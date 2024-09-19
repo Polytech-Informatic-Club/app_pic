@@ -1,4 +1,4 @@
-# app_pic
+# new_app
 
 A new Flutter project.
 
