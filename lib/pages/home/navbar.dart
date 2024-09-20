@@ -3,7 +3,7 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/pages/annonces.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/shop/shop.dart';
-import 'package:new_app/pages/sports/sports.dart';
+import 'package:new_app/pages/sports/interclasse.dart';
 import 'package:new_app/pages/xoss/xoss.dart';
 
 class navbar extends StatefulWidget {
@@ -14,13 +14,7 @@ class navbar extends StatefulWidget {
 }
 
 class _navbarState extends State<navbar> {
-  List pageList = [
-    Xoss(),
-    Annonces(),
-    HomePage(),
-    CompetitionsScreen(),
-    Shop()
-  ];
+  List pageList = [Xoss(), Annonces(), HomePage(), Interclasse(), Shop()];
 
   void _onSelected(newIndex) {
     if (Navigator.of(context).canPop()) {

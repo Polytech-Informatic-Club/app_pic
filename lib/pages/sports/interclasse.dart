@@ -1,51 +1,16 @@
-// import 'package:flutter/material.dart';
-// import 'package:new_app/fonctions.dart';
-// import 'package:new_app/pages/home/navbar.dart';
-// import 'package:new_app/pages/sports/PagesSports/foot.dart';
-
-// class Sports extends StatefulWidget {
-//   const Sports({super.key});
-
-//   @override
-//   State<Sports> createState() => _SportsState();
-// }
-
-// class _SportsState extends State<Sports> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Sports'),
-//       ),
-//       bottomNavigationBar:
-//           navbar(pageIndex: 3), // Assuming you have a navbar widget
-//       // body: Column(
-//       //   children: [
-//       //     ListTile(
-//       //       leading: Icon(Icons.sports_soccer, color: Colors.green),
-//       //       title: Text('Football'),
-//       //       trailing: Icon(Icons.arrow_forward_ios),
-//       //       onTap: () {
-//       //         changerPage(context, FootballPage());
-//       //       },
-//       //     ),
-//       //     // Add more sports as needed
-//       //   ],
-//       // ),
-
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'package:new_app/pages/sports/PagesSports/foot.dart';
 
-class CompetitionsScreen extends StatelessWidget {
+class Interclasse extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFFF9800),
-        title: Text('Compétitions'),
+        title: Text('Interclasse'),
         leading: IconButton(
           icon: Icon(Icons.menu),
           onPressed: () {},
