@@ -7,22 +7,22 @@ import 'package:new_app/inscription.dart';
 import 'package:new_app/login.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/sports/PagesSports/foot.dart';
+import 'package:new_app/pages/sports/sports.dart';
 
-void main()async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-await Firebase.initializeApp(
-  );  runApp(const MyApp());
+  await Firebase.initializeApp();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: FootballPage(),
+      home: HomePage(),
     );
   }
 }

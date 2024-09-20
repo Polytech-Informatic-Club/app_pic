@@ -14,7 +14,13 @@ class navbar extends StatefulWidget {
 }
 
 class _navbarState extends State<navbar> {
-  List pageList = [Xoss(), Annonces(), HomePage(), Sports(), Shop()];
+  List pageList = [
+    Xoss(),
+    Annonces(),
+    HomePage(),
+    CompetitionsScreen(),
+    Shop()
+  ];
 
   void _onSelected(newIndex) {
     if (Navigator.of(context).canPop()) {
@@ -43,11 +49,11 @@ class _navbarState extends State<navbar> {
       selectedIndex: widget.pageIndex,
       onDestinationSelected: _onSelected,
       destinations: [
-        _destination('assets/home-icon.png', '', 30),
-        _destination("assets/home-icon.png", '', 30),
-        _destination('assets/home-icon.png', '', 30),
-        _destination('assets/home-icon.png', '', 30),
-        _destination('assets/home-icon.png', '', 30),
+        _destination('assets/images/home-icon.png', '', 30),
+        _destination("assets/images/home-icon.png", '', 30),
+        _destination('assets/images/home-icon.png', '', 30),
+        _destination('assets/images/home-icon.png', '', 30),
+        _destination('assets/images/home-icon.png', '', 30),
       ],
     );
   }
