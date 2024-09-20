@@ -17,10 +17,10 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/ept_logo.png',
-                    height: 150,
-                  ),
+                  //  Image.asset(
+                  // 'assets/ept_logo.png',
+                  //   height: 150,
+                  // ),
                   SizedBox(height: 50),
                   Row(
                     children: [

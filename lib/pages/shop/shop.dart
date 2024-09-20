@@ -1,7 +1,7 @@
 // ignore_for_file: unused_import
 
 import 'package:flutter/material.dart';
-import 'package:new_app/pages/navbar.dart';
+import 'package:new_app/pages/home/navbar.dart';
 
 class Shop extends StatefulWidget {
   const Shop({super.key});
