@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:new_app/inscription.dart';
+import 'package:new_app/login.dart';
 import 'package:new_app/pages/home_page.dart';
 
 void main() {
@@ -15,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: Inscription(),
     );
   }
 }
