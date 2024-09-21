@@ -5,6 +5,7 @@ import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/shop/shop.dart';
 import 'package:new_app/pages/sports/interclasse.dart';
 import 'package:new_app/pages/xoss/xoss.dart';
+import 'package:new_app/utils/AppColors.dart';
 
 class navbar extends StatefulWidget {
   const navbar({super.key, required this.pageIndex});
@@ -24,13 +25,12 @@ class _navbarState extends State<navbar> {
   }
 
   NavigationDestination _destination(
-      String imagePath, String label, double width) {
+      String imagePath, String finalPath, String label, double width) {
     return NavigationDestination(
-      icon: Image.asset(imagePath, width: width, color: Colors.yellow),
+      icon: Image.asset(imagePath, width: width),
       selectedIcon: Image.asset(
-        imagePath,
+        finalPath,
         width: width,
-        color: Colors.yellow,
       ),
       label: label,
     );
@@ -40,14 +40,20 @@ class _navbarState extends State<navbar> {
   Widget build(BuildContext context) {
     return NavigationBar(
       // indicatorColor: Colors.white,
+      indicatorShape: CircleBorder(),
       selectedIndex: widget.pageIndex,
       onDestinationSelected: _onSelected,
       destinations: [
-        _destination('assets/images/home-icon.png', '', 30),
-        _destination("assets/images/home-icon.png", '', 30),
-        _destination('assets/images/home-icon.png', '', 30),
-        _destination('assets/images/home-icon.png', '', 30),
-        _destination('assets/images/home-icon.png', '', 30),
+        _destination('assets/images/Navbar-Icons/xoss.png',
+            'assets/images/Navbar-Icons/xoss1.png', '', 30),
+        _destination("assets/images/Navbar-Icons/megaphone.png",
+            "assets/images/Navbar-Icons/megaphone1.png", '', 30),
+        _destination('assets/images/Navbar-Icons/home.png',
+            'assets/images/Navbar-Icons/home1.png', '', 30),
+        _destination('assets/images/Navbar-Icons/interclasse.png',
+            'assets/images/Navbar-Icons/interclasse1.png', '', 30),
+        _destination('assets/images/Navbar-Icons/shop.png',
+            'assets/images/Navbar-Icons/shop1.png', '', 30),
       ],
     );
   }
