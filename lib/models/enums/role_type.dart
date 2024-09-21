@@ -1,0 +1,8 @@
+enum RoleType {
+  ADMIN,
+  USER,
+  ADMIN_FOOTBALL,
+  ADMIN_BASKET,
+  ADMIN_VOLLEY,
+  ADMIN_JEUX_ESPRIT,
+}

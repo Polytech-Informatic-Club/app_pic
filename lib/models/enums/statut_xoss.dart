@@ -1,0 +1,4 @@
+enum StatutXoss {
+  PAYEE,
+  IMPAYEE
+}
