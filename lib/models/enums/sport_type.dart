@@ -1,0 +1,6 @@
+enum SportType {
+  FOOTBALL,
+  BASKETBALL,
+  JEUX_ESPRIT,
+  VOLLEY
+}

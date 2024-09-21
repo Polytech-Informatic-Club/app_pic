@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:new_app/pages/navbar.dart';
+import 'package:new_app/pages/home/navbar.dart';
 
 class Annonces extends StatefulWidget {
   const Annonces({super.key});
