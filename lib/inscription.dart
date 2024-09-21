@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/login.dart';
+import 'package:new_app/utils/AppColors.dart';
 
 class Inscription extends StatelessWidget {
   const Inscription({super.key});
@@ -126,7 +127,7 @@ class Inscription extends StatelessWidget {
                             // Action lors de l'inscription
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange,
+                            backgroundColor: AppColors.primary,
                             padding: EdgeInsets.symmetric(
                                 horizontal: 100, vertical: 15),
                             shape: RoundedRectangleBorder(
@@ -151,7 +152,7 @@ class Inscription extends StatelessWidget {
                               child: Text(
                                 'connectez vous',
                                 style: TextStyle(
-                                  color: Colors.orange,
+                                  color: AppColors.primary,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

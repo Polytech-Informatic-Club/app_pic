@@ -3,35 +3,33 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 
-class BusService {
+class FootballService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-// BUS SERVICE
-  Future<List<Map<String, dynamic>>> getBusList() async {
+// Football SERVICE
+  Future<List<Map<String, dynamic>>> getFootballList() async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await _firestore.collection("BUS").get();
-      List<Map<String, dynamic>> busList =
+          await _firestore.collection("FOOTBALL").get();
+      List<Map<String, dynamic>> FootballList =
           querySnapshot.docs.map((doc) => doc.data()).toList();
 
-      return busList;
+      return FootballList;
     } catch (e) {
       return [];
     }
   }
 
-  Future<Map<String, dynamic>?> getBusById(String id) async {
+  Future<Map<String, dynamic>?> getFootballById(String id) async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
-          .collection("BUS")
-          .where("busId", isEqualTo: id)
+          .collection("Football")
+          .where("FootballUID", isEqualTo: id)
           .get();
-      Map<String, dynamic> publicite = querySnapshot.docs.first.data();
-      return publicite;
+      Map<String, dynamic> football = querySnapshot.docs.first.data();
+      return football;
     } catch (e) {
       return {};
     }
   }
-
-
 }
