@@ -8,3 +8,4 @@ class AppColors {
 }
 
 const Color orange = Color.fromRGBO(244, 171, 90, 1);
+const Color grisClair = Color.fromARGB(255, 229, 229, 229);

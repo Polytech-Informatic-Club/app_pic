@@ -6,102 +6,159 @@ import 'package:new_app/pages/sports/PagesSports/foot.dart';
 import 'package:new_app/utils/AppColors.dart';
 
 class Interclasse extends StatelessWidget {
+  const Interclasse({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: orange,
-        title: Text('Interclasse'),
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {},
-        ),
-      ),
-      bottomNavigationBar:
-          navbar(pageIndex: 3), // Assuming you have a navbar widget
+      bottomNavigationBar: navbar(pageIndex: 3),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Sous-Commissions',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              // TextField(
-              //   decoration: InputDecoration(
-              //     hintText: 'Chercher',
-              //     prefixIcon: Icon(Icons.search),
-              //     border: OutlineInputBorder(
-              //       borderRadius: BorderRadius.circular(8),
-              //     ),
-              //   ),
-              // ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 170,
+              child: Stack(
                 children: [
-                  _buildCircularIcon('assets/images/foot.png', FootballPage()),
-                  _buildCircularIcon('assets/images/foot.png', HomePage()),
-                  _buildCircularIcon('assets/images/foot.png', HomePage()),
-                  _buildCircularIcon('assets/images/foot.png', HomePage()),
-                ],
-              ),
-              SizedBox(height: 24),
-              Text(
-                'Derniers matchs',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              _buildMatchCard(
-                  'Génie en herbe', 'Mercredi 5 Juin', 'TC2: 450', 'TC1: 150'),
-              SizedBox(height: 8),
-              _buildMatchCard('Basket', 'Lundi 3 Juin', 'DIC3: 120', 'TC2: 88'),
-              SizedBox(height: 24),
-              Text(
-                'Matchs à venir',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Container(
-                padding: EdgeInsets.all(20),
-                width: 500,
-                decoration: BoxDecoration(
-                  color: orange,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
+                  Image.asset(
+                    'assets/images/Competition/top_bg_interclasse.png',
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _afficheMatch('assets/images/interclasseBasket.jpg',
-                          'Mardi 15 Juin'),
                       SizedBox(
-                        width: 10,
+                        height: 40,
                       ),
-                      _afficheMatch('assets/images/interclasseBasket.jpg',
-                          'Mardi 15 Juin'),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      _afficheMatch('assets/images/interclasseBasket.jpg',
-                          'Mardi 15 Juin'),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      _afficheMatch('assets/images/interclasseBasket.jpg',
-                          'Mardi 15 Juin'),
-                      SizedBox(
-                        width: 10,
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.menu,
+                          size: 35,
+                          color: Colors.black,
+                        ),
+                        alignment: AlignmentDirectional.topStart,
                       ),
                     ],
                   ),
-                ),
-              )
-            ],
-          ),
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 70,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Interclasses',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 33,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Sous-Commissions',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  // TextField(
+                  //   decoration: InputDecoration(
+                  //     hintText: 'Chercher',
+                  //     prefixIcon: Icon(Icons.search),
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(8),
+                  //     ),
+                  //   ),
+                  // ),
+                  SizedBox(height: 16),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(color: grisClair),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _buildCircularIcon(
+                            'assets/images/foot.png', FootballPage()),
+                        _buildCircularIcon(
+                            'assets/images/Competition/logo_basket.png',
+                            HomePage()),
+                        _buildCircularIcon(
+                            'assets/images/Competition/logo jeux desprit.png',
+                            HomePage()),
+                        _buildCircularIcon(
+                            'assets/images/Competition/logo_volley.png',
+                            HomePage()),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 24),
+                  Text(
+                    'Derniers matchs',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  _buildMatchCard('Génie en herbe', 'Mercredi 5 Juin',
+                      'TC2: 450', 'TC1: 150'),
+                  SizedBox(height: 8),
+                  _buildMatchCard(
+                      'Basket', 'Lundi 3 Juin', 'DIC3: 120', 'TC2: 88'),
+                  SizedBox(height: 24),
+                  Text(
+                    'Matchs à venir',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    width: 500,
+                    decoration: BoxDecoration(
+                      color: orange,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          _afficheMatch('assets/images/interclasseBasket.jpg',
+                              'Mardi 15 Juin'),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          _afficheMatch('assets/images/interclasseBasket.jpg',
+                              'Mardi 15 Juin'),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          _afficheMatch('assets/images/interclasseBasket.jpg',
+                              'Mardi 15 Juin'),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          _afficheMatch('assets/images/interclasseBasket.jpg',
+                              'Mardi 15 Juin'),
+                          SizedBox(
+                            width: 12,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -145,7 +202,9 @@ class Interclasse extends StatelessWidget {
     return Column(
       children: [
         Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-        Card(
+        Container(
+          decoration: BoxDecoration(
+              color: grisClair, borderRadius: BorderRadius.circular(6)),
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
@@ -154,8 +213,24 @@ class Interclasse extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(score1),
-                    Text(score2),
+                    Row(
+                      children: [
+                        Image.asset(
+                          'assets/images/Competition/logo50.png',
+                          width: 60,
+                        ),
+                        Text(score1),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(score2),
+                        Image.asset(
+                          'assets/images/Competition/logo50.png',
+                          width: 60,
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ],
