@@ -10,9 +10,7 @@ class MatchDetailsScreen extends StatefulWidget {
 
 class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
   int likes = 0;
-  int dislikes = 0;
   bool liked = false;
-  bool disliked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -271,13 +269,6 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                         liked = false;
                         likes--;
                       });
-                    } else if (disliked) {
-                      setState(() {
-                        liked = true;
-                        likes++;
-                        dislikes--;
-                        disliked = false;
-                      });
                     } else {
                       setState(() {
                         liked = true;
@@ -285,38 +276,14 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                       });
                     }
                   },
-                  color: Colors.grey,
                 ),
                 Text(likes.toString()),
                 IconButton(
-                  icon: Icon(
-                    Icons.thumb_down,
-                    color: disliked ? Colors.blue : Colors.grey,
-                  ),
-                  onPressed: () {
-                    if (disliked) {
-                      setState(() {
-                        disliked = false;
-                        dislikes--;
-                      });
-                    } else if (liked) {
-                      setState(() {
-                        disliked = true;
-                        dislikes++;
-                        likes--;
-                        liked = false;
-                      });
-                    } else {
-                      setState(() {
-                        disliked = true;
-                        dislikes++;
-                      });
-                    }
-                  },
-                  color: Colors.grey,
-                ),
-                Text(dislikes.toString()),
-                Spacer(),
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.message,
+                      color: Colors.grey,
+                    ))
               ],
             ),
             SizedBox(
