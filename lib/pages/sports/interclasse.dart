@@ -3,13 +3,14 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'package:new_app/pages/sports/PagesSports/foot.dart';
+import 'package:new_app/utils/AppColors.dart';
 
 class Interclasse extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFFF9800),
+        backgroundColor: orange,
         title: Text('Interclasse'),
         leading: IconButton(
           icon: Icon(Icons.menu),
@@ -68,8 +69,9 @@ class Interclasse extends StatelessWidget {
                 padding: EdgeInsets.all(20),
                 width: 500,
                 decoration: BoxDecoration(
-                    color: Colors.orange,
-                    borderRadius: BorderRadius.circular(20)),
+                  color: orange,
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
