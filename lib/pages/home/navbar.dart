@@ -38,23 +38,32 @@ class _navbarState extends State<navbar> {
 
   @override
   Widget build(BuildContext context) {
-    return NavigationBar(
-      // indicatorColor: Colors.white,
-      indicatorShape: CircleBorder(),
-      selectedIndex: widget.pageIndex,
-      onDestinationSelected: _onSelected,
-      destinations: [
-        _destination('assets/images/Navbar-Icons/xoss.png',
-            'assets/images/Navbar-Icons/xoss1.png', '', 30),
-        _destination("assets/images/Navbar-Icons/megaphone.png",
-            "assets/images/Navbar-Icons/megaphone1.png", '', 30),
-        _destination('assets/images/Navbar-Icons/home.png',
-            'assets/images/Navbar-Icons/home1.png', '', 30),
-        _destination('assets/images/Navbar-Icons/interclasse.png',
-            'assets/images/Navbar-Icons/interclasse1.png', '', 30),
-        _destination('assets/images/Navbar-Icons/shop.png',
-            'assets/images/Navbar-Icons/shop1.png', '', 30),
-      ],
+    return Container(
+      decoration: BoxDecoration(
+        border: BorderDirectional(
+          top: BorderSide(color: Colors.black, width: 2),
+        ),
+      ),
+      child: NavigationBar(
+        overlayColor: WidgetStatePropertyAll(Colors.white),
+        backgroundColor: Colors.white,
+        indicatorColor: Colors.white,
+        indicatorShape: CircleBorder(),
+        selectedIndex: widget.pageIndex,
+        onDestinationSelected: _onSelected,
+        destinations: [
+          _destination('assets/images/Navbar-Icons/xoss.png',
+              'assets/images/Navbar-Icons/xoss1.png', '', 30),
+          _destination("assets/images/Navbar-Icons/megaphone.png",
+              "assets/images/Navbar-Icons/megaphone1.png", '', 30),
+          _destination('assets/images/Navbar-Icons/home.png',
+              'assets/images/Navbar-Icons/home1.png', '', 30),
+          _destination('assets/images/Navbar-Icons/interclasse.png',
+              'assets/images/Navbar-Icons/interclasse1.png', '', 30),
+          _destination('assets/images/Navbar-Icons/shop.png',
+              'assets/images/Navbar-Icons/shop1.png', '', 30),
+        ],
+      ),
     );
   }
 }
