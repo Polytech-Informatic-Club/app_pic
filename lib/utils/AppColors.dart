@@ -9,5 +9,6 @@ class AppColors {
   static const Color gray = Color(0xFFD9D9D9);
 }
 
-const Color orange = Color.fromRGBO(244, 171, 90, 1);
+const Color orange = Color(0xFFF4AB5A);
 const Color grisClair = Color.fromARGB(255, 229, 229, 229);
+const Color jauneClair = Color(0xFFFFDEAD);
