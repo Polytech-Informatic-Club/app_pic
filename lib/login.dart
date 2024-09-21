@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/inscription.dart';
+import 'package:new_app/utils/AppColors.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -17,11 +18,22 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  //  Image.asset(
-                  // 'assets/ept_logo.png',
-                  //   height: 150,
-                  // ),
-                  SizedBox(height: 50),
+                  SizedBox(
+                    height: 350,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Image.asset(
+                          'assets/images/connection-inscription/logo_ept_baobab.png',
+                          fit: BoxFit.cover,
+                        ),
+                        Image.asset(
+                          'assets/images/connection-inscription/cercles_login.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ],
+                    ),
+                  ),
                   Row(
                     children: [
                       Text(
@@ -45,7 +57,7 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 30),
+                  SizedBox(height: 20),
                   TextField(
                     decoration: InputDecoration(
                       labelText: 'Mail EPT',
@@ -66,14 +78,14 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 8),
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {},
                       child: Text(
                         'Mot de passe oublié ?',
-                        style: TextStyle(color: Colors.orange),
+                        style: TextStyle(color: orange),
                       ),
                     ),
                   ),
@@ -81,7 +93,7 @@ class LoginScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
+                      backgroundColor: orange,
                       padding:
                           EdgeInsets.symmetric(horizontal: 110, vertical: 15),
                       shape: RoundedRectangleBorder(
@@ -93,7 +105,7 @@ class LoginScreen extends StatelessWidget {
                       style: TextStyle(fontSize: 16, color: Colors.black),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -105,7 +117,7 @@ class LoginScreen extends StatelessWidget {
                         child: Text(
                           'Inscrivez vous',
                           style: TextStyle(
-                            color: Colors.orange,
+                            color: orange,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
