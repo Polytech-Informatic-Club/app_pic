@@ -1,5 +1,5 @@
 import 'package:uuid/uuid.dart';
-import 'user.dart';
+import 'utilisateur.dart';
 import 'package:new_app/models/enums/statut_objet_perdu.dart';
 
 class ObjetPerdu {

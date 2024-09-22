@@ -1,5 +1,5 @@
 import 'package:uuid/uuid.dart';
-import 'user.dart';
+import 'utilisateur.dart';
 
 enum StatutSessionJeu { OUVERTE, FERMEE }
 

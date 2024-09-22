@@ -1,5 +1,5 @@
 import 'package:uuid/uuid.dart';
-import 'package:new_app/models/user.dart';
+import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/models/enums/statut_xoss.dart';
 
 class Xoss {
