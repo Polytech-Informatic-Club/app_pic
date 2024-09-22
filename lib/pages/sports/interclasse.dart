@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/home/navbar.dart';
-import 'package:new_app/pages/sports/PagesSports/foot.dart';
+import 'package:new_app/pages/sports/PagesSports/testfoot.dart';
 import 'package:new_app/utils/AppColors.dart';
 
 class Interclasse extends StatelessWidget {
@@ -18,9 +18,11 @@ class Interclasse extends StatelessWidget {
             SizedBox(
               height: 170,
               child: Stack(
+                fit: StackFit.expand,
                 children: [
                   Image.asset(
                     'assets/images/Competition/top_bg_interclasse.png',
+                    fit: BoxFit.cover,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,11 +111,21 @@ class Interclasse extends StatelessWidget {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 8),
-                  _buildMatchCard('Génie en herbe', 'Mercredi 5 Juin',
-                      'TC2: 450', 'TC1: 150'),
+                  _buildMatchCard(
+                      'Génie en herbe',
+                      'Mercredi 5 Juin',
+                      'assets/images/Competition/logo50.png',
+                      'TC2: 450',
+                      'assets/images/Competition/logo50.png',
+                      'TC1: 150'),
                   SizedBox(height: 8),
                   _buildMatchCard(
-                      'Basket', 'Lundi 3 Juin', 'DIC3: 120', 'TC2: 88'),
+                      'Basket',
+                      'Lundi 3 Juin',
+                      'assets/images/Competition/logo50.png',
+                      'DIC3: 120',
+                      'assets/images/Competition/logo50.png',
+                      'TC2: 88'),
                   SizedBox(height: 24),
                   Text(
                     'Matchs à venir',
@@ -167,9 +179,13 @@ class Interclasse extends StatelessWidget {
   Widget _afficheMatch(affiche, date) {
     return Column(
       children: [
-        Image.asset(
-          affiche,
+        SizedBox(
+          height: 140,
           width: 100,
+          child: Image.asset(
+            affiche,
+            fit: BoxFit.cover,
+          ),
         ),
         SizedBox(
           height: 5,
@@ -197,8 +213,8 @@ class Interclasse extends StatelessWidget {
     }));
   }
 
-  Widget _buildMatchCard(
-      String title, String date, String score1, String score2) {
+  Widget _buildMatchCard(String title, String date, String team1, String score1,
+      String team2, String score2) {
     return Column(
       children: [
         Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
@@ -215,9 +231,10 @@ class Interclasse extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Image.asset(
-                          'assets/images/Competition/logo50.png',
-                          width: 60,
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundColor: grisClair,
+                          backgroundImage: AssetImage(team1),
                         ),
                         Text(score1),
                       ],
@@ -225,9 +242,10 @@ class Interclasse extends StatelessWidget {
                     Row(
                       children: [
                         Text(score2),
-                        Image.asset(
-                          'assets/images/Competition/logo50.png',
-                          width: 60,
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundColor: grisClair,
+                          backgroundImage: AssetImage(team2),
                         ),
                       ],
                     ),

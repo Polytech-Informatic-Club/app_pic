@@ -8,6 +8,7 @@ import 'package:new_app/login/login.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/sports/PagesSports/detail_match.dart';
 import 'package:new_app/pages/sports/PagesSports/foot.dart';
+import 'package:new_app/pages/sports/football/homeAdminFootballPage.dart';
 import 'package:new_app/pages/sports/interclasse.dart';
 
 void main() async {
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: FootballPage(),
     );
   }
 }

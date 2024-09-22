@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -7,31 +6,33 @@ import 'package:new_app/utils/AppColors.dart';
 import 'package:new_app/widgets/reusableTextFormFied.dart';
 import 'package:new_app/widgets/submitedButton.dart';
 
-class CreateMatchFootball extends StatelessWidget {
-  CreateMatchFootball({super.key});
+class CreateMatchFootball extends StatefulWidget {
+  const CreateMatchFootball({super.key});
+
+  @override
+  State<CreateMatchFootball> createState() => _CreateMatchFootballState();
+}
+
+class _CreateMatchFootballState extends State<CreateMatchFootball> {
   TextEditingController _equipeTextController = TextEditingController();
+
   TextEditingController _adversaireTextController = TextEditingController();
+
   DateTime selectedDate = DateTime.now();
 
   Future<void> _selectDate(BuildContext context) async {
-
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     // if (picked != null && picked != selectedDate)
-      // setState(() {
-      //   selectedDate = picked;
-      // });
+    // setState(() {
+    //   selectedDate = picked;
+    // });
   }
 
   // @override
-  // initState() {
-  //   super.initState();
-  //   selectedDate = DateTime.now();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,8 +75,10 @@ class CreateMatchFootball extends StatelessWidget {
                       onPressed: () => _selectDate(context),
                       child: Text('Select date'),
                     ),
-                    SizedBox(height: 10,),
-                    SubmittedButton("Créer", (){})
+                    SizedBox(
+                      height: 10,
+                    ),
+                    SubmittedButton("Créer", () {})
                     // signInSignUpButton("Créer", context, false, () {
                     //   FirebaseFirestore.instance.collection('Matchs').add({
                     //     "idEquipe1": _equipeTextController.value.text,
