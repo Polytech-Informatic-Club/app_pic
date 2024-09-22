@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class FootballPage extends StatefulWidget {
-  const FootballPage({super.key});
+class JEspritPage extends StatefulWidget {
+  const JEspritPage({super.key});
 
   @override
-  _FootballPageState createState() => _FootballPageState();
+  _JEspritPageState createState() => _JEspritPageState();
 }
 
-class _FootballPageState extends State<FootballPage> {
+class _JEspritPageState extends State<JEspritPage> {
   List<Widget> matchs = [
     MatchCard(),
     MatchCard(),
@@ -24,7 +24,7 @@ class _FootballPageState extends State<FootballPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Football'),
+        title: Text('Jeux d\'esprit'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -33,7 +33,7 @@ class _FootballPageState extends State<FootballPage> {
               clipBehavior: Clip.none,
               children: [
                 Image.network(
-                  'https://example.com/assets/images/football/WhatsApp Image 2024-06-07 at 00.29.58_982f7f7e.jpg',
+                  'https://example.com/assets/images/jeux-desprit/WhatsApp Image 2024-06-07 at 19.41.17_1c69ac4e.jpg',
                   height: 200,
                   fit: BoxFit.cover,
                 ),
@@ -55,7 +55,7 @@ class _FootballPageState extends State<FootballPage> {
                   top: 160,
                   left: MediaQuery.of(context).size.width / 2 - 50,
                   child: Image.asset(
-                    "assets/images/foot.webp",
+                    "assets/images/assets/images/jeux-desprit/logo jeux desprit.png",
                     width: 100,
                   ),
                 ),
@@ -63,7 +63,7 @@ class _FootballPageState extends State<FootballPage> {
             ),
             SizedBox(height: 60),
             Text(
-              'Football',
+              'Jeux d\'esprit',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),

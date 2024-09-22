@@ -23,7 +23,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+<<<<<<< HEAD
       home: LoginScreen(),
+=======
+      home: HomePage(),
+>>>>>>> bb14fdf (Mis a jour des pages de sports)
     );
   }
 }

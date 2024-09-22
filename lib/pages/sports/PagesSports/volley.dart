@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class FootballPage extends StatefulWidget {
-  const FootballPage({super.key});
+class VolleyballPage extends StatefulWidget {
+  const VolleyballPage({super.key});
 
   @override
-  _FootballPageState createState() => _FootballPageState();
+  _VolleyballPageState createState() => _VolleyballPageState();
 }
 
-class _FootballPageState extends State<FootballPage> {
+class _VolleyballPageState extends State<VolleyballPage> {
   List<Widget> matchs = [
     MatchCard(),
     MatchCard(),
@@ -24,7 +24,7 @@ class _FootballPageState extends State<FootballPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Football'),
+        title: Text('Volleyball'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -33,7 +33,7 @@ class _FootballPageState extends State<FootballPage> {
               clipBehavior: Clip.none,
               children: [
                 Image.network(
-                  'https://example.com/assets/images/football/WhatsApp Image 2024-06-07 at 00.29.58_982f7f7e.jpg',
+                  'https://example.com/assets/images/volleyball/WhatsApp Image 2024-06-06 at 18.17.28_1acdb651.jpg',
                   height: 200,
                   fit: BoxFit.cover,
                 ),
@@ -63,7 +63,7 @@ class _FootballPageState extends State<FootballPage> {
             ),
             SizedBox(height: 60),
             Text(
-              'Football',
+              'Volleyball',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
