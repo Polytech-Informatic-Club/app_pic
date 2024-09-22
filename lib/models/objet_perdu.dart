@@ -1,5 +1,5 @@
 import 'package:uuid/uuid.dart';
-import 'user.dart';
+import 'utilisateur.dart';
 import 'package:new_app/models/enums/statut_objet_perdu.dart';
 
 class ObjetPerdu {
@@ -8,7 +8,7 @@ class ObjetPerdu {
   final String lieu; // Place where the object was lost
   final DateTime date; // Date when the object was lost
   final Etat etat; // Status of the object (PERDU or RETROUVE)
-  final User user; // The user who lost the object
+  final Utilisateur user; // The user who lost the object
 
   ObjetPerdu({
     required this.id,
@@ -26,8 +26,9 @@ class ObjetPerdu {
       description: json['description'] as String,
       lieu: json['lieu'] as String,
       date: DateTime.parse(json['date'] as String),
-      etat: Etat.values.firstWhere((e) => e.toString() == 'Etat.${json['etat']}'),
-      user: User.fromJson(json['user'] as Map<String, dynamic>),
+      etat:
+          Etat.values.firstWhere((e) => e.toString() == 'Etat.${json['etat']}'),
+      user: Utilisateur.fromJson(json['user'] as Map<String, dynamic>),
     );
   }
 

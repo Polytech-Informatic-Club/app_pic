@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:new_app/widgets/reusable_widgets.dart';
 
-class FootballPage extends StatefulWidget {
-  const FootballPage({super.key});
+class JEspritPage extends StatefulWidget {
+  const JEspritPage({super.key});
 
   @override
-  _FootballPageState createState() => _FootballPageState();
+  _JEspritPageState createState() => _JEspritPageState();
 }
 
-class _FootballPageState extends State<FootballPage> {
+class _JEspritPageState extends State<JEspritPage> {
   List<Widget> matchs = [
     MatchCard(),
     MatchCard(),
@@ -24,52 +23,63 @@ class _FootballPageState extends State<FootballPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Jeux d\'esprit'),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              width: double.infinity,
-              height: 200,
-              color: Colors.orange.withOpacity(0.5),
-              child: Stack(
-                fit: StackFit.expand,
-                clipBehavior: Clip.none,
-                children: [
-                  Image.asset(
-                    'assets/images/football/foot_top_bg.jpg',
-                    height: 200,
-                    fit: BoxFit.cover,
-                    opacity: AlwaysStoppedAnimation(0.3),
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Image.network(
+                  'https://example.com/assets/images/jeux-desprit/WhatsApp Image 2024-06-07 at 19.41.17_1c69ac4e.jpg',
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 200,
+                  color: Colors.orange.withOpacity(0.5),
+                ),
+                Positioned(
+                  left: 10,
+                  top: 10,
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                    size: 30,
                   ),
-                  Positioned(
-                    left: 10,
-                    top: 50,
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                    ),
+                ),
+                Positioned(
+                  top: 160,
+                  left: MediaQuery.of(context).size.width / 2 - 50,
+                  child: Image.asset(
+                    "assets/images/assets/images/jeux-desprit/logo jeux desprit.png",
+                    width: 100,
                   ),
-                  Positioned(
-                    top: 160,
-                    left: MediaQuery.of(context).size.width / 2 - 50,
-                    child: Image.asset(
-                      "assets/images/foot.webp",
-                      width: 100,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
             SizedBox(height: 60),
             Text(
-              'Football',
+              'Jeux d\'esprit',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            // Scrolling horizontal pour les membres
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  MemberCard(title: 'Président'),
+                  MemberCard(title: 'Vice-Président'),
+                  MemberCard(title: 'Membre'),
+                  MemberCard(title: 'Membre'),
+                  MemberCard(title: 'Membre'),
+                ],
+              ),
             ),
             SizedBox(height: 20),
             Padding(
@@ -77,17 +87,6 @@ class _FootballPageState extends State<FootballPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      MemberCard(title: 'Président'),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      MemberCard(title: 'Vice-Président'),
-                    ],
-                  ),
-                  SizedBox(height: 20),
                   Text(
                     'Prochain-évènement',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -118,30 +117,9 @@ class _FootballPageState extends State<FootballPage> {
                     'Matchs',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
+                  SizedBox(height: 10),
                   Column(
-                    children: [
-                      buildMatchCard(
-                          '',
-                          'Mercredi 5 Juin',
-                          'assets/images/Competition/logo50.png',
-                          'TC2: 450',
-                          'assets/images/Competition/logo50.png',
-                          'TC1: 150'),
-                      buildMatchCard(
-                          '',
-                          'Mercredi 5 Juin',
-                          'assets/images/Competition/logo50.png',
-                          'TC2: 450',
-                          'assets/images/Competition/logo50.png',
-                          'TC1: 150'),
-                      buildMatchCard(
-                          '',
-                          'Mercredi 5 Juin',
-                          'assets/images/Competition/logo50.png',
-                          'TC2: 450',
-                          'assets/images/Competition/logo50.png',
-                          'TC1: 150'),
-                    ],
+                    children: matchs,
                   ),
                   SizedBox(height: 10),
                   ElevatedButton(
@@ -182,10 +160,10 @@ class MatchCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        // leading: Image.network(
-        //   'https://example.com/team_logo.png',
-        //   width: 50,
-        // ),
+        leading: Image.network(
+          'https://example.com/team_logo.png',
+          width: 50,
+        ),
         title: Text('Mercredi 5 Juin'),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

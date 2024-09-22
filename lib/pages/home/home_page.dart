@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/pages/home/appDrawer.dart';
 import 'package:new_app/pages/home/navbar.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,6 +13,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Appdrawer(),
       appBar: AppBar(
         title: Text('Home'),
       ),
