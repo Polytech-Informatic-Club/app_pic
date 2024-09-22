@@ -1,12 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:new_app/models/utilisateur.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   CollectionReference userCollection =
       FirebaseFirestore.instance.collection("USER");
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('id_token');
+  }
+
+  Future<void> setToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('id_token', token);
+  }
+
+  Future<String?> getRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('role');
+  }
+
+  Future<void> setRole(String role) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('role', role);
+  }
 
   Future<User?> signInWithEmailAndPassword(
       String email, String password) async {

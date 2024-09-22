@@ -21,6 +21,8 @@ class Inscription extends StatelessWidget {
       TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  final ValueNotifier<bool> _isSaving = ValueNotifier<bool>(false);
+
   final ValueNotifier<double> _strengthNotifier = ValueNotifier<double>(0);
   final ValueNotifier<bool> _passwordsMatchNotifier = ValueNotifier<bool>(true);
 
@@ -362,53 +364,81 @@ class Inscription extends StatelessWidget {
                           ),
                           SizedBox(height: 30),
                           // S'inscrire Button
-                          ElevatedButton(
-                            onPressed: () async {
-                              // Action lors de l'inscription
-                              if (_formKey.currentState!.validate()) {
-                                try {
-                                  User? user = await _userService
-                                      .signUpWithEmailAndPassword(
-                                    _emailController.text.trim(),
-                                    _passwordController.text.trim(),
-                                  );
+                          ValueListenableBuilder<bool>(
+                              valueListenable: _isSaving,
+                              builder: (context, isSaving, child) {
+                                return !isSaving
+                                    ? CircularProgressIndicator()
+                                    : ElevatedButton(
+                                        onPressed: () async {
+                                          // Action lors de l'inscription
+                                          _isSaving.value = true;
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            try {
+                                              User? user = await _userService
+                                                  .signUpWithEmailAndPassword(
+                                                _emailController.text.trim(),
+                                                _passwordController.text.trim(),
+                                              );
 
-                                  if (user != null) {
-                                    Utilisateur utilisateur = new Utilisateur(
-                                        id: _emailController.value.text,
-                                        username: _emailController.value.text,
-                                        password: _emailController.value.text,
-                                        prenom: _emailController.value.text,
-                                        nom: _emailController.value.text,
-                                        email: _emailController.value.text,
-                                        telephone: _emailController.value.text,
-                                        photo: "",
-                                        role: RoleType.USER);
-                                    _userService.ajouterUser(utilisateur);
-                                    changerPage(context, HomePage());
-                                  }
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text("Formulaire invalide")),
-                                  );
-                                }
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: orange,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 100, vertical: 15),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                            ),
-                            child: Text(
-                              "S'inscrire",
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.black),
-                            ),
-                          ),
+                                              if (user != null) {
+                                                Utilisateur utilisateur = new Utilisateur(
+                                                    id: _emailController
+                                                        .value.text,
+                                                    username: _emailController
+                                                        .value.text,
+                                                    password: _emailController
+                                                        .value.text,
+                                                    prenom: _emailController
+                                                        .value.text,
+                                                    nom: _emailController
+                                                        .value.text,
+                                                    email: _emailController
+                                                        .value.text,
+                                                    telephone: _emailController
+                                                        .value.text,
+                                                    photo: "",
+                                                    role: RoleType.USER);
+                                                await _userService.setRole(
+                                                    RoleType.USER
+                                                        .toString()
+                                                        .split('.')
+                                                        .last);
+                                                try {
+                                                  await _userService
+                                                      .ajouterUser(utilisateur);
+                                                  changerPage(
+                                                      context, HomePage());
+                                                } catch (e) {}
+                                              }
+                                            } catch (e) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                    content: Text(
+                                                        "Formulaire invalide")),
+                                              );
+                                            }
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: orange,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 100, vertical: 15),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          "S'inscrire",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                      );
+                              }),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
