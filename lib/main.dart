@@ -27,11 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-<<<<<<< HEAD
       home: Articles(),
-=======
-      home: FootballPage(),
->>>>>>> c4cb4af3068dd093010efbfc630067f44ab216c2
     );
   }
 }
