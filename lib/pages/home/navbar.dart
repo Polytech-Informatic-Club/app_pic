@@ -15,7 +15,7 @@ class navbar extends StatefulWidget {
 }
 
 class _navbarState extends State<navbar> {
-  List pageList = [Xoss(), Annonces(), HomePage(), Interclasse(), Shop()];
+  List pageList = [Xoss(), Annonces(), HomePage(), InterclassePage(), Shop()];
 
   void _onSelected(newIndex) {
     if (Navigator.of(context).canPop()) {

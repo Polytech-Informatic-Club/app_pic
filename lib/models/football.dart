@@ -5,7 +5,7 @@ import 'package:new_app/models/joueur.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/models/utilisateur.dart';
 
-class Football extends Match {
+class Football extends Matches {
   final List<Joueur>? buteurs;
   final Map<String, int> statistiques;
 

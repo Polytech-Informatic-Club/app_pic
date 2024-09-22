@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class FootballPage extends StatefulWidget {
-  const FootballPage({super.key});
+class HomeFootballPage extends StatefulWidget {
+  const HomeFootballPage({super.key});
 
   @override
-  _FootballPageState createState() => _FootballPageState();
+  _HomeFootballPageState createState() => _HomeFootballPageState();
 }
 
-class _FootballPageState extends State<FootballPage> {
+class _HomeFootballPageState extends State<HomeFootballPage> {
   List<Widget> matchs = [
     MatchCard(),
     MatchCard(),

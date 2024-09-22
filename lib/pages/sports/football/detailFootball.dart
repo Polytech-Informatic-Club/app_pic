@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/utils/AppColors.dart';
 
-class MatchDetailsScreen extends StatefulWidget {
-  const MatchDetailsScreen({super.key});
+class DetailFootballScreen extends StatefulWidget {
+  const DetailFootballScreen({super.key});
 
   @override
-  State<MatchDetailsScreen> createState() => _MatchDetailsScreenState();
+  State<DetailFootballScreen> createState() => _DetailFootballScreenState();
 }
 
-class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
+class _DetailFootballScreenState extends State<DetailFootballScreen> {
   int likes = 0;
   bool liked = false;
 

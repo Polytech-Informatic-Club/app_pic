@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:new_app/models/commentaires.dart';
 import 'package:new_app/models/enums/sport_type.dart';
 import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/utilisateur.dart';
 
-class Match {
+class Matches {
   final String id;
   final DateTime date;
   final DateTime dateCreation;
@@ -19,7 +20,7 @@ class Match {
   String? description;
   String? photo;
 
-  Match(
+  Matches(
       {required this.id,
       required this.date,
       required this.dateCreation,
@@ -36,7 +37,7 @@ class Match {
       this.photo});
 
   // Factory method to create a Match object from JSON
-  factory Match.fromJson(Map<String, dynamic> json) {
+  factory Matches.fromJson(Map<String, dynamic> json) {
     var commentsFromJson = json['comments'] as List<dynamic>;
     List<Commentaire> commentsList =
         commentsFromJson.map((item) => Commentaire.fromJson(item)).toList();
@@ -47,19 +48,25 @@ class Match {
     List<Utilisateur> dislikersList =
         dislikersFromJson.map((item) => Utilisateur.fromJson(item)).toList();
 
-    return Match(
+    return Matches(
       id: json['id'] as String,
-      dateCreation: json['dateCreation'] as DateTime,
-      date: json['date'] as DateTime,
+      dateCreation: (json['dateCreation'] as Timestamp).toDate(),
+      date: (json['date'] as Timestamp).toDate(),
       equipeA: Equipe.fromJson(json['equipeA'] as Map<String, dynamic>),
       equipeB: Equipe.fromJson(json['equipeB'] as Map<String, dynamic>),
       scoreEquipeA: json['scoreEquipeA'] as int,
       scoreEquipeB: json['scoreEquipeB'] as int,
+      comments: commentsList,
       likers: likersList,
       dislikers: dislikersList,
-      sport: SportType.values
-          .firstWhere((e) => e.toString() == 'Sport.${json['sport']}'),
-      comments: commentsList,
+      sport: SportType.values.firstWhere(
+        (e) => e.toString().split('.').last == json['sport'],
+        orElse: () =>
+            SportType.FOOTBALL, // Valeur par défaut si la conversion échoue
+      ),
+      // sport: SportType.values
+      //     .firstWhere((e) => e.toString() == 'Sport.${json['sport']}'),
+      // comments: commentsList,
       partageLien: json['partageLien'] as String,
       description: json['description'] as String,
       photo: json['photo'] as String,
@@ -71,7 +78,7 @@ class Match {
     return {
       'id': id,
       'dateCreation': dateCreation,
-      'date': date.toIso8601String(), // Convert DateTime to ISO 8601 string
+      'date': date, // Convert DateTime to ISO 8601 string
       'equipeA': equipeA.toJson(),
       'equipeB': equipeB.toJson(),
       'scoreEquipeA': scoreEquipeA,
