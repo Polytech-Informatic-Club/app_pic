@@ -8,7 +8,8 @@ import 'package:new_app/models/enums/sport_type.dart';
 import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/football.dart';
 import 'package:new_app/pages/sports/football/homeAdminFootballPage.dart';
-import 'package:new_app/services/FootballService.dart';
+import 'package:new_app/services/SportService.dart';
+import 'package:new_app/services/UserService.dart';
 import 'package:new_app/utils/AppColors.dart';
 import 'package:new_app/widgets/alerteMessage.dart';
 import 'package:new_app/widgets/reusableDescriptionInput.dart';
@@ -19,7 +20,8 @@ class CreateMatchFootball extends StatelessWidget {
   CreateMatchFootball({super.key});
   TextEditingController _descriptionTextController = TextEditingController();
   DateTime selectedDate = DateTime.now();
-  FootballService _footballService = new FootballService();
+  SportService _SportService = new SportService();
+  UserService _userService = new UserService();
 
   final ValueNotifier<List<Equipe>> _equipes = ValueNotifier([]);
   ValueNotifier<Equipe?> _selectedEquipeA = ValueNotifier(null);
@@ -29,44 +31,40 @@ class CreateMatchFootball extends StatelessWidget {
   ValueNotifier<String> _url = ValueNotifier("");
 
   Future<void> _loadEquipes() async {
-    List<Equipe> equipes = await _footballService.getEquipeList();
+    List<Equipe> equipes = await _SportService.getEquipeList();
     _equipes.value = equipes;
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+  Future<void> _selectDateTime(BuildContext context) async {
+    // Sélectionner la date
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate.value,
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate != null) {
+      // Sélectionner l'heure après la date
+      final TimeOfDay? pickedTime = await showTimePicker(
         context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-  }
+        initialTime:
+            TimeOfDay.fromDateTime(_selectedDate.value ?? DateTime.now()),
+      );
 
-  FirebaseStorage firebaseStorage = FirebaseStorage.instance;
-  Future<void> uploadImage(BuildContext context) async {
-    final XFile? pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedImage == null) {
-      return null;
-    }
-    String filename = pickedImage.name;
-    File imageFile = File(pickedImage.path);
+      if (pickedTime != null) {
+        // Combiner la date et l'heure
+        final DateTime pickedDateTime = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
 
-    Reference reference = firebaseStorage.ref(filename);
-
-    try {
-      _loading.value = true;
-      await reference.putFile(imageFile);
-      _url.value = (await reference.getDownloadURL()).toString();
-      _loading.value = false;
-
-      AlerteMessageWidget(
-          context, "Fichier enregistré avec succès !", AppColors.success);
-
-      print("SamaUrl" + _url.value);
-    } on FirebaseException catch (e) {
-      print(e);
-    } catch (error) {
-      print(error);
+        // Mettre à jour la variable avec la nouvelle date et heure sélectionnées
+        _selectedDate.value = pickedDateTime;
+      }
     }
   }
 
@@ -80,32 +78,79 @@ class CreateMatchFootball extends StatelessWidget {
       ),
       body: Container(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
+          // height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(
               child: Padding(
                   padding: EdgeInsets.fromLTRB(
-                      20, MediaQuery.of(context).size.height * 0.2, 20, 0),
+                      20, MediaQuery.of(context).size.height * 0.02, 20, 0),
                   child: Column(children: <Widget>[
-                    ValueListenableBuilder<bool>(
-                        valueListenable: _loading,
-                        builder: (context, isSaving, child) {
-                          return !isSaving
-                              ? CircularProgressIndicator()
-                              : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Center(
-                                        child: ElevatedButton.icon(
-                                      onPressed: () async {
-                                        await uploadImage(context);
-                                      },
-                                      icon: Icon(
-                                        Icons.library_add,
-                                      ),
-                                      label: Text("Image"),
-                                    )),
-                                  ],
-                                );
+                    ValueListenableBuilder<String>(
+                        valueListenable: _url,
+                        builder: (context, url, child) {
+                          return url == ""
+                              ? Container(
+                                  height:
+                                      MediaQuery.sizeOf(context).width * 0.6,
+                                  width: MediaQuery.sizeOf(context).width * 0.5,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.gray,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Center(
+                                    child: ValueListenableBuilder<bool>(
+                                        valueListenable: _loading,
+                                        builder: (context, loading, child) {
+                                          return loading
+                                              ? CircularProgressIndicator()
+                                              : Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Center(
+                                                        child:
+                                                            ElevatedButton.icon(
+                                                      style: ButtonStyle(
+                                                          iconColor:
+                                                              MaterialStateProperty
+                                                                  .all(AppColors
+                                                                      .black)),
+                                                      onPressed: () async {
+                                                        String? url =
+                                                            await _userService
+                                                                .uploadImage(
+                                                                    context,
+                                                                    _loading,
+                                                                    _url);
+                                                        if (url != null) {
+                                                          AlerteMessageWidget(
+                                                              context,
+                                                              "Fichier enregistré avec succès !",
+                                                              AppColors
+                                                                  .success);
+                                                        } else {
+                                                          AlerteMessageWidget(
+                                                              context,
+                                                              "Une erreur s'est produit lors du chargement !",
+                                                              AppColors.echec);
+                                                        }
+                                                      },
+                                                      icon: Icon(
+                                                        Icons.library_add,
+                                                        color: AppColors.black,
+                                                      ),
+                                                      label: Text(
+                                                        "Importer",
+                                                        style: TextStyle(
+                                                          color:
+                                                              AppColors.black,
+                                                        ),
+                                                      ),
+                                                    )),
+                                                  ],
+                                                );
+                                        }),
+                                  ),
+                                )
+                              : Image.network(url);
                         }),
                     SizedBox(
                       height: 20,
@@ -114,59 +159,60 @@ class CreateMatchFootball extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ValueListenableBuilder<List<Equipe>>(
-                            valueListenable: _equipes,
-                            builder: (context, equipes, child) {
-                              return ValueListenableBuilder<Equipe?>(
-                                  valueListenable: _selectedEquipeA,
-                                  builder: (context, selectedEquipe, child) {
-                                    return DropdownButton<Equipe>(
-                                      hint: Text('Equipe A'),
-                                      value: _selectedEquipeA.value,
-                                      onChanged: (Equipe? newValue) {
-                                        _selectedEquipeA.value = newValue;
-                                      },
-                                      items: _equipes.value
-                                          .map<DropdownMenuItem<Equipe>>(
-                                              (Equipe equipe) {
-                                        return DropdownMenuItem<Equipe>(
-                                          value: equipe,
-                                          child: Text(equipe.nom),
-                                        );
-                                      }).toList(),
+                          valueListenable: _equipes,
+                          builder: (context, equipes, child) {
+                            return ValueListenableBuilder<Equipe?>(
+                              valueListenable: _selectedEquipeA,
+                              builder: (context, selectedEquipeA, child) {
+                                return DropdownButton<Equipe>(
+                                  hint: Text('Equipe A'),
+                                  value: equipes.contains(selectedEquipeA)
+                                      ? selectedEquipeA
+                                      : null,
+                                  onChanged: (Equipe? newValue) {
+                                    _selectedEquipeA.value = newValue;
+                                  },
+                                  items: equipes.map<DropdownMenuItem<Equipe>>(
+                                      (Equipe equipe) {
+                                    return DropdownMenuItem<Equipe>(
+                                      value: equipe,
+                                      child: Text(equipe.nom),
                                     );
-                                  });
-                            }),
-                        SizedBox(
-                          width: 3,
+                                  }).toList(),
+                                );
+                              },
+                            );
+                          },
                         ),
+                        SizedBox(width: 3),
                         Text("VS"),
-                        SizedBox(
-                          width: 3,
-                        ),
+                        SizedBox(width: 3),
                         ValueListenableBuilder<List<Equipe>>(
-                            valueListenable: _equipes,
-                            builder: (context, equipes, child) {
-                              return ValueListenableBuilder<Equipe?>(
-                                  valueListenable: _selectedEquipeB,
-                                  builder: (context, selectedEquipe, child) {
-                                    return DropdownButton<Equipe>(
-                                      borderRadius: BorderRadius.circular(10),
-                                      hint: Text('Equipe B'),
-                                      value: _selectedEquipeB.value,
-                                      onChanged: (Equipe? newValue) {
-                                        _selectedEquipeB.value = newValue;
-                                      },
-                                      items: _equipes.value
-                                          .map<DropdownMenuItem<Equipe>>(
-                                              (Equipe equipe) {
-                                        return DropdownMenuItem<Equipe>(
-                                          value: equipe,
-                                          child: Text(equipe.nom),
-                                        );
-                                      }).toList(),
+                          valueListenable: _equipes,
+                          builder: (context, equipes, child) {
+                            return ValueListenableBuilder<Equipe?>(
+                              valueListenable: _selectedEquipeB,
+                              builder: (context, selectedEquipeB, child) {
+                                return DropdownButton<Equipe>(
+                                  hint: Text('Equipe B'),
+                                  value: equipes.contains(selectedEquipeB)
+                                      ? selectedEquipeB
+                                      : null,
+                                  onChanged: (Equipe? newValue) {
+                                    _selectedEquipeB.value = newValue;
+                                  },
+                                  items: equipes.map<DropdownMenuItem<Equipe>>(
+                                      (Equipe equipe) {
+                                    return DropdownMenuItem<Equipe>(
+                                      value: equipe,
+                                      child: Text(equipe.nom),
                                     );
-                                  });
-                            }),
+                                  }).toList(),
+                                );
+                              },
+                            );
+                          },
+                        ),
                       ],
                     ),
                     SizedBox(
@@ -174,7 +220,7 @@ class CreateMatchFootball extends StatelessWidget {
                     ),
 
                     GestureDetector(
-                      onTap: () => _selectDate(context),
+                      onTap: () => _selectDateTime(context),
                       child: Row(children: [
                         Icon(Icons.calendar_month),
                         SizedBox(
@@ -205,7 +251,8 @@ class CreateMatchFootball extends StatelessWidget {
                         try {
                           Football football = new Football(
                               buteurs: [],
-                              description: _descriptionTextController.value,
+                              description:
+                                  _descriptionTextController.value.text,
                               photo: _url.value,
                               statistiques: {
                                 "redCardA": 0,
@@ -235,7 +282,7 @@ class CreateMatchFootball extends StatelessWidget {
                               partageLien: "");
                           try {
                             String code =
-                                await _footballService.postFootball(football);
+                                await _SportService.postFootball(football);
                             if (code == "OK") {
                               AlerteMessageWidget(
                                   context,
@@ -247,7 +294,7 @@ class CreateMatchFootball extends StatelessWidget {
                         } catch (e) {
                           AlerteMessageWidget(
                               context,
-                              "Une erreur est survie lors de la création.",
+                              "Une erreur est survie lors de la création.${e}",
                               AppColors.echec);
                         }
                       } else {

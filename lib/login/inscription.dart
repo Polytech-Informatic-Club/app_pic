@@ -367,7 +367,7 @@ class Inscription extends StatelessWidget {
                           ValueListenableBuilder<bool>(
                               valueListenable: _isSaving,
                               builder: (context, isSaving, child) {
-                                return !isSaving
+                                return isSaving
                                     ? CircularProgressIndicator()
                                     : ElevatedButton(
                                         onPressed: () async {

@@ -5,10 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/football.dart';
 
-class FootballService {
+class SportService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   CollectionReference footballCollection =
-      FirebaseFirestore.instance.collection("FOOTBALL");
+      FirebaseFirestore.instance.collection("MATCH");
 
 // Football SERVICE
   Future<List<Equipe>> getEquipeList() async {
@@ -41,7 +41,7 @@ class FootballService {
   Future<Map<String, dynamic>?> getFootballById(String id) async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
-          .collection("FOOTBALL")
+          .collection("MATCH")
           .where("id", isEqualTo: id)
           .get();
       Map<String, dynamic> football = querySnapshot.docs.first.data();
