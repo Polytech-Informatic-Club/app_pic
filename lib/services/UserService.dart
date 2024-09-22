@@ -76,11 +76,11 @@ class UserService {
     }
   }
 
-  Future<String?> getUserRole(String email) async {
+  Future<String?> getUserRole(String uid) async {
     try {
       // Récupère le document correspondant à l'utilisateur dans Firestore
       DocumentSnapshot<Map<String, dynamic>> docSnapshot =
-          await _firestore.collection("USER").doc(email).get();
+          await _firestore.collection("USER").doc(uid).get();
 
       if (docSnapshot.exists) {
         // Si le document existe, récupère les données de l'utilisateur

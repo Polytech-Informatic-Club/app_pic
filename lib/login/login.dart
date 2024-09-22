@@ -7,6 +7,7 @@ import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/services/UserService.dart';
 import 'package:new_app/utils/AppColors.dart';
+import 'package:new_app/widgets/alerteMessage.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -129,16 +130,14 @@ class LoginScreen extends StatelessWidget {
                                   String? role = await _userService
                                       .getUserRole(_emailController.text);
                                   if (user != null && role != null) {
-                                    print(role);
                                     _userService.setRole(role);
                                     changerPage(context, HomePage());
                                   }
                                 } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            'Mot de passe ou email invalide.')),
-                                  );
+                                  AlerteMessageWidget(
+                                      context,
+                                      "Mot de passe ou email invalide.",
+                                      AppColors.echec);
                                 }
                               }
                             },
