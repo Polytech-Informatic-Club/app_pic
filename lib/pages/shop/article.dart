@@ -145,7 +145,7 @@ class _Articles extends State<Articles> {
                           height: 35,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage('assets/images/categorie 1.png'),
+                              image: AssetImage('assets/images/categorie.png'),
                               fit: BoxFit.cover,
                             ),
                           ),

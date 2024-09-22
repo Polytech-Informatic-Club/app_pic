@@ -71,7 +71,11 @@ flutter:
     - assets/images/market/photo_2024-05-24_12-27-39.jpg
     - assets/images/market/icons8-jouer-90.png
     - assets/images/objets-perdus/WhatsApp Image 2024-06-09 at 00.36.10_223e85e0.jpg
+<<<<<<< HEAD
     - assets/images/categorie 1.png
+=======
+    - assets/images/categorie.png
+>>>>>>> e363b90e384191233d8d1305e914600d1dce9972
     - assets/images/connection-inscription/
     - assets/images/Navbar-Icons/
     - assets/images/Competition/
