@@ -406,10 +406,14 @@ class Inscription extends StatelessWidget {
                                                         .split('.')
                                                         .last);
                                                 try {
-                                                  await _userService
-                                                      .ajouterUser(utilisateur);
-                                                  changerPage(
-                                                      context, HomePage());
+                                                  String code =
+                                                      await _userService
+                                                          .ajouterUser(
+                                                              utilisateur);
+                                                  if (code == "OK") {
+                                                    changerPage(
+                                                        context, HomePage());
+                                                  }
                                                 } catch (e) {}
                                               }
                                             } catch (e) {

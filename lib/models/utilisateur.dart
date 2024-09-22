@@ -2,27 +2,28 @@ import 'package:uuid/uuid.dart';
 import 'package:new_app/models/enums/role_type.dart';
 
 class Utilisateur {
-  final String id;
-  final String username;
-  final String password;
-  final String prenom;
-  final String nom;
-  final String email;
-  final String telephone;
-  final String photo; // This could be a URL
-  final RoleType role;
+  final String? id;
+  final String? username;
+  final String? password;
+  final String prenom; // Obligatoire
+  final String nom; // Obligatoire
+  final String email; // Obligatoire
+  final String? telephone;
+  final String? photo; // This could be a URL
+  final RoleType? role;
 
   Utilisateur({
-    required this.id,
-    required this.username,
-    required this.password,
+    this.id,
+    this.username,
+    this.password,
     required this.prenom,
     required this.nom,
     required this.email,
-    required this.telephone,
-    required this.photo,
-    required this.role,
+    this.telephone,
+    this.photo,
+    this.role,
   });
+
 
   // Factory method to create a Utilisateur object from JSON
   factory Utilisateur.fromJson(Map<String, dynamic> json) {

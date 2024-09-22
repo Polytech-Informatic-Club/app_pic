@@ -8,7 +8,7 @@ class ObjetPerdu {
   final String lieu; // Place where the object was lost
   final DateTime date; // Date when the object was lost
   final Etat etat; // Status of the object (PERDU or RETROUVE)
-  final User user; // The user who lost the object
+  final Utilisateur user; // The user who lost the object
 
   ObjetPerdu({
     required this.id,
@@ -27,7 +27,7 @@ class ObjetPerdu {
       lieu: json['lieu'] as String,
       date: DateTime.parse(json['date'] as String),
       etat: Etat.values.firstWhere((e) => e.toString() == 'Etat.${json['etat']}'),
-      user: User.fromJson(json['user'] as Map<String, dynamic>),
+      user: Utilisateur.fromJson(json['user'] as Map<String, dynamic>),
     );
   }
 

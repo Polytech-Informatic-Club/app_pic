@@ -50,26 +50,51 @@ class UserService {
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
 // USER SERVICE
-  Future<List<Map<String, dynamic>>> getAllUser() async {
+  Future<List<Utilisateur>> getAllUser() async {
     try {
+      List<Utilisateur> list = [];
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await _firestore.collection("USER").get();
       List<Map<String, dynamic>> listeUsers =
           querySnapshot.docs.map((doc) => doc.data()).toList();
+      for (var user in listeUsers) {
+        list.add(Utilisateur.fromJson(user));
+      }
 
-      return listeUsers;
+      return list;
     } catch (e) {
       return [];
     }
   }
 
-  Future<void> ajouterUser(Utilisateur utilisateur) async {
+  Future<String> ajouterUser(Utilisateur utilisateur) async {
     try {
       await userCollection.doc(utilisateur.email).set(utilisateur.toJson());
-
-      print("Utilisateur ajoutée avec succès !");
+      return "OK";
     } catch (e) {
-      print("Erreur lors de l'ajout de l'Utilisateur : $e");
+      return "Erreur lors de l'ajout de l'Utilisateur : $e";
+    }
+  }
+
+  Future<String?> getUserRole(String email) async {
+    try {
+      // Récupère le document correspondant à l'utilisateur dans Firestore
+      DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+          await _firestore.collection("USER").doc(email).get();
+
+      if (docSnapshot.exists) {
+        // Si le document existe, récupère les données de l'utilisateur
+        Map<String, dynamic>? userData = docSnapshot.data();
+
+        if (userData != null && userData.containsKey('role')) {
+          // Retourne le rôle de l'utilisateur si disponible
+          return userData['role'] as String?;
+        }
+      }
+
+      return null; // Retourne null si le rôle n'est pas trouvé
+    } catch (e) {
+      return null; // Gestion des erreurs
     }
   }
 }

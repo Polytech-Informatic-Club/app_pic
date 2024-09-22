@@ -4,7 +4,7 @@ class Commentaire {
   final String id;
   final String content;
   final DateTime date;
-  final User user;
+  final Utilisateur user;
   final int likes;
   final int dislikes;
 
@@ -22,7 +22,7 @@ class Commentaire {
       id: json['id'] as String,
       content: json['content'] as String,
       date: json['date'] as DateTime,
-      user: json['user'] as User,
+      user: json['user'] as Utilisateur,
       likes: json['likes'] as int,
       dislikes: json['dislikes'] as int
     );

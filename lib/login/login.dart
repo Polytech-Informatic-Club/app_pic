@@ -126,8 +126,11 @@ class LoginScreen extends StatelessWidget {
                                     _emailController.text.trim(),
                                     _passwordController.text.trim(),
                                   );
-
-                                  if (user != null) {
+                                  String? role = await _userService
+                                      .getUserRole(_emailController.text);
+                                  if (user != null && role != null) {
+                                    print(role);
+                                    _userService.setRole(role);
                                     changerPage(context, HomePage());
                                   }
                                 } catch (e) {

@@ -6,7 +6,7 @@ enum StatutSessionJeu { OUVERTE, FERMEE }
 class SessionJeu {
   final String id;
   final DateTime date;
-  final List<User> joueurs;
+  final List<Utilisateur> joueurs;
   final StatutSessionJeu statut;
 
   SessionJeu({
@@ -19,7 +19,7 @@ class SessionJeu {
   // Factory method to create a SessionJeu object from JSON
   factory SessionJeu.fromJson(Map<String, dynamic> json) {
     var joueursFromJson = json['joueurs'] as List<dynamic>;
-    List<User> joueurList = joueursFromJson.map((item) => User.fromJson(item)).toList();
+    List<Utilisateur> joueurList = joueursFromJson.map((item) => Utilisateur.fromJson(item)).toList();
 
     return SessionJeu(
       id: json['id'] as String,
