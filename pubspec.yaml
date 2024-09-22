@@ -41,9 +41,6 @@ dependencies:
   http: ^1.2.2
   page_transition: ^2.1.0
   uuid: ^4.5.0
-  shared_preferences: ^2.3.2
-  firebase_storage: ^12.3.1
-  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
@@ -70,10 +67,14 @@ flutter:
   assets:
     - assets/images/
     - assets/images/interclasseBasket.jpg
+    - assets/images/market/photo_2024-05-24_12-27-08.jpg
+    - assets/images/market/photo_2024-05-24_12-27-39.jpg
+    - assets/images/market/icons8-jouer-90.png
+    - assets/images/objets-perdus/WhatsApp Image 2024-06-09 at 00.36.10_223e85e0.jpg
+    - assets/images/categorie 1.png
     - assets/images/connection-inscription/
     - assets/images/Navbar-Icons/
     - assets/images/Competition/
-    - assets/images/football/
 
   #   - images/a_dot_ham.jpeg
 

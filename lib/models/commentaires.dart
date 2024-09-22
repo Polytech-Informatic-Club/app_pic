@@ -1,10 +1,10 @@
-import 'package:new_app/models/utilisateur.dart';
+import 'package:new_app/models/user.dart';
 
 class Commentaire {
   final String id;
   final String content;
   final DateTime date;
-  final Utilisateur user;
+  final User user;
   final int likes;
   final int dislikes;
 
@@ -22,7 +22,7 @@ class Commentaire {
       id: json['id'] as String,
       content: json['content'] as String,
       date: json['date'] as DateTime,
-      user: json['user'] as Utilisateur,
+      user: json['user'] as User,
       likes: json['likes'] as int,
       dislikes: json['dislikes'] as int
     );

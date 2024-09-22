@@ -45,14 +45,12 @@ class _navbarState extends State<navbar> {
         ),
       ),
       child: NavigationBar(
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
         overlayColor: WidgetStatePropertyAll(Colors.white),
         backgroundColor: Colors.white,
         indicatorColor: Colors.white,
         indicatorShape: CircleBorder(),
         selectedIndex: widget.pageIndex,
         onDestinationSelected: _onSelected,
-        height: 70,
         destinations: [
           _destination('assets/images/Navbar-Icons/xoss.png',
               'assets/images/Navbar-Icons/xoss1.png', '', 30),
