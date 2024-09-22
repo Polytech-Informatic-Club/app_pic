@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/home/navbar.dart';
-import 'package:new_app/pages/sports/PagesSports/testfoot.dart';
+import 'package:new_app/pages/sports/PagesSports/foot.dart';
 import 'package:new_app/utils/AppColors.dart';
 
 class Interclasse extends StatelessWidget {

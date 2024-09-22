@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:new_app/UserPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:new_app/login/inscription.dart';
 import 'package:new_app/login/login.dart';

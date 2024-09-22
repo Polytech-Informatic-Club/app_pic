@@ -7,6 +7,9 @@ class AppColors {
   static const Color black = Colors.black;
   static const Color white = Colors.white;
   static const Color gray = Color(0xFFD9D9D9);
+
+  static const Color success = Colors.green;
+  static const Color echec = Colors.red;
 }
 
 const Color orange = Color(0xFFF4AB5A);

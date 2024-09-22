@@ -7,6 +7,7 @@ import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/services/UserService.dart';
 import 'package:new_app/utils/AppColors.dart';
+import 'package:new_app/widgets/alerteMessage.dart';
 
 class Inscription extends StatelessWidget {
   Inscription({super.key});
@@ -53,7 +54,6 @@ class Inscription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("OK");
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -367,7 +367,7 @@ class Inscription extends StatelessWidget {
                           ValueListenableBuilder<bool>(
                               valueListenable: _isSaving,
                               builder: (context, isSaving, child) {
-                                return !isSaving
+                                return isSaving
                                     ? CircularProgressIndicator()
                                     : ElevatedButton(
                                         onPressed: () async {
@@ -417,12 +417,10 @@ class Inscription extends StatelessWidget {
                                                 } catch (e) {}
                                               }
                                             } catch (e) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                    content: Text(
-                                                        "Formulaire invalide")),
-                                              );
+                                              AlerteMessageWidget(
+                                                  context,
+                                                  "Mot de passe ou email invalide.",
+                                                  AppColors.echec);
                                             }
                                           }
                                         },

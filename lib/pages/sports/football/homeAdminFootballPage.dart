@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/pages/home/appDrawer.dart';
 import 'package:new_app/pages/sports/football/createMatchFootball.dart';
 import 'package:new_app/widgets/submitedButton.dart';
 import 'package:new_app/fonctions.dart';
@@ -21,7 +22,11 @@ class HomeAdminFootballPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Appdrawer(),
+      appBar: AppBar(),
       body: SingleChildScrollView(
+          child: Padding(
+        padding: EdgeInsets.only(top: MediaQuery.sizeOf(context).height * 0.1),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -32,7 +37,7 @@ class HomeAdminFootballPage extends StatelessWidget {
             })
           ],
         ),
-      ),
+      )),
     );
   }
 }
