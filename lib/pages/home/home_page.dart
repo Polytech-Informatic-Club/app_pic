@@ -6,6 +6,7 @@ import 'package:new_app/pages/home/appDrawer.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'package:new_app/pages/interclasse/football/homeFootPage.dart';
 import 'package:new_app/pages/interclasse/interclasse.dart';
+import 'package:new_app/utils/AppColors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -78,6 +79,9 @@ class _HomePageState extends State<HomePage> {
                   // Section Jeux
                   _buildSectionTitle('Jeux', context, []),
                   _buildGameIcons(),
+                  SizedBox(
+                    height: 20,
+                  ),
                 ],
               ),
             ),
@@ -210,6 +214,10 @@ Widget _buildGameIcon(
         height: 80,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: grisClair,
+            width: 3,
+          ),
           image: DecorationImage(
             image: AssetImage(imagePath),
             fit: BoxFit.cover,
@@ -218,7 +226,8 @@ Widget _buildGameIcon(
       ),
       SizedBox(height: 8),
       Text(gameName),
-      Text(playersWaiting, style: TextStyle(color: Colors.grey, fontSize: 12)),
+      Text(playersWaiting,
+          style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold)),
     ],
   );
 }
