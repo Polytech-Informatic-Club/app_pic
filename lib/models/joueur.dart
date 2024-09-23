@@ -6,15 +6,14 @@ class Joueur extends Utilisateur {
   final String position;
   final int totalBut;
 
-  Joueur({
-    required this.id,
-    required this.position,
-    required this.totalBut,
-    required email,
-    required prenom,
-    required nom
-
-  }):super(email: email, prenom: prenom, nom: nom);
+  Joueur(
+      {required this.id,
+      required this.position,
+      required this.totalBut,
+      required email,
+      required prenom,
+      required nom})
+      : super(email: email, prenom: prenom, nom: nom);
 
   // Factory method to create a Joueur object from JSON
   factory Joueur.fromJson(Map<String, dynamic> json) {

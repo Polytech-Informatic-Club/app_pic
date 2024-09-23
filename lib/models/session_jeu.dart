@@ -19,13 +19,15 @@ class SessionJeu {
   // Factory method to create a SessionJeu object from JSON
   factory SessionJeu.fromJson(Map<String, dynamic> json) {
     var joueursFromJson = json['joueurs'] as List<dynamic>;
-    List<Utilisateur> joueurList = joueursFromJson.map((item) => Utilisateur.fromJson(item)).toList();
+    List<Utilisateur> joueurList =
+        joueursFromJson.map((item) => Utilisateur.fromJson(item)).toList();
 
     return SessionJeu(
       id: json['id'] as String,
       date: DateTime.parse(json['date'] as String),
       joueurs: joueurList,
-      statut: StatutSessionJeu.values.firstWhere((e) => e.toString() == 'StatutSessionJeu.${json['statut']}'),
+      statut: StatutSessionJeu.values.firstWhere(
+          (e) => e.toString() == 'StatutSessionJeu.${json['statut']}'),
     );
   }
 
@@ -34,7 +36,9 @@ class SessionJeu {
     return {
       'id': id,
       'date': date.toIso8601String(),
-      'joueurs': joueurs.map((joueur) => joueur.toJson()).toList(), // Convert list of User objects to JSON
+      'joueurs': joueurs
+          .map((joueur) => joueur.toJson())
+          .toList(), // Convert list of User objects to JSON
       'statut': statut.toString().split('.').last, // Convert enum to string
     };
   }

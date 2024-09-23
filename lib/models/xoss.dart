@@ -26,7 +26,8 @@ class Xoss {
       date: DateTime.parse(json['date'] as String),
       user: Utilisateur.fromJson(json['user'] as Map<String, dynamic>),
       produit: List<String>.from(json['produit'] as List<dynamic>),
-      statut: StatutXoss.values.firstWhere((e) => e.toString() == 'Statut.${json['statut']}'),
+      statut: StatutXoss.values
+          .firstWhere((e) => e.toString() == 'Statut.${json['statut']}'),
     );
   }
 

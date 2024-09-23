@@ -1,13 +1,20 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+//import 'package:new_app/UserPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:new_app/login/inscription.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/sports/football/detailFootball.dart';
 import 'package:new_app/pages/sports/football/homeFootPage.dart';
+import 'package:new_app/pages/sports/PagesSports/basket.dart';
+import 'package:new_app/pages/sports/PagesSports/detail_match.dart';
+import 'package:new_app/pages/sports/PagesSports/foot.dart';
+import 'package:new_app/pages/sports/PagesSports/volley.dart';
+import 'package:new_app/pages/sports/football/homeAdminFootballPage.dart';
 import 'package:new_app/pages/sports/interclasse.dart';
+import 'package:new_app/pages/shop/article.dart';
 
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -26,7 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: Articles(),
     );
   }
 }

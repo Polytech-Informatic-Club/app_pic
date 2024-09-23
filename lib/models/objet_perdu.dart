@@ -26,7 +26,8 @@ class ObjetPerdu {
       description: json['description'] as String,
       lieu: json['lieu'] as String,
       date: DateTime.parse(json['date'] as String),
-      etat: Etat.values.firstWhere((e) => e.toString() == 'Etat.${json['etat']}'),
+      etat:
+          Etat.values.firstWhere((e) => e.toString() == 'Etat.${json['etat']}'),
       user: Utilisateur.fromJson(json['user'] as Map<String, dynamic>),
     );
   }

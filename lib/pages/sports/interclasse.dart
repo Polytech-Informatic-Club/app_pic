@@ -23,9 +23,11 @@ class InterclassePage extends StatelessWidget {
             SizedBox(
               height: 170,
               child: Stack(
+                fit: StackFit.expand,
                 children: [
                   Image.asset(
                     'assets/images/Competition/top_bg_interclasse.png',
+                    fit: BoxFit.cover,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
