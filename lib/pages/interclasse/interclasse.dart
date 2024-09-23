@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/match.dart';
+import 'package:new_app/pages/home/appDrawer.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'package:new_app/pages/interclasse/basket/basket.dart';
@@ -11,6 +12,7 @@ import 'package:new_app/pages/interclasse/volley/volley.dart';
 import 'package:new_app/services/SportService.dart';
 import 'package:new_app/utils/AppColors.dart';
 
+// ignore: must_be_immutable
 class InterclassePage extends StatelessWidget {
   InterclassePage({super.key});
 
@@ -20,6 +22,7 @@ class InterclassePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: navbar(pageIndex: 3),
+      drawer: Appdrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -38,15 +41,19 @@ class InterclassePage extends StatelessWidget {
                       SizedBox(
                         height: 40,
                       ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.menu,
-                          size: 35,
-                          color: Colors.black,
-                        ),
-                        alignment: AlignmentDirectional.topStart,
-                      ),
+                      Builder(builder: (context) {
+                        return IconButton(
+                          onPressed: () {
+                            Scaffold.of(context).openDrawer();
+                          },
+                          icon: Icon(
+                            Icons.menu,
+                            size: 35,
+                            color: Colors.black,
+                          ),
+                          alignment: AlignmentDirectional.topStart,
+                        );
+                      }),
                     ],
                   ),
                   Column(
