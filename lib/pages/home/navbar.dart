@@ -3,7 +3,7 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/pages/annonces.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/shop/shop.dart';
-import 'package:new_app/pages/sports/interclasse.dart';
+import 'package:new_app/pages/interclasse/interclasse.dart';
 import 'package:new_app/pages/xoss/xoss.dart';
 import 'package:new_app/utils/AppColors.dart';
 

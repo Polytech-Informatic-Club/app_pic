@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/pages/home/appDrawer.dart';
 import 'package:new_app/pages/home/navbar.dart';
-import 'package:new_app/pages/sports/football/homeFootPage.dart';
-import 'package:new_app/pages/sports/interclasse.dart';
+import 'package:new_app/pages/interclasse/football/homeFootPage.dart';
+import 'package:new_app/pages/interclasse/interclasse.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -60,8 +60,8 @@ class _HomePageState extends State<HomePage> {
           ),
 
           // Section Nouveautés
-          _buildSectionTitle(
-              'Nouveautés', context, ['Polytech-Info', 'Interclasses', 'Commerces']),
+          _buildSectionTitle('Nouveautés', context,
+              ['Polytech-Info', 'Interclasses', 'Commerces']),
           SizedBox(height: 16),
           _buildEventCards(),
           SizedBox(height: 32),

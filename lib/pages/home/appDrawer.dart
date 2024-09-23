@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/models/enums/role_type.dart';
-import 'package:new_app/pages/sports/football/homeAdminFootballPage.dart';
+import 'package:new_app/pages/interclasse/football/homeAdminFootballPage.dart';
 import 'package:new_app/services/UserService.dart';
 import 'package:new_app/utils/AppColors.dart';
 import 'package:shared_preferences/shared_preferences.dart';

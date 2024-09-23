@@ -81,6 +81,9 @@ flutter:
     - assets/images/Competition/
     - assets/images/homepage/
     - assets/images/football/
+    - assets/images/basketball/
+    - assets/images/volleyball/
+    - assets/images/jeux-desprit/
 
   #   - images/a_dot_ham.jpeg
 
