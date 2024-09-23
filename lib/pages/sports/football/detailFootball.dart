@@ -1,16 +1,31 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:new_app/fonctions.dart';
+import 'package:new_app/models/football.dart';
+import 'package:new_app/models/match.dart';
+import 'package:new_app/services/SportService.dart';
 import 'package:new_app/utils/AppColors.dart';
+import 'package:new_app/widgets/commentWidget.dart';
+import 'package:new_app/widgets/deleteConfirmedDialog.dart';
+import 'package:new_app/widgets/reusable_comment_input.dart';
 
 class DetailFootballScreen extends StatefulWidget {
-  const DetailFootballScreen({super.key});
+  String id;
+  DetailFootballScreen(this.id, {super.key});
 
   @override
-  State<DetailFootballScreen> createState() => _DetailFootballScreenState();
+  State<DetailFootballScreen> createState() => _DetailFootballScreenState(id);
 }
 
 class _DetailFootballScreenState extends State<DetailFootballScreen> {
-  int likes = 0;
-  bool liked = false;
+  SportService _sportService = new SportService();
+  String _id;
+  _DetailFootballScreenState(this._id);
+
+  ValueNotifier<bool> _isPressCommment = new ValueNotifier<bool>(false);
+  ValueNotifier<Football?> _match = new ValueNotifier<Football?>(null);
+
+  TextEditingController _commentairController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,353 +47,434 @@ class _DetailFootballScreenState extends State<DetailFootballScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(color: jauneClair),
-              padding: EdgeInsets.only(bottom: 20),
-              child: Column(
-                children: [
-                  SizedBox(height: 20),
-                  // Match Information
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
+        child: FutureBuilder<Football?>(
+            future: _sportService.getMatchFootballById(_id),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Erreur lors de la récupération du rôle');
+              } else {
+                final match = snapshot.data ?? null;
+                _match.value = match;
+                return match == null
+                    ? CircularProgressIndicator()
+                    : Column(
                         children: [
-                          CircleAvatar(
-                            radius: 40,
-                            backgroundImage:
-                                AssetImage('assets/team1_logo.png'),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            "#47",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        "VS",
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      Column(
-                        children: [
-                          CircleAvatar(
-                            radius: 40,
-                            backgroundImage:
-                                AssetImage('assets/team2_logo.png'),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            "#50",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  // Score
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 35),
-                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
-                    decoration: BoxDecoration(
-                      color: orange,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
+                          Container(
+                            decoration: BoxDecoration(color: jauneClair),
+                            padding: EdgeInsets.only(bottom: 20),
+                            child: Column(
                               children: [
-                                Text(
-                                  "2",
-                                  style: TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
+                                SizedBox(height: 20),
+                                // Match Information
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        CircleAvatar(
+                                            radius: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.1,
+                                            backgroundImage: NetworkImage(
+                                              match.equipeA.logo,
+                                            )),
+                                        SizedBox(height: 10),
+                                        Text(
+                                          match.equipeA.nom,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      "VS",
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Column(
+                                      children: [
+                                        CircleAvatar(
+                                            radius: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.1,
+                                            backgroundImage: NetworkImage(
+                                              match.equipeB.logo,
+                                            )),
+                                        SizedBox(height: 10),
+                                        Text(
+                                          match.equipeB.nom,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  "Elimane Sall",
-                                  style: TextStyle(color: Colors.white),
+                                SizedBox(height: 20),
+                                // Score
+                                Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 35),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 15, horizontal: 40),
+                                  decoration: BoxDecoration(
+                                    color: orange,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Text(
+                                                match.scoreEquipeA.toString(),
+                                                style: TextStyle(
+                                                    fontSize: 32,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white),
+                                              ),
+                                              Column(
+                                                children: [
+                                                  for (var butteur
+                                                      in match.buteurs!)
+                                                    Text(
+                                                      butteur.nom,
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                          Text(
+                                            "-",
+                                            style: TextStyle(
+                                                fontSize: 32,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white),
+                                          ),
+                                          Column(
+                                            children: [
+                                              Text(
+                                                match.scoreEquipeB.toString(),
+                                                style: TextStyle(
+                                                    fontSize: 32,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white),
+                                              ),
+                                              Column(
+                                                children: [
+                                                  for (var butteur
+                                                      in match.buteurs!)
+                                                    Text(
+                                                      butteur.nom,
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Text("Modou Ndiaye",
-                                    style: TextStyle(color: Colors.white)),
                               ],
                             ),
-                            Text(
-                              "-",
-                              style: TextStyle(
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                            Column(
+                          ),
+                          SizedBox(height: 20),
+                          // Statistiques
+                          Text(
+                            "Statistiques",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 10),
+                          // Statistics Row
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  "1",
-                                  style: TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
+                                // Team 1 Stats
+                                Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: Colors.yellow,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: Text(
+                                            match.statistiques["yellowCardA"]
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: Text(
+                                            match.statistiques["redCardA"]
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text("Cartons"),
+                                  ],
                                 ),
-                                Text("Elimane Sall",
-                                    style: TextStyle(color: Colors.white)),
+                                // Statistics Icons
+                                Column(
+                                  children: [
+                                    Icon(Icons.sports_soccer, size: 32),
+                                    Text("tirs"),
+                                    Text(
+                                        "${match.statistiques["tirsA"].toString()} - ${match.statistiques["tirsB"].toString()}"),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    Icon(Icons.sports, size: 32),
+                                    Text("tirs cadrés"),
+                                    Text(
+                                        "${match.statistiques["tirsCadresA"].toString()} - ${match.statistiques["tirsCadresB"].toString()}"),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    Icon(Icons.error_outline, size: 32),
+                                    Text("fautes"),
+                                    Text(
+                                        "${match.statistiques["fautesA"].toString()} - ${match.statistiques["fautesB"].toString()}"),
+                                  ],
+                                ),
+                                // Team 2 Stats
+                                Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: Colors.yellow,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: Text(
+                                            match.statistiques["yellowCardB"]
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: Text(
+                                            match.statistiques["redCardA"]
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text("Cartons"),
+                                  ],
+                                ),
                               ],
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            // Statistiques
-            Text(
-              "Statistiques",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            // Statistics Row
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Team 1 Stats
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.yellow,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Text(
-                              "0",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 20),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 100.0),
+                            child: Divider(
+                              color: Colors.black,
                             ),
                           ),
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Text(
-                              "0",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                          Row(
+                            children: [
+                              ValueListenableBuilder<Football?>(
+                                  valueListenable: _match,
+                                  builder: (context, matchProvider, child) {
+                                    return Row(
+                                      children: [
+                                        IconButton(
+                                            icon: Icon(
+                                              Icons.thumb_up,
+                                              color: _match.value!.likers!.any(
+                                                      (liker) =>
+                                                          liker!.email ==
+                                                          FirebaseAuth
+                                                              .instance
+                                                              .currentUser!
+                                                              .email)
+                                                  ? Colors.blue
+                                                  : Colors.grey,
+                                            ),
+                                            onPressed: () async {
+                                              if (_match.value!.likers!.any(
+                                                  (liker) =>
+                                                      liker!.email ==
+                                                      FirebaseAuth
+                                                          .instance
+                                                          .currentUser!
+                                                          .email)) {
+                                                _match.value =
+                                                    await _sportService
+                                                        .removeLikeMatch(
+                                                            match.id);
+                                              } else {
+                                                _match.value =
+                                                    await _sportService
+                                                        .likerMatch(match.id);
+                                              }
+                                            }),
+                                        Text(_match.value!.likers!.length
+                                            .toString())
+                                      ],
+                                    );
+                                  }),
+                              IconButton(
+                                  onPressed: () {
+                                    _isPressCommment.value =
+                                        !_isPressCommment.value;
+                                  },
+                                  icon: Icon(
+                                    Icons.message,
+                                    color: Colors.grey,
+                                  ))
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          // Comment Section
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                ValueListenableBuilder<bool>(
+                                    valueListenable: _isPressCommment,
+                                    builder: (context, passwordsMatch, child) {
+                                      return passwordsMatch
+                                          ? reusableCommentInput(
+                                              "Commenter",
+                                              _commentairController,
+                                              (value) {}, () async {
+                                              _match.value = await _sportService
+                                                  .addCommentMatch(
+                                                      match.id,
+                                                      _commentairController
+                                                          .value.text);
+                                              _isPressCommment.value =
+                                                  !_isPressCommment.value;
+                                            })
+                                          : Container(
+                                              height: 0,
+                                            );
+                                    }),
+
+                                Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      "Commentaires",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                                SizedBox(height: 10),
+                                // Comment 1
+                                ValueListenableBuilder<Football?>(
+                                    valueListenable: _match,
+                                    builder: (context, matchProvider, child) {
+                                      return Column(
+                                        children: [
+                                          for (var comment in _match
+                                              .value!.comments!.reversed)
+                                            GestureDetector(
+                                              onLongPress: () async {
+                                                if (comment.user.email ==
+                                                    FirebaseAuth.instance
+                                                        .currentUser!.email) {
+                                                  bool confirm =
+                                                      await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return deleteConfirmedDialog(
+                                                          context);
+                                                    },
+                                                  );
+
+                                                  if (confirm) {
+                                                    _match.value =
+                                                        await _sportService
+                                                            .removeCommentMatch(
+                                                                match.id,
+                                                                comment);
+                                                  }
+                                                } else {
+                                                  print("OK");
+                                                }
+                                              },
+                                              child: CommentWidget(
+                                                photo: comment.user.photo!,
+                                                name: comment.user.prenom +
+                                                    comment.user.nom
+                                                        .toUpperCase(),
+                                                comment: comment.content,
+                                                timeAgo: comment.date,
+                                              ),
+                                            )
+                                        ],
+                                      );
+                                    })
+                              ],
                             ),
                           ),
                         ],
-                      ),
-                      SizedBox(height: 5),
-                      Text("Cartons"),
-                    ],
-                  ),
-                  // Statistics Icons
-                  Column(
-                    children: [
-                      Icon(Icons.sports_soccer, size: 32),
-                      Text("tirs"),
-                      Text("3 - 1"),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Icon(Icons.sports, size: 32),
-                      Text("tirs cadrés"),
-                      Text("0 - 0"),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Icon(Icons.error_outline, size: 32),
-                      Text("fautes"),
-                      Text("0 - 0"),
-                    ],
-                  ),
-                  // Team 2 Stats
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.yellow,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Text(
-                              "0",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Text(
-                              "0",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5),
-                      Text("Cartons"),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 100.0),
-              child: Divider(
-                color: Colors.black,
-              ),
-            ),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.thumb_up,
-                    color: liked ? Colors.blue : Colors.grey,
-                  ),
-                  onPressed: () {
-                    if (liked) {
-                      setState(() {
-                        liked = false;
-                        likes--;
-                      });
-                    } else {
-                      setState(() {
-                        liked = true;
-                        likes++;
-                      });
-                    }
-                  },
-                ),
-                Text(likes.toString()),
-                IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.message,
-                      color: Colors.grey,
-                    ))
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            // Comment Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Commentaires",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10),
-                  // Comment 1
-                  CommentWidget(
-                    name: "Elimane Sall",
-                    comment: "Lorem ipsum dolor sit amet consectetur.",
-                    timeAgo: "Il y a 1 jour",
-                  ),
-                  // Comment 2
-                  CommentWidget(
-                    name: "Elimane Sall",
-                    comment: "Lorem ipsum dolor sit amet consectetur.",
-                    timeAgo: "Il y a 1 jour",
-                  ),
-                  CommentWidget(
-                    name: "Elimane Sall",
-                    comment: "Lorem ipsum dolor sit amet consectetur.",
-                    timeAgo: "Il y a 1 jour",
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+                      );
+              }
+            }),
       ),
-    );
-  }
-}
-
-class CommentWidget extends StatelessWidget {
-  final String name;
-  final String comment;
-
-  final String timeAgo;
-
-  const CommentWidget({
-    super.key,
-    required this.name,
-    required this.comment,
-    required this.timeAgo,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundImage: AssetImage('assets/avatar.png'),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 5),
-                  Text(comment),
-                  SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Spacer(),
-                      Text(
-                        timeAgo,
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        Divider(),
-      ],
     );
   }
 }

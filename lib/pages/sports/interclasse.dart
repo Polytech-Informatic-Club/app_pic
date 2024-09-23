@@ -132,15 +132,17 @@ class InterclassePage extends StatelessWidget {
                                 Column(
                                   children: [
                                     _buildMatchCard(
-                                        context,
-                                        i.sport.name,
-                                        i.date,
-                                        i.equipeA.nom,
-                                        i.equipeB.nom,
-                                        i.scoreEquipeA.toString(),
-                                        i.scoreEquipeB.toString(),
-                                        "",
-                                        ""),
+                                      context,
+                                      i.id,
+                                      i.sport.name,
+                                      i.date,
+                                      i.equipeA.nom,
+                                      i.equipeB.nom,
+                                      i.scoreEquipeA.toString(),
+                                      i.scoreEquipeB.toString(),
+                                      i.equipeA.logo,
+                                      i.equipeA.logo,
+                                    ),
                                     SizedBox(height: 8),
                                   ],
                                 )
@@ -155,16 +157,16 @@ class InterclassePage extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Container(
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.all(10),
                     width: 500,
                     decoration: BoxDecoration(
-                      color: orange,
+                      color: AppColors.primary,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: FutureBuilder<List<Matches>>(
-                          future: _sportService.getLastMatch(),
+                          future: _sportService.getNextMatch(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
@@ -176,12 +178,12 @@ class InterclassePage extends StatelessWidget {
                               return Row(
                                 children: [
                                   for (var i in matches)
-                                    Column(
+                                    Row(
                                       children: [
-                                        _afficheMatch(
-                                            i.photo ?? '', i.date, context),
+                                        _afficheMatch(i.id, i.photo ?? '',
+                                            i.date, context),
                                         SizedBox(
-                                          width: 12,
+                                          width: 10,
                                         ),
                                       ],
                                     )
@@ -200,16 +202,19 @@ class InterclassePage extends StatelessWidget {
     );
   }
 
-  Widget _afficheMatch(String affiche, DateTime date, BuildContext context) {
+  Widget _afficheMatch(
+      String id, String affiche, DateTime date, BuildContext context) {
     return GestureDetector(
-        onTap: () => changerPage(context, DetailFootballScreen()),
+        onTap: () => changerPage(context, DetailFootballScreen(id)),
         child: Column(
           children: [
             affiche != ""
-                ? Image.network(
-                    affiche,
-                    width: 100,
-                  )
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(
+                      affiche,
+                      height: MediaQuery.sizeOf(context).height * 0.17,
+                    ))
                 : Container(
                     height: MediaQuery.sizeOf(context).height * 0.15,
                     decoration: BoxDecoration(
@@ -244,6 +249,7 @@ class InterclassePage extends StatelessWidget {
 
   Widget _buildMatchCard(
       BuildContext context,
+      String id,
       String title,
       DateTime date,
       String equipe1,
@@ -253,7 +259,7 @@ class InterclassePage extends StatelessWidget {
       String photo1,
       String photo2) {
     return GestureDetector(
-        onTap: () => changerPage(context, DetailFootballScreen()),
+        onTap: () => changerPage(context, DetailFootballScreen(id)),
         child: Column(
           children: [
             Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
@@ -270,9 +276,13 @@ class InterclassePage extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Image.asset(
-                              'assets/images/Competition/logo50.png',
-                              width: 60,
+                            CircleAvatar(
+                                radius: MediaQuery.sizeOf(context).width * 0.08,
+                                backgroundImage: NetworkImage(
+                                  photo2,
+                                )),
+                            SizedBox(
+                              width: 5,
                             ),
                             Row(
                               children: [
@@ -290,10 +300,14 @@ class InterclassePage extends StatelessWidget {
                                 Text(score2),
                               ],
                             ),
-                            Image.asset(
-                              'assets/images/Competition/logo50.png',
-                              width: 60,
+                            SizedBox(
+                              width: 5,
                             ),
+                            CircleAvatar(
+                                radius: MediaQuery.sizeOf(context).width * 0.08,
+                                backgroundImage: NetworkImage(
+                                  photo2,
+                                )),
                           ],
                         ),
                       ],

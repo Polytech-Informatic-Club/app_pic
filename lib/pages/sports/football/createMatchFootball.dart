@@ -121,13 +121,13 @@ class CreateMatchFootball extends StatelessWidget {
                                                                     _loading,
                                                                     _url);
                                                         if (url != null) {
-                                                          AlerteMessageWidget(
+                                                          alerteMessageWidget(
                                                               context,
                                                               "Fichier enregistré avec succès !",
                                                               AppColors
                                                                   .success);
                                                         } else {
-                                                          AlerteMessageWidget(
+                                                          alerteMessageWidget(
                                                               context,
                                                               "Une erreur s'est produit lors du chargement !",
                                                               AppColors.echec);
@@ -268,7 +268,10 @@ class CreateMatchFootball extends StatelessWidget {
                                 "tirsCadresA": 0,
                                 "tirsCadresB": 0,
                               },
-                              id: DateTime.now().toString(),
+                              id: _selectedEquipeA.value!.nom +
+                                  " VS " +
+                                  _selectedEquipeB.value!.nom +
+                                  _selectedDate.value!.toString(),
                               date: _selectedDate.value!,
                               equipeA: _selectedEquipeA.value!,
                               equipeB: _selectedEquipeB.value!,
@@ -284,7 +287,7 @@ class CreateMatchFootball extends StatelessWidget {
                             String code =
                                 await _SportService.postFootball(football);
                             if (code == "OK") {
-                              AlerteMessageWidget(
+                              alerteMessageWidget(
                                   context,
                                   "Match crée avec succès !",
                                   AppColors.success);
@@ -292,13 +295,13 @@ class CreateMatchFootball extends StatelessWidget {
                             }
                           } catch (e) {}
                         } catch (e) {
-                          AlerteMessageWidget(
+                          alerteMessageWidget(
                               context,
                               "Une erreur est survie lors de la création.${e}",
                               AppColors.echec);
                         }
                       } else {
-                        AlerteMessageWidget(
+                        alerteMessageWidget(
                             context,
                             "Vous n'avez pas sélectionné une équipe ou des équipes différentes.",
                             AppColors.echec);

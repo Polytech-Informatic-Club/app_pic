@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/utils/AppColors.dart';
 
-Widget ReusableTextFormField(String label, TextEditingController controller,
+Widget reusableTextFormField(String label, TextEditingController controller,
     FormFieldValidator function) {
   return TextFormField(
     controller: controller,
@@ -15,6 +15,7 @@ Widget ReusableTextFormField(String label, TextEditingController controller,
     ),
   );
 }
+
 
 Widget buildMatchCard(String title, String date, String team1, String score1,
     String team2, String score2) {

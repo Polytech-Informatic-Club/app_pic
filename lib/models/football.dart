@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:new_app/models/commentaires.dart';
 import 'package:new_app/models/enums/sport_type.dart';
 import 'package:new_app/models/equipe.dart';
@@ -41,4 +42,47 @@ class Football extends Matches {
             partageLien: partageLien,
             description: description,
             photo: photo);
+
+  Football.fromJson(Map<String, dynamic> json)
+      : buteurs = (json['buteurs'] as List<dynamic>?)
+            ?.map((item) => Joueur.fromJson(item))
+            .toList(),
+        statistiques = Map<String, int>.from(json['statistiques']),
+        super.fromJson(json);
+
+  // factory Football.fromJson(Map<String, dynamic> json) {
+  //   return Football(
+  //       buteurs: (json['buteurs'] as List<dynamic>?)
+  //           ?.map((item) => Joueur.fromJson(item))
+  //           .toList(),
+  //       statistiques: Map<String, int>.from(json['statistiques']),
+  //       id: json['id'],
+  //       date: (json['date'] as Timestamp).toDate(),
+  //       dateCreation: (json['dateCreation'] as Timestamp).toDate(),
+  //       description: json['description'],
+  //       photo: json['photo'],
+  //       equipeA: Equipe.fromJson(json['equipeA']),
+  //       equipeB: Equipe.fromJson(json['equipeB']),
+  //       scoreEquipeA: json['scoreEquipeA'],
+  //       scoreEquipeB: json['scoreEquipeB'],
+  //       sport: SportType.values
+  //           .firstWhere((e) => e.toString().split('.').last == json['sport']),
+  //       comments: (json['comments'] as List<dynamic>)
+  //           .map((comment) => Commentaire.fromJson(comment))
+  //           .toList(),
+  //       likers: (json['likers'] as List<dynamic>)
+  //           .map((liker) => Utilisateur.fromJson(liker))
+  //           .toList(),
+  //       dislikers: (json['dislikers'] as List<dynamic>)
+  //           .map((disliker) => Utilisateur.fromJson(disliker))
+  //           .toList(),
+  //       partageLien: json['partageLien']);
+  // }
+
+  Map<String, dynamic> toJson() {
+    final data = super.toJson(); // Appelle le toJson() de Matches
+    data['buteurs'] = buteurs?.map((buteur) => buteur.toJson()).toList();
+    data['statistiques'] = statistiques;
+    return data;
+  }
 }

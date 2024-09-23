@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/models/enums/role_type.dart';
+import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/sports/football/homeAdminFootballPage.dart';
 import 'package:new_app/services/UserService.dart';
 import 'package:new_app/utils/AppColors.dart';
@@ -67,6 +68,13 @@ class Appdrawer extends StatelessWidget {
                                 )),
 
                                 // Liste des options
+                                ListTile(
+                                  leading: Icon(Icons.person),
+                                  title: Text('Accueil'),
+                                  onTap: () {
+                                    changerPage(context, HomePage());
+                                  },
+                                ),
                                 ListTile(
                                   leading: Icon(Icons.person),
                                   title: Text('Compte'),

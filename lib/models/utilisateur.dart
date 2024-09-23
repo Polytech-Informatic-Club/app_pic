@@ -24,7 +24,6 @@ class Utilisateur {
     this.role,
   });
 
-
   // Factory method to create a Utilisateur object from JSON
   factory Utilisateur.fromJson(Map<String, dynamic> json) {
     return Utilisateur(
@@ -36,9 +35,9 @@ class Utilisateur {
         email: json['email'] as String,
         telephone: json['telephone'] as String,
         photo: json['photo'] as String,
-        role: json['role']
-        // role: RoleType.fromJson(json['role'] as Map<String, dynamic>),
-        );
+        role: RoleType.values.firstWhere(
+          (e) => e.toString().split('.').last == json['role'],
+        ));
   }
 
   // Method to convert a Utilisateur object to JSON
@@ -52,7 +51,7 @@ class Utilisateur {
       'email': email,
       'telephone': telephone,
       'photo': photo,
-      'role': role.toString().split('.').last 
+      'role': role.toString().split('.').last
       // 'role': role.toJson(), // Converts enum to string
     };
   }

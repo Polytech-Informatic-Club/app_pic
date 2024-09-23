@@ -126,10 +126,10 @@ class UserService {
       _loading.value = false;
       return _url.value;
     } on FirebaseException catch (e) {
-      AlerteMessageWidget(context,
+      alerteMessageWidget(context,
           "Une erreur s'est produit lors du chargement !", AppColors.echec);
     } catch (error) {
-      AlerteMessageWidget(context,
+      alerteMessageWidget(context,
           "Une erreur s'est produit lors du chargement !", AppColors.echec);
     }
     return "";

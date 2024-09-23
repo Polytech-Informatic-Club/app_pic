@@ -1,12 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:new_app/models/utilisateur.dart';
 
 class Commentaire {
-  final String id;
-  final String content;
-  final DateTime date;
-  final Utilisateur user;
-  final int likes;
-  final int dislikes;
+  String id;
+  String content;
+  DateTime date;
+  Utilisateur user;
+  int likes;
+  int dislikes;
 
   Commentaire(
       {required this.id,
@@ -20,8 +21,8 @@ class Commentaire {
     return Commentaire(
         id: json['id'] as String,
         content: json['content'] as String,
-        date: json['date'] as DateTime,
-        user: json['user'] as Utilisateur,
+        date: (json['date'] as Timestamp).toDate(),
+        user: Utilisateur.fromJson(json['user']),
         likes: json['likes'] as int,
         dislikes: json['dislikes'] as int);
   }
@@ -31,7 +32,7 @@ class Commentaire {
       'id': id,
       'content': content,
       'date': date,
-      'user': user,
+      'user': user.toJson(),
       'likes': likes,
       'dislikes': dislikes
     };
