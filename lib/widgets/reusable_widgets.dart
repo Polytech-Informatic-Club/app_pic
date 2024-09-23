@@ -17,8 +17,8 @@ Widget reusableTextFormField(String label, TextEditingController controller,
 }
 
 
-Widget buildMatchCard(String title, String date, String team1, String score1,
-    String team2, String score2) {
+Widget buildMatchCard(String title, String date, String logoteam1,
+    String score1, String logoteam2, String score2) {
   return Column(
     children: [
       Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
@@ -38,7 +38,7 @@ Widget buildMatchCard(String title, String date, String team1, String score1,
                       CircleAvatar(
                         radius: 30,
                         backgroundColor: grisClair,
-                        backgroundImage: AssetImage(team1),
+                        backgroundImage: AssetImage(logoteam1),
                       ),
                       Text(score1),
                     ],
@@ -49,7 +49,7 @@ Widget buildMatchCard(String title, String date, String team1, String score1,
                       CircleAvatar(
                         radius: 30,
                         backgroundColor: grisClair,
-                        backgroundImage: AssetImage(team2),
+                        backgroundImage: AssetImage(logoteam2),
                       ),
                     ],
                   ),

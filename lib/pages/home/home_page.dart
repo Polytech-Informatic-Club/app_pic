@@ -1,9 +1,12 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/pages/home/appDrawer.dart';
 import 'package:new_app/pages/home/navbar.dart';
-import 'package:new_app/pages/sports/football/homeFootPage.dart';
-import 'package:new_app/pages/sports/interclasse.dart';
+import 'package:new_app/pages/interclasse/football/homeFootPage.dart';
+import 'package:new_app/pages/interclasse/interclasse.dart';
+import 'package:new_app/utils/AppColors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,60 +19,74 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(),
       drawer: Appdrawer(),
-      body: ListView(
-        padding: EdgeInsets.symmetric(
-            vertical: MediaQuery.sizeOf(context).width * 0.07),
-        children: [
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Image.asset(
-                'assets/images/homepage/background.png',
-                height: 200,
-                fit: BoxFit.cover,
-              ),
-              Container(
-                width: double.infinity,
-                height: 200,
-                color: Colors.orange.withOpacity(0.5),
-              ),
-              Positioned(
-                left: 10,
-                top: 10,
-                child: Builder(
-                  builder: (context) {
-                    return DrawerButton(
-                      onPressed: () {
-                        Scaffold.of(context).openDrawer();
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 210,
+              width: double.infinity,
+              child: Stack(
+                fit: StackFit.expand,
+                clipBehavior: Clip.none,
+                children: [
+                  Image.asset(
+                    'assets/images/Homepage/home_top_bg.png',
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    left: 5,
+                    top: 40,
+                    child: Builder(
+                      builder: (context) {
+                        return IconButton(
+                          icon: Icon(Icons.menu),
+                          color: Colors.black,
+                          iconSize: 35,
+                          onPressed: () {
+                            Scaffold.of(context).openDrawer();
+                          },
+                        );
                       },
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 120,
+                    right: MediaQuery.of(context).size.width / 2 - 190,
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: AssetImage(
+                        "assets/images/homepage/profile.png",
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Positioned(
-                top: 100,
-                right: MediaQuery.of(context).size.width / 2 - 180,
-                child: Image.asset(
-                  "assets/images/homepage/profile.png",
-                  width: 50,
-                ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Column(
+                children: [
+                  _buildSectionTitle('Nouveautés', context,
+                      ['Polytech-Info', 'Interclasses', 'Commerces']),
+                  SizedBox(height: 16),
+                  _buildEventCards(),
+                  SizedBox(height: 32),
+
+                  // Section Jeux
+                  _buildSectionTitle('Jeux', context, []),
+                  _buildGameIcons(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
               ),
-            ],
-          ),
-
-          // Section Nouveautés
-          _buildSectionTitle(
-              'Nouveautés', context, ['Polytech-Info', 'Interclasses', 'Commerces']),
-          SizedBox(height: 16),
-          _buildEventCards(),
-          SizedBox(height: 32),
-
-          // Section Jeux
-          _buildSectionTitle('Jeux', context, []),
-          _buildGameIcons(),
-        ],
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: navbar(pageIndex: 2),
     );
@@ -133,12 +150,12 @@ Widget _buildEventCards() {
     scrollDirection: Axis.horizontal,
     child: Row(
       children: [
-        _buildEventCard('assets/basketball.png', 'Demi-Finale de Basketball',
-            'Mardi 6 Juin 21h45'),
-        _buildEventCard('assets/conference.png',
-            'Conférence de Maitre Djiby Mang', '6 Aout 19h00'),
-        _buildEventCard(
-            'assets/fire_camp.png', 'Feu de Camp', 'Samedi 01 Juillet 23h30'),
+        _buildEventCard('assets/images/Homepage/annonce1.jpg',
+            'Levée des couleurs', 'Mardi 6 Juin 21h45'),
+        _buildEventCard('assets/images/Homepage/annonce2.jpg', 'Squid game',
+            '6 Aout 19h00'),
+        _buildEventCard('assets/images/interclasseBasket.jpg',
+            'Demie finale basket', 'Samedi 01 Juillet 23h30'),
       ],
     ),
   );
@@ -147,15 +164,16 @@ Widget _buildEventCards() {
 Widget _buildEventCard(String imagePath, String title, String date) {
   return Card(
     margin: EdgeInsets.only(right: 16),
-    child: Container(
+    child: SizedBox(
       width: 200,
+      height: 260,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Image.asset(imagePath,
-              fit: BoxFit.cover, height: 150, width: double.infinity),
+              fit: BoxFit.cover, height: 180, width: double.infinity),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(5.0),
             child: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           Padding(
@@ -196,6 +214,10 @@ Widget _buildGameIcon(
         height: 80,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: grisClair,
+            width: 3,
+          ),
           image: DecorationImage(
             image: AssetImage(imagePath),
             fit: BoxFit.cover,
@@ -204,7 +226,8 @@ Widget _buildGameIcon(
       ),
       SizedBox(height: 8),
       Text(gameName),
-      Text(playersWaiting, style: TextStyle(color: Colors.grey, fontSize: 12)),
+      Text(playersWaiting,
+          style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold)),
     ],
   );
 }

@@ -7,7 +7,7 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/enums/sport_type.dart';
 import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/football.dart';
-import 'package:new_app/pages/sports/football/homeAdminFootballPage.dart';
+import 'package:new_app/pages/interclasse/football/homeAdminFootballPage.dart';
 import 'package:new_app/services/SportService.dart';
 import 'package:new_app/services/UserService.dart';
 import 'package:new_app/utils/AppColors.dart';
