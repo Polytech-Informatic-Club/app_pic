@@ -85,6 +85,7 @@ flutter:
     - assets/images/volleyball/
     - assets/images/jeux-desprit/
     - assets/images/Homepage/
+    - assets/images/jeux/
 
   #   - images/a_dot_ham.jpeg
 
@@ -99,6 +100,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: LilyScriptOne
+      fonts:
+        - asset: assets/fonts/LilyScriptOne-Regular.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

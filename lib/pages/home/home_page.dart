@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
                 clipBehavior: Clip.none,
                 children: [
                   Image.asset(
-                    'assets/images/Homepage/home_top_bg.png',
+                    'assets/images/homepage/home_top_bg.png',
                     fit: BoxFit.cover,
                   ),
                   Positioned(
@@ -48,6 +48,15 @@ class _HomePageState extends State<HomePage> {
                           },
                         );
                       },
+                    ),
+                  ),
+                  Center(
+                    child: Text(
+                      'PolyApp',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 60,
+                          fontFamily: 'LilyScriptOne'),
                     ),
                   ),
                   Positioned(
@@ -150,9 +159,9 @@ Widget _buildEventCards() {
     scrollDirection: Axis.horizontal,
     child: Row(
       children: [
-        _buildEventCard('assets/images/Homepage/annonce1.jpg',
+        _buildEventCard('assets/images/homepage/annonce1.jpg',
             'Levée des couleurs', 'Mardi 6 Juin 21h45'),
-        _buildEventCard('assets/images/Homepage/annonce2.jpg', 'Squid game',
+        _buildEventCard('assets/images/homepage/annonce2.jpg', 'Squid game',
             '6 Aout 19h00'),
         _buildEventCard('assets/images/interclasseBasket.jpg',
             'Demie finale basket', 'Samedi 01 Juillet 23h30'),
