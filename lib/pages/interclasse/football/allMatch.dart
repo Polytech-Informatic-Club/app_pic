@@ -1,0 +1,155 @@
+import 'package:flutter/material.dart';
+import 'package:new_app/models/enums/sport_type.dart';
+import 'package:new_app/models/equipe.dart';
+import 'package:new_app/models/match.dart';
+import 'package:new_app/pages/interclasse/football/detailFootball.dart';
+import 'package:new_app/services/SportService.dart';
+import 'package:new_app/widgets/matchCard.dart';
+
+class AllMatch extends StatefulWidget {
+  const AllMatch({super.key});
+
+  @override
+  State<AllMatch> createState() => _AllMatchState();
+}
+
+class _AllMatchState extends State<AllMatch> {
+  final SportService _sportService = SportService();
+  ValueNotifier<List<Equipe>> _equipes = ValueNotifier<List<Equipe>>([]);
+  Future<void> _loadEquipes() async {
+    List<Equipe> equipes = await _sportService.getEquipeList();
+    _equipes.value = equipes;
+  }
+
+  ValueNotifier<List<Matches>?> _matchNotifier = ValueNotifier([]);
+  ValueNotifier<SportType?> _selectedTypeSport = ValueNotifier(null);
+  ValueNotifier<Equipe?> _selectedEquipe = ValueNotifier(null);
+  ValueNotifier<DateTime?> _selectedDateDebut = ValueNotifier(null);
+  ValueNotifier<DateTime?> _selectedDateFin = ValueNotifier(null);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadEquipes();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Tous les matchs"),
+        ),
+        body: FutureBuilder<List<Matches>?>(
+            future: _sportService.getAllMatch(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Erreur lors de la récupération du rôle');
+              } else {
+                final match = snapshot.data ?? null;
+                _matchNotifier.value = match;
+                return Column(
+                  children: [
+                    SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ValueListenableBuilder<SportType?>(
+                                valueListenable: _selectedTypeSport,
+                                builder: (context, selectedEquipeB, child) {
+                                  return DropdownButton<SportType>(
+                                    hint: Text("TypeSport"),
+                                    items:
+                                        SportType.values.map((SportType type) {
+                                      return DropdownMenuItem<SportType>(
+                                        value: type,
+                                        child: Text(type
+                                            .toString()
+                                            .split('.')
+                                            .last), // Affiche juste le nom sans enum class
+                                      );
+                                    }).toList(),
+                                    onChanged: (SportType? newValue) {
+                                      // Traiter la
+                                      _selectedTypeSport.value = newValue;
+                                    },
+                                  );
+                                }),
+                            ValueListenableBuilder<List<Equipe>>(
+                              valueListenable: _equipes,
+                              builder: (context, equipes, child) {
+                                return ValueListenableBuilder<Equipe?>(
+                                  valueListenable: _selectedEquipe,
+                                  builder: (context, selectedEquipeB, child) {
+                                    return DropdownButton<Equipe>(
+                                      hint: Text('Equipe'),
+                                      value: equipes.contains(selectedEquipeB)
+                                          ? selectedEquipeB
+                                          : null,
+                                      onChanged: (Equipe? newValue) {
+                                        _selectedEquipe.value = newValue;
+                                      },
+                                      items: equipes
+                                          .map<DropdownMenuItem<Equipe>>(
+                                              (Equipe equipe) {
+                                        return DropdownMenuItem<Equipe>(
+                                          value: equipe,
+                                          child: Text(equipe.nom),
+                                        );
+                                      }).toList(),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                DateTime? dateDebut = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2100),
+                                );
+                                // Traiter la date début
+                                _selectedDateDebut.value = dateDebut;
+                              },
+                              child: Text("Date Début"),
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                DateTime? dateFin = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2100),
+                                );
+                                // Traiter la date fin
+                                _selectedDateFin.value = dateFin;
+                                _sportService.getAllMatch();
+                              },
+                              child: Text("Date Fin"),
+                            ),
+                          ],
+                        )),
+                    for (var i in _matchNotifier.value!)
+                      buildMatchCard(
+                          context,
+                          i.id,
+                          i.sport.name,
+                          i.date,
+                          i.equipeA.nom,
+                          i.equipeB.nom,
+                          i.scoreEquipeA.toString(),
+                          i.scoreEquipeB.toString(),
+                          i.equipeA.logo,
+                          i.equipeA.logo,
+                          DetailFootballScreen(i.id)),
+                  ],
+                );
+              }
+            }));
+  }
+}

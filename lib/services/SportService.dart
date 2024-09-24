@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:new_app/models/buteur.dart';
 import 'package:new_app/models/commentaires.dart';
+import 'package:new_app/models/enums/sport_type.dart';
 import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/football.dart';
+import 'package:new_app/models/joueur.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/models/utilisateur.dart';
 
@@ -162,7 +166,6 @@ class SportService {
 
   Future<Football?> addCommentMatch(String matchId, String content) async {
     try {
-      print("Commen");
       String email = FirebaseAuth.instance.currentUser!.email!;
 
       // Récupérer l'utilisateur avec l'email
@@ -206,8 +209,6 @@ class SportService {
   Future<Football?> removeCommentMatch(
       String matchId, Commentaire commentaire) async {
     try {
-      print("remove");
-
       DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
 
       await matchDoc.update(
@@ -216,13 +217,102 @@ class SportService {
         },
       );
 
-      print("OK");
       DocumentSnapshot querySnapshot = await matchDoc.get();
 
       return Football.fromJson(querySnapshot.data() as Map<String, dynamic>);
     } catch (e) {
       print(e);
       return null;
+    }
+  }
+
+  Future<Football?> updateStatistique(
+      String matchId, String libelle, int value) async {
+    try {
+      DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
+      await matchDoc.update(
+        {"statistiques.$libelle": FieldValue.increment(value)},
+      );
+
+      DocumentSnapshot querySnapshot = await matchDoc.get();
+      print(querySnapshot.data());
+
+      return Football.fromJson(querySnapshot.data() as Map<String, dynamic>);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<Football?> addButeur(String matchId, Joueur joueur, int minute,
+      String libelleScore, String libelleBut) async {
+    try {
+      DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
+      But but = But(
+          joueur: joueur,
+          id: DateTime.now().toString(),
+          date: DateTime.now(),
+          minute: minute);
+      await matchDoc.update(
+        {
+          libelleBut: FieldValue.arrayUnion([but.toJson()]),
+          libelleScore: FieldValue.increment(1)
+        },
+      );
+
+      DocumentSnapshot querySnapshot = await matchDoc.get();
+      print(querySnapshot.data());
+
+      return Football.fromJson(querySnapshot.data() as Map<String, dynamic>);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<List<Matches>> getListMatchFootball() async {
+    List<Matches> list = [];
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+          .collection("MATCH")
+          .where("sport", isEqualTo: "FOOTBALL")
+          .limit(2)
+          .get();
+      List<Map<String, dynamic>> data =
+          querySnapshot.docs.map((doc) => doc.data()).toList();
+      for (var d in data) {
+        list.add(Matches.fromJson(d));
+      }
+
+      return list;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<Matches>> getAllMatch() async {
+    List<Matches> list = [];
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+          .collection("MATCH")
+          // .where('sport', isEqualTo: sportType.toString().split('.').last)
+          // .where('date', isGreaterThanOrEqualTo: dd)
+          // .where('date', isLessThanOrEqualTo: df)
+          // .where('equipeA.nom', isEqualTo: equipe)
+          // .where('equipeB.nom',
+          //     isEqualTo: equipe,
+          //     isNotEqualTo: equipe) // Vérifie dans les deux équipes
+          .get();
+
+      List<Map<String, dynamic>> data =
+          querySnapshot.docs.map((doc) => doc.data()).toList();
+      for (var d in data) {
+        list.add(Matches.fromJson(d));
+      }
+
+      return list;
+    } catch (e) {
+      return [];
     }
   }
 

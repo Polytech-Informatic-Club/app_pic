@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/models/match.dart';
 import 'package:new_app/pages/home/appDrawer.dart';
+import 'package:new_app/pages/interclasse/football/administrateOneFootball.dart.dart';
 import 'package:new_app/pages/interclasse/football/createMatchFootball.dart';
+import 'package:new_app/services/SportService.dart';
 import 'package:new_app/widgets/submitedButton.dart';
 import 'package:new_app/fonctions.dart';
+import 'package:new_app/widgets/matchCard.dart';
 
 class HomeAdminFootballPage extends StatelessWidget {
   HomeAdminFootballPage({super.key});
@@ -12,12 +16,7 @@ class HomeAdminFootballPage extends StatelessWidget {
     MatchCard(),
     MatchCard(),
   ];
-
-  void addMatch() {
-    // setState(() {
-    //   matchs.add(MatchCard());
-    // });
-  }
+  final SportService _sportService = SportService();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +33,40 @@ class HomeAdminFootballPage extends StatelessWidget {
           children: [
             SubmittedButton("Créer un match", () {
               changerPage(context, CreateMatchFootball());
-            })
+            }),
+            FutureBuilder<List<Matches>>(
+                future: _sportService.getListMatchFootball(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Erreur lors du chargement');
+                  } else {
+                    List<Matches> matches = snapshot.data ?? [];
+                    return Column(
+                      children: [
+                        for (var i in matches)
+                          Column(
+                            children: [
+                              buildMatchCard(
+                                  context,
+                                  i.id,
+                                  i.sport.name,
+                                  i.date,
+                                  i.equipeA.nom,
+                                  i.equipeB.nom,
+                                  i.scoreEquipeA.toString(),
+                                  i.scoreEquipeB.toString(),
+                                  i.equipeA.logo,
+                                  i.equipeA.logo,
+                                  administrateOneFootball(i.id)),
+                              SizedBox(height: 8),
+                            ],
+                          )
+                      ],
+                    );
+                  }
+                }),
           ],
         ),
       )),

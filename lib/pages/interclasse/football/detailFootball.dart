@@ -146,9 +146,9 @@ class _DetailFootballScreenState extends State<DetailFootballScreen> {
                                               Column(
                                                 children: [
                                                   for (var butteur
-                                                      in match.buteurs!)
+                                                      in match.buteursA!)
                                                     Text(
-                                                      butteur.nom,
+                                                      "${butteur.joueur.nom} (${butteur.minute}')",
                                                       style: TextStyle(
                                                           color: Colors.white),
                                                     ),
@@ -175,9 +175,9 @@ class _DetailFootballScreenState extends State<DetailFootballScreen> {
                                               Column(
                                                 children: [
                                                   for (var butteur
-                                                      in match.buteurs!)
+                                                      in match.buteursB!)
                                                     Text(
-                                                      butteur.nom,
+                                                      "${butteur.joueur.nom} (${butteur.minute}')",
                                                       style: TextStyle(
                                                           color: Colors.white),
                                                     ),
@@ -452,7 +452,6 @@ class _DetailFootballScreenState extends State<DetailFootballScreen> {
                                                                 comment);
                                                   }
                                                 } else {
-                                                  print("OK");
                                                 }
                                               },
                                               child: CommentWidget(

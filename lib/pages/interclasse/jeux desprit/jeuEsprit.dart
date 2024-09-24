@@ -11,21 +11,18 @@ class JEspritPage extends StatefulWidget {
 class _JEspritPageState extends State<JEspritPage> {
   List<Widget> matchs = [
     buildMatchCard(
-        '',
         'Mercredi 5 Juin',
         'assets/images/Competition/logo50.png',
         'TC2: 450',
         'assets/images/Competition/logo50.png',
         'TC1: 150'),
     buildMatchCard(
-        '',
         'Mercredi 5 Juin',
         'assets/images/Competition/logo50.png',
         'TC2: 450',
         'assets/images/Competition/logo50.png',
         'TC1: 150'),
     buildMatchCard(
-        '',
         'Mercredi 5 Juin',
         'assets/images/Competition/logo50.png',
         'TC2: 450',

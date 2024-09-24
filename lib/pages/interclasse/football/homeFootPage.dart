@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/fonctions.dart';
+import 'package:new_app/models/match.dart';
+import 'package:new_app/services/SportService.dart';
 import 'package:new_app/widgets/reusable_widgets.dart';
 
 class HomeFootballPage extends StatefulWidget {
@@ -9,30 +12,7 @@ class HomeFootballPage extends StatefulWidget {
 }
 
 class _HomeFootballPageState extends State<HomeFootballPage> {
-  List<Widget> matchs = [
-    buildMatchCard(
-        '',
-        'Mercredi 5 Juin',
-        'assets/images/Competition/logo50.png',
-        'TC2: 450',
-        'assets/images/Competition/logo50.png',
-        'TC1: 150'),
-    buildMatchCard(
-        '',
-        'Mercredi 5 Juin',
-        'assets/images/Competition/logo50.png',
-        'TC2: 450',
-        'assets/images/Competition/logo50.png',
-        'TC1: 150'),
-    buildMatchCard(
-        '',
-        'Mercredi 5 Juin',
-        'assets/images/Competition/logo50.png',
-        'TC2: 450',
-        'assets/images/Competition/logo50.png',
-        'TC1: 150'),
-  ];
-
+  SportService _sportService = SportService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,9 +113,43 @@ class _HomeFootballPageState extends State<HomeFootballPage> {
                     'Matchs',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  Column(
-                    children: matchs,
-                  ),
+                  FutureBuilder<List<Matches>>(
+                      future: _sportService.getListMatchFootball(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Erreur lors du chargement');
+                        } else {
+                          List<Matches> matches = snapshot.data ?? [];
+                          return Column(
+                            children: [
+                              for (var i in matches)
+                                Column(
+                                  children: [
+                                    buildMatchCard(
+                                        // context,
+                                        // i.id,
+                                        // i.sport.name,
+                                        simpleDateformat(i.date),
+                                        i.equipeA.logo,
+                                        i.equipeA.nom +
+                                            " : " +
+                                            i.scoreEquipeA.toString(),
+                                        i.equipeA.logo,
+                                        i.equipeB.nom +
+                                            " : " +
+                                            i.scoreEquipeB.toString()
+                                        // administrateOneFootball(i.id)
+                                        ),
+                                    SizedBox(height: 8),
+                                  ],
+                                )
+                            ],
+                          );
+                        }
+                      }),
                   SizedBox(
                     height: 10,
                   )

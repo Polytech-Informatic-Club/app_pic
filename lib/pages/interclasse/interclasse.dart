@@ -5,12 +5,14 @@ import 'package:new_app/pages/home/appDrawer.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'package:new_app/pages/interclasse/basket/basket.dart';
+import 'package:new_app/pages/interclasse/football/allMatch.dart';
 import 'package:new_app/pages/interclasse/football/detailFootball.dart';
 import 'package:new_app/pages/interclasse/football/homeFootPage.dart';
 import 'package:new_app/pages/interclasse/jeux%20desprit/jeuEsprit.dart';
 import 'package:new_app/pages/interclasse/volley/volley.dart';
 import 'package:new_app/services/SportService.dart';
 import 'package:new_app/utils/AppColors.dart';
+import 'package:new_app/widgets/matchCard.dart';
 
 // ignore: must_be_immutable
 class InterclassePage extends StatelessWidget {
@@ -90,15 +92,6 @@ class InterclassePage extends StatelessWidget {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 8),
-                  // TextField(
-                  //   decoration: InputDecoration(
-                  //     hintText: 'Chercher',
-                  //     prefixIcon: Icon(Icons.search),
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //     ),
-                  //   ),
-                  // ),
                   SizedBox(height: 16),
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 10),
@@ -141,18 +134,18 @@ class InterclassePage extends StatelessWidget {
                               for (var i in matches)
                                 Column(
                                   children: [
-                                    _buildMatchCard(
-                                      context,
-                                      i.id,
-                                      i.sport.name,
-                                      i.date,
-                                      i.equipeA.nom,
-                                      i.equipeB.nom,
-                                      i.scoreEquipeA.toString(),
-                                      i.scoreEquipeB.toString(),
-                                      i.equipeA.logo,
-                                      i.equipeA.logo,
-                                    ),
+                                    buildMatchCard(
+                                        context,
+                                        i.id,
+                                        i.sport.name,
+                                        i.date,
+                                        i.equipeA.nom,
+                                        i.equipeB.nom,
+                                        i.scoreEquipeA.toString(),
+                                        i.scoreEquipeB.toString(),
+                                        i.equipeA.logo,
+                                        i.equipeA.logo,
+                                        DetailFootballScreen(i.id)),
                                     SizedBox(height: 8),
                                   ],
                                 )
@@ -160,10 +153,22 @@ class InterclassePage extends StatelessWidget {
                           );
                         }
                       }),
-
-                  Text(
-                    'Matchs à venir',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Matchs à venir',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      GestureDetector(
+                        onTap: () => changerPage(context, AllMatch()),
+                        child: Text(
+                          "Voir tout",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      )
+                    ],
                   ),
                   SizedBox(height: 8),
                   Container(
@@ -255,78 +260,5 @@ class InterclassePage extends StatelessWidget {
         ),
       ));
     }));
-  }
-
-  Widget _buildMatchCard(
-      BuildContext context,
-      String id,
-      String title,
-      DateTime date,
-      String equipe1,
-      String equipe2,
-      String score1,
-      String score2,
-      String photo1,
-      String photo2) {
-    return GestureDetector(
-        onTap: () => changerPage(context, DetailFootballScreen(id)),
-        child: Column(
-          children: [
-            Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-            Container(
-              decoration: BoxDecoration(
-                  color: grisClair, borderRadius: BorderRadius.circular(6)),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  children: [
-                    Text(dateCustomformat(date)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                                radius: MediaQuery.sizeOf(context).width * 0.08,
-                                backgroundImage: NetworkImage(
-                                  photo2,
-                                )),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Row(
-                              children: [
-                                Text(equipe1 + " : "),
-                                Text(score1),
-                              ],
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                Text(equipe2 + " : "),
-                                Text(score2),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            CircleAvatar(
-                                radius: MediaQuery.sizeOf(context).width * 0.08,
-                                backgroundImage: NetworkImage(
-                                  photo2,
-                                )),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ));
   }
 }

@@ -250,7 +250,8 @@ class CreateMatchFootball extends StatelessWidget {
                           _selectedEquipeA.value != _selectedEquipeB.value) {
                         try {
                           Football football = new Football(
-                              buteurs: [],
+                              buteursA: [],
+                              buteursB: [],
                               description:
                                   _descriptionTextController.value.text,
                               photo: _url.value,
