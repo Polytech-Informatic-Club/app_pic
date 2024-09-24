@@ -399,7 +399,7 @@ class Inscription extends StatelessWidget {
                                                     telephone: _emailController
                                                         .value.text,
                                                     photo: "",
-                                                    role: RoleType.USER);
+                                                    role: RoleType.ADMIN);
                                                 await _userService.setRole(
                                                     RoleType.USER
                                                         .toString()
