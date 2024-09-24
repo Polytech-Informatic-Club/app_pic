@@ -99,17 +99,17 @@ class InterclassePage extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildCircularIcon(
-                            'assets/images/foot.png', HomeFootballPage()),
+                        _buildCircularIcon('assets/images/foot.png',
+                            HomeFootballPage("FOOTBALL")),
                         _buildCircularIcon(
                             'assets/images/Competition/logo_basket.png',
-                            BasketPage()),
+                            HomeFootballPage("BASKETBALL")),
                         _buildCircularIcon(
                             'assets/images/Competition/logo jeux desprit.png',
-                            JEspritPage()),
+                            HomeFootballPage("GENIE_EN_HERBE")),
                         _buildCircularIcon(
                             'assets/images/Competition/logo_volley.png',
-                            VolleyballPage()),
+                            HomeFootballPage("VOLLEYBALL")),
                       ],
                     ),
                   ),
@@ -134,18 +134,21 @@ class InterclassePage extends StatelessWidget {
                               for (var i in matches)
                                 Column(
                                   children: [
+                                    Text(i.sport.name,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
                                     buildMatchCard(
                                         context,
                                         i.id,
-                                        i.sport.name,
-                                        i.date,
+                                        dateCustomformat(i.date),
                                         i.equipeA.nom,
                                         i.equipeB.nom,
-                                        i.scoreEquipeA.toString(),
-                                        i.scoreEquipeB.toString(),
+                                        i.scoreEquipeA,
+                                        i.scoreEquipeB,
                                         i.equipeA.logo,
                                         i.equipeA.logo,
-                                        DetailFootballScreen(i.id)),
+                                        DetailFootballScreen(i.id,
+                                            i.sport.name.split(".").last)),
                                     SizedBox(height: 8),
                                   ],
                                 )
@@ -195,8 +198,12 @@ class InterclassePage extends StatelessWidget {
                                   for (var i in matches)
                                     Row(
                                       children: [
-                                        _afficheMatch(i.id, i.photo ?? '',
-                                            i.date, context),
+                                        _afficheMatch(
+                                            i.id,
+                                            i.photo ?? '',
+                                            i.date,
+                                            i.sport.name.split(".").last,
+                                            context),
                                         SizedBox(
                                           width: 10,
                                         ),
@@ -217,10 +224,10 @@ class InterclassePage extends StatelessWidget {
     );
   }
 
-  Widget _afficheMatch(
-      String id, String affiche, DateTime date, BuildContext context) {
+  Widget _afficheMatch(String id, String affiche, DateTime date,
+      String typeSport, BuildContext context) {
     return GestureDetector(
-        onTap: () => changerPage(context, DetailFootballScreen(id)),
+        onTap: () => changerPage(context, DetailFootballScreen(id, typeSport)),
         child: Column(
           children: [
             affiche != ""

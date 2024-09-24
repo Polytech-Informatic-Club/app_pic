@@ -97,13 +97,25 @@ class Appdrawer extends StatelessWidget {
                                             .toString()
                                             .split(".")
                                             .last ||
-                                    role == RoleType.ADMIN_FOOTBALL.toString())
+                                    role ==
+                                        RoleType.ADMIN_FOOTBALL
+                                            .toString()
+                                            .split(".")
+                                            .last ||
+                                    role ==
+                                        RoleType.ADMIN_BASKET
+                                            .toString()
+                                            .split(".")
+                                            .last)
                                   ListTile(
                                     leading: Icon(Icons.settings),
-                                    title: Text('Administraion football'),
+                                    title: Text(
+                                        'Administraion ${role.toLowerCase()}'),
                                     onTap: () {
                                       changerPage(
-                                          context, HomeAdminFootballPage());
+                                          context,
+                                          HomeAdminFootballPage(
+                                              role.split("_").last));
                                     },
                                   ),
 

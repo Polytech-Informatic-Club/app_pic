@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:new_app/models/basket.dart';
 import 'package:new_app/models/buteur.dart';
 import 'package:new_app/models/commentaires.dart';
+import 'package:new_app/models/commission.dart';
 import 'package:new_app/models/enums/sport_type.dart';
 import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/football.dart';
@@ -15,6 +17,9 @@ class SportService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   CollectionReference footballCollection =
       FirebaseFirestore.instance.collection("MATCH");
+
+  CollectionReference commissionCollection =
+      FirebaseFirestore.instance.collection("COMMISSION");
 
 // Football SERVICE
   Future<List<Equipe>> getEquipeList() async {
@@ -33,7 +38,7 @@ class SportService {
     }
   }
 
-  Future<String> postFootball(Football football) async {
+  Future<String> postFootball(dynamic football) async {
     try {
       await footballCollection
           .doc(football.equipeA.nom +
@@ -87,11 +92,29 @@ class SportService {
     }
   }
 
-  Future<Football?> getMatchFootballById(String id) async {
+  Future<Matches?> getTheFollowingMatch(String typeSport) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+          .collection("MATCH")
+          .where("date", isGreaterThanOrEqualTo: Timestamp.now())
+          .where("sport", isEqualTo: typeSport)
+          .limit(1)
+          .get();
+      return Matches.fromJson(querySnapshot.docs.first.data());
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<dynamic> getMatchFootballById(String id, String typeSport) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> querySnapshot =
           await _firestore.collection("MATCH").doc(id).get();
-      return Football.fromJson(querySnapshot.data()!);
+      return typeSport == "BASKETBALL"
+          ? Basket.fromJson(querySnapshot.data()!)
+          : typeSport == "FOOTBALL"
+              ? Football.fromJson(querySnapshot.data()!)
+              : null;
     } catch (e) {
       return null;
     }
@@ -270,12 +293,12 @@ class SportService {
     }
   }
 
-  Future<List<Matches>> getListMatchFootball() async {
+  Future<List<Matches>> getListMatchFootball(String typeSport) async {
     List<Matches> list = [];
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
           .collection("MATCH")
-          .where("sport", isEqualTo: "FOOTBALL")
+          .where("sport", isEqualTo: typeSport)
           .limit(2)
           .get();
       List<Map<String, dynamic>> data =
@@ -287,6 +310,34 @@ class SportService {
       return list;
     } catch (e) {
       return [];
+    }
+  }
+
+  Future<Commission?> getMembresCommission(String libelle) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> filteredSnapshot = await _firestore
+          .collection("COMMISSION")
+          .where("nom", isEqualTo: libelle)
+          .limit(1)
+          .get();
+
+      if (filteredSnapshot.docs.isEmpty) {
+        return null;
+      }
+      var data = filteredSnapshot.docs.first.data();
+      return Commission.fromJson(data);
+    } catch (e) {
+      print("Erreur: $e");
+      return null;
+    }
+  }
+
+  Future<String> postCommission(Commission commission) async {
+    try {
+      await commissionCollection.doc(commission.nom).set(commission.toJson());
+      return "OK";
+    } catch (e) {
+      return "Erreur lors de la création du match : $e";
     }
   }
 

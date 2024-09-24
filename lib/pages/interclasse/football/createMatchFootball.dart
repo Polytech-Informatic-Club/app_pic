@@ -4,9 +4,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
+import 'package:new_app/models/basket.dart';
 import 'package:new_app/models/enums/sport_type.dart';
 import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/football.dart';
+import 'package:new_app/models/match.dart';
 import 'package:new_app/pages/interclasse/football/homeAdminFootballPage.dart';
 import 'package:new_app/services/SportService.dart';
 import 'package:new_app/services/UserService.dart';
@@ -17,7 +19,8 @@ import 'package:new_app/widgets/reusable_widgets.dart';
 import 'package:new_app/widgets/submitedButton.dart';
 
 class CreateMatchFootball extends StatelessWidget {
-  CreateMatchFootball({super.key});
+  String typeSport;
+  CreateMatchFootball(this.typeSport, {super.key});
   TextEditingController _descriptionTextController = TextEditingController();
   DateTime selectedDate = DateTime.now();
   SportService _SportService = new SportService();
@@ -248,51 +251,88 @@ class CreateMatchFootball extends StatelessWidget {
                       if (_selectedEquipeA.value != null &&
                           _selectedEquipeB.value != null &&
                           _selectedEquipeA.value != _selectedEquipeB.value) {
+                        dynamic match;
                         try {
-                          Football football = new Football(
-                              buteursA: [],
-                              buteursB: [],
-                              description:
-                                  _descriptionTextController.value.text,
-                              photo: _url.value,
-                              statistiques: {
-                                "redCardA": 0,
-                                "redCardB": 0,
-                                "yellowCardA": 0,
-                                "yellowCardB": 0,
-                                "cornersA": 0,
-                                "cornersB": 0,
-                                "fautesA": 0,
-                                "fautesB": 0,
-                                "tirsA": 0,
-                                "tirsB": 0,
-                                "tirsCadresA": 0,
-                                "tirsCadresB": 0,
-                              },
-                              id: _selectedEquipeA.value!.nom +
-                                  " VS " +
-                                  _selectedEquipeB.value!.nom +
-                                  _selectedDate.value!.toString(),
-                              date: _selectedDate.value!,
-                              equipeA: _selectedEquipeA.value!,
-                              equipeB: _selectedEquipeB.value!,
-                              dateCreation: DateTime.now(),
-                              scoreEquipeA: 0,
-                              scoreEquipeB: 0,
-                              sport: SportType.FOOTBALL,
-                              comments: [],
-                              likers: [],
-                              dislikers: [],
-                              partageLien: "");
+                          if (typeSport == "FOOTBALL") {
+                            match = new Football(
+                                statistiques: {
+                                  "redCardA": 0,
+                                  "redCardB": 0,
+                                  "yellowCardA": 0,
+                                  "yellowCardB": 0,
+                                  "cornersA": 0,
+                                  "cornersB": 0,
+                                  "fautesA": 0,
+                                  "fautesB": 0,
+                                  "tirsA": 0,
+                                  "tirsB": 0,
+                                  "tirsCadresA": 0,
+                                  "tirsCadresB": 0,
+                                },
+                                buteursA: [],
+                                buteursB: [],
+                                description:
+                                    _descriptionTextController.value.text,
+                                photo: _url.value,
+                                id: _selectedEquipeA.value!.nom +
+                                    " VS " +
+                                    _selectedEquipeB.value!.nom +
+                                    _selectedDate.value!.toString(),
+                                date: _selectedDate.value!,
+                                equipeA: _selectedEquipeA.value!,
+                                equipeB: _selectedEquipeB.value!,
+                                dateCreation: DateTime.now(),
+                                scoreEquipeA: 0,
+                                scoreEquipeB: 0,
+                                sport: SportType.FOOTBALL,
+                                comments: [],
+                                likers: [],
+                                dislikers: [],
+                                partageLien: "");
+                          } else if (typeSport == "BASKET") {
+                            match = new Basket(
+                                statistiques: {
+                                  "point3A": 0,
+                                  "point3B": 0,
+                                  "point2A": 0,
+                                  "point2B": 0,
+                                  "point1A": 0,
+                                  "point1B": 0,
+                                  "fautesA": 0,
+                                  "fautesB": 0,
+                                },
+                                buteursA: [],
+                                buteursB: [],
+                                description:
+                                    _descriptionTextController.value.text,
+                                photo: _url.value,
+                                id: _selectedEquipeA.value!.nom +
+                                    " VS " +
+                                    _selectedEquipeB.value!.nom +
+                                    _selectedDate.value!.toString(),
+                                date: _selectedDate.value!,
+                                equipeA: _selectedEquipeA.value!,
+                                equipeB: _selectedEquipeB.value!,
+                                dateCreation: DateTime.now(),
+                                scoreEquipeA: 0,
+                                scoreEquipeB: 0,
+                                sport: SportType.BASKETBALL,
+                                comments: [],
+                                likers: [],
+                                dislikers: [],
+                                partageLien: "");
+                          }
+
                           try {
                             String code =
-                                await _SportService.postFootball(football);
+                                await _SportService.postFootball(match);
                             if (code == "OK") {
                               alerteMessageWidget(
                                   context,
                                   "Match crée avec succès !",
                                   AppColors.success);
-                              changerPage(context, HomeAdminFootballPage());
+                              changerPage(
+                                  context, HomeAdminFootballPage(typeSport));
                             }
                           } catch (e) {}
                         } catch (e) {

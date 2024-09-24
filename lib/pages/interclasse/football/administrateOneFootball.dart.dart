@@ -14,17 +14,19 @@ import 'package:new_app/widgets/updateStatisticDialog.dart';
 
 class administrateOneFootball extends StatefulWidget {
   String id;
-  administrateOneFootball(this.id, {super.key});
+  String typeSport;
+  administrateOneFootball(this.id, this.typeSport, {super.key});
 
   @override
   State<administrateOneFootball> createState() =>
-      _administrateOneFootballState(id);
+      _administrateOneFootballState(id, typeSport);
 }
 
 class _administrateOneFootballState extends State<administrateOneFootball> {
   SportService _sportService = new SportService();
   String _id;
-  _administrateOneFootballState(this._id);
+  String _typeSport;
+  _administrateOneFootballState(this._id, this._typeSport);
 
   ValueNotifier<bool> _isPressCommment = new ValueNotifier<bool>(false);
   ValueNotifier<Football?> matchProvider = new ValueNotifier<Football?>(null);
@@ -51,8 +53,8 @@ class _administrateOneFootballState extends State<administrateOneFootball> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: FutureBuilder<Football?>(
-            future: _sportService.getMatchFootballById(_id),
+        child: FutureBuilder<dynamic>(
+            future: _sportService.getMatchFootballById(_id, _typeSport),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CircularProgressIndicator();

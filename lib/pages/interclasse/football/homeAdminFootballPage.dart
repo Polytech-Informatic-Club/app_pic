@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/pages/home/appDrawer.dart';
+import 'package:new_app/pages/interclasse/createCommission.dart';
 import 'package:new_app/pages/interclasse/football/administrateOneFootball.dart.dart';
 import 'package:new_app/pages/interclasse/football/createMatchFootball.dart';
 import 'package:new_app/services/SportService.dart';
@@ -9,7 +10,8 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/widgets/matchCard.dart';
 
 class HomeAdminFootballPage extends StatelessWidget {
-  HomeAdminFootballPage({super.key});
+  String typeSport;
+  HomeAdminFootballPage(this.typeSport, {super.key});
 
   List<Widget> matchs = [
     MatchCard(),
@@ -32,10 +34,16 @@ class HomeAdminFootballPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             SubmittedButton("Créer un match", () {
-              changerPage(context, CreateMatchFootball());
+              changerPage(context, CreateMatchFootball(typeSport));
+            }),
+            SizedBox(
+              height: 10,
+            ),
+            SubmittedButton("Créer un commission", () {
+              changerPage(context, CreateCommission(typeSport));
             }),
             FutureBuilder<List<Matches>>(
-                future: _sportService.getListMatchFootball(),
+                future: _sportService.getListMatchFootball(typeSport),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
@@ -48,18 +56,21 @@ class HomeAdminFootballPage extends StatelessWidget {
                         for (var i in matches)
                           Column(
                             children: [
+                              Text(i.sport.name,
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
                               buildMatchCard(
                                   context,
                                   i.id,
-                                  i.sport.name,
-                                  i.date,
+                                  dateCustomformat(i.date),
                                   i.equipeA.nom,
                                   i.equipeB.nom,
-                                  i.scoreEquipeA.toString(),
-                                  i.scoreEquipeB.toString(),
+                                  i.scoreEquipeA,
+                                  i.scoreEquipeB,
                                   i.equipeA.logo,
                                   i.equipeA.logo,
-                                  administrateOneFootball(i.id)),
+                                  administrateOneFootball(
+                                      i.id, i.sport.name.split(".").last)),
                               SizedBox(height: 8),
                             ],
                           )

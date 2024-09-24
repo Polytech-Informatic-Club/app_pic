@@ -16,7 +16,8 @@ class Commission {
   factory Commission.fromJson(Map<String, dynamic> json) {
     // Parse the 'membres' list from JSON and map it to a list of membre objects
     var membresFromJson = json['membres'] as List<dynamic>;
-    List<Membre> membresList = membresFromJson.map((item) => Membre.fromJson(item)).toList();
+    List<Membre> membresList =
+        membresFromJson.map((item) => Membre.fromJson(item)).toList();
 
     return Commission(
       id: json['id'] as String,
@@ -30,7 +31,9 @@ class Commission {
     return {
       'id': id,
       'nom': nom,
-      'membres': membres.map((membre) => membre.toJson()).toList(), // Convert list of membre objects to JSON
+      'membres': membres
+          .map((membre) => membre.toJson())
+          .toList(), // Convert list of membre objects to JSON
     };
   }
 }

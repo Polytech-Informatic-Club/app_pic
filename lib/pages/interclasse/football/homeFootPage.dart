@@ -1,23 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
+import 'package:new_app/models/commission.dart';
 import 'package:new_app/models/match.dart';
+import 'package:new_app/models/membre.dart';
+import 'package:new_app/pages/interclasse/football/detailFootball.dart';
 import 'package:new_app/services/SportService.dart';
-import 'package:new_app/widgets/reusable_widgets.dart';
+import 'package:new_app/utils/AppColors.dart';
+import 'package:new_app/widgets/matchCard.dart';
 
 class HomeFootballPage extends StatefulWidget {
-  const HomeFootballPage({super.key});
+  String typeSport;
+  HomeFootballPage(this.typeSport, {super.key});
 
   @override
-  _HomeFootballPageState createState() => _HomeFootballPageState();
+  _HomeFootballPageState createState() =>
+      _HomeFootballPageState(this.typeSport);
 }
 
 class _HomeFootballPageState extends State<HomeFootballPage> {
+  String _typeSport;
+  _HomeFootballPageState(this._typeSport);
   SportService _sportService = SportService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               width: double.infinity,
@@ -62,44 +72,72 @@ class _HomeFootballPageState extends State<HomeFootballPage> {
               ),
             ),
             SizedBox(height: 60),
-            Text(
-              'Football',
+            Center(
+                child: Text(
+              _typeSport,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
+            )),
+            SizedBox(height: 5),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      MemberCard(title: 'Président'),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      MemberCard(title: 'Vice-Président'),
-                    ],
+                  Text(
+                    'Membres',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
+                  FutureBuilder<Commission?>(
+                      future: _sportService.getMembresCommission(_typeSport),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Erreur lors du chargement');
+                        } else {
+                          Commission? commissions = snapshot.data ?? null;
+                          return commissions != null
+                              ? SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      for (var i in commissions.membres)
+                                        MemberCard(title: i.poste)
+                                    ],
+                                  ))
+                              : Text(
+                                  "Aucun membre de la sous-commission $_typeSport");
+                        }
+                      }),
                   SizedBox(height: 20),
                   Text(
                     'Prochain-évènement',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 10),
-                  Container(
-                    height: 100,
-                    color: Colors.grey[300],
-                    child: Center(
-                      child: Icon(Icons.play_arrow, size: 50),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Lorem ipsum dolor sit amet consectetur. Quis faucibus lacus integer nisi. Aenean amet amet libero duis sollicitudin blandit sed...',
-                    style: TextStyle(fontSize: 14),
-                  ),
+                  FutureBuilder<Matches?>(
+                      future: _sportService.getTheFollowingMatch(_typeSport),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Erreur lors du chargement');
+                        } else {
+                          Matches? followingMatch = snapshot.data ?? null;
+                          return followingMatch != null
+                              ? _afficheFollowingMatch(
+                                  followingMatch.id,
+                                  followingMatch.photo!,
+                                  followingMatch.description!,
+                                  followingMatch.sport.name.split(".").last,
+                                  context)
+                              : Text(
+                                  "Aucun match n'est prévu dans les jours à venir");
+                        }
+                      }),
                 ],
               ),
             ),
@@ -114,7 +152,7 @@ class _HomeFootballPageState extends State<HomeFootballPage> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   FutureBuilder<List<Matches>>(
-                      future: _sportService.getListMatchFootball(),
+                      future: _sportService.getListMatchFootball(_typeSport),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -123,31 +161,33 @@ class _HomeFootballPageState extends State<HomeFootballPage> {
                           return Text('Erreur lors du chargement');
                         } else {
                           List<Matches> matches = snapshot.data ?? [];
-                          return Column(
-                            children: [
-                              for (var i in matches)
-                                Column(
+                          return matches.isEmpty
+                              ? Text("Aucun match trouvé")
+                              : Column(
                                   children: [
-                                    buildMatchCard(
-                                        // context,
-                                        // i.id,
-                                        // i.sport.name,
-                                        simpleDateformat(i.date),
-                                        i.equipeA.logo,
-                                        i.equipeA.nom +
-                                            " : " +
-                                            i.scoreEquipeA.toString(),
-                                        i.equipeA.logo,
-                                        i.equipeB.nom +
-                                            " : " +
-                                            i.scoreEquipeB.toString()
-                                        // administrateOneFootball(i.id)
-                                        ),
-                                    SizedBox(height: 8),
+                                    for (var i in matches.reversed)
+                                      Column(
+                                        children: [
+                                          buildMatchCard(
+                                              context,
+                                              i.id,
+                                              simpleDateformat(i.date),
+                                              i.equipeA.nom,
+                                              i.equipeB.nom,
+                                              i.scoreEquipeA,
+                                              i.scoreEquipeB,
+                                              i.equipeA.logo,
+                                              i.equipeA.logo,
+                                              DetailFootballScreen(
+                                                  i.id,
+                                                  i.sport.name
+                                                      .split(".")
+                                                      .last)),
+                                          SizedBox(height: 8),
+                                        ],
+                                      )
                                   ],
-                                )
-                            ],
-                          );
+                                );
                         }
                       }),
                   SizedBox(
@@ -163,13 +203,50 @@ class _HomeFootballPageState extends State<HomeFootballPage> {
   }
 }
 
+Widget _afficheFollowingMatch(String id, String affiche, String description,
+    String typeSport, BuildContext context) {
+  return GestureDetector(
+      onTap: () => changerPage(context, DetailFootballScreen(id, typeSport)),
+      child: Column(
+        children: [
+          affiche != ""
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    affiche,
+                    height: description != ""
+                        ? MediaQuery.sizeOf(context).height * 0.2
+                        : MediaQuery.sizeOf(context).height * 0.3,
+                    width: double.infinity,
+                  ))
+              : Container(
+                  height: MediaQuery.sizeOf(context).height * 0.15,
+                  decoration: BoxDecoration(
+                      color: AppColors.gray,
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            description,
+            // simpleDateformat(date),
+            style: TextStyle(fontSize: 12),
+          )
+        ],
+      ));
+}
+
 class MemberCard extends StatelessWidget {
   final String title;
   const MemberCard({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Center(
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CircleAvatar(
           radius: 30,
@@ -178,6 +255,6 @@ class MemberCard extends StatelessWidget {
         SizedBox(height: 5),
         Text(title),
       ],
-    );
+    ));
   }
 }

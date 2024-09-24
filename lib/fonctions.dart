@@ -62,7 +62,7 @@ String timeAgoCustom(DateTime d) {
 }
 
 String dateCustomformat(DateTime d) {
-  final newFormatter = DateFormat("EEEE dd MMMM yyyy à hh:mm:ss", "fr");
+  final newFormatter = DateFormat("EEEE dd MMMM yyyy à hh:mm", "fr");
   final newFormatString = newFormatter.format(d);
 
   final result =

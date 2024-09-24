@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/enums/sport_type.dart';
 import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/match.dart';
@@ -135,18 +136,24 @@ class _AllMatchState extends State<AllMatch> {
                           ],
                         )),
                     for (var i in _matchNotifier.value!)
-                      buildMatchCard(
-                          context,
-                          i.id,
-                          i.sport.name,
-                          i.date,
-                          i.equipeA.nom,
-                          i.equipeB.nom,
-                          i.scoreEquipeA.toString(),
-                          i.scoreEquipeB.toString(),
-                          i.equipeA.logo,
-                          i.equipeA.logo,
-                          DetailFootballScreen(i.id)),
+                      Column(
+                        children: [
+                          Text(i.sport.name,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          buildMatchCard(
+                              context,
+                              i.id,
+                              dateCustomformat(i.date),
+                              i.equipeA.nom,
+                              i.equipeB.nom,
+                              i.scoreEquipeA,
+                              i.scoreEquipeB,
+                              i.equipeA.logo,
+                              i.equipeA.logo,
+                              DetailFootballScreen(
+                                  i.id, i.sport.name.split(".").last)),
+                        ],
+                      )
                   ],
                 );
               }

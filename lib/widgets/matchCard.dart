@@ -5,12 +5,11 @@ import 'package:new_app/utils/AppColors.dart';
 Widget buildMatchCard(
     BuildContext context,
     String id,
-    String title,
-    DateTime date,
+    String date,
     String equipe1,
     String equipe2,
-    String score1,
-    String score2,
+    int score1,
+    int score2,
     String photo1,
     String photo2,
     Widget destination) {
@@ -18,7 +17,6 @@ Widget buildMatchCard(
       onTap: () => changerPage(context, destination),
       child: Column(
         children: [
-          Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
           Container(
             decoration: BoxDecoration(
                 color: grisClair, borderRadius: BorderRadius.circular(6)),
@@ -26,7 +24,10 @@ Widget buildMatchCard(
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 children: [
-                  Text(dateCustomformat(date)),
+                  Text(
+                    date,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -35,15 +36,33 @@ Widget buildMatchCard(
                           CircleAvatar(
                               radius: MediaQuery.sizeOf(context).width * 0.08,
                               backgroundImage: NetworkImage(
-                                photo2,
+                                photo1,
                               )),
                           SizedBox(
                             width: 5,
                           ),
                           Row(
                             children: [
-                              Text(equipe1 + " : "),
-                              Text(score1),
+                              Text(
+                                "$equipe1 : ",
+                                style: TextStyle(
+                                  color: score1 > score2
+                                      ? AppColors.success
+                                      : score1 == score2
+                                          ? AppColors.black
+                                          : AppColors.echec,
+                                ),
+                              ),
+                              Text(
+                                "$score1 : ",
+                                style: TextStyle(
+                                  color: score1 > score2
+                                      ? AppColors.success
+                                      : score1 == score2
+                                          ? AppColors.black
+                                          : AppColors.echec,
+                                ),
+                              ),
                             ],
                           )
                         ],
@@ -52,8 +71,26 @@ Widget buildMatchCard(
                         children: [
                           Row(
                             children: [
-                              Text(equipe2 + " : "),
-                              Text(score2),
+                              Text(
+                                "$equipe2 : ",
+                                style: TextStyle(
+                                  color: score1 < score2
+                                      ? AppColors.success
+                                      : score1 == score2
+                                          ? AppColors.black
+                                          : AppColors.echec,
+                                ),
+                              ),
+                              Text(
+                                "$score2 : ",
+                                style: TextStyle(
+                                  color: score1 < score2
+                                      ? AppColors.success
+                                      : score1 == score2
+                                          ? AppColors.black
+                                          : AppColors.echec,
+                                ),
+                              ),
                             ],
                           ),
                           SizedBox(

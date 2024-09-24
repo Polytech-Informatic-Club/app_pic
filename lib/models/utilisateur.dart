@@ -25,20 +25,18 @@ class Utilisateur {
   });
 
   // Factory method to create a Utilisateur object from JSON
-  factory Utilisateur.fromJson(Map<String, dynamic> json) {
-    return Utilisateur(
-        id: json['id'] as String,
-        username: json['username'] as String,
-        password: json['password'] as String,
-        prenom: json['prenom'] as String,
-        nom: json['nom'] as String,
-        email: json['email'] as String,
-        telephone: json['telephone'] as String,
-        photo: json['photo'] as String,
-        role: RoleType.values.firstWhere(
+  Utilisateur.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as String,
+        username = json['username'] as String,
+        password = json['password'] as String,
+        prenom = json['prenom'] as String,
+        nom = json['nom'] as String,
+        email = json['email'] as String,
+        telephone = json['telephone'] as String,
+        photo = json['photo'] as String,
+        role = RoleType.values.firstWhere(
           (e) => e.toString().split('.').last == json['role'],
-        ));
-  }
+        );
 
   // Method to convert a Utilisateur object to JSON
   Map<String, dynamic> toJson() {

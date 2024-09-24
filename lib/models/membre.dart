@@ -16,13 +16,15 @@ class Membre extends Utilisateur {
   // Factory method to create a Membre object from JSON
   factory Membre.fromJson(Map<String, dynamic> json) {
     return Membre(
-      id: json['id'] as String,
-      nom: json['nom'] as String,
-      poste: json['poste'] as String,
-      email: json['email'] as String,
-      prenom: json['prenom'] as String,
-    );
+        email: json['email'] as String,
+        id: json['id'],
+        poste: json['poste'],
+        prenom: json['prenom'],
+        nom: json['nom'] as String);
   }
+  // : id = json['id'] as String,
+  //   poste = json['poste'] as String,
+  //   // super.fromJson(json);
 
   // Method to convert a Membre object to JSON
   Map<String, dynamic> toJson() {
