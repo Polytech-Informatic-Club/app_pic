@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'dart:async';
 
+import 'package:new_app/pages/shop/shop_blouson.dart';
+
 class Shop extends StatefulWidget {
   const Shop({Key? key}) : super(key: key);
 
@@ -102,6 +104,7 @@ class _ShopState extends State<Shop> {
         child: Column(
           children: [
             ShopCarousel(imagePaths: carouselImages),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               child: Column(
@@ -188,7 +191,6 @@ class _ShopState extends State<Shop> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
                   Text(
                     selectedCategory,
                     style: TextStyle(
@@ -200,16 +202,13 @@ class _ShopState extends State<Shop> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
+             Text(
                 'Nouveautés',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
             LayoutBuilder(
               builder: (context, constraints) {
                 int crossAxisCount = (constraints.maxWidth > 600) ? 3 : 2;
@@ -292,6 +291,7 @@ class _ShopCarouselState extends State<ShopCarousel> {
       height: 650,
       child: Stack(
         children: [
+
           PageView.builder(
             controller: _pageController,
             itemCount: widget.imagePaths.length,
@@ -349,7 +349,7 @@ class _ShopCarouselState extends State<ShopCarousel> {
                     Text(
                       'Nouvelle Collection',
                       style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.08,
+                        fontSize: MediaQuery.of(context).size.width * 0.05,
                         color: Colors.black,
                         fontFamily: 'LeagueGothicRegular-Regular',
                       ),
@@ -357,7 +357,11 @@ class _ShopCarouselState extends State<ShopCarousel> {
                     SizedBox(height: 10),
                     GestureDetector(
                       onTap: () {
-                        // Action lorsque l'utilisateur clique sur "Tout voir"
+                        // Redirection vers la page du produit
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => blouson_page()),
+                        );
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
@@ -445,7 +449,6 @@ class ProductCard extends StatelessWidget {
                   style: TextStyle(fontSize: 14, color: Colors.grey),
                 ),
                 if (isOrdered) ...[
-                  SizedBox(width: 5),
                   Image.asset('assets/images/checked.png', height: 20),
                 ],
               ],
@@ -463,7 +466,7 @@ final List<Map<String, dynamic>> products = [
     'produit': 'Tasse en Céramique',
     'categorie': 'Tasse',
     'prix': '3000',
-    'image_path': 'assets/images/objets-perdus/WhatsApp Image 2024-06-09 at 00.36.10_223e85e0.jpg',
+    'image_path': 'assets/images/market/tasse_50aire.png',
     'description': 'Une tasse en céramique élégante et durable, parfaite pour vos boissons chaudes préférées.',
     'commande': false,
   },
@@ -471,7 +474,7 @@ final List<Map<String, dynamic>> products = [
     'produit': 'Bloc-Notes Écologique',
     'categorie': 'Bloc-Notes',
     'prix': '2000',
-    'image_path': 'assets/images/objets-perdus/WhatsApp Image 2024-06-09 at 00.36.10_223e85e0.jpg',
+    'image_path': 'assets/images/market/bloc_note.png',
     'description': 'Un bloc-notes fabriqué à partir de matériaux recyclés, idéal pour prendre des notes tout en respectant l\'environnement.',
     'commande': false,
   },
@@ -479,7 +482,7 @@ final List<Map<String, dynamic>> products = [
     'produit': 'Porte-Clé en Bois',
     'categorie': 'Porte-Clé',
     'prix': '1500',
-    'image_path': 'assets/images/objets-perdus/WhatsApp Image 2024-06-09 at 00.36.10_223e85e0.jpg',
+    'image_path': 'assets/images/market/porte_cle.png',
     'description': 'Un porte-clé élégant en bois naturel, léger et résistant pour garder vos clés organisées.',
     'commande': false,
   },
@@ -487,7 +490,7 @@ final List<Map<String, dynamic>> products = [
     'produit': 'Gourde Isotherme',
     'categorie': 'Gourde',
     'prix': '5000',
-    'image_path': 'assets/images/objets-perdus/WhatsApp Image 2024-06-09 at 00.36.10_223e85e0.jpg',
+    'image_path': 'assets/images/market/gourde.png',
     'description': 'Une gourde isotherme de haute qualité qui maintient vos boissons chaudes ou froides pendant des heures.',
     'commande': false,
   },
@@ -495,7 +498,7 @@ final List<Map<String, dynamic>> products = [
     'produit': 'Tasse à Café Vintage',
     'categorie': 'Tasse',
     'prix': '3500',
-    'image_path': 'assets/images/objets-perdus/WhatsApp Image 2024-06-09 at 00.36.10_223e85e0.jpg',
+    'image_path': 'assets/images/market/tasse_50aire_2.png',
     'description': 'Une tasse à café au design rétro, parfaite pour ajouter une touche de nostalgie à votre pause café.',
     'commande': false,
   },
@@ -503,7 +506,7 @@ final List<Map<String, dynamic>> products = [
     'produit': 'Carnet de Voyage',
     'categorie': 'Bloc-Notes',
     'prix': '2500',
-    'image_path': 'assets/images/objets-perdus/WhatsApp Image 2024-06-09 at 00.36.10_223e85e0.jpg',
+    'image_path': 'assets/images/market/bloc_note.png',
     'description': 'Un carnet élégant pour consigner vos aventures et souvenirs de voyage.',
     'commande': false,
   },
