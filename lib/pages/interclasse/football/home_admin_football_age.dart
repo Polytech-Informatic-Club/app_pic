@@ -9,6 +9,7 @@ import 'package:new_app/widgets/submited_button.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/widgets/match_card.dart';
 
+// ignore: must_be_immutable
 class HomeAdminFootballPage extends StatelessWidget {
   String typeSport;
   HomeAdminFootballPage(this.typeSport, {super.key});
@@ -69,7 +70,7 @@ class HomeAdminFootballPage extends StatelessWidget {
                                   i.scoreEquipeB,
                                   i.equipeA.logo,
                                   i.equipeA.logo,
-                                  administrateOneFootball(
+                                  AdministrateOneFootball(
                                       i.id, i.sport.name.split(".").last)),
                               SizedBox(height: 8),
                             ],
@@ -105,6 +106,8 @@ class MemberCard extends StatelessWidget {
 }
 
 class MatchCard extends StatelessWidget {
+  const MatchCard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Card(

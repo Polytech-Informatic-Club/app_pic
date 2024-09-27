@@ -6,17 +6,18 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:new_app/login/inscription.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/models/football.dart';
+import 'package:new_app/objets_perdus.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/home/jeux/loup.dart';
 import 'package:new_app/pages/home/jeux/monopoly.dart';
 import 'package:new_app/pages/home/jeux/scrabble.dart';
 import 'package:new_app/pages/home/jeux/uno.dart';
 import 'package:new_app/pages/interclasse/basket/basket.dart';
-import 'package:new_app/pages/interclasse/football/createMatchFootball.dart';
-import 'package:new_app/pages/interclasse/football/detailFootball.dart';
-import 'package:new_app/pages/interclasse/football/homeFootPage.dart';
-import 'package:new_app/pages/interclasse/football/homeAdminFootballPage.dart';
-import 'package:new_app/pages/interclasse/jeux%20desprit/jeuEsprit.dart';
+import 'package:new_app/pages/interclasse/football/create_match_football.dart';
+import 'package:new_app/pages/interclasse/football/detail_football.dart';
+import 'package:new_app/pages/interclasse/football/home_football_page.dart';
+import 'package:new_app/pages/interclasse/football/home_admin_football_age.dart';
+import 'package:new_app/pages/interclasse/jeux%20desprit/jeu_esprit.dart';
 import 'package:new_app/pages/interclasse/volley/volley.dart';
 import 'package:new_app/pages/interclasse/interclasse.dart';
 import 'package:new_app/pages/shop/shop.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: ObjetsPerdus(),
     );
   }
 }

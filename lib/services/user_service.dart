@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers
+
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -124,6 +126,7 @@ class UserService {
       _url.value = (await reference.getDownloadURL()).toString();
       _loading.value = false;
       return _url.value;
+      // ignore: unused_catch_clause
     } on FirebaseException catch (e) {
       alerteMessageWidget(context,
           "Une erreur s'est produit lors du chargement !", AppColors.echec);

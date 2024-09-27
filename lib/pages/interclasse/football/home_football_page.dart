@@ -1,9 +1,11 @@
+// ignore_for_file: must_be_immutable, no_logic_in_create_state
+
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/commission.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/models/membre.dart';
-import 'package:new_app/pages/interclasse/football/detailFootball.dart';
+import 'package:new_app/pages/interclasse/football/detail_football.dart';
 import 'package:new_app/services/sport_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/match_card.dart';
@@ -13,14 +15,16 @@ class HomeFootballPage extends StatefulWidget {
   HomeFootballPage(this.typeSport, {super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomeFootballPageState createState() =>
+      // ignore: unnecessary_this
       _HomeFootballPageState(this.typeSport);
 }
 
 class _HomeFootballPageState extends State<HomeFootballPage> {
-  String _typeSport;
+  final String _typeSport;
   _HomeFootballPageState(this._typeSport);
-  SportService _sportService = SportService();
+  final SportService _sportService = SportService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,7 +101,7 @@ class _HomeFootballPageState extends State<HomeFootballPage> {
                         } else if (snapshot.hasError) {
                           return Text('Erreur lors du chargement');
                         } else {
-                          Commission? commissions = snapshot.data ?? null;
+                          Commission? commissions = snapshot.data;
                           return commissions != null
                               ? SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
@@ -126,7 +130,7 @@ class _HomeFootballPageState extends State<HomeFootballPage> {
                         } else if (snapshot.hasError) {
                           return Text('Erreur lors du chargement');
                         } else {
-                          Matches? followingMatch = snapshot.data ?? null;
+                          Matches? followingMatch = snapshot.data;
                           return followingMatch != null
                               ? _afficheFollowingMatch(
                                   followingMatch.id,

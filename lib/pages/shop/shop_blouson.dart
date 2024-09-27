@@ -1,12 +1,16 @@
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-class blouson_page extends StatefulWidget {
+class blousonPage extends StatefulWidget {
+  const blousonPage({super.key});
+
   @override
   _Blouson_PageState createState() => _Blouson_PageState();
 }
 
-class _Blouson_PageState extends State<blouson_page> {
+class _Blouson_PageState extends State<blousonPage> {
   final List<String> carouselImages = [
     'assets/images/market/photo_2024-05-24_12-27-39.jpg',
     'assets/images/market/photo_2024-05-24_12-27-53.jpg',
@@ -52,7 +56,8 @@ class _Blouson_PageState extends State<blouson_page> {
   }
 
   void _previousImage() {
-    _currentPage = (_currentPage - 1 + carouselImages.length) % carouselImages.length;
+    _currentPage =
+        (_currentPage - 1 + carouselImages.length) % carouselImages.length;
     _pageController.animateToPage(
       _currentPage,
       duration: Duration(milliseconds: 300),
@@ -70,7 +75,8 @@ class _Blouson_PageState extends State<blouson_page> {
             children: [
               Image.asset(carouselImages[_currentPage], height: 200),
               SizedBox(height: 10),
-              Text("Blouson 2024", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text("Blouson 2024",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               Text('Catégorie: Classe Polytechnicienne'),
               Text('Prix: 5000 CFA'),
               SizedBox(height: 10),
@@ -148,7 +154,8 @@ class _Blouson_PageState extends State<blouson_page> {
               right: 10,
               top: MediaQuery.of(context).size.height * 0.5 - 20,
               child: IconButton(
-                icon: Icon(Icons.arrow_forward_ios, color: Colors.white, size: 30),
+                icon: Icon(Icons.arrow_forward_ios,
+                    color: Colors.white, size: 30),
                 onPressed: _nextImage,
               ),
             ),
@@ -179,25 +186,35 @@ class _Blouson_PageState extends State<blouson_page> {
                   children: [
                     Text(
                       "Blousons 2024",
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, fontFamily: 'Cursive'),
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Cursive'),
                     ),
                     SizedBox(height: 5),
                     Text(
                       "Classe Polytechnicienne",
-                      style: TextStyle(fontSize: 18, color: Colors.black87, fontWeight: FontWeight.w300),
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w300),
                     ),
                     SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: _showProductDetails,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
-                        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text('Commander', style: TextStyle(fontSize: 16, color: Colors.white)),
+                          Text('Commander',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.white)),
                           SizedBox(width: 5),
                           Icon(Icons.shopping_cart, color: Colors.white),
                         ],
