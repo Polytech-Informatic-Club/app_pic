@@ -74,7 +74,13 @@ flutter:
     #  Pour les navbar
     - assets/images/connection-inscription/
     - assets/images/Navbar-Icons/
+
     - assets/images/Homepage/    
+
+    - assets/images/Competition/
+    - assets/images/homepage/
+    - assets/images/football/
+
     - assets/images/market/
 
     # Chemin des images de objets-perdus
