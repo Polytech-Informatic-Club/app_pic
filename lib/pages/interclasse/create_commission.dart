@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,13 +13,13 @@ import 'package:new_app/models/football.dart';
 import 'package:new_app/models/membre.dart';
 import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/pages/interclasse/football/homeAdminFootballPage.dart';
-import 'package:new_app/services/SportService.dart';
-import 'package:new_app/services/UserService.dart';
-import 'package:new_app/utils/AppColors.dart';
-import 'package:new_app/widgets/alerteMessage.dart';
-import 'package:new_app/widgets/reusableDescriptionInput.dart';
+import 'package:new_app/services/sport_service.dart';
+import 'package:new_app/services/user_service.dart';
+import 'package:new_app/utils/app_colors.dart';
+import 'package:new_app/widgets/alerte_message.dart';
+import 'package:new_app/widgets/reusable_description_input.dart';
 import 'package:new_app/widgets/reusable_widgets.dart';
-import 'package:new_app/widgets/submitedButton.dart';
+import 'package:new_app/widgets/submited_button.dart';
 
 class CreateCommission extends StatelessWidget {
   String typeSport;
@@ -84,10 +86,15 @@ class CreateCommission extends StatelessWidget {
                     SizedBox(
                       height: 20,
                     ),
+                    reusableTextFormField("Poste", _nomCommissionTextController,
+                        (value) {
+                      return null;
+                    }),
                     reusableTextFormField(
-                        "Poste", _nomCommissionTextController, (value) {}),
-                    reusableTextFormField("Nom Commission",
-                        _nomCommissionTextController, (value) {}),
+                        "Nom Commission", _nomCommissionTextController,
+                        (value) {
+                      return null;
+                    }),
                     SizedBox(
                       height: 20,
                     ),

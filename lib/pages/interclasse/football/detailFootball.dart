@@ -4,10 +4,10 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/basket.dart';
 import 'package:new_app/models/football.dart';
 import 'package:new_app/models/match.dart';
-import 'package:new_app/services/SportService.dart';
-import 'package:new_app/utils/AppColors.dart';
-import 'package:new_app/widgets/commentWidget.dart';
-import 'package:new_app/widgets/deleteConfirmedDialog.dart';
+import 'package:new_app/services/sport_service.dart';
+import 'package:new_app/utils/app_colors.dart';
+import 'package:new_app/widgets/comment_widget.dart';
+import 'package:new_app/widgets/delete_confirmed_dialog.dart';
 import 'package:new_app/widgets/reusable_comment_input.dart';
 
 class DetailFootballScreen extends StatefulWidget {

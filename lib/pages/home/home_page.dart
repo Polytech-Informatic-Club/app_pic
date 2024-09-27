@@ -2,11 +2,11 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
-import 'package:new_app/pages/home/appDrawer.dart';
+import 'package:new_app/pages/home/app_drawer.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'package:new_app/pages/interclasse/football/homeFootPage.dart';
 import 'package:new_app/pages/interclasse/interclasse.dart';
-import 'package:new_app/utils/AppColors.dart';
+import 'package:new_app/utils/app_colors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

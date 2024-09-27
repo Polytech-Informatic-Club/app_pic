@@ -10,13 +10,13 @@ import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/football.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/pages/interclasse/football/homeAdminFootballPage.dart';
-import 'package:new_app/services/SportService.dart';
-import 'package:new_app/services/UserService.dart';
-import 'package:new_app/utils/AppColors.dart';
-import 'package:new_app/widgets/alerteMessage.dart';
-import 'package:new_app/widgets/reusableDescriptionInput.dart';
+import 'package:new_app/services/sport_service.dart';
+import 'package:new_app/services/user_service.dart';
+import 'package:new_app/utils/app_colors.dart';
+import 'package:new_app/widgets/alerte_message.dart';
+import 'package:new_app/widgets/reusable_description_input.dart';
 import 'package:new_app/widgets/reusable_widgets.dart';
-import 'package:new_app/widgets/submitedButton.dart';
+import 'package:new_app/widgets/submited_button.dart';
 
 class CreateMatchFootball extends StatelessWidget {
   String typeSport;

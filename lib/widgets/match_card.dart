@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
-import 'package:new_app/utils/AppColors.dart';
+import 'package:new_app/utils/app_colors.dart';
 
 Widget buildMatchCard(
     BuildContext context,

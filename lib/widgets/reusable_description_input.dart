@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 Widget ReusableDescriptionInput(String label, TextEditingController controller,
     FormFieldValidator function) {
@@ -10,7 +9,9 @@ Widget ReusableDescriptionInput(String label, TextEditingController controller,
     maxLines: 4,
     decoration: InputDecoration(
       labelText: label,
-      labelStyle: TextStyle(fontSize: 14,),
+      labelStyle: TextStyle(
+        fontSize: 14,
+      ),
       alignLabelWithHint: true,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),

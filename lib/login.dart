@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/inscription.dart';
-import 'package:new_app/utils/AppColors.dart';
+import 'package:new_app/utils/app_colors.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});

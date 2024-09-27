@@ -1,4 +1,3 @@
-enum StatutXoss {
-  PAYEE,
-  IMPAYEE
-}
+// ignore_for_file: constant_identifier_names
+
+enum StatutXoss { PAYEE, IMPAYEE }

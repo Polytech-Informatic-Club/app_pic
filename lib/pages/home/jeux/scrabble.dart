@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:new_app/utils/AppColors.dart';
-import 'package:new_app/widgets/submitedButton.dart';
+import 'package:new_app/utils/app_colors.dart';
+import 'package:new_app/widgets/submited_button.dart';
 
 class ScrabbleGameScreen extends StatelessWidget {
   const ScrabbleGameScreen({super.key});

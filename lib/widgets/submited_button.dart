@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:new_app/utils/AppColors.dart';
+import 'package:new_app/utils/app_colors.dart';
 
 Widget SubmittedButton(String label, Function() _onSubmited) {
   return ElevatedButton(

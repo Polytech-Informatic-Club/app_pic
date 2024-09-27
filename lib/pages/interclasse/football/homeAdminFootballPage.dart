@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/models/match.dart';
-import 'package:new_app/pages/home/appDrawer.dart';
-import 'package:new_app/pages/interclasse/createCommission.dart';
+import 'package:new_app/pages/home/app_drawer.dart';
+import 'package:new_app/pages/interclasse/create_commission.dart';
 import 'package:new_app/pages/interclasse/football/administrateOneFootball.dart.dart';
 import 'package:new_app/pages/interclasse/football/createMatchFootball.dart';
-import 'package:new_app/services/SportService.dart';
-import 'package:new_app/widgets/submitedButton.dart';
+import 'package:new_app/services/sport_service.dart';
+import 'package:new_app/widgets/submited_button.dart';
 import 'package:new_app/fonctions.dart';
-import 'package:new_app/widgets/matchCard.dart';
+import 'package:new_app/widgets/match_card.dart';
 
 class HomeAdminFootballPage extends StatelessWidget {
   String typeSport;

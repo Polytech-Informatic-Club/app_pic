@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/login.dart';
-import 'package:new_app/utils/AppColors.dart';
+import 'package:new_app/utils/app_colors.dart';
 
 class Inscription extends StatelessWidget {
   const Inscription({super.key});

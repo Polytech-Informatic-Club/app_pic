@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/match.dart';
-import 'package:new_app/pages/home/appDrawer.dart';
+import 'package:new_app/pages/home/app_drawer.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'package:new_app/pages/interclasse/basket/basket.dart';
@@ -10,9 +10,9 @@ import 'package:new_app/pages/interclasse/football/detailFootball.dart';
 import 'package:new_app/pages/interclasse/football/homeFootPage.dart';
 import 'package:new_app/pages/interclasse/jeux%20desprit/jeuEsprit.dart';
 import 'package:new_app/pages/interclasse/volley/volley.dart';
-import 'package:new_app/services/SportService.dart';
-import 'package:new_app/utils/AppColors.dart';
-import 'package:new_app/widgets/matchCard.dart';
+import 'package:new_app/services/sport_service.dart';
+import 'package:new_app/utils/app_colors.dart';
+import 'package:new_app/widgets/match_card.dart';
 
 // ignore: must_be_immutable
 class InterclassePage extends StatelessWidget {

@@ -5,9 +5,9 @@ import 'package:new_app/login/inscription.dart';
 import 'package:new_app/models/role.dart';
 import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/pages/home/home_page.dart';
-import 'package:new_app/services/UserService.dart';
-import 'package:new_app/utils/AppColors.dart';
-import 'package:new_app/widgets/alerteMessage.dart';
+import 'package:new_app/services/user_service.dart';
+import 'package:new_app/utils/app_colors.dart';
+import 'package:new_app/widgets/alerte_message.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});

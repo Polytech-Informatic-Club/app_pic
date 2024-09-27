@@ -5,7 +5,7 @@ import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/shop/shop.dart';
 import 'package:new_app/pages/interclasse/interclasse.dart';
 import 'package:new_app/pages/xoss/xoss.dart';
-import 'package:new_app/utils/AppColors.dart';
+import 'package:new_app/utils/app_colors.dart';
 
 class navbar extends StatefulWidget {
   const navbar({super.key, required this.pageIndex});

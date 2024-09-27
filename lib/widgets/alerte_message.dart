@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 ScaffoldFeatureController alerteMessageWidget(
     BuildContext context, String message, Color color) {

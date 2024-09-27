@@ -4,8 +4,8 @@ import 'package:new_app/models/enums/sport_type.dart';
 import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/pages/interclasse/football/detailFootball.dart';
-import 'package:new_app/services/SportService.dart';
-import 'package:new_app/widgets/matchCard.dart';
+import 'package:new_app/services/sport_service.dart';
+import 'package:new_app/widgets/match_card.dart';
 
 class AllMatch extends StatefulWidget {
   const AllMatch({super.key});

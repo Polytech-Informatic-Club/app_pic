@@ -1,13 +1,12 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:new_app/models/utilisateur.dart';
-import 'package:new_app/utils/AppColors.dart';
-import 'package:new_app/widgets/alerteMessage.dart';
+import 'package:new_app/utils/app_colors.dart';
+import 'package:new_app/widgets/alerte_message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService {

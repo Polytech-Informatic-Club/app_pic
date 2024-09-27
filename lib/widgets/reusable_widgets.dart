@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:new_app/utils/AppColors.dart';
+import 'package:new_app/utils/app_colors.dart';
 
 Widget reusableTextFormField(String label, TextEditingController controller,
     FormFieldValidator function) {

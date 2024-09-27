@@ -4,9 +4,9 @@ import 'package:new_app/models/commission.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/models/membre.dart';
 import 'package:new_app/pages/interclasse/football/detailFootball.dart';
-import 'package:new_app/services/SportService.dart';
-import 'package:new_app/utils/AppColors.dart';
-import 'package:new_app/widgets/matchCard.dart';
+import 'package:new_app/services/sport_service.dart';
+import 'package:new_app/utils/app_colors.dart';
+import 'package:new_app/widgets/match_card.dart';
 
 class HomeFootballPage extends StatefulWidget {
   String typeSport;

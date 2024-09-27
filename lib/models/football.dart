@@ -46,7 +46,7 @@ class Football extends Matches {
             description: description,
             photo: photo);
 
-  Football.fromJson(Map<String, dynamic> json)
+  Football.fromJson(super.json)
       : buteursA = (json['buteursA'] as List<dynamic>?)
             ?.map((item) => But.fromJson(item))
             .toList(),
@@ -54,8 +54,9 @@ class Football extends Matches {
             ?.map((item) => But.fromJson(item))
             .toList(),
         statistiques = Map<String, int>.from(json['statistiques']),
-        super.fromJson(json);
+        super.fromJson();
 
+  @override
   Map<String, dynamic> toJson() {
     final data = super.toJson(); // Appelle le toJson() de Matches
     data['buteursA'] = buteursA?.map((buteur) => buteur.toJson()).toList();
