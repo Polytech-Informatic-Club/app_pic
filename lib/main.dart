@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:new_app/login/inscription.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/models/football.dart';
+import 'package:new_app/pages/annonce/annonce.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/home/jeux/loup.dart';
 import 'package:new_app/pages/home/jeux/monopoly.dart';
@@ -24,6 +25,8 @@ import 'package:new_app/pages/shop/shop.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+import 'pages/annonces.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -39,7 +42,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: Annonce(),
     );
   }
 }

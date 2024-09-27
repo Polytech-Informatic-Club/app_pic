@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
+import 'package:new_app/pages/annonce/annonce.dart';
 import 'package:new_app/pages/annonces.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/shop/shop.dart';
@@ -15,7 +16,7 @@ class navbar extends StatefulWidget {
 }
 
 class _navbarState extends State<navbar> {
-  List pageList = [Xoss(), Annonces(), HomePage(), InterclassePage(), Shop()];
+  List pageList = [Xoss(), Annonce(), HomePage(), InterclassePage(), Shop()];
 
   void _onSelected(newIndex) {
     if (Navigator.of(context).canPop()) {
