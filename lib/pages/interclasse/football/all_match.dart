@@ -3,7 +3,7 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/enums/sport_type.dart';
 import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/match.dart';
-import 'package:new_app/pages/interclasse/football/detailFootball.dart';
+import 'package:new_app/pages/interclasse/football/detail_football.dart';
 import 'package:new_app/services/sport_service.dart';
 import 'package:new_app/widgets/match_card.dart';
 
@@ -16,21 +16,20 @@ class AllMatch extends StatefulWidget {
 
 class _AllMatchState extends State<AllMatch> {
   final SportService _sportService = SportService();
-  ValueNotifier<List<Equipe>> _equipes = ValueNotifier<List<Equipe>>([]);
+  final ValueNotifier<List<Equipe>> _equipes = ValueNotifier<List<Equipe>>([]);
   Future<void> _loadEquipes() async {
     List<Equipe> equipes = await _sportService.getEquipeList();
     _equipes.value = equipes;
   }
 
-  ValueNotifier<List<Matches>?> _matchNotifier = ValueNotifier([]);
-  ValueNotifier<SportType?> _selectedTypeSport = ValueNotifier(null);
-  ValueNotifier<Equipe?> _selectedEquipe = ValueNotifier(null);
-  ValueNotifier<DateTime?> _selectedDateDebut = ValueNotifier(null);
-  ValueNotifier<DateTime?> _selectedDateFin = ValueNotifier(null);
+  final ValueNotifier<List<Matches>?> _matchNotifier = ValueNotifier([]);
+  final ValueNotifier<SportType?> _selectedTypeSport = ValueNotifier(null);
+  final ValueNotifier<Equipe?> _selectedEquipe = ValueNotifier(null);
+  final ValueNotifier<DateTime?> _selectedDateDebut = ValueNotifier(null);
+  final ValueNotifier<DateTime?> _selectedDateFin = ValueNotifier(null);
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadEquipes();
   }
@@ -49,7 +48,7 @@ class _AllMatchState extends State<AllMatch> {
               } else if (snapshot.hasError) {
                 return Text('Erreur lors de la récupération du rôle');
               } else {
-                final match = snapshot.data ?? null;
+                final match = snapshot.data;
                 _matchNotifier.value = match;
                 return Column(
                   children: [

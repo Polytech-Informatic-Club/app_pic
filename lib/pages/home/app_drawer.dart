@@ -3,7 +3,7 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/models/enums/role_type.dart';
 import 'package:new_app/pages/home/home_page.dart';
-import 'package:new_app/pages/interclasse/football/homeAdminFootballPage.dart';
+import 'package:new_app/pages/interclasse/football/home_admin_football_age.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';

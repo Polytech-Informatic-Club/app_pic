@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -9,7 +11,7 @@ import 'package:new_app/models/enums/sport_type.dart';
 import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/football.dart';
 import 'package:new_app/models/match.dart';
-import 'package:new_app/pages/interclasse/football/homeAdminFootballPage.dart';
+import 'package:new_app/pages/interclasse/football/home_admin_football_age.dart';
 import 'package:new_app/services/sport_service.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
@@ -21,17 +23,19 @@ import 'package:new_app/widgets/submited_button.dart';
 class CreateMatchFootball extends StatelessWidget {
   String typeSport;
   CreateMatchFootball(this.typeSport, {super.key});
-  TextEditingController _descriptionTextController = TextEditingController();
+  final TextEditingController _descriptionTextController =
+      TextEditingController();
   DateTime selectedDate = DateTime.now();
-  SportService _SportService = new SportService();
-  UserService _userService = new UserService();
+  // ignore: non_constant_identifier_names
+  final SportService _SportService = SportService();
+  final UserService _userService = UserService();
 
   final ValueNotifier<List<Equipe>> _equipes = ValueNotifier([]);
-  ValueNotifier<Equipe?> _selectedEquipeA = ValueNotifier(null);
-  ValueNotifier<Equipe?> _selectedEquipeB = ValueNotifier(null);
-  ValueNotifier<DateTime?> _selectedDate = ValueNotifier(DateTime.now());
-  ValueNotifier<bool> _loading = ValueNotifier(false);
-  ValueNotifier<String> _url = ValueNotifier("");
+  final ValueNotifier<Equipe?> _selectedEquipeA = ValueNotifier(null);
+  final ValueNotifier<Equipe?> _selectedEquipeB = ValueNotifier(null);
+  final ValueNotifier<DateTime?> _selectedDate = ValueNotifier(DateTime.now());
+  final ValueNotifier<bool> _loading = ValueNotifier(false);
+  final ValueNotifier<String> _url = ValueNotifier("");
 
   Future<void> _loadEquipes() async {
     List<Equipe> equipes = await _SportService.getEquipeList();
@@ -79,7 +83,7 @@ class CreateMatchFootball extends StatelessWidget {
         backgroundColor: AppColors.primary,
         title: Text("Créer un match"),
       ),
-      body: Container(
+      body: SizedBox(
           width: MediaQuery.of(context).size.width,
           // height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(
@@ -113,7 +117,7 @@ class CreateMatchFootball extends StatelessWidget {
                                                             ElevatedButton.icon(
                                                       style: ButtonStyle(
                                                           iconColor:
-                                                              MaterialStateProperty
+                                                              WidgetStateProperty
                                                                   .all(AppColors
                                                                       .black)),
                                                       onPressed: () async {
@@ -243,7 +247,9 @@ class CreateMatchFootball extends StatelessWidget {
                       height: 20,
                     ),
                     ReusableDescriptionInput(
-                        "Description", _descriptionTextController, (value) {}),
+                        "Description", _descriptionTextController, (value) {
+                      return null;
+                    }),
                     SizedBox(
                       height: 20,
                     ),
@@ -254,7 +260,7 @@ class CreateMatchFootball extends StatelessWidget {
                         dynamic match;
                         try {
                           if (typeSport == "FOOTBALL") {
-                            match = new Football(
+                            match = Football(
                                 statistiques: {
                                   "redCardA": 0,
                                   "redCardB": 0,
@@ -274,10 +280,7 @@ class CreateMatchFootball extends StatelessWidget {
                                 description:
                                     _descriptionTextController.value.text,
                                 photo: _url.value,
-                                id: _selectedEquipeA.value!.nom +
-                                    " VS " +
-                                    _selectedEquipeB.value!.nom +
-                                    _selectedDate.value!.toString(),
+                                id: "${_selectedEquipeA.value!.nom} VS ${_selectedEquipeB.value!.nom}${_selectedDate.value!}",
                                 date: _selectedDate.value!,
                                 equipeA: _selectedEquipeA.value!,
                                 equipeB: _selectedEquipeB.value!,
@@ -290,7 +293,7 @@ class CreateMatchFootball extends StatelessWidget {
                                 dislikers: [],
                                 partageLien: "");
                           } else if (typeSport == "BASKET") {
-                            match = new Basket(
+                            match = Basket(
                                 statistiques: {
                                   "point3A": 0,
                                   "point3B": 0,
@@ -306,10 +309,7 @@ class CreateMatchFootball extends StatelessWidget {
                                 description:
                                     _descriptionTextController.value.text,
                                 photo: _url.value,
-                                id: _selectedEquipeA.value!.nom +
-                                    " VS " +
-                                    _selectedEquipeB.value!.nom +
-                                    _selectedDate.value!.toString(),
+                                id: "${_selectedEquipeA.value!.nom} VS ${_selectedEquipeB.value!.nom}${_selectedDate.value!}",
                                 date: _selectedDate.value!,
                                 equipeA: _selectedEquipeA.value!,
                                 equipeB: _selectedEquipeB.value!,
@@ -334,11 +334,13 @@ class CreateMatchFootball extends StatelessWidget {
                               changerPage(
                                   context, HomeAdminFootballPage(typeSport));
                             }
-                          } catch (e) {}
+                          } catch (e) {
+                            return null;
+                          }
                         } catch (e) {
                           alerteMessageWidget(
                               context,
-                              "Une erreur est survie lors de la création.${e}",
+                              "Une erreur est survie lors de la création.$e",
                               AppColors.echec);
                         }
                       } else {

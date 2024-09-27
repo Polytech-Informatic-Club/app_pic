@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/pages/home/app_drawer.dart';
 import 'package:new_app/pages/interclasse/create_commission.dart';
-import 'package:new_app/pages/interclasse/football/administrateOneFootball.dart.dart';
-import 'package:new_app/pages/interclasse/football/createMatchFootball.dart';
+import 'package:new_app/pages/interclasse/football/administrate_one_football.dart.dart';
+import 'package:new_app/pages/interclasse/football/create_match_football.dart';
+
 import 'package:new_app/services/sport_service.dart';
 import 'package:new_app/widgets/submited_button.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/widgets/match_card.dart';
 
+// ignore: must_be_immutable
 class HomeAdminFootballPage extends StatelessWidget {
   String typeSport;
   HomeAdminFootballPage(this.typeSport, {super.key});
@@ -69,7 +71,7 @@ class HomeAdminFootballPage extends StatelessWidget {
                                   i.scoreEquipeB,
                                   i.equipeA.logo,
                                   i.equipeA.logo,
-                                  administrateOneFootball(
+                                  AdministrateOneFootball(
                                       i.id, i.sport.name.split(".").last)),
                               SizedBox(height: 8),
                             ],
@@ -105,6 +107,8 @@ class MemberCard extends StatelessWidget {
 }
 
 class MatchCard extends StatelessWidget {
+  const MatchCard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Card(

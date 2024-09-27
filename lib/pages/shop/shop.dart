@@ -20,7 +20,13 @@ class _ShopState extends State<Shop> {
   ];
 
   String selectedCategory = 'Tous';
-  List<String> categories = ['Tous', 'Tasse', 'Bloc-Notes', 'Porte-Clé', 'Gourde'];
+  List<String> categories = [
+    'Tous',
+    'Tasse',
+    'Bloc-Notes',
+    'Porte-Clé',
+    'Gourde'
+  ];
   String searchQuery = '';
 
   List<Map<String, dynamic>> getFilteredProducts() {
@@ -34,8 +40,10 @@ class _ShopState extends State<Shop> {
     });
 
     return filteredProducts.where((product) {
-      bool categoryMatch = selectedCategory == 'Tous' || product['categorie'] == selectedCategory;
-      bool searchMatch = product['produit'].toLowerCase().contains(searchQuery.toLowerCase());
+      bool categoryMatch = selectedCategory == 'Tous' ||
+          product['categorie'] == selectedCategory;
+      bool searchMatch =
+          product['produit'].toLowerCase().contains(searchQuery.toLowerCase());
       return categoryMatch && searchMatch;
     }).toList();
   }
@@ -50,14 +58,16 @@ class _ShopState extends State<Shop> {
             children: [
               Image.asset(product['image_path'] ?? '', height: 200),
               SizedBox(height: 10),
-              Text(product['produit'] ?? '', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text(product['produit'] ?? '',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               Text('Catégorie: ${product['categorie'] ?? ''}'),
               Text('Prix: ${product['prix'] ?? ''} CFA'),
               SizedBox(height: 10),
               Text(product['description'] ?? ''),
               SizedBox(height: 20),
               ElevatedButton(
-                child: Text(product['commande'] == true ? 'Retirer' : 'Commander'),
+                child:
+                    Text(product['commande'] == true ? 'Retirer' : 'Commander'),
                 onPressed: () {
                   setState(() {
                     product['commande'] = !(product['commande'] ?? false);
@@ -84,7 +94,9 @@ class _ShopState extends State<Shop> {
               Image.asset('assets/images/checked.png', height: 100),
               SizedBox(height: 20),
               Text(
-                isOrdered ? 'Commande passée avec succès' : 'Commande retirée avec succès',
+                isOrdered
+                    ? 'Commande passée avec succès'
+                    : 'Commande retirée avec succès',
                 textAlign: TextAlign.center,
               ),
             ],
@@ -104,7 +116,6 @@ class _ShopState extends State<Shop> {
         child: Column(
           children: [
             ShopCarousel(imagePaths: carouselImages),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               child: Column(
@@ -123,8 +134,10 @@ class _ShopState extends State<Shop> {
                         child: Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 10, right: 5),
-                              child: Icon(Icons.search, color: Color(0xff777777), size: 20),
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 5),
+                              child: Icon(Icons.search,
+                                  color: Color(0xff777777), size: 20),
                             ),
                             Expanded(
                               child: TextField(
@@ -135,7 +148,8 @@ class _ShopState extends State<Shop> {
                                     color: Color(0xff777777),
                                   ),
                                   border: InputBorder.none,
-                                  contentPadding: EdgeInsets.symmetric(vertical: 10),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(vertical: 10),
                                 ),
                                 style: TextStyle(
                                   fontSize: 15,
@@ -181,7 +195,8 @@ class _ShopState extends State<Shop> {
                               height: 35,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: AssetImage('assets/images/categorie.png'),
+                                  image:
+                                      AssetImage('assets/images/categorie.png'),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -202,18 +217,19 @@ class _ShopState extends State<Shop> {
                 ],
               ),
             ),
-             Text(
-                'Nouveautés',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+            Text(
+              'Nouveautés',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
+            ),
             LayoutBuilder(
               builder: (context, constraints) {
                 int crossAxisCount = (constraints.maxWidth > 600) ? 3 : 2;
 
-                List<Map<String, dynamic>> filteredProducts = getFilteredProducts();
+                List<Map<String, dynamic>> filteredProducts =
+                    getFilteredProducts();
 
                 return GridView.builder(
                   shrinkWrap: true,
@@ -291,7 +307,6 @@ class _ShopCarouselState extends State<ShopCarousel> {
       height: 650,
       child: Stack(
         children: [
-
           PageView.builder(
             controller: _pageController,
             itemCount: widget.imagePaths.length,
@@ -360,11 +375,13 @@ class _ShopCarouselState extends State<ShopCarousel> {
                         // Redirection vers la page du produit
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => blouson_page()),
+                          MaterialPageRoute(
+                              builder: (context) => blousonPage()),
                         );
                       },
                       child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                         decoration: BoxDecoration(
                           color: Colors.black,
                           borderRadius: BorderRadius.circular(8),
@@ -458,7 +475,6 @@ class ProductCard extends StatelessWidget {
       ),
     );
   }
-
 }
 
 final List<Map<String, dynamic>> products = [
@@ -467,7 +483,8 @@ final List<Map<String, dynamic>> products = [
     'categorie': 'Tasse',
     'prix': '3000',
     'image_path': 'assets/images/market/tasse_50aire.png',
-    'description': 'Une tasse en céramique élégante et durable, parfaite pour vos boissons chaudes préférées.',
+    'description':
+        'Une tasse en céramique élégante et durable, parfaite pour vos boissons chaudes préférées.',
     'commande': false,
   },
   {
@@ -475,7 +492,8 @@ final List<Map<String, dynamic>> products = [
     'categorie': 'Bloc-Notes',
     'prix': '2000',
     'image_path': 'assets/images/market/bloc_note.png',
-    'description': 'Un bloc-notes fabriqué à partir de matériaux recyclés, idéal pour prendre des notes tout en respectant l\'environnement.',
+    'description':
+        'Un bloc-notes fabriqué à partir de matériaux recyclés, idéal pour prendre des notes tout en respectant l\'environnement.',
     'commande': false,
   },
   {
@@ -483,7 +501,8 @@ final List<Map<String, dynamic>> products = [
     'categorie': 'Porte-Clé',
     'prix': '1500',
     'image_path': 'assets/images/market/porte_cle.png',
-    'description': 'Un porte-clé élégant en bois naturel, léger et résistant pour garder vos clés organisées.',
+    'description':
+        'Un porte-clé élégant en bois naturel, léger et résistant pour garder vos clés organisées.',
     'commande': false,
   },
   {
@@ -491,7 +510,8 @@ final List<Map<String, dynamic>> products = [
     'categorie': 'Gourde',
     'prix': '5000',
     'image_path': 'assets/images/market/gourde.png',
-    'description': 'Une gourde isotherme de haute qualité qui maintient vos boissons chaudes ou froides pendant des heures.',
+    'description':
+        'Une gourde isotherme de haute qualité qui maintient vos boissons chaudes ou froides pendant des heures.',
     'commande': false,
   },
   {
@@ -499,7 +519,8 @@ final List<Map<String, dynamic>> products = [
     'categorie': 'Tasse',
     'prix': '3500',
     'image_path': 'assets/images/market/tasse_50aire_2.png',
-    'description': 'Une tasse à café au design rétro, parfaite pour ajouter une touche de nostalgie à votre pause café.',
+    'description':
+        'Une tasse à café au design rétro, parfaite pour ajouter une touche de nostalgie à votre pause café.',
     'commande': false,
   },
   {
@@ -507,7 +528,8 @@ final List<Map<String, dynamic>> products = [
     'categorie': 'Bloc-Notes',
     'prix': '2500',
     'image_path': 'assets/images/market/bloc_note.png',
-    'description': 'Un carnet élégant pour consigner vos aventures et souvenirs de voyage.',
+    'description':
+        'Un carnet élégant pour consigner vos aventures et souvenirs de voyage.',
     'commande': false,
   },
 ];

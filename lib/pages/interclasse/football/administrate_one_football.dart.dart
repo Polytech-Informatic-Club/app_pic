@@ -1,3 +1,5 @@
+// ignore_for_file: no_logic_in_create_state
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
@@ -13,26 +15,26 @@ import 'package:new_app/widgets/update_gold_dialog.dart';
 import 'package:new_app/widgets/update_statistic_dialog.dart';
 
 // ignore: must_be_immutable
-class administrateOneFootball extends StatefulWidget {
+class AdministrateOneFootball extends StatefulWidget {
   String id;
   String typeSport;
-  administrateOneFootball(this.id, this.typeSport, {super.key});
+  AdministrateOneFootball(this.id, this.typeSport, {super.key});
 
   @override
-  State<administrateOneFootball> createState() =>
-      _administrateOneFootballState(id, typeSport);
+  State<AdministrateOneFootball> createState() =>
+      _AdministrateOneFootballState(id, typeSport);
 }
 
-class _administrateOneFootballState extends State<administrateOneFootball> {
-  SportService _sportService = new SportService();
-  String _id;
-  String _typeSport;
-  _administrateOneFootballState(this._id, this._typeSport);
+class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
+  final SportService _sportService = SportService();
+  final String _id;
+  final String _typeSport;
+  _AdministrateOneFootballState(this._id, this._typeSport);
 
-  ValueNotifier<bool> _isPressCommment = new ValueNotifier<bool>(false);
-  ValueNotifier<Football?> matchProvider = new ValueNotifier<Football?>(null);
+  final ValueNotifier<bool> _isPressCommment = ValueNotifier<bool>(false);
+  ValueNotifier<Football?> matchProvider = ValueNotifier<Football?>(null);
 
-  TextEditingController _commentairController = TextEditingController();
+  final TextEditingController _commentairController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +64,14 @@ class _administrateOneFootballState extends State<administrateOneFootball> {
               } else if (snapshot.hasError) {
                 return Text('Erreur lors de la récupération du rôle');
               } else {
-                final _match = snapshot.data ?? null;
+                // ignore: no_leading_underscores_for_local_identifiers
+                final _match = snapshot.data;
                 matchProvider.value = _match;
                 return _match == null
                     ? CircularProgressIndicator()
                     : ValueListenableBuilder<Football?>(
                         valueListenable: matchProvider,
+                        // ignore: no_leading_underscores_for_local_identifiers
                         builder: (context, _matchProvider, child) {
                           return Column(
                             children: [
@@ -488,6 +492,7 @@ class _administrateOneFootballState extends State<administrateOneFootball> {
                                                       },
                                                     );
 
+                                                    // ignore: unrelated_type_equality_checks
                                                     if (confirm != Null) {
                                                       matchProvider.value =
                                                           await _sportService
@@ -560,6 +565,7 @@ class _administrateOneFootballState extends State<administrateOneFootball> {
                                                       },
                                                     );
 
+                                                    // ignore: unrelated_type_equality_checks
                                                     if (confirm != Null) {
                                                       matchProvider.value =
                                                           await _sportService
@@ -633,6 +639,7 @@ class _administrateOneFootballState extends State<administrateOneFootball> {
                                                     );
 
                                                     if (confirm || !confirm) {
+                                                      // ignore: avoid_print
                                                       print("Faute B");
 
                                                       matchProvider.value =
@@ -846,7 +853,9 @@ class _administrateOneFootballState extends State<administrateOneFootball> {
                                               ? reusableCommentInput(
                                                   "Commenter",
                                                   _commentairController,
-                                                  (value) {}, () async {
+                                                  (value) {
+                                                  return null;
+                                                }, () async {
                                                   matchProvider.value =
                                                       await _sportService
                                                           .addCommentMatch(

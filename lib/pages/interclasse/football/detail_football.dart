@@ -10,6 +10,7 @@ import 'package:new_app/widgets/comment_widget.dart';
 import 'package:new_app/widgets/delete_confirmed_dialog.dart';
 import 'package:new_app/widgets/reusable_comment_input.dart';
 
+// ignore: must_be_immutable
 class DetailFootballScreen extends StatefulWidget {
   String id;
   String typeSport;
@@ -17,19 +18,20 @@ class DetailFootballScreen extends StatefulWidget {
 
   @override
   State<DetailFootballScreen> createState() =>
+      // ignore: no_logic_in_create_state
       _DetailFootballScreenState(id, typeSport);
 }
 
 class _DetailFootballScreenState extends State<DetailFootballScreen> {
-  SportService _sportService = new SportService();
-  String _id;
-  String _typeSport;
+  final SportService _sportService = SportService();
+  final String _id;
+  final String _typeSport;
   _DetailFootballScreenState(this._id, this._typeSport);
 
-  ValueNotifier<bool> _isPressCommment = new ValueNotifier<bool>(false);
-  ValueNotifier<dynamic> _match = new ValueNotifier<dynamic>(null);
+  final ValueNotifier<bool> _isPressCommment = ValueNotifier<bool>(false);
+  final ValueNotifier<dynamic> _match = ValueNotifier<dynamic>(null);
 
-  TextEditingController _commentairController = TextEditingController();
+  final TextEditingController _commentairController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,7 @@ class _DetailFootballScreenState extends State<DetailFootballScreen> {
               } else if (snapshot.hasError) {
                 return Text('Erreur lors de la récupération du rôle');
               } else {
-                final match = snapshot.data ?? null;
+                final match = snapshot.data;
                 _match.value = match;
                 return match == null
                     ? CircularProgressIndicator()
@@ -386,10 +388,10 @@ class _DetailFootballScreenState extends State<DetailFootballScreen> {
                                     valueListenable: _isPressCommment,
                                     builder: (context, passwordsMatch, child) {
                                       return passwordsMatch
-                                          ? reusableCommentInput(
-                                              "Commenter",
-                                              _commentairController,
-                                              (value) {}, () async {
+                                          ? reusableCommentInput("Commenter",
+                                              _commentairController, (value) {
+                                              return null;
+                                            }, () async {
                                               _match.value = await _sportService
                                                   .addCommentMatch(
                                                       match.id,
@@ -413,7 +415,7 @@ class _DetailFootballScreenState extends State<DetailFootballScreen> {
                                     )),
                                 SizedBox(height: 10),
                                 // Comment 1
-                                ValueListenableBuilder<dynamic?>(
+                                ValueListenableBuilder<dynamic>(
                                     valueListenable: _match,
                                     builder: (context, matchProvider, child) {
                                       return Column(

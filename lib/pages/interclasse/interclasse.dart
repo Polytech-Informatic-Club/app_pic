@@ -5,10 +5,10 @@ import 'package:new_app/pages/home/app_drawer.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'package:new_app/pages/interclasse/basket/basket.dart';
-import 'package:new_app/pages/interclasse/football/allMatch.dart';
-import 'package:new_app/pages/interclasse/football/detailFootball.dart';
-import 'package:new_app/pages/interclasse/football/homeFootPage.dart';
-import 'package:new_app/pages/interclasse/jeux%20desprit/jeuEsprit.dart';
+import 'package:new_app/pages/interclasse/football/all_match.dart';
+import 'package:new_app/pages/interclasse/football/detail_football.dart';
+import 'package:new_app/pages/interclasse/football/home_football_page.dart';
+
 import 'package:new_app/pages/interclasse/volley/volley.dart';
 import 'package:new_app/services/sport_service.dart';
 import 'package:new_app/utils/app_colors.dart';
