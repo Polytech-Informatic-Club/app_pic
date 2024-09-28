@@ -7,6 +7,7 @@ import 'package:new_app/login/inscription.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/models/football.dart';
 import 'package:new_app/objets_perdus.dart';
+import 'package:new_app/pages/annonce/afficher_annonce.dart';
 import 'package:new_app/pages/annonce/annonce.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/home/jeux/loup.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: AfficherAnononceScreen(),
     );
   }
 }
