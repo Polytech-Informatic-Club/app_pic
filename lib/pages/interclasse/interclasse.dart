@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/match.dart';
+import 'package:new_app/pages/drawer.dart';
 import 'package:new_app/pages/home/app_drawer.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/home/navbar.dart';
@@ -24,7 +25,7 @@ class InterclassePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: navbar(pageIndex: 3),
-      drawer: Appdrawer(),
+      drawer: EptDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [

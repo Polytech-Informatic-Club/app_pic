@@ -4,6 +4,7 @@ import 'package:new_app/pages/annonce/hot_topic.dart';
 import 'package:new_app/pages/annonce/p_info_nouveaute.dart';
 import 'package:new_app/pages/annonce/ept_button.dart';
 import 'package:new_app/pages/annonces.dart';
+import 'package:new_app/pages/drawer.dart';
 import 'package:new_app/pages/home/app_drawer.dart';
 import 'package:new_app/pages/home/navbar.dart';
 
@@ -34,7 +35,7 @@ class _AnnonceState extends State<Annonce> {
         backgroundColor: Colors.white,
         centerTitle: true,
       ),
-      drawer: Appdrawer(),
+      drawer: EptDrawer(),
       bottomNavigationBar: navbar(pageIndex: 1),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(

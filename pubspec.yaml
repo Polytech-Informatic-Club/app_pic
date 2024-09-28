@@ -80,6 +80,7 @@ flutter:
     - assets/images/football/
     - assets/images/polytech-Info/
     - assets/images/market/
+    - assets/images/top-left-menu/
 
     # Chemin des images de objets-perdus
     - assets/images/objets-perdus/
