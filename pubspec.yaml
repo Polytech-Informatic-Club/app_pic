@@ -74,7 +74,7 @@ flutter:
     #  Pour les navbar
     - assets/images/connection-inscription/
     - assets/images/Navbar-Icons/
-
+    - assets/images/xoss/
     - assets/images/Competition/
     - assets/images/homepage/
     - assets/images/football/
