@@ -21,10 +21,15 @@ class _AnnonceState extends State<Annonce> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.menu,
-          size: 35,
-        ),
+        leading: Builder(builder: (context) {
+          return IconButton(
+            onPressed: () => Scaffold.of(context).openDrawer(),
+            icon: Icon(
+              Icons.menu,
+              size: 35,
+            ),
+          );
+        }),
         title: Text('Polytech Info'),
         backgroundColor: Colors.white,
         centerTitle: true,

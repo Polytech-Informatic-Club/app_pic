@@ -111,6 +111,7 @@ class _ShopState extends State<Shop> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       bottomNavigationBar: navbar(pageIndex: 4),
       body: SingleChildScrollView(
         child: Column(
@@ -446,19 +447,19 @@ class ProductCard extends StatelessWidget {
             child: Image.asset(
               imagePath,
               fit: BoxFit.cover,
-              height: 150,
+              height: 140,
               width: double.infinity,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.fromLTRB(8.0, 5, 0, 0),
             child: Text(
               productName,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Row(
               children: [
                 Text(
