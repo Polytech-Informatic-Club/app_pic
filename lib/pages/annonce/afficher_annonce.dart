@@ -30,7 +30,7 @@ class AfficherAnononceScreen extends StatelessWidget {
           children: [
             // Image de fond
             Container(
-              height: 500,
+              height: 470,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(
