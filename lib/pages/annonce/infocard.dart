@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:new_app/pages/annonce/constante.dart';
+import 'package:new_app/utils/app_colors.dart';
 
 class InfoCard extends StatelessWidget {
   final Image image;

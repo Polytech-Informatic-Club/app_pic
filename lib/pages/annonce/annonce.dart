@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:new_app/pages/annonce/assemblee_generale_item.dart';
 import 'package:new_app/pages/annonce/hot_topic.dart';
 import 'package:new_app/pages/annonce/p_info_nouveaute.dart';
-import 'package:new_app/pages/annonce/ept_button.dart';
+import 'package:new_app/widgets/ept_button.dart';
 import 'package:new_app/pages/annonces.dart';
 import 'package:new_app/pages/drawer.dart';
 import 'package:new_app/pages/home/app_drawer.dart';
