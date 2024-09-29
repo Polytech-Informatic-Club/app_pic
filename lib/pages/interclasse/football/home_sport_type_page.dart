@@ -5,25 +5,25 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/commission.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/models/membre.dart';
-import 'package:new_app/pages/interclasse/football/detail_football.dart';
+import 'package:new_app/pages/interclasse/football/detail_match.dart';
 import 'package:new_app/services/sport_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/match_card.dart';
 
-class HomeFootballPage extends StatefulWidget {
+class HomeSportTypePage extends StatefulWidget {
   String typeSport;
-  HomeFootballPage(this.typeSport, {super.key});
+  HomeSportTypePage(this.typeSport, {super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _HomeFootballPageState createState() =>
+  _HomeSportTypePageState createState() =>
       // ignore: unnecessary_this
-      _HomeFootballPageState(this.typeSport);
+      _HomeSportTypePageState(this.typeSport);
 }
 
-class _HomeFootballPageState extends State<HomeFootballPage> {
+class _HomeSportTypePageState extends State<HomeSportTypePage> {
   final String _typeSport;
-  _HomeFootballPageState(this._typeSport);
+  _HomeSportTypePageState(this._typeSport);
   final SportService _sportService = SportService();
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class _HomeFootballPageState extends State<HomeFootballPage> {
             SizedBox(height: 60),
             Center(
                 child: Text(
-              _typeSport,
+              _typeSport.split("_").join(" "),
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             )),
             SizedBox(height: 5),
@@ -112,7 +112,7 @@ class _HomeFootballPageState extends State<HomeFootballPage> {
                                     ],
                                   ))
                               : Text(
-                                  "Aucun membre de la sous-commission $_typeSport");
+                                  "Aucun membre de la sous-commission ${_typeSport.split("_").join(" ").toLowerCase()}");
                         }
                       }),
                   SizedBox(height: 20),
@@ -165,6 +165,7 @@ class _HomeFootballPageState extends State<HomeFootballPage> {
                           return Text('Erreur lors du chargement');
                         } else {
                           List<Matches> matches = snapshot.data ?? [];
+                          print("SALLOS ??${matches.length.toString()}");
                           return matches.isEmpty
                               ? Text("Aucun match trouvé")
                               : Column(
@@ -182,7 +183,7 @@ class _HomeFootballPageState extends State<HomeFootballPage> {
                                               i.scoreEquipeB,
                                               i.equipeA.logo,
                                               i.equipeA.logo,
-                                              DetailFootballScreen(
+                                              DetailMatchScreen(
                                                   i.id,
                                                   i.sport.name
                                                       .split(".")
@@ -210,7 +211,7 @@ class _HomeFootballPageState extends State<HomeFootballPage> {
 Widget _afficheFollowingMatch(String id, String affiche, String description,
     String typeSport, BuildContext context) {
   return GestureDetector(
-      onTap: () => changerPage(context, DetailFootballScreen(id, typeSport)),
+      onTap: () => changerPage(context, DetailMatchScreen(id, typeSport)),
       child: Column(
         children: [
           affiche != ""

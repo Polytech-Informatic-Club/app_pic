@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/pages/drawer.dart';
-import 'package:new_app/pages/home/app_drawer.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'package:new_app/pages/interclasse/basket/basket.dart';
 import 'package:new_app/pages/interclasse/football/all_match.dart';
-import 'package:new_app/pages/interclasse/football/detail_football.dart';
-import 'package:new_app/pages/interclasse/football/home_football_page.dart';
+import 'package:new_app/pages/interclasse/football/detail_match.dart';
+import 'package:new_app/pages/interclasse/football/home_sport_type_page.dart';
 
 import 'package:new_app/pages/interclasse/volley/volley.dart';
 import 'package:new_app/services/sport_service.dart';
@@ -101,16 +100,16 @@ class InterclassePage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         _buildCircularIcon('assets/images/foot.png',
-                            HomeFootballPage("FOOTBALL")),
+                            HomeSportTypePage("FOOTBALL")),
                         _buildCircularIcon(
                             'assets/images/Competition/logo_basket.png',
-                            HomeFootballPage("BASKETBALL")),
+                            HomeSportTypePage("BASKETBALL")),
                         _buildCircularIcon(
                             'assets/images/Competition/logo jeux desprit.png',
-                            HomeFootballPage("GENIE_EN_HERBE")),
+                            HomeSportTypePage("JEUX_ESPRIT")),
                         _buildCircularIcon(
                             'assets/images/Competition/logo_volley.png',
-                            HomeFootballPage("VOLLEYBALL")),
+                            HomeSportTypePage("VOLLEYBALL")),
                       ],
                     ),
                   ),
@@ -130,31 +129,36 @@ class InterclassePage extends StatelessWidget {
                           return Text('Erreur lors du chargement');
                         } else {
                           List<Matches> matches = snapshot.data ?? [];
-                          return Column(
-                            children: [
-                              for (var i in matches)
-                                Column(
+                          return matches.isNotEmpty
+                              ? Column(
                                   children: [
-                                    Text(i.sport.name,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    buildMatchCard(
-                                        context,
-                                        i.id,
-                                        dateCustomformat(i.date),
-                                        i.equipeA.nom,
-                                        i.equipeB.nom,
-                                        i.scoreEquipeA,
-                                        i.scoreEquipeB,
-                                        i.equipeA.logo,
-                                        i.equipeA.logo,
-                                        DetailFootballScreen(i.id,
-                                            i.sport.name.split(".").last)),
-                                    SizedBox(height: 8),
+                                    for (var i in matches)
+                                      Column(
+                                        children: [
+                                          Text(i.sport.name,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                          buildMatchCard(
+                                              context,
+                                              i.id,
+                                              dateCustomformat(i.date),
+                                              i.equipeA.nom,
+                                              i.equipeB.nom,
+                                              i.scoreEquipeA,
+                                              i.scoreEquipeB,
+                                              i.equipeA.logo,
+                                              i.equipeA.logo,
+                                              DetailMatchScreen(
+                                                  i.id,
+                                                  i.sport.name
+                                                      .split(".")
+                                                      .last)),
+                                          SizedBox(height: 8),
+                                        ],
+                                      )
                                   ],
                                 )
-                            ],
-                          );
+                              : Text("Aucun match trouvé.");
                         }
                       }),
                   Row(
@@ -175,47 +179,51 @@ class InterclassePage extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 8),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    width: 500,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: FutureBuilder<List<Matches>>(
-                          future: _sportService.getNextMatch(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return CircularProgressIndicator();
-                            } else if (snapshot.hasError) {
-                              return Text('Erreur lors du chargement');
-                            } else {
-                              List<Matches> matches = snapshot.data ?? [];
-                              return Row(
-                                children: [
-                                  for (var i in matches)
-                                    Row(
-                                      children: [
-                                        _afficheMatch(
-                                            i.id,
-                                            i.photo ?? '',
-                                            i.date,
-                                            i.sport.name.split(".").last,
-                                            context),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                      ],
-                                    )
-                                ],
-                              );
-                            }
-                          }),
-                    ),
-                  )
+                  FutureBuilder<List<Matches>>(
+                      future: _sportService.getNextMatch(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Erreur lors du chargement');
+                        } else {
+                          List<Matches> matches = snapshot.data ?? [];
+                          return matches.isNotEmpty
+                              ? Container(
+                                  padding: EdgeInsets.all(10),
+                                  width: 500,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          for (var i in matches)
+                                            Row(
+                                              children: [
+                                                _afficheMatch(
+                                                    i.id,
+                                                    i.photo ?? '',
+                                                    i.date,
+                                                    i.sport.name
+                                                        .split(".")
+                                                        .last,
+                                                    context),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                              ],
+                                            )
+                                        ],
+                                      )),
+                                )
+                              : Text(
+                                  "Aucun match n'est prévu dans les jours à venir");
+                        }
+                      }),
                 ],
               ),
             ),
@@ -228,7 +236,7 @@ class InterclassePage extends StatelessWidget {
   Widget _afficheMatch(String id, String affiche, DateTime date,
       String typeSport, BuildContext context) {
     return GestureDetector(
-        onTap: () => changerPage(context, DetailFootballScreen(id, typeSport)),
+        onTap: () => changerPage(context, DetailMatchScreen(id, typeSport)),
         child: Column(
           children: [
             affiche != ""

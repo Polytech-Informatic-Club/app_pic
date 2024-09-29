@@ -9,9 +9,11 @@ import 'package:new_app/models/commission.dart';
 import 'package:new_app/models/enums/sport_type.dart';
 import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/football.dart';
+import 'package:new_app/models/jeux_esprit.dart';
 import 'package:new_app/models/joueur.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/models/utilisateur.dart';
+import 'package:new_app/models/volleyball.dart';
 
 class SportService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -58,6 +60,7 @@ class SportService {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
           .collection("MATCH")
           .where("date", isLessThanOrEqualTo: Timestamp.now())
+          .orderBy("date", descending: true)
           .limit(2)
           .get();
       List<Map<String, dynamic>> data =
@@ -106,7 +109,7 @@ class SportService {
     }
   }
 
-  Future<dynamic> getMatchFootballById(String id, String typeSport) async {
+  Future<dynamic> getMatchById(String id, String typeSport) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> querySnapshot =
           await _firestore.collection("MATCH").doc(id).get();
@@ -114,7 +117,11 @@ class SportService {
           ? Basket.fromJson(querySnapshot.data()!)
           : typeSport == "FOOTBALL"
               ? Football.fromJson(querySnapshot.data()!)
-              : null;
+              : typeSport == "VOLLEYBALL"
+                  ? Volleyball.fromJson(querySnapshot.data()!)
+                  : typeSport == "JEUX_ESPRIT"
+                      ? JeuxEsprit.fromJson(querySnapshot.data()!)
+                      : null;
     } catch (e) {
       return null;
     }
@@ -258,7 +265,6 @@ class SportService {
       );
 
       DocumentSnapshot querySnapshot = await matchDoc.get();
-      print(querySnapshot.data());
 
       return Football.fromJson(querySnapshot.data() as Map<String, dynamic>);
     } catch (e) {
@@ -268,7 +274,7 @@ class SportService {
   }
 
   Future<Football?> addButeur(String matchId, Joueur joueur, int minute,
-      String libelleScore, String libelleBut) async {
+      String libelleScore, String libelleBut, [int increment = 1]) async {
     try {
       DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
       But but = But(
@@ -279,7 +285,7 @@ class SportService {
       await matchDoc.update(
         {
           libelleBut: FieldValue.arrayUnion([but.toJson()]),
-          libelleScore: FieldValue.increment(1)
+          libelleScore: FieldValue.increment(increment)
         },
       );
 
@@ -299,7 +305,7 @@ class SportService {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
           .collection("MATCH")
           .where("sport", isEqualTo: typeSport)
-          .limit(2)
+          // .limit(2)
           .get();
       List<Map<String, dynamic>> data =
           querySnapshot.docs.map((doc) => doc.data()).toList();
