@@ -108,6 +108,10 @@ flutter:
     - family: LilyScriptOne
       fonts:
         - asset: assets/fonts/LilyScriptOne-Regular.ttf
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter_18pt-Bold.ttf
+
   # fonts:
   #   - family: Schyler
   #     fonts:

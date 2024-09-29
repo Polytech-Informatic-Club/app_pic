@@ -61,7 +61,7 @@ class LoginScreen extends StatelessWidget {
                       Text(
                         'Tous les services des polytechniciens à portée de main.',
                         style: TextStyle(
-                          fontSize: MediaQuery.sizeOf(context).width * 0.035,
+                          fontSize: MediaQuery.sizeOf(context).width * 0.032,
                         ),
                         textAlign: TextAlign.center,
                       ),
