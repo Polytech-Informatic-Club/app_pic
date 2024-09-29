@@ -58,6 +58,7 @@ class SportService {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
           .collection("MATCH")
           .where("date", isLessThanOrEqualTo: Timestamp.now())
+          .orderBy("date", descending: true)
           .limit(2)
           .get();
       List<Map<String, dynamic>> data =
@@ -106,7 +107,7 @@ class SportService {
     }
   }
 
-  Future<dynamic> getMatchFootballById(String id, String typeSport) async {
+  Future<dynamic> getMatchById(String id, String typeSport) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> querySnapshot =
           await _firestore.collection("MATCH").doc(id).get();
@@ -258,7 +259,6 @@ class SportService {
       );
 
       DocumentSnapshot querySnapshot = await matchDoc.get();
-      print(querySnapshot.data());
 
       return Football.fromJson(querySnapshot.data() as Map<String, dynamic>);
     } catch (e) {
@@ -299,7 +299,7 @@ class SportService {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
           .collection("MATCH")
           .where("sport", isEqualTo: typeSport)
-          .limit(2)
+          // .limit(2)
           .get();
       List<Map<String, dynamic>> data =
           querySnapshot.docs.map((doc) => doc.data()).toList();

@@ -292,7 +292,7 @@ class CreateMatchFootball extends StatelessWidget {
                                 likers: [],
                                 dislikers: [],
                                 partageLien: "");
-                          } else if (typeSport == "BASKET") {
+                          } else if (typeSport == "BASKETBALL") {
                             match = Basket(
                                 statistiques: {
                                   "point3A": 0,

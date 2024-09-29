@@ -16,7 +16,7 @@ class EptDrawer extends StatelessWidget {
     double size = 100;
     return Drawer(
       child: Container(
-        height: MediaQuery.of(context).size.height,
+        // height: MediaQuery.of(context).size.height,
         color: eptLighterOrange,
         child: FutureBuilder<String?>(
           future: _userService.getRole(),
@@ -27,8 +27,9 @@ class EptDrawer extends StatelessWidget {
               return Text('Erreur lors de la récupération du rôle');
             } else {
               final role = snapshot.data ?? 'role';
-              return Column(
-                mainAxisSize: MainAxisSize.min, // Ajoute cette ligne
+              return Flexible(
+                  child: Column(
+                // mainAxisSize: MainAxisSize.min, // Ajoute cette ligne
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -99,11 +100,21 @@ class EptDrawer extends StatelessWidget {
                       onTap: () {}),
                   if (role == RoleType.ADMIN.toString().split(".").last ||
                       role ==
-                          RoleType.ADMIN_FOOTBALL.toString().split(".").last ||
-                      role == RoleType.ADMIN_BASKET.toString().split(".").last)
+                          RoleType.ADMIN_FOOTBALL
+                              .toString()
+                              .split(".")
+                              .last
+                              .toString() ||
+                      role ==
+                          RoleType.ADMIN_BASKETBALL
+                              .toString()
+                              .split(".")
+                              .last
+                              .toString())
                     DrawerItem(
                       imagePath: "assets/images/top-left-menu/paramètres.png",
-                      title: Text('Administraion ${role.toLowerCase()}'),
+                      title:
+                          'Administraion ${role.split("_").last.toLowerCase()}',
                       onTap: () {
                         changerPage(context,
                             HomeAdminFootballPage(role.split("_").last));
@@ -148,8 +159,8 @@ class EptDrawer extends StatelessWidget {
                   ),
                   // SizedBox(height: 15,),
                   InkWell(
-                    onTap: () {
-                      _userService.signOut();
+                    onTap: () async {
+                      await _userService.signOut();
                       changerPage(context, LoginScreen());
                     },
                     child: Container(
@@ -189,7 +200,7 @@ class EptDrawer extends StatelessWidget {
                     color: eptOrange,
                   )
                 ],
-              );
+              ));
             }
           },
         ),
@@ -200,8 +211,8 @@ class EptDrawer extends StatelessWidget {
 
 class DrawerItem extends StatelessWidget {
   final String imagePath;
-  final title;
-  Function onTap;
+  final String title;
+  VoidCallback onTap;
   bool isLink;
   DrawerItem(
       {super.key,
@@ -212,34 +223,36 @@ class DrawerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(5),
-      margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-      color: Colors.white,
-      width: 250,
-      height: 40,
-      child: Row(
-        children: [
-          Image.asset(
-            imagePath,
-            scale: 4,
+    return GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(5),
+          margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+          color: Colors.white,
+          width: 250,
+          height: 40,
+          child: Row(
+            children: [
+              Image.asset(
+                imagePath,
+                scale: 4,
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Text(
+                title,
+                style: const TextStyle(fontFamily: "Inter", fontSize: 12),
+              ),
+              if (isLink) ...[
+                Spacer(),
+                Image.asset(
+                  "assets/images/top-left-menu/external_link.png",
+                  scale: 1,
+                )
+              ]
+            ],
           ),
-          const SizedBox(
-            width: 5,
-          ),
-          Text(
-            title,
-            style: const TextStyle(fontFamily: "Inter", fontSize: 12),
-          ),
-          if (isLink) ...[
-            Spacer(),
-            Image.asset(
-              "assets/images/top-left-menu/external_link.png",
-              scale: 1,
-            )
-          ]
-        ],
-      ),
-    );
+        ));
   }
 }

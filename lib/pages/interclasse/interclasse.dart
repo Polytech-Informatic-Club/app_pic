@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/pages/drawer.dart';
-import 'package:new_app/pages/home/app_drawer.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'package:new_app/pages/interclasse/basket/basket.dart';
@@ -130,7 +129,7 @@ class InterclassePage extends StatelessWidget {
                           return Text('Erreur lors du chargement');
                         } else {
                           List<Matches> matches = snapshot.data ?? [];
-                          return Column(
+                          return matches.isNotEmpty? Column(
                             children: [
                               for (var i in matches)
                                 Column(
@@ -154,7 +153,7 @@ class InterclassePage extends StatelessWidget {
                                   ],
                                 )
                             ],
-                          );
+                          ): Text("Aucun match trouvé.");
                         }
                       }),
                   Row(
@@ -175,47 +174,51 @@ class InterclassePage extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 8),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    width: 500,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: FutureBuilder<List<Matches>>(
-                          future: _sportService.getNextMatch(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return CircularProgressIndicator();
-                            } else if (snapshot.hasError) {
-                              return Text('Erreur lors du chargement');
-                            } else {
-                              List<Matches> matches = snapshot.data ?? [];
-                              return Row(
-                                children: [
-                                  for (var i in matches)
-                                    Row(
-                                      children: [
-                                        _afficheMatch(
-                                            i.id,
-                                            i.photo ?? '',
-                                            i.date,
-                                            i.sport.name.split(".").last,
-                                            context),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                      ],
-                                    )
-                                ],
-                              );
-                            }
-                          }),
-                    ),
-                  )
+                  FutureBuilder<List<Matches>>(
+                      future: _sportService.getNextMatch(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Erreur lors du chargement');
+                        } else {
+                          List<Matches> matches = snapshot.data ?? [];
+                          return matches.isNotEmpty
+                              ? Container(
+                                  padding: EdgeInsets.all(10),
+                                  width: 500,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          for (var i in matches)
+                                            Row(
+                                              children: [
+                                                _afficheMatch(
+                                                    i.id,
+                                                    i.photo ?? '',
+                                                    i.date,
+                                                    i.sport.name
+                                                        .split(".")
+                                                        .last,
+                                                    context),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                              ],
+                                            )
+                                        ],
+                                      )),
+                                )
+                              : Text(
+                                  "Aucun match n'est prévu dans les jours à venir");
+                        }
+                      }),
                 ],
               ),
             ),

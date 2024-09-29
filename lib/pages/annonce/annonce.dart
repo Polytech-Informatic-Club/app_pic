@@ -4,7 +4,6 @@ import 'package:new_app/pages/annonce/p_info_nouveaute.dart';
 import 'package:new_app/widgets/ept_button.dart';
 import 'package:new_app/pages/annonces.dart';
 import 'package:new_app/pages/drawer.dart';
-import 'package:new_app/pages/home/app_drawer.dart';
 import 'package:new_app/pages/home/navbar.dart';
 
 class Annonce extends StatefulWidget {

@@ -54,7 +54,7 @@ class _DetailFootballScreenState extends State<DetailFootballScreen> {
       ),
       body: SingleChildScrollView(
         child: FutureBuilder<dynamic>(
-            future: _sportService.getMatchFootballById(_id, _typeSport),
+            future: _sportService.getMatchById(_id, _typeSport),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CircularProgressIndicator();
@@ -66,6 +66,8 @@ class _DetailFootballScreenState extends State<DetailFootballScreen> {
                 return match == null
                     ? CircularProgressIndicator()
                     : Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
                             decoration: BoxDecoration(color: jauneClair),
@@ -102,24 +104,32 @@ class _DetailFootballScreenState extends State<DetailFootballScreen> {
                                           fontSize: 24,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    Column(
-                                      children: [
-                                        CircleAvatar(
-                                            radius: MediaQuery.sizeOf(context)
-                                                    .width *
+                                    Container(
+                                        height:
+                                            MediaQuery.sizeOf(context).height *
                                                 0.1,
-                                            backgroundImage: NetworkImage(
-                                              match.equipeB.logo,
-                                            )),
-                                        SizedBox(height: 10),
-                                        Text(
-                                          match.equipeB.nom,
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              CircleAvatar(
+                                                  radius:
+                                                      MediaQuery.sizeOf(context)
+                                                              .width *
+                                                          0.1,
+                                                  backgroundImage: NetworkImage(
+                                                    match.equipeB.logo,
+                                                  )),
+                                              SizedBox(height: 10),
+                                              Text(
+                                                match.equipeB.nom,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ))
                                   ],
                                 ),
                                 SizedBox(height: 20),
@@ -149,17 +159,24 @@ class _DetailFootballScreenState extends State<DetailFootballScreen> {
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.white),
                                               ),
-                                              Column(
-                                                children: [
-                                                  for (var butteur
-                                                      in match.buteursA!)
-                                                    Text(
-                                                      "${butteur.joueur.nom} (${butteur.minute}')",
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                ],
-                                              )
+                                              Container(
+                                                  height:
+                                                      MediaQuery.sizeOf(context)
+                                                              .height *
+                                                          0.1,
+                                                  child: SingleChildScrollView(
+                                                      child: Column(
+                                                    children: [
+                                                      for (var butteur
+                                                          in match.buteursA!)
+                                                        Text(
+                                                          "${butteur.joueur.nom} (${butteur.minute}')",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                    ],
+                                                  )))
                                             ],
                                           ),
                                           Text(
@@ -211,103 +228,130 @@ class _DetailFootballScreenState extends State<DetailFootballScreen> {
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 20.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // Carton Equipe 1
-                                if (_typeSport == "FOOTBALL")
-                                  Column(
-                                    children: [
+                            child: Align(
+                                alignment: Alignment.center,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    // Carton Equipe 1
+                                    if (_typeSport == "FOOTBALL")
+                                      Row(children: [
+                                        Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  padding: EdgeInsets.all(8),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.yellow,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                  ),
+                                                  child: Text(
+                                                    match.statistiques[
+                                                            "yellowCardA"]
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding: EdgeInsets.all(8),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.red,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                  ),
+                                                  child: Text(
+                                                    match.statistiques[
+                                                            "redCardA"]
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 5),
+                                            Text("Cartons"),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: 16,
+                                        ),
+                                      ]),
+                                    // Statistics Icons
+
+                                    if (_typeSport == "FOOTBALL")
+                                      statisticFootball(match),
+
+                                    if (_typeSport == "FOOTBALL")
                                       Row(
                                         children: [
-                                          Container(
-                                            padding: EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                              color: Colors.yellow,
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            child: Text(
-                                              match.statistiques["yellowCardA"]
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
+                                          SizedBox(
+                                            width: 16,
                                           ),
-                                          Container(
-                                            padding: EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                              color: Colors.red,
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            child: Text(
-                                              match.statistiques["redCardA"]
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
+                                          Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    padding: EdgeInsets.all(8),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.yellow,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                    ),
+                                                    child: Text(
+                                                      match.statistiques[
+                                                              "yellowCardB"]
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    padding: EdgeInsets.all(8),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.red,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                    ),
+                                                    child: Text(
+                                                      match.statistiques[
+                                                              "redCardA"]
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 5),
+                                              Text("Cartons"),
+                                            ],
+                                          )
                                         ],
                                       ),
-                                      SizedBox(height: 5),
-                                      Text("Cartons"),
-                                    ],
-                                  ),
-                                // Statistics Icons
 
-                                if (_typeSport == "FOOTBALL")
-                                  statisticFootball(match),
-
-                                Text(match.runtimeType.toString()),
-                                if (_typeSport == "BASKETBALL")
-                                  statisticBasket(match),
-                                // Carton Equipe 1
-                                if (_typeSport == "FOOTBALL")
-                                  Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Container(
-                                            padding: EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                              color: Colors.yellow,
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            child: Text(
-                                              match.statistiques["yellowCardB"]
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                          Container(
-                                            padding: EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                              color: Colors.red,
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            child: Text(
-                                              match.statistiques["redCardA"]
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 5),
-                                      Text("Cartons"),
-                                    ],
-                                  ),
-                              ],
-                            ),
+                                    if (_typeSport == "BASKETBALL")
+                                      statisticBasket(match),
+                                    // Carton Equipe 2
+                                  ],
+                                )),
                           ),
                           SizedBox(height: 20),
 
@@ -318,7 +362,7 @@ class _DetailFootballScreenState extends State<DetailFootballScreen> {
                               color: Colors.black,
                             ),
                           ),
-                          // LIKE
+                          // SECTION LIKE
                           Row(
                             children: [
                               ValueListenableBuilder<dynamic>(
@@ -376,7 +420,7 @@ class _DetailFootballScreenState extends State<DetailFootballScreen> {
                           SizedBox(
                             height: 10,
                           ),
-                          // Comment Section
+                          // SECTION COMMENTAIRE
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 20.0),
@@ -482,14 +526,21 @@ Widget statisticCard(IconData icon, String libelle, int value1, int value2) {
 
 Widget statisticFootball(Football match) {
   return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       statisticCard(
           Icons.sports,
           "tirs cadrés",
           match.statistiques["tirsCadresA"]!,
           match.statistiques["tirsCadresB"]!),
-      statisticCard(Icons.sports_soccer, "tirs", match.statistiques["tirA"]!,
-          match.statistiques["tirB"]!),
+      SizedBox(
+        width: 16,
+      ),
+      statisticCard(Icons.sports_soccer, "tirs", match.statistiques["tirsA"]!,
+          match.statistiques["tirsB"]!),
+      SizedBox(
+        width: 16,
+      ),
       statisticCard(Icons.sports_soccer, "fautes",
           match.statistiques["fautesA"]!, match.statistiques["fautesB"]!),
     ],
@@ -498,17 +549,26 @@ Widget statisticFootball(Football match) {
 
 Widget statisticBasket(Basket match) {
   return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      statisticCard(Icons.sports, "3 points", match.statistiques["point3A"]!,
-          match.statistiques["point3A"]!),
-      Column(
-        children: [
-          Icon(Icons.sports_soccer, size: 32),
-          Text("2 points"),
-          Text(
-              "${match.statistiques["point2A"].toString()} - ${match.statistiques["point2B"].toString()}"),
-        ],
+      statisticCard(Icons.sports, "1 point", match.statistiques["point1A"]!,
+          match.statistiques["point1B"]!),
+      SizedBox(
+        width: 30,
       ),
+      statisticCard(Icons.sports, "2 points", match.statistiques["point2A"]!,
+          match.statistiques["point2B"]!),
+      SizedBox(
+        width: 30,
+      ),
+      statisticCard(Icons.sports, "3 points", match.statistiques["point3A"]!,
+          match.statistiques["point3B"]!),
+      SizedBox(
+        width: 30,
+      ),
+      statisticCard(Icons.sports_soccer, "fautes",
+          match.statistiques["fautesA"]!, match.statistiques["fautesB"]!),
     ],
   );
 }

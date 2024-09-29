@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/models/match.dart';
-import 'package:new_app/pages/home/app_drawer.dart';
+import 'package:new_app/pages/drawer.dart';
 import 'package:new_app/pages/interclasse/create_commission.dart';
 import 'package:new_app/pages/interclasse/football/administrate_one_football.dart.dart';
 import 'package:new_app/pages/interclasse/football/create_match_football.dart';
@@ -25,8 +25,10 @@ class HomeAdminFootballPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Appdrawer(),
-      appBar: AppBar(),
+      // drawer: EptDrawer(),
+      appBar: AppBar(
+        title: Text("Gestion $typeSport"),
+      ),
       body: SingleChildScrollView(
           child: Padding(
         padding: EdgeInsets.only(top: MediaQuery.sizeOf(context).height * 0.1),
@@ -53,31 +55,33 @@ class HomeAdminFootballPage extends StatelessWidget {
                     return Text('Erreur lors du chargement');
                   } else {
                     List<Matches> matches = snapshot.data ?? [];
-                    return Column(
-                      children: [
-                        for (var i in matches)
-                          Column(
+                    return matches.isNotEmpty
+                        ? Column(
                             children: [
-                              Text(i.sport.name,
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                              buildMatchCard(
-                                  context,
-                                  i.id,
-                                  dateCustomformat(i.date),
-                                  i.equipeA.nom,
-                                  i.equipeB.nom,
-                                  i.scoreEquipeA,
-                                  i.scoreEquipeB,
-                                  i.equipeA.logo,
-                                  i.equipeA.logo,
-                                  AdministrateOneFootball(
-                                      i.id, i.sport.name.split(".").last)),
-                              SizedBox(height: 8),
+                              for (var i in matches)
+                                Column(
+                                  children: [
+                                    Text(i.sport.name,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    buildMatchCard(
+                                        context,
+                                        i.id,
+                                        dateCustomformat(i.date),
+                                        i.equipeA.nom,
+                                        i.equipeB.nom,
+                                        i.scoreEquipeA,
+                                        i.scoreEquipeB,
+                                        i.equipeA.logo,
+                                        i.equipeA.logo,
+                                        AdministrateOneFootball(i.id,
+                                            i.sport.name.split(".").last)),
+                                    SizedBox(height: 8),
+                                  ],
+                                )
                             ],
                           )
-                      ],
-                    );
+                        : Text("Aucun match à administrer");
                   }
                 }),
           ],
