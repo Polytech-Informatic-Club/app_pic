@@ -1,10 +1,16 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart'; // Importer intl pour le formatage des dates
+import 'package:new_app/models/objet_perdu_model.dart';
+import 'package:new_app/models/utilisateur.dart';
+import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart'; // Assurez-vous que cette classe existe
+import 'package:new_app/services/lost_found_service.dart';
 
 class ObjetsPerdus extends StatefulWidget {
   const ObjetsPerdus({super.key});
@@ -14,6 +20,9 @@ class ObjetsPerdus extends StatefulWidget {
 }
 
 class _ObjetsPerdusState extends State<ObjetsPerdus> {
+  final ObjetPerduService _service = ObjetPerduService();
+  final UserService _userService = UserService();
+
   TextEditingController dateController = TextEditingController();
   TextEditingController lieuController = TextEditingController();
   TextEditingController objetController = TextEditingController();
@@ -81,6 +90,33 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
             DateFormat('dd-MM-yyyy').format(pickedDate); // Format de date
       });
     }
+  }
+
+  // submit the form
+  Future<void> _submitForm() async {
+    String? photoURL = await _service.uploadImage(_image!);
+    User? user = FirebaseAuth.instance.currentUser;
+
+    ObjetPerdu objet = ObjetPerdu(
+      description: objetController.text,
+      details: infoSuppController.text,
+      photoURL: photoURL,
+      lieu: lieuController.text,
+      date: dateController.text,
+      estTrouve: 0,
+      idUser: user?.email,
+    );
+
+    await _service.addLostObject(objet);
+
+    // clear the form
+    objetController.clear();
+    lieuController.clear();
+    dateController.clear();
+    infoSuppController.clear();
+    setState(() {
+      _image = null;
+    });
   }
 
   @override
@@ -178,6 +214,7 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                 child: ElevatedButton(
                   onPressed: () {
                     // Code pour soumettre le formulaire
+                    _submitForm();
                   },
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all<Color>(

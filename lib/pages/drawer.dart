@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/models/enums/role_type.dart';
+import 'package:new_app/objets_perdus.dart';
 import 'package:new_app/pages/interclasse/football/home_admin_football_age.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
@@ -92,7 +93,9 @@ class EptDrawer extends StatelessWidget {
                   DrawerItem(
                       imagePath: "assets/images/top-left-menu/jumelles.png",
                       title: "Objets perdus",
-                      onTap: () {}),
+                      onTap: () {
+                        changerPage(context, ObjetsPerdus());
+                      }),
                   DrawerItem(
                       imagePath: "assets/images/top-left-menu/paramètres.png",
                       title: "Paramètres",
@@ -212,33 +215,36 @@ class DrawerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(5),
-      margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-      color: Colors.white,
-      width: 250,
-      height: 40,
-      child: Row(
-        children: [
-          Image.asset(
-            imagePath,
-            scale: 4,
-          ),
-          const SizedBox(
-            width: 5,
-          ),
-          Text(
-            title,
-            style: const TextStyle(fontFamily: "Inter", fontSize: 12),
-          ),
-          if (isLink) ...[
-            Spacer(),
+    return GestureDetector(
+      onTap: () { onTap(); },
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+        color: Colors.white,
+        width: 250,
+        height: 40,
+        child: Row(
+          children: [
             Image.asset(
-              "assets/images/top-left-menu/external_link.png",
-              scale: 1,
-            )
-          ]
-        ],
+              imagePath,
+              scale: 4,
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            Text(
+              title,
+              style: const TextStyle(fontFamily: "Inter", fontSize: 12),
+            ),
+            if (isLink) ...[
+              Spacer(),
+              Image.asset(
+                "assets/images/top-left-menu/external_link.png",
+                scale: 1,
+              )
+            ]
+          ],
+        ),
       ),
     );
   }
