@@ -104,10 +104,9 @@ class _EptDrawerState extends State<EptDrawer> {
                           "Famille Polytechnicienne", () {}),
                       drawerItem("assets/images/top-left-menu/jumelles.png",
                           "Objets perdus", () {
-                            changerPage(context, ObjetsPerdus());
-                          }),
-                      drawerItem("assets/images/top-left-menu/paramètres.png",
-                          "Paramètres", () {}),
+                        changerPage(context, ObjetsPerdus());
+                      }),
+
                       drawerItem("assets/images/top-left-menu/a_propos.png",
                           "A propos", () {}),
                       if (role == RoleType.ADMIN.toString().split(".").last ||
@@ -237,7 +236,6 @@ class _EptDrawerState extends State<EptDrawer> {
     );
   }
 }
-
 
 Widget drawerItem(final String imagePath, final title, ontap,
     {bool isLink = false}) {
