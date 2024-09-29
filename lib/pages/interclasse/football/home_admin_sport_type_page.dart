@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/pages/drawer.dart';
 import 'package:new_app/pages/interclasse/create_commission.dart';
-import 'package:new_app/pages/interclasse/football/administrate_one_football.dart.dart';
-import 'package:new_app/pages/interclasse/football/create_match_football.dart';
+import 'package:new_app/pages/interclasse/football/administrate_one_match.dart';
+import 'package:new_app/pages/interclasse/football/create_match.dart';
 
 import 'package:new_app/services/sport_service.dart';
 import 'package:new_app/widgets/submited_button.dart';
@@ -11,9 +11,9 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/widgets/match_card.dart';
 
 // ignore: must_be_immutable
-class HomeAdminFootballPage extends StatelessWidget {
+class HomeAdminSportTypePage extends StatelessWidget {
   String typeSport;
-  HomeAdminFootballPage(this.typeSport, {super.key});
+  HomeAdminSportTypePage(this.typeSport, {super.key});
 
   List<Widget> matchs = [
     MatchCard(),
@@ -38,7 +38,7 @@ class HomeAdminFootballPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             SubmittedButton("Créer un match", () {
-              changerPage(context, CreateMatchFootball(typeSport));
+              changerPage(context, CreateMatch(typeSport));
             }),
             SizedBox(
               height: 10,

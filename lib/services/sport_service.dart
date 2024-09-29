@@ -12,6 +12,7 @@ import 'package:new_app/models/football.dart';
 import 'package:new_app/models/joueur.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/models/utilisateur.dart';
+import 'package:new_app/models/volleyball.dart';
 
 class SportService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -115,7 +116,9 @@ class SportService {
           ? Basket.fromJson(querySnapshot.data()!)
           : typeSport == "FOOTBALL"
               ? Football.fromJson(querySnapshot.data()!)
-              : null;
+              : typeSport == "VOLLEYBALL"
+                  ? Volleyball.fromJson(querySnapshot.data()!)
+                  : null;
     } catch (e) {
       return null;
     }

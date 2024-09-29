@@ -4,6 +4,7 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/basket.dart';
 import 'package:new_app/models/football.dart';
 import 'package:new_app/models/match.dart';
+import 'package:new_app/models/volleyball.dart';
 import 'package:new_app/services/sport_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/comment_widget.dart';
@@ -11,22 +12,22 @@ import 'package:new_app/widgets/delete_confirmed_dialog.dart';
 import 'package:new_app/widgets/reusable_comment_input.dart';
 
 // ignore: must_be_immutable
-class DetailFootballScreen extends StatefulWidget {
+class DetailMatchScreen extends StatefulWidget {
   String id;
   String typeSport;
-  DetailFootballScreen(this.id, this.typeSport, {super.key});
+  DetailMatchScreen(this.id, this.typeSport, {super.key});
 
   @override
-  State<DetailFootballScreen> createState() =>
+  State<DetailMatchScreen> createState() =>
       // ignore: no_logic_in_create_state
-      _DetailFootballScreenState(id, typeSport);
+      _DetailMatchScreenState(id, typeSport);
 }
 
-class _DetailFootballScreenState extends State<DetailFootballScreen> {
+class _DetailMatchScreenState extends State<DetailMatchScreen> {
   final SportService _sportService = SportService();
   final String _id;
   final String _typeSport;
-  _DetailFootballScreenState(this._id, this._typeSport);
+  _DetailMatchScreenState(this._id, this._typeSport);
 
   final ValueNotifier<bool> _isPressCommment = ValueNotifier<bool>(false);
   final ValueNotifier<dynamic> _match = ValueNotifier<dynamic>(null);
@@ -349,7 +350,9 @@ class _DetailFootballScreenState extends State<DetailFootballScreen> {
 
                                     if (_typeSport == "BASKETBALL")
                                       statisticBasket(match),
-                                    // Carton Equipe 2
+
+                                    if (_typeSport == "VOLLEYBALL")
+                                      statisticVolleyball(match),
                                   ],
                                 )),
                           ),
@@ -564,6 +567,30 @@ Widget statisticBasket(Basket match) {
       ),
       statisticCard(Icons.sports, "3 points", match.statistiques["point3A"]!,
           match.statistiques["point3B"]!),
+      SizedBox(
+        width: 30,
+      ),
+      statisticCard(Icons.sports_soccer, "fautes",
+          match.statistiques["fautesA"]!, match.statistiques["fautesB"]!),
+    ],
+  );
+}
+
+Widget statisticVolleyball(Volleyball match) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      statisticCard(Icons.sports, "Gold", match.statistiques["goalA"]!,
+          match.statistiques["goalB"]!),
+      SizedBox(
+        width: 30,
+      ),
+      statisticCard(
+          Icons.sports,
+          "highest streak",
+          match.statistiques["highestStreakA"]!,
+          match.statistiques["highestStreakB"]!),
       SizedBox(
         width: 30,
       ),

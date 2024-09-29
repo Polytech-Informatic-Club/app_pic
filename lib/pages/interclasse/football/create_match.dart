@@ -11,7 +11,8 @@ import 'package:new_app/models/enums/sport_type.dart';
 import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/football.dart';
 import 'package:new_app/models/match.dart';
-import 'package:new_app/pages/interclasse/football/home_admin_football_age.dart';
+import 'package:new_app/models/volleyball.dart';
+import 'package:new_app/pages/interclasse/football/home_admin_sport_type_page.dart';
 import 'package:new_app/services/sport_service.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
@@ -20,9 +21,9 @@ import 'package:new_app/widgets/reusable_description_input.dart';
 import 'package:new_app/widgets/reusable_widgets.dart';
 import 'package:new_app/widgets/submited_button.dart';
 
-class CreateMatchFootball extends StatelessWidget {
+class CreateMatch extends StatelessWidget {
   String typeSport;
-  CreateMatchFootball(this.typeSport, {super.key});
+  CreateMatch(this.typeSport, {super.key});
   final TextEditingController _descriptionTextController =
       TextEditingController();
   DateTime selectedDate = DateTime.now();
@@ -321,8 +322,33 @@ class CreateMatchFootball extends StatelessWidget {
                                 likers: [],
                                 dislikers: [],
                                 partageLien: "");
-                          }
-
+                          } else if (typeSport == "VOLLEYBALL")
+                            match = Volleyball(
+                                statistiques: {
+                                  "goalA": 0,
+                                  "goalB": 0,
+                                  "highestStreakA": 0,
+                                  "highestStreakB": 0,
+                                  "fautesA": 0,
+                                  "fautesB": 0,
+                                },
+                                buteursA: [],
+                                buteursB: [],
+                                description:
+                                    _descriptionTextController.value.text,
+                                photo: _url.value,
+                                id: "${_selectedEquipeA.value!.nom} VS ${_selectedEquipeB.value!.nom}${_selectedDate.value!}",
+                                date: _selectedDate.value!,
+                                equipeA: _selectedEquipeA.value!,
+                                equipeB: _selectedEquipeB.value!,
+                                dateCreation: DateTime.now(),
+                                scoreEquipeA: 0,
+                                scoreEquipeB: 0,
+                                sport: SportType.VOLLEYBALL,
+                                comments: [],
+                                likers: [],
+                                dislikers: [],
+                                partageLien: "");
                           try {
                             String code =
                                 await _SportService.postFootball(match);
@@ -332,7 +358,7 @@ class CreateMatchFootball extends StatelessWidget {
                                   "Match crée avec succès !",
                                   AppColors.success);
                               changerPage(
-                                  context, HomeAdminFootballPage(typeSport));
+                                  context, HomeAdminSportTypePage(typeSport));
                             }
                           } catch (e) {
                             return null;

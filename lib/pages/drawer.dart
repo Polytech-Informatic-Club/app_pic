@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/models/enums/role_type.dart';
-import 'package:new_app/pages/interclasse/football/home_admin_football_age.dart';
+import 'package:new_app/pages/interclasse/football/home_admin_sport_type_page.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 
