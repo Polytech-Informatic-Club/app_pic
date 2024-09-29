@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/models/enums/role_type.dart';
+import 'package:new_app/objets_perdus.dart';
 import 'package:new_app/pages/interclasse/football/home_admin_sport_type_page.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
@@ -94,7 +95,6 @@ class _EptDrawerState extends State<EptDrawer> {
                           ),
                         ],
                       ),
-
                       const SizedBox(
                         height: 20,
                       ),
@@ -103,7 +103,9 @@ class _EptDrawerState extends State<EptDrawer> {
                       drawerItem("assets/images/top-left-menu/famille.png",
                           "Famille Polytechnicienne", () {}),
                       drawerItem("assets/images/top-left-menu/jumelles.png",
-                          "Objets perdus", () {}),
+                          "Objets perdus", () {
+                            changerPage(context, ObjetsPerdus());
+                          }),
                       drawerItem("assets/images/top-left-menu/paramètres.png",
                           "Paramètres", () {}),
                       drawerItem("assets/images/top-left-menu/a_propos.png",
@@ -235,6 +237,7 @@ class _EptDrawerState extends State<EptDrawer> {
     );
   }
 }
+
 
 Widget drawerItem(final String imagePath, final title, ontap,
     {bool isLink = false}) {
