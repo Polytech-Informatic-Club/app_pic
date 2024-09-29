@@ -32,7 +32,7 @@ class _PInfoNouveauteState extends State<PInfoNouveaute> {
               InkWell(
                   onTap: () {},
                   child: Image.asset(
-                    "assets/images/polytech-Info/icons8-filtre-90.png",
+                    "assets/images/polytech-Info/plus.png",
                     scale: 5,
                   )),
             ]

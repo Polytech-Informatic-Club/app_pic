@@ -16,7 +16,7 @@ class EptDrawer extends StatelessWidget {
     double size = 100;
     return Drawer(
       child: Container(
-        // height: MediaQuery.of(context).size.height,
+        height: MediaQuery.of(context).size.height,
         color: eptLighterOrange,
         child: FutureBuilder<String?>(
           future: _userService.getRole(),
@@ -27,8 +27,7 @@ class EptDrawer extends StatelessWidget {
               return Text('Erreur lors de la récupération du rôle');
             } else {
               final role = snapshot.data ?? 'role';
-              return Flexible(
-                  child: Column(
+              return  Column(
                 // mainAxisSize: MainAxisSize.min, // Ajoute cette ligne
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -200,7 +199,7 @@ class EptDrawer extends StatelessWidget {
                     color: eptOrange,
                   )
                 ],
-              ));
+              );
             }
           },
         ),
