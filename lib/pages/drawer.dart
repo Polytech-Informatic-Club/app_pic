@@ -118,6 +118,16 @@ class _EptDrawerState extends State<EptDrawer> {
                               RoleType.ADMIN_BASKETBALL
                                   .toString()
                                   .split(".")
+                                  .last ||
+                          role ==
+                              RoleType.ADMIN_VOLLEYBALL
+                                  .toString()
+                                  .split(".")
+                                  .last ||
+                          role ==
+                              RoleType.ADMIN_JEUX_ESPRIT
+                                  .toString()
+                                  .split(".")
                                   .last)
                         drawerItem(
                           "assets/images/top-left-menu/paramètres.png",
