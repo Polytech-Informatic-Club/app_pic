@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:new_app/models/objet_perdu_model.dart';
@@ -11,7 +13,7 @@ class ObjetPerduService {
       // Create a reference to the Firebase Storage location
       final storageRef = FirebaseStorage.instance
           .ref()
-          .child('lost_objects/${imageFile.path.split('/').last}');
+          .child('LOSTOBJECTS/${imageFile.path.split('/').last}');
 
       // Upload the file
       final uploadTask = storageRef.putFile(imageFile);
@@ -28,13 +30,14 @@ class ObjetPerduService {
 
   Future<void> addLostObject(ObjetPerdu objetPerdu) async {
     try {
-      await _firestore.collection('lost_objects').add({
+      await _firestore.collection('LOSTOBJECTS').add({
         'description': objetPerdu.description,
+        'details': objetPerdu.details,
         'photoURL': objetPerdu.photoURL,
         'lieu': objetPerdu.lieu,
         'date': objetPerdu.date,
         'etat': objetPerdu.estTrouve,
-        'user': objetPerdu.user
+        'idUser': objetPerdu.idUser
       });
     } catch (e) {
       print(e);
@@ -44,8 +47,18 @@ class ObjetPerduService {
 
   Stream<QuerySnapshot> getLostObjects() {
     return _firestore
-        .collection('lost_objects')
+        .collection('LOSTOBJECTS')
         .orderBy('estTrouve', descending: false)
         .snapshots();
+  }
+
+  Future<Map<String, dynamic>?> getUserByEmail(String email) async {
+    try {
+      var snapshot = await _firestore.collection('LOSTOBJECTS').where('email', isEqualTo: email).limit(1).get();
+      return snapshot.docs[0].data();
+    } catch(e) {
+      print(e);
+      return null;
+    }
   }
 }
