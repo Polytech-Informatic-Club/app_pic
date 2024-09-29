@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/models/enums/role_type.dart';
-import 'package:new_app/pages/interclasse/football/home_admin_football_age.dart';
+import 'package:new_app/pages/interclasse/football/home_admin_sport_type_page.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 
@@ -27,7 +27,7 @@ class EptDrawer extends StatelessWidget {
               return Text('Erreur lors de la récupération du rôle');
             } else {
               final role = snapshot.data ?? 'role';
-              return  Column(
+              return Column(
                 // mainAxisSize: MainAxisSize.min, // Ajoute cette ligne
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -109,6 +109,18 @@ class EptDrawer extends StatelessWidget {
                               .toString()
                               .split(".")
                               .last
+                              .toString() ||
+                      role ==
+                          RoleType.ADMIN_VOLLEYBALL
+                              .toString()
+                              .split(".")
+                              .last
+                              .toString() ||
+                      role ==
+                          RoleType.ADMIN_JEUX_ESPRIT
+                              .toString()
+                              .split(".")
+                              .last
                               .toString())
                     DrawerItem(
                       imagePath: "assets/images/top-left-menu/paramètres.png",
@@ -116,7 +128,7 @@ class EptDrawer extends StatelessWidget {
                           'Administraion ${role.split("_").last.toLowerCase()}',
                       onTap: () {
                         changerPage(context,
-                            HomeAdminFootballPage(role.split("_").last));
+                            HomeAdminSportTypePage(role.split("_").last));
                       },
                     ),
                   const SizedBox(

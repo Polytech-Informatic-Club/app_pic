@@ -12,7 +12,7 @@ import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/football.dart';
 import 'package:new_app/models/membre.dart';
 import 'package:new_app/models/utilisateur.dart';
-import 'package:new_app/pages/interclasse/football/home_admin_football_age.dart';
+import 'package:new_app/pages/interclasse/football/home_admin_sport_type_page.dart';
 import 'package:new_app/services/sport_service.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
@@ -118,7 +118,7 @@ class CreateCommission extends StatelessWidget {
                             alerteMessageWidget(context,
                                 "Match crée avec succès !", AppColors.success);
                             changerPage(
-                                context, HomeAdminFootballPage(typeSport));
+                                context, HomeAdminSportTypePage(typeSport));
                           }
                         } catch (e) {}
                       } catch (e) {
