@@ -212,9 +212,16 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
               SizedBox(height: 16),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     // Code pour soumettre le formulaire
-                    _submitForm();
+                    await _submitForm();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Soumission réussie!"),
+                        backgroundColor: Colors.green,
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
                   },
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all<Color>(
@@ -249,48 +256,133 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                 ),
               ),
               SizedBox(height: 16),
-              SizedBox(
-                height:
-                    400, // Vous pouvez ajuster cette hauteur selon vos besoins
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                  ),
-                  itemCount: 6, // Nombre d'objets perdus à afficher
-                  itemBuilder: (context, index) {
-                    return Card(
+              StreamBuilder<QuerySnapshot>(
+                stream: _service.getLostObjects(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: _image == null
-                                ? Icon(Icons.image_not_supported, size: 50)
-                                : Image.file(_image!, fit: BoxFit.cover),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'Nom de l\'objet',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                          const Text('Erreur de chargement'),
+                          SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {});
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: WidgetStateProperty.all<Color>(
+                                  const Color.fromRGBO(244, 171, 90, 1)),
+                              shape: WidgetStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      8.0), // Bordure personnalisée
+                                ),
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Text('Lieu: Lieu perdu'),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Text('Date: Date perdu'),
+                            child: Text(
+                              "Réessayer",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ],
                       ),
                     );
-                  },
-                ),
+                  } else if (!snapshot.hasData) {
+                    return Center(
+                      child: const Text(
+                        "Aucun objet perdu n'est encore signalé",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                    );
+                  } else {
+                    final lostObjects = snapshot.data!.docs;
+
+                    return SizedBox(
+                      height: 500,
+                      child: ListView.builder(
+                        // physics: NeverScrollableScrollPhysics(),
+                        // shrinkWrap: true,
+                        itemCount: lostObjects.length,
+                        itemBuilder: (context, index) {
+                          // Extracting data from each document
+                          var lostObject =
+                              lostObjects[index].data() as Map<String, dynamic>;
+                          String description =
+                              lostObject['description'] ?? 'No description';
+                          String lieu =
+                              lostObject['lieu'] ?? 'Unknown location';
+                          String? photoUrl = lostObject[
+                              'photoURL']; // Nullable: May not have a photo
+                          bool estTrouve = lostObject['etat'] != 0;
+
+                          return Card(
+                            margin: EdgeInsets.all(8.0),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (photoUrl != null)
+                                    Image.network(photoUrl,
+                                        height: 150,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover)
+                                  else
+                                    Container(
+                                      height: 150,
+                                      color: Colors.grey[300],
+                                      child: Center(
+                                          child: Icon(Icons.image_not_supported,
+                                              size: 50)),
+                                    ),
+                                  SizedBox(height: 8),
+                                  Text(description,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18)),
+                                  Text(lieu,
+                                      style: TextStyle(color: Colors.grey)),
+                                  SizedBox(height: 8),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      const Text('Condition: '),
+                                      estTrouve
+                                          ? Text(
+                                              'Trouvé',
+                                              style: TextStyle(
+                                                  color: Colors.green),
+                                            )
+                                          : Text(
+                                              'Non Trouvé',
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            )
+                                    ],
+                                  ),
+                                  Text(
+                                      'Date: ${lostObject['date'] ?? 'Unknown'}'),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  }
+                },
               ),
             ],
           ),

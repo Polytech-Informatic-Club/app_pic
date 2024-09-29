@@ -48,7 +48,7 @@ class ObjetPerduService {
   Stream<QuerySnapshot> getLostObjects() {
     return _firestore
         .collection('LOSTOBJECTS')
-        .orderBy('estTrouve', descending: false)
+        .orderBy('etat', descending: false)
         .snapshots();
   }
 
