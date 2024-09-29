@@ -78,7 +78,7 @@ class _HomeSportTypePageState extends State<HomeSportTypePage> {
             SizedBox(height: 60),
             Center(
                 child: Text(
-              _typeSport,
+              _typeSport.split("_").join(" "),
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             )),
             SizedBox(height: 5),
@@ -112,7 +112,7 @@ class _HomeSportTypePageState extends State<HomeSportTypePage> {
                                     ],
                                   ))
                               : Text(
-                                  "Aucun membre de la sous-commission $_typeSport");
+                                  "Aucun membre de la sous-commission ${_typeSport.split("_").join(" ").toLowerCase()}");
                         }
                       }),
                   SizedBox(height: 20),

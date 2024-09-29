@@ -870,3 +870,104 @@ Widget statisticVolleyballCard(ValueNotifier matchProvider,
         ),
       ));
 }
+
+Widget statisticJeuxEspritsCard(ValueNotifier matchProvider,
+    BuildContext context, SportService _sportService) {
+  return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Statistics Icons
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(Icons.sports_soccer, size: 32),
+                Text("Bonnes réponses"),
+                Text(
+                    "${matchProvider.value!.statistiques["bonneReponseA"].toString()} "
+                    " - ${matchProvider.value!.statistiques["bonneReponseB"].toString()}"),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () async {
+                        Map<String, dynamic> resultat = await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return updateGoldWithPointDialog(
+                              context,
+                              matchProvider.value!.equipeA.joueurs,
+                            );
+                          },
+                        );
+
+                        Joueur? joueur = resultat["joueur"];
+                        int? minute = resultat["minute"];
+                        int? point = resultat["point"];
+
+                        if (joueur != null) {
+                          matchProvider.value = await _sportService.addButeur(
+                              matchProvider.value!.id,
+                              joueur,
+                              minute!,
+                              "scoreEquipeA",
+                              "buteursA",
+                              point!);
+                          matchProvider.value =
+                              await _sportService.updateStatistique(
+                                  matchProvider.value!.id,
+                                  "bonneReponseA",
+                                  point);
+                        }
+                      },
+                      icon: Icon(
+                        Icons.edit,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        Map<String, dynamic> resultat = await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return updateGoldWithPointDialog(
+                              context,
+                              matchProvider.value!.equipeA.joueurs,
+                            );
+                          },
+                        );
+
+                        Joueur? joueur = resultat["joueur"];
+                        int? minute = resultat["minute"];
+                        int? point = resultat["point"];
+
+                        if (joueur != null) {
+                          matchProvider.value = await _sportService.addButeur(
+                              matchProvider.value!.id,
+                              joueur,
+                              minute!,
+                              "scoreEquipeB",
+                              "buteursB",
+                              point!);
+                          matchProvider.value =
+                              await _sportService.updateStatistique(
+                                  matchProvider.value!.id,
+                                  "bonneReponseB",
+                                  point);
+                        }
+                      },
+                      icon: Icon(
+                        Icons.edit,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ],
+        ),
+      ));
+}

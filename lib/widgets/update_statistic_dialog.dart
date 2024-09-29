@@ -155,10 +155,11 @@ Widget updateStatisticDialog(BuildContext context) {
   );
 }
 
-Widget updateStatisticWithPlayerDialog(BuildContext context, List<Joueur> joueurs) {
+Widget updateGoldWithPointDialog(BuildContext context, List<Joueur> joueurs) {
   ValueNotifier<Joueur?> _selectedPlayer = ValueNotifier<Joueur?>(null);
-  ValueNotifier<int?> _selectedMinute =
-      ValueNotifier<int?>(null); // Ajout du notifier pour la minute
+  ValueNotifier<int?> _selectedMinute = ValueNotifier<int?>(null);
+  ValueNotifier<int?> _selectedPoint =
+      ValueNotifier<int?>(null); // Notifier pour le point
 
   return AlertDialog(
     title: Text("Statistique"),
@@ -184,14 +185,13 @@ Widget updateStatisticWithPlayerDialog(BuildContext context, List<Joueur> joueur
             );
           },
         ),
-        SizedBox(height: 16), // Ajout d'un espace
+        SizedBox(height: 16),
         ValueListenableBuilder<int?>(
           valueListenable: _selectedMinute,
           builder: (context, selectedMinute, child) {
             return ElevatedButton(
               onPressed: () async {
-                int? selected =
-                    await showMinutePicker(context); // Sélection de la minute
+                int? selected = await showMinutePicker(context);
                 if (selected != null) {
                   _selectedMinute.value = selected;
                 }
@@ -199,6 +199,26 @@ Widget updateStatisticWithPlayerDialog(BuildContext context, List<Joueur> joueur
               child: Text(_selectedMinute.value != null
                   ? "Minute: ${_selectedMinute.value}"
                   : "Choisir minute"),
+            );
+          },
+        ),
+        SizedBox(height: 16),
+        ValueListenableBuilder<int?>(
+          valueListenable: _selectedPoint,
+          builder: (context, selectedPoint, child) {
+            return DropdownButton<int>(
+              hint: Text('Point'),
+              value: selectedPoint,
+              onChanged: (int? newValue) {
+                _selectedPoint.value = newValue;
+              },
+              items: [1, 2, 3, 5, 10, 20, 30, 50]
+                  .map<DropdownMenuItem<int>>((int point) {
+                return DropdownMenuItem<int>(
+                  value: point,
+                  child: Text(point.toString()),
+                );
+              }).toList(),
             );
           },
         ),
@@ -214,17 +234,19 @@ Widget updateStatisticWithPlayerDialog(BuildContext context, List<Joueur> joueur
       TextButton(
         child: Text("+"),
         onPressed: () {
-          if (_selectedPlayer.value != null && _selectedMinute.value != null) {
+          if (_selectedPlayer.value != null &&
+              _selectedMinute.value != null &&
+              _selectedPoint.value != null) {
             Navigator.of(context).pop({
               'joueur': _selectedPlayer.value,
               'minute': _selectedMinute.value,
-            }); // Renvoyer joueur et minute
+              'point': _selectedPoint.value,
+            });
           } else {
-            // Gérer le cas où l'utilisateur n'a pas sélectionné un joueur ou une minute
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                  content:
-                      Text('Veuillez sélectionner un joueur et une minute')),
+                  content: Text(
+                      'Veuillez sélectionner un joueur, une minute et un point')),
             );
           }
         },

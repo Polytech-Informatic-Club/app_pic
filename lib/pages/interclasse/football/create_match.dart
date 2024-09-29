@@ -10,6 +10,7 @@ import 'package:new_app/models/basket.dart';
 import 'package:new_app/models/enums/sport_type.dart';
 import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/football.dart';
+import 'package:new_app/models/jeux_esprit.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/models/volleyball.dart';
 import 'package:new_app/pages/interclasse/football/home_admin_sport_type_page.dart';
@@ -349,6 +350,30 @@ class CreateMatch extends StatelessWidget {
                                 likers: [],
                                 dislikers: [],
                                 partageLien: "");
+                          else if (typeSport == "JEUX ESPRIT") {
+                            match = JeuxEsprit(
+                                statistiques: {
+                                  "bonneReponseA": 0,
+                                  "bonneReponseB": 0,
+                                },
+                                buteursA: [],
+                                buteursB: [],
+                                description:
+                                    _descriptionTextController.value.text,
+                                photo: _url.value,
+                                id: "${_selectedEquipeA.value!.nom} VS ${_selectedEquipeB.value!.nom}${_selectedDate.value!}",
+                                date: _selectedDate.value!,
+                                equipeA: _selectedEquipeA.value!,
+                                equipeB: _selectedEquipeB.value!,
+                                dateCreation: DateTime.now(),
+                                scoreEquipeA: 0,
+                                scoreEquipeB: 0,
+                                sport: SportType.JEUX_ESPRIT,
+                                comments: [],
+                                likers: [],
+                                dislikers: [],
+                                partageLien: "");
+                          }
                           try {
                             String code =
                                 await _SportService.postFootball(match);

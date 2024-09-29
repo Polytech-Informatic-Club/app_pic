@@ -106,7 +106,7 @@ class InterclassePage extends StatelessWidget {
                             HomeSportTypePage("BASKETBALL")),
                         _buildCircularIcon(
                             'assets/images/Competition/logo jeux desprit.png',
-                            HomeSportTypePage("GENIE_EN_HERBE")),
+                            HomeSportTypePage("JEUX_ESPRIT")),
                         _buildCircularIcon(
                             'assets/images/Competition/logo_volley.png',
                             HomeSportTypePage("VOLLEYBALL")),

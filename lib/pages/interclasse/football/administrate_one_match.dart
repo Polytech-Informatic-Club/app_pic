@@ -354,6 +354,9 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                               if (_typeSport == "VOLLEYBALL")
                                 statisticVolleyballCard(
                                     matchProvider, context, _sportService),
+                              if (_typeSport == "JEUX_ESPRIT")
+                                statisticJeuxEspritsCard(
+                                    matchProvider, context, _sportService),
                               SizedBox(height: 20),
                               Padding(
                                 padding: const EdgeInsets.symmetric(

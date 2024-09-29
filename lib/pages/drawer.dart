@@ -125,10 +125,16 @@ class EptDrawer extends StatelessWidget {
                     DrawerItem(
                       imagePath: "assets/images/top-left-menu/paramètres.png",
                       title:
-                          'Administraion ${role.split("_").last.toLowerCase()}',
+                          'Administration ${role.split("_").sublist(1, role.split("_").length).join(" ").toLowerCase()}',
                       onTap: () {
-                        changerPage(context,
-                            HomeAdminSportTypePage(role.split("_").last));
+                        changerPage(
+                            context,
+                            HomeAdminSportTypePage(
+                              role
+                                  .split("_")
+                                  .sublist(1, role.split("_").length)
+                                  .join("_"),
+                            ));
                       },
                     ),
                   const SizedBox(

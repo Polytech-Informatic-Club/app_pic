@@ -9,6 +9,7 @@ import 'package:new_app/models/commission.dart';
 import 'package:new_app/models/enums/sport_type.dart';
 import 'package:new_app/models/equipe.dart';
 import 'package:new_app/models/football.dart';
+import 'package:new_app/models/jeux_esprit.dart';
 import 'package:new_app/models/joueur.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/models/utilisateur.dart';
@@ -118,7 +119,9 @@ class SportService {
               ? Football.fromJson(querySnapshot.data()!)
               : typeSport == "VOLLEYBALL"
                   ? Volleyball.fromJson(querySnapshot.data()!)
-                  : null;
+                  : typeSport == "JEUX_ESPRIT"
+                      ? JeuxEsprit.fromJson(querySnapshot.data()!)
+                      : null;
     } catch (e) {
       return null;
     }
@@ -271,7 +274,7 @@ class SportService {
   }
 
   Future<Football?> addButeur(String matchId, Joueur joueur, int minute,
-      String libelleScore, String libelleBut) async {
+      String libelleScore, String libelleBut, [int increment = 1]) async {
     try {
       DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
       But but = But(
@@ -282,7 +285,7 @@ class SportService {
       await matchDoc.update(
         {
           libelleBut: FieldValue.arrayUnion([but.toJson()]),
-          libelleScore: FieldValue.increment(1)
+          libelleScore: FieldValue.increment(increment)
         },
       );
 

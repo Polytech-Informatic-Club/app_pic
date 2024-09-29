@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/basket.dart';
 import 'package:new_app/models/football.dart';
+import 'package:new_app/models/jeux_esprit.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/models/volleyball.dart';
 import 'package:new_app/services/sport_service.dart';
@@ -48,7 +49,7 @@ class _DetailMatchScreenState extends State<DetailMatchScreen> {
           },
         ),
         title: Text(
-          "Détails du match",
+          "Détail du match",
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
@@ -353,6 +354,8 @@ class _DetailMatchScreenState extends State<DetailMatchScreen> {
 
                                     if (_typeSport == "VOLLEYBALL")
                                       statisticVolleyball(match),
+                                    if (_typeSport == "JEUX_ESPRIT")
+                                      statisticJeuxEsprit(match),
                                   ],
                                 )),
                           ),
@@ -596,6 +599,23 @@ Widget statisticVolleyball(Volleyball match) {
       ),
       statisticCard(Icons.sports_soccer, "fautes",
           match.statistiques["fautesA"]!, match.statistiques["fautesB"]!),
+    ],
+  );
+}
+
+Widget statisticJeuxEsprit(JeuxEsprit match) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      statisticCard(
+          Icons.sports,
+          "Bonne réponse",
+          match.statistiques["bonneReponseA"]!,
+          match.statistiques["bonneReponseB"]!),
+      SizedBox(
+        width: 30,
+      ),
     ],
   );
 }
