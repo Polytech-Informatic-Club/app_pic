@@ -6,193 +6,214 @@ import 'package:new_app/pages/interclasse/football/home_admin_football_age.dart'
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 
-class EptDrawer extends StatelessWidget {
-  final UserService _userService = new UserService();
-
+class EptDrawer extends StatefulWidget {
   EptDrawer({super.key});
+
+  @override
+  State<EptDrawer> createState() => _EptDrawerState();
+}
+
+class _EptDrawerState extends State<EptDrawer> {
+  final UserService _userService = new UserService();
 
   @override
   Widget build(BuildContext context) {
     double size = 100;
     return Drawer(
-      child: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          color: eptLighterOrange,
-          child: FutureBuilder<String?>(
-            future: _userService.getRole(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Erreur lors de la récupération du rôle');
-              } else {
-                final role = snapshot.data ?? 'role';
-                return Column(
-                  mainAxisSize: MainAxisSize.min, // Ajoute cette ligne
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    Container(
-                        width: size,
-                        height: size,
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(200),
-                          color: eptOrange,
-                        ),
-                        child: Container(
-                          width: size,
-                          height: size,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(200)),
-                          clipBehavior: Clip.hardEdge,
-                          child: Image.asset(
-                            "assets/images/homepage/profile.png",
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text(
-                      "Gnatam Guaye",
-                      style: TextStyle(
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14),
-                    ),
-                    Text(
-                      role,
-                      style: TextStyle(fontFamily: "Inter", fontSize: 11),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-
-                    Container(
-                      width: 200,
-                      height: 1,
-                      color: Colors.black,
-                    ),
-
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    drawerItem("assets/images/top-left-menu/compte.png",
-                        "Compte", () {}),
-                    drawerItem("assets/images/top-left-menu/famille.png",
-                        "Famille Polytechnicienne", () {}),
-                    drawerItem("assets/images/top-left-menu/jumelles.png",
-                        "Objets perdus", () {}),
-                    drawerItem("assets/images/top-left-menu/paramètres.png",
-                        "Paramètres", () {}),
-                    if (role == RoleType.ADMIN.toString().split(".").last ||
-                        role ==
-                            RoleType.ADMIN_FOOTBALL
-                                .toString()
-                                .split(".")
-                                .last ||
-                        role ==
-                            RoleType.ADMIN_BASKET.toString().split(".").last)
-                      drawerItem(
-                        "assets/images/top-left-menu/paramètres.png",
-                        'Administraion ${role.toLowerCase()}',
-                        () {
-                          changerPage(context,
-                              HomeAdminFootballPage(role.split("_").last));
-                        },
+      backgroundColor: eptLighterOrange,
+      child: FutureBuilder<String?>(
+        future: _userService.getRole(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Erreur lors de la récupération du rôle');
+          } else {
+            final role = snapshot.data ?? 'role';
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsets.symmetric(horizontal: 30),
+                    children: [
+                      const SizedBox(
+                        height: 30,
                       ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Container(
-                      width: 200,
-                      height: 1,
-                      color: Colors.black,
-                    ),
-
-                    const SizedBox(
-                      height: 20,
-                    ),
-
-                    drawerItem(
-                      "assets/images/top-left-menu/facebook.png",
-                      "compte",
-                      () {},
-                      isLink: true,
-                    ),
-                    drawerItem(
-                      "assets/images/top-left-menu/instagram.png",
-                      "compte",
-                      () {},
-                      isLink: true,
-                    ),
-                    drawerItem(
-                      "assets/images/top-left-menu/x.png",
-                      "compte",
-                      () {},
-                      isLink: true,
-                    ),
-                    drawerItem(
-                      "assets/images/top-left-menu/internet.png",
-                      "compte",
-                      () {},
-                      isLink: true,
-                    ),
-                    // SizedBox(height: 15,),
-                    InkWell(
-                      onTap: () {
-                        _userService.signOut();
-                        changerPage(context, LoginScreen());
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        width: 150,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            color: eptOrange,
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Row(children: [
-                          Image.asset(
-                            "assets/images/top-left-menu/sortie.png",
-                            scale: 4,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                              width: size,
+                              height: size,
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(200),
+                                color: eptOrange,
+                              ),
+                              child: Container(
+                                width: size,
+                                height: size,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(200)),
+                                clipBehavior: Clip.hardEdge,
+                                child: Image.asset(
+                                  "assets/images/homepage/profile.png",
+                                  fit: BoxFit.cover,
+                                ),
+                              )),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Column(
+                        children: [
                           const Text(
-                            "Déconnexion",
-                            style: TextStyle(fontFamily: "Inter", fontSize: 12),
+                            "Gnatam Gaye",
+                            style: TextStyle(
+                                fontFamily: "Inter",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14),
                           ),
-                        ]),
+                          Text(
+                            role,
+                            style: TextStyle(fontFamily: "Inter", fontSize: 11),
+                          ),
+                        ],
                       ),
-                    ),
-                    const Spacer(),
-                    const Text(
-                      "PolyApp version 1.0.0",
-                      style: TextStyle(
-                          fontFamily: "Inter",
-                          fontSize: 10,
-                          color: eptDarkGrey),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 5,
-                      color: eptOrange,
-                    )
-                  ],
-                );
-              }
-            },
-          ),
-        ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      Column(
+                        children: [
+                          Container(
+                            width: 200,
+                            height: 1,
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      drawerItem("assets/images/top-left-menu/compte.png",
+                          "Compte", () {}),
+                      drawerItem("assets/images/top-left-menu/famille.png",
+                          "Famille Polytechnicienne", () {}),
+                      drawerItem("assets/images/top-left-menu/jumelles.png",
+                          "Objets perdus", () {}),
+                      drawerItem("assets/images/top-left-menu/paramètres.png",
+                          "Paramètres", () {}),
+                      drawerItem("assets/images/top-left-menu/a_propos.png",
+                          "A propos", () {}),
+                      if (role == RoleType.ADMIN.toString().split(".").last ||
+                          role ==
+                              RoleType.ADMIN_FOOTBALL
+                                  .toString()
+                                  .split(".")
+                                  .last ||
+                          role ==
+                              RoleType.ADMIN_BASKET.toString().split(".").last)
+                        drawerItem(
+                          "assets/images/top-left-menu/paramètres.png",
+                          'Administraion ${role.toLowerCase()}',
+                          () {
+                            changerPage(context,
+                                HomeAdminFootballPage(role.split("_").last));
+                          },
+                        ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                            width: 200,
+                            height: 1,
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(
+                        height: 20,
+                      ),
+
+                      drawerItem(
+                        "assets/images/top-left-menu/facebook.png",
+                        "compte",
+                        () {},
+                        isLink: true,
+                      ),
+                      drawerItem(
+                        "assets/images/top-left-menu/instagram.png",
+                        "compte",
+                        () {},
+                        isLink: true,
+                      ),
+                      drawerItem(
+                        "assets/images/top-left-menu/x.png",
+                        "compte",
+                        () {},
+                        isLink: true,
+                      ),
+
+                      // SizedBox(height: 15,),
+                      Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              _userService.signOut();
+                              changerPage(context, LoginScreen());
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(5),
+                              width: 150,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  color: eptOrange,
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Row(children: [
+                                Image.asset(
+                                  "assets/images/top-left-menu/sortie.png",
+                                  scale: 4,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                const Text(
+                                  "Déconnexion",
+                                  style: TextStyle(
+                                      fontFamily: "Inter", fontSize: 12),
+                                ),
+                              ]),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
+                ),
+                const Text(
+                  "PolyApp version 1.0.0",
+                  style: TextStyle(
+                      fontFamily: "Inter", fontSize: 10, color: eptDarkGrey),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 5,
+                  color: eptOrange,
+                ),
+              ],
+            );
+          }
+        },
       ),
     );
   }
