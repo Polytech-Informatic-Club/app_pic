@@ -52,7 +52,7 @@ class HotTopic extends StatelessWidget {
                   InkWell(
                       onTap: () {},
                       child: Image.asset(
-                        "assets/images/polytech-Info/icons8-filtre-90.png",
+                        "assets/images/polytech-Info/plus.png",
                         scale: 5,
                       )),
                 ]
@@ -104,7 +104,7 @@ class HotTopic extends StatelessWidget {
                   InkWell(
                       onTap: () {},
                       child: Image.asset(
-                        "assets/images/polytech-Info/icons8-filtre-90.png",
+                        "assets/images/polytech-Info/plus.png",
                         scale: 5,
                       )),
                 ]
@@ -156,7 +156,7 @@ class HotTopic extends StatelessWidget {
                   InkWell(
                       onTap: () {},
                       child: Image.asset(
-                        "assets/images/polytech-Info/icons8-filtre-90.png",
+                        "assets/images/polytech-Info/plus.png",
                         scale: 5,
                       )),
                 ]
