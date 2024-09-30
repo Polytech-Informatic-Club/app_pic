@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-//import 'package:new_app/UserPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:new_app/login/inscription.dart';
 import 'package:new_app/login/login.dart';
@@ -10,10 +9,7 @@ import 'package:new_app/objets_perdus.dart';
 import 'package:new_app/pages/annonce/afficher_annonce.dart';
 import 'package:new_app/pages/annonce/annonce.dart';
 import 'package:new_app/pages/home/home_page.dart';
-import 'package:new_app/pages/home/jeux/loup.dart';
 import 'package:new_app/pages/home/jeux/monopoly.dart';
-import 'package:new_app/pages/home/jeux/scrabble.dart';
-import 'package:new_app/pages/home/jeux/uno.dart';
 import 'package:new_app/pages/interclasse/basket/basket.dart';
 import 'package:new_app/pages/interclasse/football/create_match.dart';
 import 'package:new_app/pages/interclasse/football/detail_match.dart';
