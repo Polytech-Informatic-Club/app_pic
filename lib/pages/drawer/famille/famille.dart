@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/promo.dart';
-import 'package:new_app/pages/drawer/promo.dart';
+import 'package:new_app/pages/drawer/famille/promo.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
