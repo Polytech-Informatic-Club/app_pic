@@ -383,23 +383,29 @@ class Inscription extends StatelessWidget {
                                               );
 
                                               if (user != null) {
-                                                Utilisateur utilisateur = new Utilisateur(
-                                                    id: _emailController
-                                                        .value.text,
-                                                    username: _emailController
-                                                        .value.text,
-                                                    password: _emailController
-                                                        .value.text,
-                                                    prenom: _emailController
-                                                        .value.text,
-                                                    nom: _emailController
-                                                        .value.text,
-                                                    email: _emailController
-                                                        .value.text,
-                                                    telephone: _emailController
-                                                        .value.text,
-                                                    photo: "",
-                                                    role: RoleType.ADMIN);
+                                                Utilisateur utilisateur =
+                                                    new Utilisateur(
+                                                        id: _emailController
+                                                            .value.text,
+                                                        username:
+                                                            _emailController
+                                                                .value.text,
+                                                        // password: _passwordController
+                                                        //     .value.text,
+                                                        prenom: _prenomController
+                                                            .value.text,
+                                                        nom: _nomController
+                                                            .value.text,
+                                                        email: _emailController
+                                                            .value.text,
+                                                        telephone:
+                                                            _telephoneController
+                                                                .value.text,
+                                                        photo: "",
+                                                        genie: "",
+                                                        promo:
+                                                            "#${_promoController.value.text}",
+                                                        role: RoleType.ADMIN);
                                                 await _userService.setRole(
                                                     RoleType.USER
                                                         .toString()

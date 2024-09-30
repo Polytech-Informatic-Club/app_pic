@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/models/promo.dart';
+import 'package:new_app/models/utilisateur.dart';
+import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 
 class PromotionPage extends StatelessWidget {
-  const PromotionPage({super.key});
+  String nomPromo;
+  PromotionPage(this.nomPromo, {super.key});
+  UserService _userService = UserService();
 
   @override
   Widget build(BuildContext context) {
@@ -21,32 +26,44 @@ class PromotionPage extends StatelessWidget {
               SizedBox(
                 height: 60,
               ),
-              Center(
-                child: Column(
-                  children: [
-                    Image.asset(
-                      'assets/images/Competition/logo50.png',
-                      height: 150,
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Promotion 50',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      'Devise: "Douma Meusseu bayi EPT ba dé"',
-                      style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              FutureBuilder<Promo?>(
+                  future: _userService.getListByName(nomPromo),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Erreur lors de la récupération des données');
+                    } else {
+                      final promo = snapshot.data;
+
+                      return Center(
+                        child: Column(
+                          children: [
+                            Image.network(
+                              promo!.logo,
+                              height: 150,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'Promotion ${promo!.nom}',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              'Devise: "${promo!.devise}"',
+                              style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  }),
               SizedBox(height: 20),
               Center(
                 child: SizedBox(
@@ -72,15 +89,23 @@ class PromotionPage extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              eleveWidget('image', 'Abdou Salam Mboup', 'GIT', '777777777'),
-              eleveWidget('image', 'Abdou Salam Mboup', 'GIT', '777777777'),
-              eleveWidget('image', 'Abdou Salam Mboup', 'GIT', '777777777'),
-              eleveWidget('image', 'Abdou Salam Mboup', 'GIT', '777777777'),
-              eleveWidget('image', 'Abdou Salam Mboup', 'GIT', '777777777'),
-              eleveWidget('image', 'Abdou Salam Mboup', 'GIT', '777777777'),
-              eleveWidget('image', 'Abdou Salam Mboup', 'GIT', '777777777'),
-              eleveWidget('image', 'Abdou Salam Mboup', 'GIT', '777777777'),
-              eleveWidget('image', 'Abdou Salam Mboup', 'GIT', '777777777'),
+              FutureBuilder<List<Utilisateur>?>(
+                  future: _userService.getAllUserInPromo(nomPromo),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Erreur lors de la récupération des données');
+                    } else {
+                      final promos = snapshot.data;
+
+                      return Column(children: [
+                        for (var i in promos!)
+                          eleveWidget(i.photo, i.prenom + i.nom.toUpperCase(),
+                              i.genie, i.telephone),
+                      ]);
+                    }
+                  })
             ],
           ),
         ),
