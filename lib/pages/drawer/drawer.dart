@@ -3,7 +3,8 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/models/enums/role_type.dart';
 import 'package:new_app/objets_perdus.dart';
-import 'package:new_app/pages/drawer/famille.dart';
+import 'package:new_app/pages/drawer/famille/famille.dart';
+import 'package:new_app/pages/drawer/propos/a_propos.dart';
 import 'package:new_app/pages/interclasse/football/home_admin_sport_type_page.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
@@ -111,7 +112,9 @@ class _EptDrawerState extends State<EptDrawer> {
                       }),
 
                       drawerItem("assets/images/top-left-menu/a_propos.png",
-                          "A propos", () {}),
+                          "A propos", () {
+                        changerPage(context, AProposPage());
+                      }),
                       if (role == RoleType.ADMIN.toString().split(".").last ||
                           role ==
                               RoleType.ADMIN_FOOTBALL

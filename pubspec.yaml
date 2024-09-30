@@ -81,6 +81,7 @@ flutter:
     - assets/images/polytech-Info/
     - assets/images/market/
     - assets/images/top-left-menu/
+    - assets/images/equipe/
 
     # Chemin des images de objets-perdus
     - assets/images/objets-perdus/
@@ -111,6 +112,12 @@ flutter:
     - family: Inter
       fonts:
         - asset: assets/fonts/Inter_18pt-Bold.ttf
+    - family: InterLight
+      fonts:
+        - asset: assets/fonts/Inter/static/Inter_18pt-ExtraLight.ttf
+    - family: InterMedium
+      fonts:
+        - asset: assets/fonts/Inter/static/Inter_18pt-Light.ttf
 
   # fonts:
   #   - family: Schyler
