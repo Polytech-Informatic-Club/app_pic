@@ -8,6 +8,7 @@ import 'package:new_app/models/football.dart';
 import 'package:new_app/objets_perdus.dart';
 import 'package:new_app/pages/annonce/afficher_annonce.dart';
 import 'package:new_app/pages/annonce/annonce.dart';
+import 'package:new_app/pages/drawer/compte/compte.dart';
 import 'package:new_app/pages/drawer/famille/famille.dart';
 import 'package:new_app/pages/drawer/famille/promo.dart';
 import 'package:new_app/pages/drawer/propos/a_propos.dart';
