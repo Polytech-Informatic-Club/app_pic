@@ -6,6 +6,7 @@ import 'package:new_app/models/jeu.dart';
 import 'package:new_app/pages/home/jeux/monopoly.dart';
 import 'package:new_app/pages/drawer/drawer.dart';
 import 'package:new_app/pages/home/navbar.dart';
+import 'package:new_app/pages/home/nouveaute.dart';
 import 'package:new_app/pages/interclasse/interclasse.dart';
 import 'package:new_app/services/jeu_service.dart';
 import 'package:new_app/utils/app_colors.dart';
@@ -65,12 +66,22 @@ class _HomePageState extends State<HomePage> {
                   Positioned(
                     top: 120,
                     right: MediaQuery.of(context).size.width / 2 - 190,
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: AssetImage(
-                        "assets/images/homepage/profile.png",
-                      ),
-                    ),
+                    child: Container(
+                        padding: const EdgeInsets.all(2),
+                        width: 88,
+                        height: 117,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(40)),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(40)),
+                            clipBehavior: Clip.hardEdge,
+                            child: Image.asset(
+                              'assets/images/equipe/ibou.jpg',
+                              fit: BoxFit.cover,
+                            ))),
                   ),
                 ],
               ),
@@ -81,15 +92,17 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildSectionTitle('Nouveautés', context,
-                      ['Polytech-Info', 'Interclasses', 'Commerces']),
-                  SizedBox(height: 16),
-                  _buildEventCards(),
-                  SizedBox(height: 32),
+                  Nouveaute(),
+
+                  SizedBox(height: 30),
 
                   // Section Jeux
-                  _buildSectionTitle('Jeux', context, []),
+                  Text("Jeux", style: TextStyle(fontSize: 16)),
+                  SizedBox(
+                    height: 10,
+                  ),
                   _buildGameIcons(),
                   SizedBox(
                     height: 20,
@@ -103,99 +116,6 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: navbar(pageIndex: 2),
     );
   }
-}
-
-Widget _buildSectionTitle(
-    String title, BuildContext context, List<String> tabs) {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(title,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          Row(
-            children: [
-              Text('voir tout',
-                  style: TextStyle(fontSize: 16, color: Colors.red)),
-              Icon(
-                Icons.arrow_forward_sharp,
-                color: Colors.red,
-                size: 16,
-              )
-            ],
-          )
-        ],
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      if (tabs.isNotEmpty)
-        Row(
-          children: tabs.map((tab) {
-            return GestureDetector(
-                onTap: () {
-                  changerPage(context, InterclassePage());
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    tab,
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: tab == 'Polytech-Info'
-                            ? Colors.black
-                            : Colors.grey),
-                  ),
-                ));
-          }).toList(),
-        ),
-    ],
-  );
-}
-
-Widget _buildEventCards() {
-  return SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
-    child: Row(
-      children: [
-        _buildEventCard('assets/images/homepage/annonce1.jpg',
-            'Levée des couleurs', 'Mardi 6 Juin 21h45'),
-        _buildEventCard('assets/images/homepage/annonce2.jpg', 'Squid game',
-            '6 Aout 19h00'),
-        _buildEventCard('assets/images/interclasseBasket.jpg',
-            'Demie finale basket', 'Samedi 01 Juillet 23h30'),
-      ],
-    ),
-  );
-}
-
-Widget _buildEventCard(String imagePath, String title, String date) {
-  return Card(
-    margin: EdgeInsets.only(right: 16),
-    child: SizedBox(
-      width: 200,
-      height: 260,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image.asset(imagePath,
-              fit: BoxFit.cover, height: 180, width: double.infinity),
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(date, style: TextStyle(color: Colors.grey)),
-          ),
-        ],
-      ),
-    ),
-  );
 }
 
 Widget _buildGameIcons() {
@@ -220,15 +140,7 @@ Widget _buildGameIcons() {
                               changerPage(context, GameScreen(i.id));
                             },
                             child: _buildGameIcon(
-                                i.logo,
-                                i.nom,
-                                '4 joueurs en attente')),
-                      // _buildGameIcon('assets/images/homepage/uno.jpg', 'UNO',
-                      //     '4 joueurs en attente'),
-                      // _buildGameIcon('assets/images/homepage/monopoly.png',
-                      //     'Monopoly', '4 joueurs en attente'),
-                      // _buildGameIcon('assets/images/homepage/scrabble.jpg',
-                      //     'Scrabble', '4 joueurs en attente'),
+                                i.logo, i.nom, '4 joueurs en attente')),
                     ],
                   )
                 : Text("Aucun jeu n'est disponible");
