@@ -54,11 +54,26 @@ class ObjetPerduService {
 
   Future<Map<String, dynamic>?> getUserByEmail(String email) async {
     try {
-      var snapshot = await _firestore.collection('LOSTOBJECTS').where('email', isEqualTo: email).limit(1).get();
+      var snapshot = await _firestore
+          .collection('LOSTOBJECTS')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
       return snapshot.docs[0].data();
-    } catch(e) {
+    } catch (e) {
       print(e);
       return null;
+    }
+  }
+
+  Future<void> toggleFoundStatus(String docId, int value) async {
+    try {
+      _firestore
+          .collection('LOSTOBJECTS')
+          .doc(docId)
+          .update({'etat': value});
+    } catch (e) {
+      print('Error: $e');
     }
   }
 }

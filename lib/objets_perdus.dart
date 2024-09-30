@@ -22,6 +22,7 @@ class ObjetsPerdus extends StatefulWidget {
 class _ObjetsPerdusState extends State<ObjetsPerdus> {
   final ObjetPerduService _service = ObjetPerduService();
   final UserService _userService = UserService();
+  final currentUser = FirebaseAuth.instance.currentUser;
 
   TextEditingController dateController = TextEditingController();
   TextEditingController lieuController = TextEditingController();
@@ -94,8 +95,10 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
 
   // submit the form
   Future<void> _submitForm() async {
-    String? photoURL = await _service.uploadImage(_image!);
-    User? user = FirebaseAuth.instance.currentUser;
+    String? photoURL = null;
+    if (_image != null) {
+      photoURL = await _service.uploadImage(_image!);
+    }
 
     ObjetPerdu objet = ObjetPerdu(
       description: objetController.text,
@@ -104,7 +107,7 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
       lieu: lieuController.text,
       date: dateController.text,
       estTrouve: 0,
-      idUser: user?.email,
+      idUser: currentUser?.email,
     );
 
     await _service.addLostObject(objet);
@@ -138,14 +141,14 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Chercher un objet perdu',
+                'Signaler un objet perdu',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 16),
               TextField(
                 controller: objetController,
                 decoration: InputDecoration(
-                  labelText: "Qu'avez-vous perdu?",
+                  labelText: "Nom précis de l'objet",
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -153,7 +156,7 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
               TextField(
                 controller: lieuController,
                 decoration: InputDecoration(
-                  labelText: "Où avez-vous perdu votre objet?",
+                  labelText: "Où avez-vous perdu/trouvé l'objet ?",
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -162,7 +165,7 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                 controller: dateController,
                 readOnly: true,
                 decoration: InputDecoration(
-                  labelText: "Quand avez-vous perdu votre objet?",
+                  labelText: "Quand avez-vous perdu/trouvé l'objet ?",
                   border: OutlineInputBorder(),
                   suffixIcon: IconButton(
                     icon: Icon(Icons.calendar_today),
@@ -217,7 +220,11 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                     await _submitForm();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text("Soumission réussie!"),
+                        content: Text(
+                          "Objet Signalé avec succès!",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        elevation: 2,
                         backgroundColor: Colors.green,
                         duration: Duration(seconds: 2),
                       ),
@@ -234,7 +241,7 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                     ),
                   ),
                   child: Text(
-                    "Soumettre",
+                    "Signaler",
                     style: TextStyle(
                         fontSize: 18,
                         color: Colors.white,
@@ -311,11 +318,8 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                     return SizedBox(
                       height: 500,
                       child: ListView.builder(
-                        // physics: NeverScrollableScrollPhysics(),
-                        // shrinkWrap: true,
                         itemCount: lostObjects.length,
                         itemBuilder: (context, index) {
-                          // Extracting data from each document
                           var lostObject =
                               lostObjects[index].data() as Map<String, dynamic>;
                           String description =
@@ -355,21 +359,58 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                                       style: TextStyle(color: Colors.grey)),
                                   SizedBox(height: 8),
                                   Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisSize: MainAxisSize.max,
                                     children: [
-                                      const Text('Condition: '),
-                                      estTrouve
-                                          ? Text(
-                                              'Trouvé',
-                                              style: TextStyle(
-                                                  color: Colors.green),
-                                            )
-                                          : Text(
-                                              'Non Trouvé',
-                                              style:
-                                                  TextStyle(color: Colors.red),
-                                            )
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          const Text('Condition: '),
+                                          estTrouve
+                                              ? Text(
+                                                  'Trouvé',
+                                                  style: TextStyle(
+                                                      color: Colors.green),
+                                                )
+                                              : Text(
+                                                  'Non Trouvé',
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                ),
+                                        ],
+                                      ),
+                                      Switch(
+                                        activeColor: Colors.green,
+                                        value: 1 == lostObject['etat'],
+                                        onChanged: currentUser == null ||
+                                                currentUser!.email !=
+                                                    lostObject['idUser']
+                                            ? (_) {}
+                                            : (value) async {
+                                                await _service
+                                                    .toggleFoundStatus(
+                                                        lostObjects[index].id,
+                                                        value ? 1 : 0);
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      value
+                                                          ? 'Objet marqué comme trouvé!'
+                                                          : 'Objet marqué comme perdu!',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    backgroundColor:
+                                                        Colors.green,
+                                                  ),
+                                                );
+                                              },
+                                      )
                                     ],
                                   ),
                                   Text(
