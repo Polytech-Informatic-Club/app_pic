@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/match.dart';
-import 'package:new_app/pages/drawer.dart';
+import 'package:new_app/pages/drawer/drawer.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'package:new_app/pages/interclasse/basket/basket.dart';

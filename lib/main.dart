@@ -8,6 +8,8 @@ import 'package:new_app/models/football.dart';
 import 'package:new_app/objets_perdus.dart';
 import 'package:new_app/pages/annonce/afficher_annonce.dart';
 import 'package:new_app/pages/annonce/annonce.dart';
+import 'package:new_app/pages/drawer/famille.dart';
+import 'package:new_app/pages/drawer/promo.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/home/jeux/monopoly.dart';
 import 'package:new_app/pages/interclasse/basket/basket.dart';
@@ -23,8 +25,6 @@ import 'package:new_app/pages/shop/shop.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import 'pages/annonces.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -39,6 +39,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'Inter',
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(backgroundColor: Colors.white),
+      ),
       debugShowCheckedModeBanner: false,
       home: HomePage(),
     );
