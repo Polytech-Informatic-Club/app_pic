@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
+import 'package:new_app/models/promo.dart';
 import 'package:new_app/pages/drawer/famille/promo.dart';
 import 'package:new_app/pages/home/home_page.dart';
+import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 
 class FamillePolytechnicienneScreen extends StatelessWidget {
-  const FamillePolytechnicienneScreen({Key? key}) : super(key: key);
+  FamillePolytechnicienneScreen({Key? key}) : super(key: key);
+
+  UserService _userService = UserService();
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +49,25 @@ class FamillePolytechnicienneScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 40),
-              promoWidget('logo', '#51', '74', 'Wonderfull', HomePage()),
-              promoWidget('assets/images/Competition/logo50.png', '#50', '76',
-                  'Duma messa bayi ept ba de', PromotionPage()),
-              promoWidget('logo', '#49', '72', 'Ya pas waya waya', HomePage()),
-              promoWidget(
-                  'logo', '#47', '70', 'Together we get far', HomePage()),
+              FutureBuilder<List<Promo>?>(
+                  future: _userService.getListPromo(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Erreur lors de la récupération des données');
+                    } else {
+                      final promos = snapshot.data;
+
+                      return Column(
+                        children: [
+                          for (var i in promos!)
+                            promoWidget(i.logo, i.nom, i.total, i.devise,
+                                PromotionPage(i.nom)),
+                        ],
+                      );
+                    }
+                  })
             ],
           ),
         ),
@@ -75,7 +92,7 @@ Widget promoWidget(logo, nom, nombre, devise, page) {
         child: ListTile(
           leading: CircleAvatar(
             radius: 35,
-            backgroundImage: AssetImage(logo), // Chemin de l'image
+            backgroundImage: NetworkImage(logo), // Chemin de l'image
           ),
           title: Text(
             nom,

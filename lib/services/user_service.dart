@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:new_app/models/promo.dart';
 import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/alerte_message.dart';
@@ -135,5 +136,58 @@ class UserService {
           "Une erreur s'est produit lors du chargement !", AppColors.echec);
     }
     return "";
+  }
+
+  Future<List<Promo>> getListPromo() async {
+    try {
+      List<Promo> list = [];
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await _firestore.collection("PROMO").get();
+      List<Map<String, dynamic>> listePromos =
+          querySnapshot.docs.map((doc) => doc.data()).toList();
+      for (var promo in listePromos) {
+        print(promo);
+        list.add(Promo.fromJson(promo));
+      }
+
+      return list;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<Promo?> getListByName(String promo) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+          .collection("PROMO")
+          .where("nom", isEqualTo: promo)
+          .limit(1)
+          .get();
+      List<Map<String, dynamic>> listePromos =
+          querySnapshot.docs.map((doc) => doc.data()).toList();
+
+      return Promo.fromJson(listePromos.first);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<List<Utilisateur>> getAllUserInPromo(String promo) async {
+    try {
+      List<Utilisateur> list = [];
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+          .collection("USER")
+          .where("promo", isEqualTo: promo)
+          .get();
+      List<Map<String, dynamic>> listeUsers =
+          querySnapshot.docs.map((doc) => doc.data()).toList();
+      for (var user in listeUsers) {
+        list.add(Utilisateur.fromJson(user));
+      }
+
+      return list;
+    } catch (e) {
+      return [];
+    }
   }
 }

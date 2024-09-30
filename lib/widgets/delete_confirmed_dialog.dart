@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-Widget deleteConfirmedDialog(BuildContext context) {
+Widget deleteConfirmedDialog(BuildContext context, String message) {
   return AlertDialog(
     title: Text("Confirmer la suppression"),
-    content: Text("Voulez-vous vraiment supprimer ce commentaire ?"),
+    content: Text(message),
     actions: [
       TextButton(
         child: Text("Annuler"),

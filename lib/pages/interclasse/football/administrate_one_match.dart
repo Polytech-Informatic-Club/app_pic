@@ -472,7 +472,8 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                                   builder:
                                                       (BuildContext context) {
                                                     return deleteConfirmedDialog(
-                                                        context);
+                                                        context,
+                                                        "Voulez-vous vraiment supprimer ce commentaire ?");
                                                   },
                                                 );
 

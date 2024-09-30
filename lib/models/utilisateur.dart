@@ -4,6 +4,8 @@ import 'package:new_app/models/enums/role_type.dart';
 class Utilisateur {
   final String? id;
   final String? username;
+  final String? promo;
+  final String? genie;
   final String? password;
   final String prenom; // Obligatoire
   final String nom; // Obligatoire
@@ -16,6 +18,8 @@ class Utilisateur {
     this.id,
     this.username,
     this.password,
+    this.promo,
+    this.genie,
     required this.prenom,
     required this.nom,
     required this.email,
@@ -28,6 +32,8 @@ class Utilisateur {
   Utilisateur.fromJson(Map<String, dynamic> json)
       : id = json['id'] as String,
         username = json['username'] as String,
+        genie = json['genie'] as String,
+        promo = json['promo'] as String,
         password = json['password'] as String,
         prenom = json['prenom'] as String,
         nom = json['nom'] as String,
@@ -43,6 +49,9 @@ class Utilisateur {
     return {
       'id': id,
       'username': username,
+      'promo': promo,
+      'genie': genie,
+
       'password': password,
       'prenom': prenom,
       'nom': nom,

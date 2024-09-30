@@ -2,9 +2,12 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
+import 'package:new_app/models/jeu.dart';
+import 'package:new_app/pages/home/jeux/monopoly.dart';
 import 'package:new_app/pages/drawer/drawer.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'package:new_app/pages/interclasse/interclasse.dart';
+import 'package:new_app/services/jeu_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -196,20 +199,41 @@ Widget _buildEventCard(String imagePath, String title, String date) {
 }
 
 Widget _buildGameIcons() {
+  JeuService _jeuService = JeuService();
   return SingleChildScrollView(
     scrollDirection: Axis.horizontal,
-    child: Row(
-      children: [
-        _buildGameIcon('assets/images/homepage/loup_garou.jpg', 'Loup-Garou',
-            '4 joueurs en attente'),
-        _buildGameIcon(
-            'assets/images/homepage/uno.jpg', 'UNO', '4 joueurs en attente'),
-        _buildGameIcon('assets/images/homepage/monopoly.png', 'Monopoly',
-            '4 joueurs en attente'),
-        _buildGameIcon('assets/images/homepage/scrabble.jpg', 'Scrabble',
-            '4 joueurs en attente'),
-      ],
-    ),
+    child: FutureBuilder<List<Jeu>?>(
+        future: _jeuService.getAllJeux(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Erreur lors de la récupération des données');
+          } else {
+            List<Jeu> jeux = snapshot.data!;
+            return jeux.isNotEmpty
+                ? Row(
+                    children: [
+                      for (var i in jeux)
+                        GestureDetector(
+                            onTap: () {
+                              changerPage(context, GameScreen(i.id));
+                            },
+                            child: _buildGameIcon(
+                                i.logo,
+                                i.nom,
+                                '4 joueurs en attente')),
+                      // _buildGameIcon('assets/images/homepage/uno.jpg', 'UNO',
+                      //     '4 joueurs en attente'),
+                      // _buildGameIcon('assets/images/homepage/monopoly.png',
+                      //     'Monopoly', '4 joueurs en attente'),
+                      // _buildGameIcon('assets/images/homepage/scrabble.jpg',
+                      //     'Scrabble', '4 joueurs en attente'),
+                    ],
+                  )
+                : Text("Aucun jeu n'est disponible");
+          }
+        }),
   );
 }
 
@@ -228,7 +252,7 @@ Widget _buildGameIcon(
             width: 3,
           ),
           image: DecorationImage(
-            image: AssetImage(imagePath),
+            image: NetworkImage(imagePath),
             fit: BoxFit.cover,
           ),
         ),

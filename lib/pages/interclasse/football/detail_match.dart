@@ -483,7 +483,8 @@ class _DetailMatchScreenState extends State<DetailMatchScreen> {
                                                     builder:
                                                         (BuildContext context) {
                                                       return deleteConfirmedDialog(
-                                                          context);
+                                                          context,
+                                                          "Voulez-vous vraiment supprimer ce commentaire ?");
                                                     },
                                                   );
 
