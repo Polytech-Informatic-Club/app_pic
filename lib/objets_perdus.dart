@@ -215,6 +215,20 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
               Center(
                 child: ElevatedButton(
                   onPressed: () async {
+                    if (objetController.text == '') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            "Donnez un nom à l'objet svp",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          elevation: 2,
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                      return;
+                    }
                     // Code pour soumettre le formulaire
                     await _submitForm();
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -367,7 +381,7 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          const Text('Condition: '),
+                                          const Text('Statut: '),
                                           estTrouve
                                               ? Text(
                                                   'Trouvé',
@@ -422,7 +436,8 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                                       SizedBox(width: 10),
                                       Text(
                                         lostObject['idUser'] ?? 'Inconnu',
-                                        style: TextStyle(color: Colors.grey[600]),
+                                        style:
+                                            TextStyle(color: Colors.grey[600]),
                                       )
                                     ],
                                   )
