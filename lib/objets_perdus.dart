@@ -21,7 +21,6 @@ class ObjetsPerdus extends StatefulWidget {
 
 class _ObjetsPerdusState extends State<ObjetsPerdus> {
   final ObjetPerduService _service = ObjetPerduService();
-  final UserService _userService = UserService();
   final currentUser = FirebaseAuth.instance.currentUser;
 
   TextEditingController dateController = TextEditingController();
@@ -95,7 +94,7 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
 
   // submit the form
   Future<void> _submitForm() async {
-    String? photoURL = null;
+    String? photoURL;
     if (_image != null) {
       photoURL = await _service.uploadImage(_image!);
     }
@@ -415,6 +414,18 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                                   ),
                                   Text(
                                       'Date: ${lostObject['date'] ?? 'Unknown'}'),
+                                  SizedBox(height: 8),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text('Signalé par:'),
+                                      SizedBox(width: 10),
+                                      Text(
+                                        lostObject['idUser'] ?? 'Inconnu',
+                                        style: TextStyle(color: Colors.grey[600]),
+                                      )
+                                    ],
+                                  )
                                 ],
                               ),
                             ),
