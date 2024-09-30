@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/models/match.dart';
-import 'package:new_app/pages/drawer.dart';
+import 'package:new_app/pages/drawer/drawer.dart';
 import 'package:new_app/pages/interclasse/create_commission.dart';
 import 'package:new_app/pages/interclasse/football/administrate_one_match.dart';
 import 'package:new_app/pages/interclasse/football/create_match.dart';

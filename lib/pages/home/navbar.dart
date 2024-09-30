@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/pages/annonce/annonce.dart';
-import 'package:new_app/pages/annonces.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/shop/shop.dart';
 import 'package:new_app/pages/interclasse/interclasse.dart';
