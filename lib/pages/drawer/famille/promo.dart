@@ -45,7 +45,7 @@ class PromotionPage extends StatelessWidget {
                             ),
                             SizedBox(height: 10),
                             Text(
-                              'Promotion ${promo!.nom}',
+                              'Promotion ${promo.nom}',
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -53,7 +53,7 @@ class PromotionPage extends StatelessWidget {
                             ),
                             SizedBox(height: 5),
                             Text(
-                              'Devise: "${promo!.devise}"',
+                              'Devise: "${promo.devise}"',
                               style: TextStyle(
                                 fontStyle: FontStyle.italic,
                                 color: Colors.grey[600],

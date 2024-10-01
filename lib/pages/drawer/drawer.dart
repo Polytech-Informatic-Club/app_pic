@@ -3,12 +3,12 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/models/enums/role_type.dart';
 import 'package:new_app/objets_perdus.dart';
-import 'package:new_app/pages/drawer/compte/compte.dart';
 import 'package:new_app/pages/drawer/famille/famille.dart';
 import 'package:new_app/pages/drawer/propos/a_propos.dart';
 import 'package:new_app/pages/interclasse/football/home_admin_sport_type_page.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
+import 'package:url_launcher/url_launcher.dart'; // Import du package url_launcher
 
 class EptDrawer extends StatefulWidget {
   EptDrawer({super.key});
@@ -18,7 +18,19 @@ class EptDrawer extends StatefulWidget {
 }
 
 class _EptDrawerState extends State<EptDrawer> {
-  final UserService _userService = new UserService();
+  final UserService _userService = UserService();
+
+  // Fonction pour ouvrir un lien dans le navigateur
+  void _ouvrirLien(String url) async {
+    final Uri uri = Uri.parse(Uri.encodeFull(url)); // Encode l'URL
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Impossible d\'ouvrir le lien')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +41,10 @@ class _EptDrawerState extends State<EptDrawer> {
         future: _userService.getRole(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Text('Erreur lors de la récupération du rôle');
+            return Center(
+                child: Text('Erreur lors de la récupération du rôle'));
           } else {
             final role = snapshot.data ?? 'role';
             return Column(
@@ -40,72 +53,58 @@ class _EptDrawerState extends State<EptDrawer> {
                   child: ListView(
                     padding: EdgeInsets.symmetric(horizontal: 30),
                     children: [
-                      const SizedBox(
-                        height: 30,
-                      ),
+                      const SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
+                            width: size,
+                            height: size,
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(200),
+                              color: eptOrange,
+                            ),
+                            child: Container(
                               width: size,
                               height: size,
-                              padding: const EdgeInsets.all(5),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(200),
-                                color: eptOrange,
                               ),
-                              child: Container(
-                                width: size,
-                                height: size,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(200)),
-                                clipBehavior: Clip.hardEdge,
-                                child: Image.asset(
-                                  "assets/images/homepage/profile.png",
-                                  fit: BoxFit.cover,
-                                ),
-                              )),
+                              clipBehavior: Clip.hardEdge,
+                              child: Image.asset(
+                                "assets/images/homepage/profile.png",
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10),
                       Column(
                         children: [
                           const Text(
                             "Gnatam Gaye",
                             style: TextStyle(
-                                fontFamily: "Inter",
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14),
+                              fontFamily: "Inter",
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
                           ),
                           Text(
                             role,
-                            style: TextStyle(fontFamily: "Inter", fontSize: 11),
+                            style: TextStyle(
+                              fontFamily: "Inter",
+                              fontSize: 11,
+                            ),
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-
-                      Column(
-                        children: [
-                          Container(
-                            width: 200,
-                            height: 1,
-                            color: Colors.black,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      drawerItem(
-                          "assets/images/top-left-menu/compte.png", "Compte",
-                          () {
-                        changerPage(context, Compte());
-                      }),
+                      const SizedBox(height: 10),
+                      Divider(thickness: 1, color: Colors.black),
+                      const SizedBox(height: 20),
+                      drawerItem("assets/images/top-left-menu/compte.png",
+                          "Compte", () {}),
                       drawerItem("assets/images/top-left-menu/famille.png",
                           "Famille Polytechnicienne", () {
                         changerPage(context, FamillePolytechnicienneScreen());
@@ -114,125 +113,114 @@ class _EptDrawerState extends State<EptDrawer> {
                           "Objets perdus", () {
                         changerPage(context, ObjetsPerdus());
                       }),
-
                       drawerItem("assets/images/top-left-menu/a_propos.png",
                           "A propos", () {
                         changerPage(context, AProposPage());
                       }),
-                      if (role == RoleType.ADMIN.toString().split(".").last ||
-                          role ==
-                              RoleType.ADMIN_FOOTBALL
-                                  .toString()
-                                  .split(".")
-                                  .last ||
-                          role ==
-                              RoleType.ADMIN_BASKETBALL
-                                  .toString()
-                                  .split(".")
-                                  .last ||
-                          role ==
-                              RoleType.ADMIN_VOLLEYBALL
-                                  .toString()
-                                  .split(".")
-                                  .last ||
-                          role ==
-                              RoleType.ADMIN_JEUX_ESPRIT
-                                  .toString()
-                                  .split(".")
-                                  .last)
+                      if ([
+                        RoleType.ADMIN.toString().split(".").last,
+                        RoleType.ADMIN_FOOTBALL.toString().split(".").last,
+                        RoleType.ADMIN_BASKETBALL.toString().split(".").last,
+                        RoleType.ADMIN_VOLLEYBALL.toString().split(".").last,
+                        RoleType.ADMIN_JEUX_ESPRIT.toString().split(".").last
+                      ].contains(role))
                         drawerItem(
                           "assets/images/top-left-menu/paramètres.png",
-                          'Administration ${role.split("_").sublist(1, role.split("_").length).join(" ").toLowerCase()}',
+                          'Administration ${role.split("_").sublist(1).join(" ").toLowerCase()}',
                           () {
                             changerPage(
-                                context,
-                                HomeAdminSportTypePage(role
-                                    .split("_")
-                                    .sublist(1, role.split("_").length)
-                                    .join("_")));
+                              context,
+                              HomeAdminSportTypePage(
+                                role.split("_").sublist(1).join("_"),
+                              ),
+                            );
                           },
                         ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            width: 200,
-                            height: 1,
-                            color: Colors.black,
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(
-                        height: 20,
-                      ),
-
+                      const SizedBox(height: 5),
+                      Divider(thickness: 1, color: Colors.black),
+                      const SizedBox(height: 20),
+                      // Icônes des réseaux sociaux avec liens
                       drawerItem(
                         "assets/images/top-left-menu/facebook.png",
-                        "compte",
-                        () {},
+                        "Facebook",
+                        () {
+                          _ouvrirLien(
+                              "https://www.facebook.com/profile.php?id=100075396502307");
+                        },
                         isLink: true,
                       ),
                       drawerItem(
                         "assets/images/top-left-menu/instagram.png",
-                        "compte",
-                        () {},
+                        "Instagram",
+                        () {
+                          _ouvrirLien(
+                              "https://www.instagram.com/bde_ept?igsh=MWdxamV4dGhjNWE3aA==");
+                        },
                         isLink: true,
                       ),
                       drawerItem(
                         "assets/images/top-left-menu/x.png",
-                        "compte",
-                        () {},
+                        "X (Twitter)",
+                        () {
+                          _ouvrirLien("https://x.com/bde_ept?s=21");
+                        },
                         isLink: true,
                       ),
-
-                      // SizedBox(height: 15,),
-                      Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              _userService.signOut();
-                              changerPage(context, LoginScreen());
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(5),
-                              width: 150,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  color: eptOrange,
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: Row(children: [
-                                Image.asset(
-                                  "assets/images/top-left-menu/sortie.png",
-                                  scale: 4,
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                const Text(
-                                  "Déconnexion",
-                                  style: TextStyle(
-                                      fontFamily: "Inter", fontSize: 12),
-                                ),
-                              ]),
-                            ),
-                          ),
-                        ],
+                      drawerItem(
+                        "assets/images/top-left-menu/linkedin.png",
+                        "LinkedIn",
+                        () {
+                          _ouvrirLien(
+                              "https://www.linkedin.com/company/bureau-des-el%C3%A8ves-ept/");
+                        },
+                        isLink: true,
                       ),
-                      const Spacer(),
+                      const SizedBox(height: 20),
+                      // Bouton Déconnexion
+                      InkWell(
+                        onTap: () {
+                          _userService.signOut();
+                          changerPage(context, LoginScreen());
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          width: 150,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: eptOrange,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                "assets/images/top-left-menu/sortie.png",
+                                scale: 4,
+                              ),
+                              const SizedBox(width: 10),
+                              const Text(
+                                "Déconnexion",
+                                style: TextStyle(
+                                  fontFamily: "Inter",
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
                 const Text(
                   "PolyApp version 1.0.0",
                   style: TextStyle(
-                      fontFamily: "Inter", fontSize: 10, color: eptDarkGrey),
+                    fontFamily: "Inter",
+                    fontSize: 10,
+                    color: eptDarkGrey,
+                  ),
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
+                const SizedBox(height: 5),
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: 5,
@@ -247,40 +235,41 @@ class _EptDrawerState extends State<EptDrawer> {
   }
 }
 
-Widget drawerItem(final String imagePath, final title, ontap,
+// Fonction widget pour les éléments du drawer
+Widget drawerItem(
+    final String imagePath, final String title, VoidCallback ontap,
     {bool isLink = false}) {
-  return Builder(builder: (context) {
-    return InkWell(
-      onTap: ontap,
-      child: Container(
-        padding: const EdgeInsets.all(5),
-        margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-        color: Colors.white,
-        width: 250,
-        height: 40,
-        child: Row(
-          children: [
+  return InkWell(
+    onTap: ontap,
+    child: Container(
+      padding: const EdgeInsets.all(5),
+      margin: const EdgeInsets.only(bottom: 15),
+      color: Colors.white,
+      width: 250,
+      height: 40,
+      child: Row(
+        children: [
+          Image.asset(
+            imagePath,
+            scale: 4,
+          ),
+          const SizedBox(width: 5),
+          Text(
+            title,
+            style: const TextStyle(
+              fontFamily: "Inter",
+              fontSize: 12,
+            ),
+          ),
+          if (isLink) ...[
+            Spacer(),
             Image.asset(
-              imagePath,
-              scale: 4,
+              "assets/images/top-left-menu/external_link.png",
+              scale: 1,
             ),
-            const SizedBox(
-              width: 5,
-            ),
-            Text(
-              title,
-              style: const TextStyle(fontFamily: "Inter", fontSize: 12),
-            ),
-            if (isLink) ...[
-              Spacer(),
-              Image.asset(
-                "assets/images/top-left-menu/external_link.png",
-                scale: 1,
-              )
-            ]
-          ],
-        ),
+          ]
+        ],
       ),
-    );
-  });
+    ),
+  );
 }
