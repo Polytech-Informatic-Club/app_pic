@@ -239,7 +239,7 @@ class _ShopState extends State<Shop> {
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 30,
-                      mainAxisSpacing: 0,
+                      mainAxisSpacing: 15,
                       childAspectRatio: 0.7,
                     ),
                     itemCount: filteredProducts.length,
