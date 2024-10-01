@@ -119,6 +119,9 @@ flutter:
     - family: InterMedium
       fonts:
         - asset: assets/fonts/Inter/static/Inter_18pt-Light.ttf
+    - family: InterRegular
+      fonts:
+        - asset: assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf
 
   # fonts:
   #   - family: Schyler

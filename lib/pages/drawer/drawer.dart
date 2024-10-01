@@ -3,6 +3,7 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/models/enums/role_type.dart';
 import 'package:new_app/objets_perdus.dart';
+import 'package:new_app/pages/drawer/compte/compte.dart';
 import 'package:new_app/pages/drawer/famille/famille.dart';
 import 'package:new_app/pages/drawer/propos/a_propos.dart';
 import 'package:new_app/pages/interclasse/football/home_admin_sport_type_page.dart';
@@ -83,10 +84,9 @@ class _EptDrawerState extends State<EptDrawer> {
                       const SizedBox(height: 10),
                       Column(
                         children: [
-                          const Text(
-                            "Gnatam Gaye",
+                          Text(
+                            'Prenom NOM',
                             style: TextStyle(
-                              fontFamily: "Inter",
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),
@@ -94,7 +94,7 @@ class _EptDrawerState extends State<EptDrawer> {
                           Text(
                             role,
                             style: TextStyle(
-                              fontFamily: "Inter",
+                              fontFamily: "InterRegular",
                               fontSize: 11,
                             ),
                           ),
@@ -103,8 +103,11 @@ class _EptDrawerState extends State<EptDrawer> {
                       const SizedBox(height: 10),
                       Divider(thickness: 1, color: Colors.black),
                       const SizedBox(height: 20),
-                      drawerItem("assets/images/top-left-menu/compte.png",
-                          "Compte", () {}),
+                      drawerItem(
+                          "assets/images/top-left-menu/compte.png", "Compte",
+                          () {
+                        changerPage(context, Compte());
+                      }),
                       drawerItem("assets/images/top-left-menu/famille.png",
                           "Famille Polytechnicienne", () {
                         changerPage(context, FamillePolytechnicienneScreen());
@@ -200,7 +203,6 @@ class _EptDrawerState extends State<EptDrawer> {
                               const Text(
                                 "Déconnexion",
                                 style: TextStyle(
-                                  fontFamily: "Inter",
                                   fontSize: 12,
                                 ),
                               ),
@@ -215,7 +217,6 @@ class _EptDrawerState extends State<EptDrawer> {
                 const Text(
                   "PolyApp version 1.0.0",
                   style: TextStyle(
-                    fontFamily: "Inter",
                     fontSize: 10,
                     color: eptDarkGrey,
                   ),
@@ -239,37 +240,43 @@ class _EptDrawerState extends State<EptDrawer> {
 Widget drawerItem(
     final String imagePath, final String title, VoidCallback ontap,
     {bool isLink = false}) {
-  return InkWell(
-    onTap: ontap,
-    child: Container(
-      padding: const EdgeInsets.all(5),
-      margin: const EdgeInsets.only(bottom: 15),
-      color: Colors.white,
-      width: 250,
-      height: 40,
-      child: Row(
-        children: [
-          Image.asset(
-            imagePath,
-            scale: 4,
+  return Column(
+    children: [
+      InkWell(
+        onTap: ontap,
+        child: Container(
+          padding: const EdgeInsets.all(5),
+          color: Colors.white,
+          width: 250,
+          height: 40,
+          child: Row(
+            children: [
+              Image.asset(
+                imagePath,
+                scale: 4,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontFamily: "InterRegular",
+                  fontSize: 12,
+                ),
+              ),
+              if (isLink) ...[
+                Spacer(),
+                Image.asset(
+                  "assets/images/top-left-menu/external_link.png",
+                  scale: 1,
+                ),
+              ]
+            ],
           ),
-          const SizedBox(width: 5),
-          Text(
-            title,
-            style: const TextStyle(
-              fontFamily: "Inter",
-              fontSize: 12,
-            ),
-          ),
-          if (isLink) ...[
-            Spacer(),
-            Image.asset(
-              "assets/images/top-left-menu/external_link.png",
-              scale: 1,
-            ),
-          ]
-        ],
+        ),
       ),
-    ),
+      SizedBox(
+        height: 15,
+      )
+    ],
   );
 }
