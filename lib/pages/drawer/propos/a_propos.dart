@@ -101,12 +101,12 @@ class AProposPage extends StatelessWidget {
                   "message": "Envoyer un message"
                 },
                 {
-                  "imagePath": "assets/images/membre2.jpg",
+                  "imagePath": "assets/images/codiallo.jpg",
                   "name": "Cheikh Oumar DIALLO",
                   "role": "Frontend Developer",
                   "description":
                       "En deuxième année lors du développement de l'application, un élément de la 50ème promotion.",
-                  "contact": "77 234 56 78",
+                  "contact": "77 418 94 39",
                   "message": "Envoyer un message"
                 },
                 {
@@ -128,7 +128,7 @@ class AProposPage extends StatelessWidget {
                   "message": "Envoyer un message"
                 },
                 {
-                  "imagePath": "assets/images/membre8.jpg",
+                  "imagePath": "assets/images/aminou.jpg",
                   "name": "Mouhamed Aminou NIANG",
                   "role": "Project Manager",
                   "description":
