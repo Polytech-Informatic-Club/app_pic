@@ -3,6 +3,7 @@ import 'package:new_app/pages/home/navbar.dart';
 import 'dart:async';
 
 import 'package:new_app/pages/shop/shop_blouson.dart';
+import 'package:new_app/utils/app_colors.dart';
 
 class Shop extends StatefulWidget {
   const Shop({Key? key}) : super(key: key);
@@ -126,7 +127,7 @@ class _ShopState extends State<Shop> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        width: screenWidth * 0.6,
+                        width: screenWidth * 0.4,
                         height: 40,
                         decoration: BoxDecoration(
                           color: Color(0xffd9d9d9),
@@ -227,33 +228,34 @@ class _ShopState extends State<Shop> {
             ),
             LayoutBuilder(
               builder: (context, constraints) {
-                int crossAxisCount = (constraints.maxWidth > 600) ? 3 : 2;
-
                 List<Map<String, dynamic>> filteredProducts =
                     getFilteredProducts();
 
-                return GridView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 8,
-                    childAspectRatio: 0.9,
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 30,
+                      mainAxisSpacing: 0,
+                      childAspectRatio: 0.7,
+                    ),
+                    itemCount: filteredProducts.length,
+                    itemBuilder: (context, index) {
+                      final product = filteredProducts[index];
+                      return GestureDetector(
+                        onTap: () => _showProductDetails(product),
+                        child: shopItem(
+                          product['image_path'],
+                          product['produit'],
+                          product['prix'],
+                          product['commande'],
+                        ),
+                      );
+                    },
                   ),
-                  itemCount: filteredProducts.length,
-                  itemBuilder: (context, index) {
-                    final product = filteredProducts[index];
-                    return GestureDetector(
-                      onTap: () => _showProductDetails(product),
-                      child: ProductCard(
-                        imagePath: product['image_path'],
-                        productName: product['produit'],
-                        price: product['prix'],
-                        isOrdered: product['commande'],
-                      ),
-                    );
-                  },
                 );
               },
             ),
@@ -415,67 +417,48 @@ class _ShopCarouselState extends State<ShopCarousel> {
   }
 }
 
-class ProductCard extends StatelessWidget {
-  final String imagePath;
-  final String productName;
-  final String price;
-  final bool isOrdered;
-
-  const ProductCard({
-    super.key,
-    required this.imagePath,
-    required this.productName,
-    required this.price,
-    required this.isOrdered,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
+Widget shopItem(imagePath, productName, price, isOrdered) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Container(
+        padding: const EdgeInsets.all(5),
+        width: 170,
+        height: 190,
+        decoration: BoxDecoration(
+            color: eptLightGrey, borderRadius: BorderRadius.circular(15)),
+        child: Container(
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
+          clipBehavior: Clip.hardEdge,
+          child: Image.asset(
+            imagePath,
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      const SizedBox(
+        height: 5,
+      ),
+      Text(
+        productName,
+        style: const TextStyle(fontSize: 12, color: eptDarkGrey),
+      ),
+      Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-            child: Image.asset(
-              imagePath,
-              fit: BoxFit.cover,
-              height: 140,
-              width: double.infinity,
+          Text(
+            "$price Fcfa",
+            style: const TextStyle(
+              fontFamily: "Inter",
+              fontSize: 16,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 5, 0, 0),
-            child: Text(
-              productName,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Row(
-              children: [
-                Text(
-                  '$price CFA',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-                if (isOrdered) ...[
-                  Image.asset('assets/images/checked.png', height: 20),
-                ],
-              ],
-            ),
-          ),
+          if (isOrdered) ...[
+            Image.asset('assets/images/checked.png', height: 20),
+          ],
         ],
       ),
-    );
-  }
+    ],
+  );
 }
 
 final List<Map<String, dynamic>> products = [
