@@ -31,13 +31,11 @@ class HistoriqueXoss extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      " Xossna",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
-                    ),
+                    Text(" Xossna",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20)),
                     Image.asset("assets/images/xoss/Ellipse_red.png")
                   ],
                 ),
@@ -219,9 +217,23 @@ class HistoriqueXoss extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Text(
-                      "3000 Fcfa",
-                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "3000 Fcfa",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Text(
+                          "15 fevrier",
+                          style: TextStyle(color: Colors.white, fontSize: 14),
+                        )
+                      ],
                     )
                   ],
                 )

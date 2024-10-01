@@ -325,7 +325,7 @@ class Xoss extends StatelessWidget {
                               Text(
                                 "3000 Fcfa",
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 25),
+                                    color: Colors.white, fontSize: 20),
                               ),
                               SizedBox(
                                 height: 30,
@@ -333,7 +333,7 @@ class Xoss extends StatelessWidget {
                               Text(
                                 "15 fevrier",
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 16),
+                                    color: Colors.white, fontSize: 14),
                               )
                             ],
                           )
