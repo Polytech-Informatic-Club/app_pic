@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/models/enums/role_type.dart';
+import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/pages/drawer/objets_perdus.dart';
 import 'package:new_app/pages/drawer/compte/compte.dart';
 import 'package:new_app/pages/drawer/famille/famille.dart';
@@ -38,16 +40,17 @@ class _EptDrawerState extends State<EptDrawer> {
     double size = 100;
     return Drawer(
       backgroundColor: eptLighterOrange,
-      child: FutureBuilder<String?>(
-        future: _userService.getRole(),
+      child: FutureBuilder<Utilisateur?>(
+        future: _userService
+            .getUserByEmail(FirebaseAuth.instance.currentUser!.email!),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(
-                child: Text('Erreur lors de la récupération du rôle'));
+                child: Text('Erreur lors de la récupération des données'));
           } else {
-            final role = snapshot.data ?? 'role';
+            final user = snapshot.data;
             return Column(
               children: [
                 Expanded(
@@ -73,10 +76,12 @@ class _EptDrawerState extends State<EptDrawer> {
                                 borderRadius: BorderRadius.circular(200),
                               ),
                               clipBehavior: Clip.hardEdge,
-                              child: Image.asset(
-                                "assets/images/homepage/profile.png",
-                                fit: BoxFit.cover,
-                              ),
+                              child: user!.photo != ""
+                                  ? Image.network(
+                                      "${user.photo}",
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Container(),
                             ),
                           ),
                         ],
@@ -85,14 +90,14 @@ class _EptDrawerState extends State<EptDrawer> {
                       Column(
                         children: [
                           Text(
-                            'Prenom NOM',
+                            '${user.prenom} ${user.nom.toUpperCase()}',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            role,
+                            user.role.toString().split(".").last,
                             style: TextStyle(
                               fontFamily: "InterRegular",
                               fontSize: 11,
@@ -106,7 +111,7 @@ class _EptDrawerState extends State<EptDrawer> {
                       drawerItem(
                           "assets/images/top-left-menu/compte.png", "Compte",
                           () {
-                        changerPage(context, Compte());
+                        changerPage(context, CompteScreen());
                       }),
                       drawerItem("assets/images/top-left-menu/famille.png",
                           "Famille Polytechnicienne", () {
@@ -126,15 +131,21 @@ class _EptDrawerState extends State<EptDrawer> {
                         RoleType.ADMIN_BASKETBALL.toString().split(".").last,
                         RoleType.ADMIN_VOLLEYBALL.toString().split(".").last,
                         RoleType.ADMIN_JEUX_ESPRIT.toString().split(".").last
-                      ].contains(role))
+                      ].contains(user.role.toString().split(".").last))
                         drawerItem(
                           "assets/images/top-left-menu/paramètres.png",
-                          'Administration ${role.split("_").sublist(1).join(" ").toLowerCase()}',
+                          'Administration  ${user.role.toString().split(".").last.split("_").sublist(1).join(" ").toLowerCase()}',
                           () {
                             changerPage(
                               context,
                               HomeAdminSportTypePage(
-                                role.split("_").sublist(1).join("_"),
+                                user.role
+                                    .toString()
+                                    .split(".")
+                                    .last
+                                    .split("_")
+                                    .sublist(1)
+                                    .join("_"),
                               ),
                             );
                           },

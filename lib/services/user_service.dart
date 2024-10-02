@@ -77,12 +77,46 @@ class UserService {
     }
   }
 
+  Future<Utilisateur?> getUserByEmail(String email) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+          .collection("USER")
+          .where("email", isEqualTo: email)
+          .limit(1)
+          .get();
+      Map<String, dynamic> user = querySnapshot.docs.first.data();
+      return Utilisateur.fromJson(user);
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<String> ajouterUser(Utilisateur utilisateur) async {
     try {
       await userCollection.doc(utilisateur.email).set(utilisateur.toJson());
       return "OK";
     } catch (e) {
       return "Erreur lors de l'ajout de l'Utilisateur : $e";
+    }
+  }
+
+  Future<String> updateUser(
+      String email, Map<String, dynamic> fieldsToUpdate) async {
+    try {
+      print("Updating user with email: $email");
+      print("Fields to update: $fieldsToUpdate");
+
+      // Vérifiez que l'email est valide
+      if (email.isEmpty) {
+        throw "Email is empty!";
+      }
+
+      await userCollection.doc(email).update(fieldsToUpdate);
+      print("Update successful for user with email: $email");
+      return "OK";
+    } catch (e) {
+      print("Error updating user: $e");
+      return "Erreur lors de la mise à jour de l'utilisateur : $e";
     }
   }
 
