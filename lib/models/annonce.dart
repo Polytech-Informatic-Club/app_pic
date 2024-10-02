@@ -1,12 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:new_app/models/categorie.dart';
 import 'package:uuid/uuid.dart';
 import 'package:new_app/models/commentaires.dart';
 
 class Annonce {
   final String id;
   final DateTime date;
+  final DateTime dateCreation;
   final String description;
   final String titre;
+  final String lieu;
   final String image;
+  final Categorie categorie;
   final List<Commentaire> comments;
   final int likes;
   final int dislikes;
@@ -15,9 +20,12 @@ class Annonce {
   Annonce({
     required this.id,
     required this.date,
+    required this.dateCreation,
     required this.description,
     required this.titre,
+    required this.lieu,
     required this.image,
+    required this.categorie,
     required this.comments,
     required this.likes,
     required this.dislikes,
@@ -27,14 +35,19 @@ class Annonce {
   // Factory method to create an Annonce object from JSON
   factory Annonce.fromJson(Map<String, dynamic> json) {
     var commentsFromJson = json['comments'] as List<dynamic>;
-    List<Commentaire> commentList = commentsFromJson.map((item) => Commentaire.fromJson(item)).toList();
+    List<Commentaire> commentList =
+        commentsFromJson.map((item) => Commentaire.fromJson(item)).toList();
 
     return Annonce(
       id: json['id'] as String,
-      date: DateTime.parse(json['date'] as String),
+      date: (json['date'] as Timestamp).toDate(),
+      dateCreation: (json['dateCreation'] as Timestamp).toDate(),
       description: json['description'] as String,
       titre: json['titre'] as String,
+      lieu: json['lieu'] as String,
       image: json['image'] as String,
+      // categorie: Categorie(id: "", logo: "", libelle: ""),
+      categorie: Categorie.fromJson(json['categorie']),
       comments: commentList,
       likes: json['likes'] as int,
       dislikes: json['dislikes'] as int,
@@ -46,11 +59,16 @@ class Annonce {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'date': date.toIso8601String(),
+      'date': date,
+      'dateCreation': dateCreation,
       'description': description,
       'titre': titre,
+      'lieu': lieu,
       'image': image,
-      'comments': comments.map((comment) => comment.toJson()).toList(), // Convert list of Commentaire objects to JSON
+      'categorie': categorie.toJson(),
+      'comments': comments
+          .map((comment) => comment.toJson())
+          .toList(), // Convert list of Commentaire objects to JSON
       'likes': likes,
       'dislikes': dislikes,
       'partageLien': partageLien,

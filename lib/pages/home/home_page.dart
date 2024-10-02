@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/jeu.dart';
-import 'package:new_app/pages/home/jeux/monopoly.dart';
+import 'package:new_app/pages/home/jeux/game_screen.dart';
 import 'package:new_app/pages/drawer/drawer.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'package:new_app/pages/home/nouveaute.dart';

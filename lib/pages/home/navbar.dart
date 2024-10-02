@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
-import 'package:new_app/pages/annonce/annonce.dart';
+import 'package:new_app/pages/annonce/annonce_screen.dart';
 import 'package:new_app/pages/object_perdus/objets_perdus.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/shop/shop.dart';
@@ -18,7 +18,7 @@ class navbar extends StatefulWidget {
 class _navbarState extends State<navbar> {
   List pageList = [
     ObjetsPerdus(),
-    Annonce(),
+    AnnonceScreen(),
     HomePage(),
     InterclassePage(),
     Shop()

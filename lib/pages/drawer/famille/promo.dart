@@ -101,8 +101,11 @@ class PromotionPage extends StatelessWidget {
 
                       return Column(children: [
                         for (var i in promos!)
-                          eleveWidget(i.photo, i.prenom + i.nom.toUpperCase(),
-                              i.genie, i.telephone),
+                          eleveWidget(
+                              i.photo,
+                              "${i.prenom} ${i.nom.toUpperCase()}",
+                              i.genie,
+                              i.telephone),
                       ]);
                     }
                   })

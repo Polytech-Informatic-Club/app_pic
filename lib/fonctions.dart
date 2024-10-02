@@ -80,3 +80,12 @@ String simpleDateformat(DateTime d) {
       newFormatString[0].toUpperCase() + newFormatString.substring(1);
   return result;
 }
+
+String getHour(DateTime d) {
+  final newFormatter = DateFormat("hh:mm", "fr");
+  final newFormatString = newFormatter.format(d);
+
+  final result =
+      newFormatString[0].toUpperCase() + newFormatString.substring(1);
+  return result;
+}

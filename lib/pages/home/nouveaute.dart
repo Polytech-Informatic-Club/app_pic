@@ -1,158 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/models/annonce.dart';
+import 'package:new_app/models/match.dart';
 import 'package:new_app/pages/annonce/infocard.dart';
 import 'package:new_app/pages/annonce/p_info_nouveaute.dart';
 import 'package:new_app/pages/home/section_selector.dart';
-
-List<InfoCard> listeInfoCard = [
-  InfoCard(
-      image: Image.asset(
-        "assets/images/homepage/annonce1.jpg",
-        fit: BoxFit.cover,
-      ),
-      widget: Container(),
-      width: 140,
-      height: 200,
-      borderRadius: 20),
-  InfoCard(
-      image: Image.asset(
-        "assets/images/homepage/annonce2.jpg",
-        fit: BoxFit.cover,
-      ),
-      widget: Container(),
-      width: 140,
-      height: 200,
-      borderRadius: 20),
-  InfoCard(
-      image: Image.asset(
-        "assets/images/homepage/annonce1.jpg",
-        fit: BoxFit.cover,
-      ),
-      widget: Container(),
-      width: 140,
-      height: 200,
-      borderRadius: 20),
-  InfoCard(
-      image: Image.asset(
-        "assets/images/homepage/annonce2.jpg",
-        fit: BoxFit.cover,
-      ),
-      widget: Container(),
-      width: 140,
-      height: 200,
-      borderRadius: 20),
-];
-List<InfoCard> listeInfoCard2 = [
-  InfoCard(
-      image: Image.asset(
-        "assets/images/homepage/annonce1.jpg",
-        fit: BoxFit.cover,
-      ),
-      widget: Container(),
-      width: 140,
-      height: 200,
-      borderRadius: 20),
-  InfoCard(
-      image: Image.asset(
-        "assets/images/homepage/annonce1.jpg",
-        fit: BoxFit.cover,
-      ),
-      widget: Container(),
-      width: 140,
-      height: 200,
-      borderRadius: 20),
-  InfoCard(
-      image: Image.asset(
-        "assets/images/homepage/annonce1.jpg",
-        fit: BoxFit.cover,
-      ),
-      widget: Container(),
-      width: 140,
-      height: 200,
-      borderRadius: 20),
-  InfoCard(
-      image: Image.asset(
-        "assets/images/homepage/annonce1.jpg",
-        fit: BoxFit.cover,
-      ),
-      widget: Container(),
-      width: 140,
-      height: 200,
-      borderRadius: 20),
-  InfoCard(
-      image: Image.asset(
-        "assets/images/homepage/annonce1.jpg",
-        fit: BoxFit.cover,
-      ),
-      widget: Container(),
-      width: 140,
-      height: 200,
-      borderRadius: 20),
-  InfoCard(
-      image: Image.asset(
-        "assets/images/homepage/annonce1.jpg",
-        fit: BoxFit.cover,
-      ),
-      widget: Container(),
-      width: 140,
-      height: 200,
-      borderRadius: 20),
-];
-List<InfoCard> listeInfoCard3 = [
-  InfoCard(
-      image: Image.asset(
-        "assets/images/homepage/annonce2.jpg",
-        fit: BoxFit.cover,
-      ),
-      widget: Container(),
-      width: 140,
-      height: 200,
-      borderRadius: 20),
-  InfoCard(
-      image: Image.asset(
-        "assets/images/homepage/annonce2.jpg",
-        fit: BoxFit.cover,
-      ),
-      widget: Container(),
-      width: 140,
-      height: 200,
-      borderRadius: 20),
-  InfoCard(
-      image: Image.asset(
-        "assets/images/homepage/annonce2.jpg",
-        fit: BoxFit.cover,
-      ),
-      widget: Container(),
-      width: 140,
-      height: 200,
-      borderRadius: 20),
-  InfoCard(
-      image: Image.asset(
-        "assets/images/homepage/annonce2.jpg",
-        fit: BoxFit.cover,
-      ),
-      widget: Container(),
-      width: 140,
-      height: 200,
-      borderRadius: 20),
-  InfoCard(
-      image: Image.asset(
-        "assets/images/homepage/annonce2.jpg",
-        fit: BoxFit.cover,
-      ),
-      widget: Container(),
-      width: 140,
-      height: 200,
-      borderRadius: 20),
-  InfoCard(
-      image: Image.asset(
-        "assets/images/homepage/annonce2.jpg",
-        fit: BoxFit.cover,
-      ),
-      widget: Container(),
-      width: 140,
-      height: 200,
-      borderRadius: 20),
-];
+import 'package:new_app/services/annonce_service.dart';
+import 'package:new_app/services/sport_service.dart';
 
 class Nouveaute extends StatefulWidget {
   const Nouveaute({super.key});
@@ -162,6 +15,8 @@ class Nouveaute extends StatefulWidget {
 }
 
 class _NouveauteState extends State<Nouveaute> {
+  AnnonceService _annonceService = AnnonceService();
+  SportService _sportService = SportService();
   int _value = 1;
   @override
   Widget build(BuildContext context) {
@@ -224,10 +79,72 @@ class _NouveauteState extends State<Nouveaute> {
               const SizedBox(
                 height: 20,
               ),
-              CategorySelection(
-                value: _value - 1,
-                itemLists: [listeInfoCard, listeInfoCard2, listeInfoCard3],
-              )
+              if (_value == 1)
+                FutureBuilder<List<Annonce>>(
+                  future: _annonceService.getAllAnnonce(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Erreur lors du chargement des annonces');
+                    } else {
+                      List<Annonce> annonces = snapshot.data ?? [];
+                      return Row(
+                        children: [
+                          for (var annonce in annonces)
+                            annonce.image.isNotEmpty
+                                ? InfoCard(
+                                    image: Image.network(
+                                      annonce.image,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    widget: widget,
+                                    width:
+                                        MediaQuery.sizeOf(context).height * 0.2,
+                                    height: MediaQuery.sizeOf(context).height *
+                                        0.25,
+                                    borderRadius: 10)
+                                : Container(
+                                    height: 0,
+                                  )
+                        ],
+                      );
+                    }
+                  },
+                ),
+              if (_value == 2)
+                FutureBuilder<List<Matches>>(
+                  future: _sportService.getNextMatch(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Erreur lors du chargement des annonces');
+                    } else {
+                      List<Matches> matches = snapshot.data ?? [];
+                      return Row(
+                        children: [
+                          for (var match in matches)
+                            match.photo!.isNotEmpty
+                                ? InfoCard(
+                                    image: Image.network(
+                                      match.photo!,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    widget: widget,
+                                    width:
+                                        MediaQuery.sizeOf(context).height * 0.2,
+                                    height: MediaQuery.sizeOf(context).height *
+                                        0.25,
+                                    borderRadius: 10)
+                                : Container(
+                                    height: 0,
+                                  )
+                        ],
+                      );
+                    }
+                  },
+                ),
             ],
           ),
         ),

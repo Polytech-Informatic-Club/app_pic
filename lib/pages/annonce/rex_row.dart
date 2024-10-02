@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/models/categorie.dart';
 import 'package:new_app/utils/app_colors.dart';
 
-class Rex extends StatefulWidget {
-  const Rex({super.key});
+class RexRow extends StatelessWidget {
+  Categorie categorie;
+  RexRow(this.categorie, {super.key});
 
-  @override
-  State<Rex> createState() => _RexState();
-}
-
-class _RexState extends State<Rex> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(

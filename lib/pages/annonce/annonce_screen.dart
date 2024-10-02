@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/fonctions.dart';
+import 'package:new_app/models/annonce.dart';
 import 'package:new_app/pages/annonce/hot_topic.dart';
 import 'package:new_app/pages/annonce/p_info_nouveaute.dart';
+import 'package:new_app/services/annonce_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/ept_button.dart';
 import 'package:new_app/pages/drawer/drawer.dart';
 import 'package:new_app/pages/home/navbar.dart';
 
-class Annonce extends StatefulWidget {
-  const Annonce({super.key});
+class AnnonceScreen extends StatefulWidget {
+  AnnonceScreen({super.key});
 
   @override
-  State<Annonce> createState() => _AnnonceState();
+  State<AnnonceScreen> createState() => _AnnonceScreenState();
 }
 
-class _AnnonceState extends State<Annonce> {
+class _AnnonceScreenState extends State<AnnonceScreen> {
+  AnnonceService _annonceService = AnnonceService();
   bool annonceAvailable = true;
   bool isAdmin = true;
   @override
@@ -42,38 +46,23 @@ class _AnnonceState extends State<Annonce> {
       body: SingleChildScrollView(
           child: Column(
         children: [
-          widgetAG('Jeudi 15 Octobre', '19h30', 'Case des Polytechniciens',
-              'Divers'),
+          FutureBuilder<Annonce?>(
+              future: _annonceService.getNextAG(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Erreur lors du chargement des annonces');
+                } else {
+                  Annonce annonce = snapshot.data!;
+                  return widgetAG(simpleDateformat(annonce.date),
+                      getHour(annonce.date), annonce.lieu, 'Divers');
+                }
+              }),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 0, 50),
             child: Column(
               children: [
-                // if (annonceAvailable) ...[
-                //   Row(
-                //     children: [
-                //       AssembleeGeneraleItem(
-                //           date: "Jeudi 13 Juin",
-                //           time: "22h30",
-                //           location: "Case de Polytechniciens",
-                //           topic: "Divers"),
-                //     ],
-                //   ),
-                //   const SizedBox(
-                //     height: 20,
-                //   ),
-                //   if (isAdmin) ...[
-                //     EptButton(
-                //       title: "Annoncer",
-                //       width: 150,
-                //       height: 40,
-                //       borderRadius: 5,
-                //     )
-                //   ],
-                //   const SizedBox(
-                //     height: 40,
-                //   ),
-                // ],
-
                 const PInfoNouveaute(),
                 const SizedBox(
                   height: 40,
@@ -86,7 +75,7 @@ class _AnnonceState extends State<Annonce> {
                 const SizedBox(
                   height: 30,
                 ),
-                const HotTopic(),
+                HotTopic(),
               ],
             ),
           ),

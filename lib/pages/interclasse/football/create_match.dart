@@ -323,7 +323,7 @@ class CreateMatch extends StatelessWidget {
                                 likers: [],
                                 dislikers: [],
                                 partageLien: "");
-                          } else if (typeSport == "VOLLEYBALL")
+                          } else if (typeSport == "VOLLEYBALL") {
                             match = Volleyball(
                                 statistiques: {
                                   "goalA": 0,
@@ -350,7 +350,7 @@ class CreateMatch extends StatelessWidget {
                                 likers: [],
                                 dislikers: [],
                                 partageLien: "");
-                          else if (typeSport == "JEUX ESPRIT") {
+                          } else if (typeSport == "JEUX ESPRIT") {
                             match = JeuxEsprit(
                                 statistiques: {
                                   "bonneReponseA": 0,
