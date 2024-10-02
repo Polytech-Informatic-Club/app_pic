@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/pages/annonce/annonce.dart';
+import 'package:new_app/pages/object_perdus/objets_perdus.dart';
 import 'package:new_app/pages/home/home_page.dart';
 import 'package:new_app/pages/shop/shop.dart';
 import 'package:new_app/pages/interclasse/interclasse.dart';
-import 'package:new_app/pages/xoss/xoss.dart';
+import 'package:new_app/pages/drawer/xoss/xoss.dart';
 import 'package:new_app/utils/app_colors.dart';
 
 class navbar extends StatefulWidget {
@@ -15,7 +16,13 @@ class navbar extends StatefulWidget {
 }
 
 class _navbarState extends State<navbar> {
-  List pageList = [Xoss(), Annonce(), HomePage(), InterclassePage(), Shop()];
+  List pageList = [
+    ObjetsPerdus(),
+    Annonce(),
+    HomePage(),
+    InterclassePage(),
+    Shop()
+  ];
 
   void _onSelected(newIndex) {
     if (Navigator.of(context).canPop()) {
@@ -54,8 +61,8 @@ class _navbarState extends State<navbar> {
         onDestinationSelected: _onSelected,
         height: 70,
         destinations: [
-          _destination('assets/images/Navbar-Icons/xoss.png',
-              'assets/images/Navbar-Icons/xoss1.png', '', 30),
+          _destination('assets/images/Navbar-Icons/loupe.png',
+              'assets/images/Navbar-Icons/loupe-selected.png', '', 30),
           _destination("assets/images/Navbar-Icons/megaphone.png",
               "assets/images/Navbar-Icons/megaphone1.png", '', 30),
           _destination('assets/images/Navbar-Icons/home.png',
