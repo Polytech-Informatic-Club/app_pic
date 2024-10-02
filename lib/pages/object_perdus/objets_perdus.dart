@@ -8,9 +8,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart'; // Importer intl pour le formatage des dates
 import 'package:new_app/models/objet_perdu_model.dart';
 import 'package:new_app/models/utilisateur.dart';
+import 'package:new_app/pages/drawer/drawer.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart'; // Assurez-vous que cette classe existe
 import 'package:new_app/services/lost_found_service.dart';
+
+import '../home/navbar.dart';
 
 class ObjetsPerdus extends StatefulWidget {
   const ObjetsPerdus({super.key});
@@ -124,9 +127,21 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: EptDrawer(),
       appBar: AppBar(
+        leading: Builder(builder: (context) {
+          return IconButton(
+            onPressed: () => Scaffold.of(context).openDrawer(),
+            icon: Icon(
+              Icons.menu,
+              size: 35,
+            ),
+          );
+        }),
         title: Text('Objets Perdus'),
+        centerTitle: true,
       ),
+      bottomNavigationBar: navbar(pageIndex: 0),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/pages/drawer/drawer.dart';
 import 'package:new_app/pages/home/navbar.dart';
-import 'package:new_app/pages/xoss/historique_xoss.dart';
+import 'package:new_app/pages/drawer/xoss/historique_xoss.dart';
 import 'package:new_app/utils/app_colors.dart';
 
 class Xoss extends StatelessWidget {
@@ -11,8 +11,10 @@ class Xoss extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: EptDrawer(),
-      bottomNavigationBar: navbar(pageIndex: 0),
+      appBar: AppBar(
+        forceMaterialTransparency: true,
+      ),
+      extendBodyBehindAppBar: true,
       body: Padding(
         padding: const EdgeInsets.all(0.0),
         child: Column(
@@ -28,22 +30,6 @@ class Xoss extends StatelessWidget {
                 clipBehavior:
                     Clip.none, // Permet à l'image de sortir du Container
                 children: [
-                  Positioned(
-                    left: 5,
-                    top: 40,
-                    child: Builder(
-                      builder: (context) {
-                        return IconButton(
-                          icon: Icon(Icons.menu),
-                          color: Colors.black,
-                          iconSize: 35,
-                          onPressed: () {
-                            Scaffold.of(context).openDrawer();
-                          },
-                        );
-                      },
-                    ),
-                  ),
                   Positioned(
                     bottom:
                         -78, // Positionne l'image en dehors du bas du Container
