@@ -39,16 +39,22 @@ class _EptDrawerState extends State<EptDrawer> {
     double size = 100;
     return Drawer(
       backgroundColor: eptLighterOrange,
-      child: FutureBuilder<String?>(
-        future: _userService.getRole(),
+      child: FutureBuilder<Map<String, dynamic>?>(
+        future: _userService
+            .getUserData(), // Récupérer les données de l'utilisateur
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(
-                child: Text('Erreur lors de la récupération du rôle'));
+              child: Text('Erreur : ${snapshot.error.toString()}'),
+            );
           } else {
-            final role = snapshot.data ?? 'role';
+            final userData = snapshot.data ?? {};
+            final prenom = userData['prenom'] ?? 'Prenom';
+            final nom = userData['nom'] ?? 'NOM';
+            final role = userData['role'] ?? 'role';
+            final photo = userData['photo'] ?? '';
             return Column(
               children: [
                 Expanded(
@@ -75,7 +81,9 @@ class _EptDrawerState extends State<EptDrawer> {
                               ),
                               clipBehavior: Clip.hardEdge,
                               child: Image.asset(
-                                "assets/images/homepage/profile.png",
+                                photo == ''
+                                    ? 'assets/images/top-left-menu/default_profile.jpg'
+                                    : photo,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -86,7 +94,7 @@ class _EptDrawerState extends State<EptDrawer> {
                       Column(
                         children: [
                           Text(
-                            'Prenom NOM',
+                            prenom + ' ' + nom,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,

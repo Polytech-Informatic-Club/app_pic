@@ -19,9 +19,31 @@ class UserService {
       FirebaseFirestore.instance.collection("USER");
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  Future<Map<String, dynamic>> getUserData() async {
+    String? email = FirebaseAuth.instance.currentUser?.email;
+
+    if (email == null) {
+      throw Exception("Utilisateur non authentifié");
+    }
+
+    DocumentSnapshot userDoc =
+        await FirebaseFirestore.instance.collection("USER").doc(email).get();
+
+    if (!userDoc.exists) {
+      throw Exception("Données utilisateur non trouvée");
+    }
+
+    return userDoc.data() as Map<String, dynamic>;
+  }
+
   Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('id_token');
+  }
+
+  Future<String?> getPrenom() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('prenom');
   }
 
   Future<void> setToken(String token) async {
