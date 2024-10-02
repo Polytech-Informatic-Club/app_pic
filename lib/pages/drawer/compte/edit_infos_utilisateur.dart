@@ -53,6 +53,7 @@ class _EditInfosUtilisateurState extends State<EditInfosUtilisateur> {
 
       if (user != null) {
         setState(() {
+          _url.value = user.photo!;
           _user = user;
           _prenomTextController.text = user.prenom;
           _nomTextController.text = user.nom;
@@ -91,74 +92,53 @@ class _EditInfosUtilisateurState extends State<EditInfosUtilisateur> {
                     ValueListenableBuilder<String>(
                         valueListenable: _url,
                         builder: (context, url, child) {
-                          return url == ""
-                              ? ValueListenableBuilder<bool>(
-                                  valueListenable: _loading,
-                                  builder: (context, loading, child) {
-                                    return loading
-                                        ? CircularProgressIndicator()
-                                        : Container(
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape
-                                                  .circle, // Forme en cercle
-                                              border: Border.all(
-                                                color:
-                                                    orange, // Couleur de la bordure
-                                                width:
-                                                    4.0, // Largeur de la bordure
-                                              ),
-                                            ),
-                                            child: CircleAvatar(
-                                              radius: 80,
-                                              backgroundImage: AssetImage(''),
-                                              backgroundColor: grisClair,
-                                              child: Align(
-                                                  alignment:
-                                                      Alignment.bottomRight,
-                                                  child: GestureDetector(
-                                                    onTap: () async {
-                                                      String? url =
-                                                          await _userService
-                                                              .uploadImage(
-                                                                  context,
-                                                                  _loading,
-                                                                  _url);
-                                                      if (url != null) {
-                                                        alerteMessageWidget(
-                                                            context,
-                                                            "Fichier enregistré avec succès !",
-                                                            AppColors.success);
-                                                      } else {
-                                                        alerteMessageWidget(
-                                                            context,
-                                                            "Une erreur s'est produit lors du chargement !",
-                                                            AppColors.echec);
-                                                      }
-                                                    },
-                                                    child: Icon(
-                                                      Icons.edit,
-                                                      color: AppColors.primary,
-                                                    ),
-                                                  )),
-                                            ),
-                                          );
-                                  })
-                              : Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle, // Forme en cercle
-                                    border: Border.all(
-                                      color: orange, // Couleur de la bordure
-                                      width: 4.0, // Largeur de la bordure
-                                    ),
-                                  ),
-                                  child: CircleAvatar(
-                                    radius: 80,
-                                    backgroundImage: url != ""
-                                        ? NetworkImage(url)
-                                        : AssetImage(''),
-                                    backgroundColor: grisClair,
-                                  ),
-                                );
+                          return ValueListenableBuilder<bool>(
+                              valueListenable: _loading,
+                              builder: (context, loading, child) {
+                                return loading
+                                    ? CircularProgressIndicator()
+                                    : Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape
+                                              .circle, // Forme en cercle
+                                          border: Border.all(
+                                            color:
+                                                orange, // Couleur de la bordure
+                                            width: 4.0, // Largeur de la bordure
+                                          ),
+                                        ),
+                                        child: CircleAvatar(
+                                          radius: 80,
+                                          backgroundImage: NetworkImage(url),
+                                          backgroundColor: grisClair,
+                                          child: Align(
+                                              alignment: Alignment.bottomRight,
+                                              child: GestureDetector(
+                                                onTap: () async {
+                                                  String? url =
+                                                      await _userService
+                                                          .uploadImage(context,
+                                                              _loading, _url);
+                                                  if (url != null) {
+                                                    alerteMessageWidget(
+                                                        context,
+                                                        "Fichier enregistré avec succès !",
+                                                        AppColors.success);
+                                                  } else {
+                                                    alerteMessageWidget(
+                                                        context,
+                                                        "Une erreur s'est produit lors du chargement !",
+                                                        AppColors.echec);
+                                                  }
+                                                },
+                                                child: Icon(
+                                                  Icons.edit,
+                                                  color: AppColors.primary,
+                                                ),
+                                              )),
+                                        ),
+                                      );
+                              });
                         }),
                     SizedBox(
                       height: 20,
@@ -174,13 +154,6 @@ class _EditInfosUtilisateurState extends State<EditInfosUtilisateur> {
                       height: 20,
                     ),
                     reusableTextFormField("Nom", _nomTextController, (value) {
-                      return null;
-                    }),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    reusableTextFormField("Email", _emailTextController,
-                        (value) {
                       return null;
                     }),
                     SizedBox(
