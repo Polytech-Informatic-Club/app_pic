@@ -33,6 +33,10 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
   File? _image;
   final ImagePicker _picker = ImagePicker(); // Instance de ImagePicker
 
+  // Search Lost Objects
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
   // Fonction pour sélectionner une image depuis la galerie ou prendre une photo
   Future<void> _choisirImage() async {
     showModalBottomSheet(
@@ -148,6 +152,7 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Formulaire
               Text(
                 'Signaler un objet perdu',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -329,6 +334,8 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                   ),
                 ),
               ),
+
+              // Chercher un objet perdu
               SizedBox(height: 32),
               Text(
                 'Liste des objets perdus',
@@ -339,6 +346,7 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                 height: 30,
                 width: 200,
                 child: TextField(
+                  controller: _searchController,
                   decoration: InputDecoration(
                     fillColor: grisClair,
                     filled: true,
@@ -350,8 +358,15 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                         borderRadius: BorderRadius.circular(30)),
                     prefixIcon: Icon(Icons.search),
                   ),
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value.toLowerCase();
+                    });
+                  },
                 ),
               ),
+
+              // Liste des objets perdus
               SizedBox(height: 16),
               StreamBuilder<QuerySnapshot>(
                 stream: _service.getLostObjects(),
@@ -405,6 +420,19 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                   } else {
                     final lostObjects = snapshot.data!.docs;
 
+                    // Search filtering based on a potential search query
+                    final filteredObjects = lostObjects.where((doc) {
+                      var data = doc.data() as Map<String, dynamic>;
+                      var description = data['description']?.toLowerCase();
+                      return description.contains(_searchQuery);
+                    }).toList();
+
+                    if (filteredObjects.isEmpty) {
+                      return Center(
+                        child: Text('Aucun objet trouvé.'),
+                      );
+                    }
+
                     return SizedBox(
                         height: 500,
                         child: GridView.builder(
@@ -419,9 +447,9 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                             childAspectRatio:
                                 0.7, // Ratio largeur/hauteur pour chaque carte
                           ),
-                          itemCount: lostObjects.length,
+                          itemCount: filteredObjects.length,
                           itemBuilder: (context, index) {
-                            var lostObject = lostObjects[index].data()
+                            var lostObject = filteredObjects[index].data()
                                 as Map<String, dynamic>;
                             String description =
                                 lostObject['description'] ?? 'No description';
