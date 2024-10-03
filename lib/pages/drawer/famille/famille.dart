@@ -26,20 +26,16 @@ class FamillePolytechnicienneScreen extends StatelessWidget {
             children: [
               Center(
                 child: SizedBox(
-                  height: 26,
-                  width: 200,
+                  height: 30,
+                  width: 250,
                   child: TextField(
                     decoration: InputDecoration(
-                      // focusedBorder: OutlineInputBorder(
-                      //     borderSide: BorderSide(color: Colors.black, width: 2),
-                      //     borderRadius: BorderRadius.circular(30)),
                       hintText: 'chercher',
-                      hintStyle: TextStyle(
-                        fontSize: 12,
-                      ),
+                      hintStyle:
+                          TextStyle(fontSize: 12, fontFamily: 'InterMedium'),
                       prefixIcon: Icon(Icons.search),
                       border: OutlineInputBorder(
-                        borderSide: BorderSide(style: BorderStyle.none),
+                        borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(30),
                       ),
                       filled: true,

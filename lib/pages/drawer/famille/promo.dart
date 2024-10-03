@@ -67,17 +67,16 @@ class PromotionPage extends StatelessWidget {
               SizedBox(height: 20),
               Center(
                 child: SizedBox(
-                  height: 26,
-                  width: 200,
+                  height: 30,
+                  width: 250,
                   child: TextField(
                     decoration: InputDecoration(
                       hintText: 'chercher',
-                      hintStyle: TextStyle(
-                        fontSize: 12,
-                      ),
+                      hintStyle:
+                          TextStyle(fontSize: 12, fontFamily: 'InterMedium'),
                       prefixIcon: Icon(Icons.search),
                       border: OutlineInputBorder(
-                        borderSide: BorderSide(style: BorderStyle.none),
+                        borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(30),
                       ),
                       filled: true,

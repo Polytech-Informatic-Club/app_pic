@@ -166,7 +166,7 @@ class CompteScreen extends StatelessWidget {
                       child: Text(user.genie!),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 50,
                     ),
                   ],
                 );
