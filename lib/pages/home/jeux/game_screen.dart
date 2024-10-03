@@ -109,26 +109,26 @@ class GameScreen extends StatelessWidget {
                                       return session.statut ==
                                               StatutSessionJeu.OUVERTE
                                           ? GestureDetector(
-                                              onLongPress: () async {
-                                                // if (session.user.email ==
-                                                //     FirebaseAuth.instance
-                                                //         .currentUser!.email) {
-                                                bool confirm = await showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return deleteConfirmedDialog(
-                                                        context,
-                                                        "Voulez-vous vraiment supprimer cette session ?");
-                                                  },
-                                                );
+                                              // onLongPress: () async {
+                                              //   // if (session.user.email ==
+                                              //   //     FirebaseAuth.instance
+                                              //   //         .currentUser!.email) {
+                                              //   bool confirm = await showDialog(
+                                              //     context: context,
+                                              //     builder:
+                                              //         (BuildContext context) {
+                                              //       return deleteConfirmedDialog(
+                                              //           context,
+                                              //           "Voulez-vous vraiment supprimer cette session ?");
+                                              //     },
+                                              //   );
 
-                                                if (confirm) {
-                                                  jeu = await _jeuService
-                                                      .deleteSessionJeu(
-                                                          id, session);
-                                                }
-                                              },
+                                              //   if (confirm) {
+                                              //     jeu = await _jeuService
+                                              //         .deleteSessionJeu(
+                                              //             id, session);
+                                              //   }
+                                              // },
                                               child: ExpansionTile(
                                                   expandedCrossAxisAlignment:
                                                       CrossAxisAlignment.start,
@@ -144,106 +144,139 @@ class GameScreen extends StatelessWidget {
                                                             FontWeight.bold),
                                                   ),
                                                   children: [
-                                                    Text(
-                                                      "Il y a ${session.joueurs.length} joueurs en attente à ${session.lieu}",
-                                                      style: TextStyle(
-                                                          fontSize: 16),
-                                                    ),
-                                                    Container(
-                                                        width: double.infinity,
-                                                        padding:
-                                                            EdgeInsets.all(16),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color:
-                                                              Colors.grey[200],
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
+                                                  Text(
+                                                    "Il y a ${session.joueurs.length} joueurs en attente à ${session.lieu}",
+                                                    style:
+                                                        TextStyle(fontSize: 16),
+                                                  ),
+                                                  Container(
+                                                      width: double.infinity,
+                                                      padding:
+                                                          EdgeInsets.all(16),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.grey[200],
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: session
+                                                            .joueurs
+                                                            .map((joueur) {
+                                                          return Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                SizedBox(
+                                                                    height: 10),
+                                                                Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(joueur
+                                                                            .prenom +
+                                                                        " " +
+                                                                        joueur
+                                                                            .nom
+                                                                            .toUpperCase()),
+                                                                  ],
+                                                                ),
+                                                              ]);
+                                                        }).toList(),
+                                                      )),
+                                                  Row(
+                                                    children: [
+                                                      ElevatedButton(
+                                                        onPressed: () async {
+                                                          try {
+                                                            Jeu? jeu =
+                                                                await _jeuService
+                                                                    .postRejoindreSessionJeu(
+                                                                        id);
+                                                            if (jeu == null) {
+                                                              alerteMessageWidget(
+                                                                  context,
+                                                                  "Vous etes déjà dans la session.",
+                                                                  AppColors
+                                                                      .echec);
+                                                            } else {
+                                                              alerteMessageWidget(
+                                                                  context,
+                                                                  "Bienvenue dans la session.",
+                                                                  AppColors
+                                                                      .success);
+                                                            }
+                                                          } catch (e) {}
+                                                        },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              grisClair,
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      10,
+                                                                  vertical: 5),
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                          ),
                                                         ),
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: session
-                                                              .joueurs
-                                                              .map((joueur) {
-                                                            return Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  SizedBox(
-                                                                      height:
-                                                                          10),
-                                                                  Column(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
-                                                                    children: [
-                                                                      Text(joueur
-                                                                              .prenom +
-                                                                          " " +
-                                                                          joueur
-                                                                              .nom
-                                                                              .toUpperCase()),
-                                                                    ],
-                                                                  ),
-                                                                ]);
-                                                          }).toList(),
-                                                        )),
-                                                    ElevatedButton(
-                                                      onPressed: () async {
-                                                        try {
-                                                          Jeu? jeu =
-                                                              await _jeuService
-                                                                  .postRejoindreSessionJeu(
-                                                                      id);
-                                                          if (jeu == null) {
-                                                            alerteMessageWidget(
-                                                                context,
-                                                                "Vous etes déjà dans la session.",
-                                                                AppColors
-                                                                    .echec);
-                                                          } else {
-                                                            alerteMessageWidget(
-                                                                context,
-                                                                "Bienvenue dans la session.",
-                                                                AppColors
-                                                                    .success);
+                                                        child: Text(
+                                                          'Rejoindre',
+                                                          style: TextStyle(
+                                                              fontSize: 13,
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                      ),
+                                                      Spacer(),
+                                                      IconButton(
+                                                        onPressed: () async {
+                                                          // if (session.user.email ==
+                                                          //     FirebaseAuth.instance
+                                                          //         .currentUser!.email) {
+                                                          bool confirm =
+                                                              await showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return deleteConfirmedDialog(
+                                                                  context,
+                                                                  "Voulez-vous vraiment supprimer cette session ?");
+                                                            },
+                                                          );
+
+                                                          if (confirm) {
+                                                            jeu = await _jeuService
+                                                                .deleteSessionJeu(
+                                                                    id,
+                                                                    session);
                                                           }
-                                                        } catch (e) {}
-                                                      },
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        backgroundColor:
-                                                            grisClair,
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 10,
-                                                                vertical: 5),
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
+                                                        },
+                                                        icon: Icon(
+                                                          Icons.delete,
+                                                          color: Colors.red,
                                                         ),
-                                                      ),
-                                                      child: Text(
-                                                        'Rejoindre',
-                                                        style: TextStyle(
-                                                            fontSize: 13,
-                                                            color:
-                                                                Colors.black),
-                                                      ),
-                                                    ),
-                                                  ]))
+                                                      )
+                                                    ],
+                                                  ),
+                                                ]))
                                           : Container(
                                               height: 0,
                                             );
