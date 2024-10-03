@@ -18,6 +18,10 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          forceMaterialTransparency: true,
+        ),
+        extendBodyBehindAppBar: true,
         body: FutureBuilder<Jeu?>(
             future: _jeuService.getJeuId(id),
             builder: (context, snapshot) {
@@ -28,53 +32,31 @@ class GameScreen extends StatelessWidget {
               } else {
                 Jeu? jeu = snapshot.data;
                 return jeu != null
-                    ? Stack(
-                        children: [
-                          // Image de fond
-                          Container(
-                            height: 310,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/homepage/jeux_top_bg.png'), // Image de fond à ajouter dans 'assets'
-                                fit: BoxFit.cover,
+                    ? SingleChildScrollView(
+                        child: Column(children: [
+                          Stack(children: [
+                            // Image de fond
+                            Container(
+                              height: 310,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/images/homepage/jeux_top_bg.png'), // Image de fond à ajouter dans 'assets'
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-
-                          // Contenu de la page
-                          SingleChildScrollView(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Column(
                               children: [
                                 SizedBox(
-                                    height:
-                                        30), // Pour espacer du haut de l'écran
-
-                                // Bouton retour
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: IconButton(
-                                    icon: Icon(Icons.arrow_back,
-                                        color: Colors.black),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
+                                  height: 70,
                                 ),
-
-                                SizedBox(height: 20),
-
-                                // Logo UNO
                                 Center(
                                   child: Image.network(
                                     jeu.logo, // Image UNO dans 'assets'
                                     height: 150,
                                   ),
                                 ),
-
                                 SizedBox(height: 10),
 
                                 // Texte UNO
@@ -86,20 +68,28 @@ class GameScreen extends StatelessWidget {
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
-
-                                SizedBox(height: 40),
-
-                                // Règles du jeu
+                              ],
+                            ),
+                          ]),
+                          SizedBox(height: 10),
+                          // Contenu de la page
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                                 Text(
                                   "Règles:",
                                   style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
+                                    fontSize: 18,
+                                  ),
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   jeu.regle,
-                                  style: TextStyle(fontSize: 15),
+                                  style: TextStyle(
+                                      fontSize: 12, fontFamily: 'InterRegular'),
                                 ),
                                 SizedBox(
                                   height: 10,
@@ -110,14 +100,11 @@ class GameScreen extends StatelessWidget {
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                ListView.builder(
-                                    shrinkWrap:
-                                        true, // Pour permettre à ListView de fonctionner dans SingleChildScrollView
-                                    physics:
-                                        NeverScrollableScrollPhysics(), // Pour éviter le conflit avec le scroll principal
-                                    itemCount: jeu
-                                        .sessions.length, // Nombre de sessions
-                                    itemBuilder: (context, index) {
+
+                                Column(
+                                  children: [
+                                    ...List.generate(jeu.sessions.length,
+                                        (index) {
                                       SessionJeu session = jeu!.sessions[index];
                                       return session.statut ==
                                               StatutSessionJeu.OUVERTE
@@ -261,89 +248,89 @@ class GameScreen extends StatelessWidget {
                                               height: 0,
                                             );
                                     }),
-
-                                SizedBox(height: 20),
-
-                                Center(
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      TextEditingController _lieuController =
-                                          TextEditingController();
-
-                                      // Afficher un dialog pour saisir le lieu
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: Text(
-                                                'Entrer le lieu de la session'),
-                                            content: TextField(
-                                              controller: _lieuController,
-                                              decoration: InputDecoration(
-                                                  hintText: 'Lieu'),
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context)
-                                                      .pop(); // Fermer le dialog
-                                                },
-                                                child: Text('Annuler'),
-                                              ),
-                                              TextButton(
-                                                onPressed: () async {
-                                                  String lieu =
-                                                      _lieuController.text;
-                                                  if (lieu.isNotEmpty) {
-                                                    // Poster la session si le lieu est saisi
-                                                    Jeu? jeu = await _jeuService
-                                                        .postSessionJeu(
-                                                            id, lieu);
-                                                    Navigator.of(context)
-                                                        .pop(); // Fermer le dialog
-                                                    if (jeu != null) {
-                                                      alerteMessageWidget(
-                                                        context,
-                                                        "Session créée avec succès.",
-                                                        AppColors.success,
-                                                      );
-                                                    }
-                                                  } else {
-                                                    alerteMessageWidget(
-                                                        context,
-                                                        "Veuillez entrer un lieu.",
-                                                        AppColors.echec);
-                                                  }
-                                                },
-                                                child: Text('Valider'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: orange,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 5),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      'Créer une session',
-                                      style: TextStyle(
-                                          fontSize: 15, color: Colors.black),
-                                    ),
-                                  ),
+                                  ],
                                 ),
-                                // Bouton "Créer une session"
 
                                 SizedBox(height: 20),
+
+                                // Bouton "Créer une session"
                               ],
                             ),
                           ),
-                        ],
+                          Center(
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                TextEditingController _lieuController =
+                                    TextEditingController();
+
+                                // Afficher un dialog pour saisir le lieu
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title:
+                                          Text('Entrer le lieu de la session'),
+                                      content: TextField(
+                                        controller: _lieuController,
+                                        decoration:
+                                            InputDecoration(hintText: 'Lieu'),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // Fermer le dialog
+                                          },
+                                          child: Text('Annuler'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            String lieu = _lieuController.text;
+                                            if (lieu.isNotEmpty) {
+                                              // Poster la session si le lieu est saisi
+                                              Jeu? jeu = await _jeuService
+                                                  .postSessionJeu(id, lieu);
+                                              Navigator.of(context)
+                                                  .pop(); // Fermer le dialog
+                                              if (jeu != null) {
+                                                alerteMessageWidget(
+                                                  context,
+                                                  "Session créée avec succès.",
+                                                  AppColors.success,
+                                                );
+                                              }
+                                            } else {
+                                              alerteMessageWidget(
+                                                  context,
+                                                  "Veuillez entrer un lieu.",
+                                                  AppColors.echec);
+                                            }
+                                          },
+                                          child: Text('Valider'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: orange,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: Text(
+                                'Créer une session',
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.black),
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(height: 20),
+                        ]),
                       )
                     : Text("Aucun jeu trouvé");
               }
