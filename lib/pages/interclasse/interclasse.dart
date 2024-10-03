@@ -99,17 +99,30 @@ class InterclassePage extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildCircularIcon('assets/images/foot.png',
-                            HomeSportTypePage("FOOTBALL")),
+                        _buildCircularIcon(
+                            'assets/images/foot.png',
+                            HomeSportTypePage(
+                                "FOOTBALL",
+                                "assets/images/football/foot_top_bg.jpg",
+                                "assets/images/foot.webp")),
                         _buildCircularIcon(
                             'assets/images/Competition/logo_basket.png',
-                            HomeSportTypePage("BASKETBALL")),
+                            HomeSportTypePage(
+                                "BASKETBALL",
+                                "assets/images/basketball/basket_top_bg.jpg",
+                                'assets/images/Competition/logo_basket.png')),
                         _buildCircularIcon(
                             'assets/images/Competition/logo jeux desprit.png',
-                            HomeSportTypePage("JEUX_ESPRIT")),
+                            HomeSportTypePage(
+                                "JEUX_ESPRIT",
+                                "assets/images/jeux-desprit/je_top_bg.jpg",
+                                "assets/images/Competition/logo jeux desprit.png")),
                         _buildCircularIcon(
                             'assets/images/Competition/logo_volley.png',
-                            HomeSportTypePage("VOLLEYBALL")),
+                            HomeSportTypePage(
+                                "VOLLEYBALL",
+                                "assets/images/volleyball/volley_top_bg.jpg",
+                                "assets/images/Competition/logo_volley.png")),
                       ],
                     ),
                   ),

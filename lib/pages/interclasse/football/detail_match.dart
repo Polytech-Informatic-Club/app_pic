@@ -161,24 +161,18 @@ class _DetailMatchScreenState extends State<DetailMatchScreen> {
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.white),
                                               ),
-                                              Container(
-                                                  height:
-                                                      MediaQuery.sizeOf(context)
-                                                              .height *
-                                                          0.1,
-                                                  child: SingleChildScrollView(
-                                                      child: Column(
-                                                    children: [
-                                                      for (var butteur
-                                                          in match.buteursA!)
-                                                        Text(
-                                                          "${butteur.joueur.nom} (${butteur.minute}')",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
-                                                        ),
-                                                    ],
-                                                  )))
+                                              SingleChildScrollView(
+                                                  child: Column(
+                                                children: [
+                                                  for (var butteur
+                                                      in match.buteursA!)
+                                                    Text(
+                                                      "${butteur.joueur.nom} (${butteur.minute}')",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                ],
+                                              ))
                                             ],
                                           ),
                                           Text(
