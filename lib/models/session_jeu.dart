@@ -1,49 +1,40 @@
 import 'package:new_app/models/joueur_jeu.dart';
 import 'package:uuid/uuid.dart';
 
-enum StatutSessionJeu { OUVERTE, FERMEE }
-
 class SessionJeu {
-  final String id;
   final DateTime date;
-  final List<JoueurJeu> joueurs;
-  final StatutSessionJeu statut;
   final String lieu;
+  final String id; // ID de la session
+  final List<JoueurJeu> joueurs;
+  final String creatorId; // ID de l'utilisateur qui a créé la session
 
   SessionJeu({
-    required this.id,
     required this.date,
-    required this.joueurs,
-    required this.statut,
     required this.lieu,
+    required this.id,
+    required this.joueurs,
+    required this.creatorId,
   });
 
-  // Factory method to create a SessionJeu object from JSON
-  factory SessionJeu.fromJson(Map<String, dynamic> json) {
-    var joueursFromJson = json['joueurs'] as List<dynamic>;
-    List<JoueurJeu> joueurList =
-        joueursFromJson.map((item) => JoueurJeu.fromJson(item)).toList();
-
-    return SessionJeu(
-      id: json['id'] as String,
-      lieu: json['lieu'] as String,
-      date: DateTime.parse(json['date'] as String),
-      joueurs: joueurList,
-      statut: StatutSessionJeu.values.firstWhere(
-          (e) => e.toString() == 'StatutSessionJeu.${json['statut']}'),
-    );
-  }
-
-  // Method to convert a SessionJeu object to JSON
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'lieu': lieu,
       'date': date.toIso8601String(),
-      'joueurs': joueurs
-          .map((joueur) => joueur.toJson())
-          .toList(), // Convert list of User objects to JSON
-      'statut': statut.toString().split('.').last, // Convert enum to string
+      'lieu': lieu,
+      'id': id,
+      'joueurs': joueurs.map((j) => j.toJson()).toList(),
+      'creatorId': creatorId, // Inclure l'ID du créateur
     };
+  }
+
+  // Ajoute un fromJson pour récupérer les données
+  factory SessionJeu.fromJson(Map<String, dynamic> json) {
+    return SessionJeu(
+      date: DateTime.parse(json['date']),
+      lieu: json['lieu'],
+      id: json['id'],
+      joueurs:
+          (json['joueurs'] as List).map((j) => JoueurJeu.fromJson(j)).toList(),
+      creatorId: json['creatorId'], // Récupérer l'ID du créateur
+    );
   }
 }

@@ -118,7 +118,7 @@ class _GameScreenState extends State<GameScreen> {
 
   Future<void> _quitterSession(SessionJeu session, JoueurJeu joueur) async {
     try {
-      await _jeuService.quitterSessionJeu(widget.id, joueur);
+      await _jeuService.quitterSessionJeu(widget.id, session.id);
       alerteMessageWidget(
         context,
         "Vous avez quitté la session.",
@@ -136,7 +136,7 @@ class _GameScreenState extends State<GameScreen> {
 
   Future<void> _rejoindreSession(SessionJeu session) async {
     try {
-      Jeu? jeu = await _jeuService.postRejoindreSessionJeu(widget.id);
+      Jeu? jeu = await _jeuService.rejoindreSessionJeu(widget.id, session.id);
       if (jeu == null) {
         alerteMessageWidget(
           context,
@@ -285,12 +285,15 @@ class _GameScreenState extends State<GameScreen> {
                                     ),
                                   ),
                                   Spacer(),
-                                  IconButton(
-                                    onPressed: () {
-                                      _deleteSession(session);
-                                    },
-                                    icon: Icon(Icons.delete, color: Colors.red),
-                                  ),
+                                  if (session.creatorId ==
+                                      _userId) // Vérifie si l'utilisateur est le créateur
+                                    IconButton(
+                                      onPressed: () {
+                                        _deleteSession(session);
+                                      },
+                                      icon:
+                                          Icon(Icons.delete, color: Colors.red),
+                                    ),
                                 ],
                               ),
                             ],
