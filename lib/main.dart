@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:new_app/login/inscription.dart';
@@ -48,7 +49,36 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(backgroundColor: Colors.white),
       ),
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: AuthHandler(),
+    );
+  }
+}
+
+class AuthHandler extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Utilisation de StreamBuilder pour écouter les changements d'état de l'utilisateur
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        // Si l'utilisateur est connecté, afficher la page d'accueil
+        if (snapshot.connectionState == ConnectionState.active) {
+          User? user = snapshot.data;
+
+          if (user == null) {
+            return LoginScreen(); // Utilisateur non connecté -> Page de connexion
+          } else {
+            return HomePage(); // Utilisateur connecté -> Page d'accueil
+          }
+        }
+
+        // Pendant que la connexion est en cours de vérification, afficher un chargement
+        return Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
     );
   }
 }
