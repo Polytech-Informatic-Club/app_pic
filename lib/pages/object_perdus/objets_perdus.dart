@@ -344,7 +344,7 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
               ),
               SizedBox(height: 16),
               SizedBox(
-                height: 30,
+                height: 50,
                 width: 200,
                 child: TextField(
                   controller: _searchController,
@@ -618,36 +618,6 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                                             fontFamily: 'InterRegular',
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.person,
-                                          size: 15,
-                                        ),
-                                        SizedBox(width: 5),
-                                        FutureBuilder(
-                                          future: _service.getUserByEmail(
-                                              lostObject['idUser']),
-                                          builder: (context, snapshot) {
-                                            Map<String, dynamic>? signalant =
-                                                snapshot.data;
-                                            return Text(
-                                              (signalant == null
-                                                  ? "Iconnu"
-                                                  : "${signalant['prenom'].split(' ')[0]} ${signalant['nom']}"),
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  fontFamily: 'InterRegular',
-                                                  overflow:
-                                                      TextOverflow.ellipsis),
-                                            );
-                                          },
-                                        )
                                       ],
                                     ),
                                     SizedBox(
