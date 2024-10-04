@@ -674,24 +674,24 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                                                   ),
                                           ],
                                         ),
-                                        SizedBox(
-                                          height: 5,
-                                          width: 35,
-                                          child: Transform.scale(
-                                            scale: 0.5,
-                                            child: Switch(
-                                              activeColor: Colors.green,
-                                              value: 1 == lostObject['etat'],
-                                              onChanged: currentUser == null ||
-                                                      currentUser!.email !=
-                                                          lostObject['idUser']
-                                                  ? (_) {}
-                                                  : (value) async {
+                                        currentUser != null &&
+                                                currentUser!.email ==
+                                                    lostObject['idUser']
+                                            ? SizedBox(
+                                                height: 10,
+                                                width: 40,
+                                                child: Transform.scale(
+                                                  scale: 0.5,
+                                                  child: Switch(
+                                                    activeColor: Colors.green,
+                                                    value:
+                                                        1 == lostObject['etat'],
+                                                    onChanged: (value) async {
                                                       await _service
                                                           .toggleFoundStatus(
-                                                              lostObjects[index]
-                                                                  .id,
-                                                              value ? 1 : 0);
+                                                        lostObjects[index].id,
+                                                        value ? 1 : 0,
+                                                      );
                                                       ScaffoldMessenger.of(
                                                               context)
                                                           .showSnackBar(
@@ -710,9 +710,10 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                                                         ),
                                                       );
                                                     },
-                                            ),
-                                          ),
-                                        )
+                                                  ),
+                                                ),
+                                              )
+                                            : Container(),
                                       ],
                                     ),
                                   ],
