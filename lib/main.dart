@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(backgroundColor: Colors.white),
       ),
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: LoginScreen(),
     );
   }
 }

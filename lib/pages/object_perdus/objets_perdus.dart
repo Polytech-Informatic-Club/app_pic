@@ -116,13 +116,14 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
       idUser: currentUser?.email,
     );
 
-    await _service.addLostObject(objet);
-
     // clear the form
     objetController.clear();
     lieuController.clear();
     dateController.clear();
     infoSuppController.clear();
+
+    await _service.addLostObject(objet);
+
     setState(() {
       _image = null;
     });
@@ -434,34 +435,117 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                     }
 
                     return SizedBox(
-                        height: 500,
-                        child: GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount:
-                                2, // Nombre d'objets par ligne (2 ou 3)
-                            crossAxisSpacing:
-                                8.0, // Espace horizontal entre les objets
-                            mainAxisSpacing:
-                                8.0, // Espace vertical entre les objets
-                            childAspectRatio:
-                                0.7, // Ratio largeur/hauteur pour chaque carte
-                          ),
-                          itemCount: filteredObjects.length,
-                          itemBuilder: (context, index) {
-                            var lostObject = filteredObjects[index].data()
-                                as Map<String, dynamic>;
-                            String description =
-                                lostObject['description'] ?? 'No description';
-                            String lieu =
-                                lostObject['lieu'] ?? 'Unknown location';
-                            String date = lostObject['date'] ?? 'Unknown date';
-                            String? photoUrl = lostObject[
-                                'photoURL']; // Nullable: May not have a photo
-                            bool estTrouve = lostObject['etat'] != 0;
+                      height: 500,
+                      child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 8.0,
+                          mainAxisSpacing: 8.0,
+                          childAspectRatio: 0.7,
+                        ),
+                        itemCount: filteredObjects.length,
+                        itemBuilder: (context, index) {
+                          var lostObject = filteredObjects[index].data()
+                              as Map<String, dynamic>;
+                          String description = lostObject['description'];
+                          String details = lostObject['details'] ?? '';
+                          String lieu =
+                              lostObject['lieu'] ?? 'Unknown location';
+                          String date = lostObject['date'] ?? 'Unknown date';
+                          String? photoUrl = lostObject[
+                              'photoURL']; // Nullable: May not have a photo
+                          bool estTrouve = lostObject['etat'] != 0;
 
-                            return Card(
+                          return GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(description),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          details != '' ? details : "Pas d'infos supplémentaires",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                            height:
+                                                20), // Add some space before the separator
+                                        Divider(
+                                            thickness:
+                                                1.0), // Visual separator (line)
+
+                                        // Full name of the person who reported the lost object
+                                        SizedBox(height: 10),
+                                        FutureBuilder(
+                                          future: _service.getUserByEmail(
+                                              lostObject['idUser']),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return LinearProgressIndicator();
+                                            } else {
+                                              Map<String, dynamic>? signalant =
+                                                  snapshot.data;
+                                              return Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  (signalant == null
+                                                      ? 'Inconnu'
+                                                      : '${signalant["prenom"]} ${signalant["nom"]} ${signalant["promo"]}'), // Full name of the reporter
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                    color: Colors
+                                                        .blueAccent, // You can customize the color and style here
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                    actions: [
+                                      ElevatedButton(
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              WidgetStateProperty.all<Color>(
+                                                  const Color.fromRGBO(
+                                                      244, 171, 90, 1)),
+                                          shape: WidgetStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text(
+                                          'Fermer',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              color: Colors.white),
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: Card(
                               color: eptLightOrange,
+                              elevation: 3,
                               margin: EdgeInsets.all(8.0),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -471,8 +555,7 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                                     if (photoUrl != null)
                                       Image.network(
                                         photoUrl,
-                                        height:
-                                            120, // Ajustement de la hauteur pour correspondre à la grille
+                                        height: 120,
                                         width: double.infinity,
                                         fit: BoxFit.cover,
                                       )
@@ -547,13 +630,24 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                                           size: 15,
                                         ),
                                         SizedBox(width: 5),
-                                        Text(
-                                          lostObject['idUser'] ?? 'Inconnu',
-                                          style: TextStyle(
-                                            fontSize: 10,
-                                            fontFamily: 'InterRegular',
-                                          ),
-                                        ),
+                                        FutureBuilder(
+                                          future: _service.getUserByEmail(
+                                              lostObject['idUser']),
+                                          builder: (context, snapshot) {
+                                            Map<String, dynamic>? signalant =
+                                                snapshot.data;
+                                            return Text(
+                                              (signalant == null
+                                                  ? "Iconnu"
+                                                  : "${signalant['prenom'].split(' ')[0]} ${signalant['nom']}"),
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontFamily: 'InterRegular',
+                                                  overflow:
+                                                      TextOverflow.ellipsis),
+                                            );
+                                          },
+                                        )
                                       ],
                                     ),
                                     SizedBox(
@@ -624,129 +718,11 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                                   ],
                                 ),
                               ),
-                            );
-                          },
-                        )
-
-                        // ListView.builder(
-                        //   itemCount: lostObjects.length,
-                        //   itemBuilder: (context, index) {
-                        //     var lostObject =
-                        //         lostObjects[index].data() as Map<String, dynamic>;
-                        //     String description =
-                        //         lostObject['description'] ?? 'No description';
-                        //     String lieu =
-                        //         lostObject['lieu'] ?? 'Unknown location';
-                        //     String? photoUrl = lostObject[
-                        //         'photoURL']; // Nullable: May not have a photo
-                        //     bool estTrouve = lostObject['etat'] != 0;
-
-                        //     return Card(
-                        //       margin: EdgeInsets.all(8.0),
-                        //       child: Padding(
-                        //         padding: const EdgeInsets.all(8.0),
-                        //         child: Column(
-                        //           crossAxisAlignment: CrossAxisAlignment.start,
-                        //           children: [
-                        //             if (photoUrl != null)
-                        //               Image.network(photoUrl,
-                        //                   height: 150,
-                        //                   width: double.infinity,
-                        //                   fit: BoxFit.cover)
-                        //             else
-                        //               Container(
-                        //                 height: 150,
-                        //                 color: Colors.grey[300],
-                        //                 child: Center(
-                        //                     child: Icon(Icons.image_not_supported,
-                        //                         size: 50)),
-                        //               ),
-                        //             SizedBox(height: 8),
-                        //             Text(description,
-                        //                 style: TextStyle(
-                        //                     fontWeight: FontWeight.bold,
-                        //                     fontSize: 18)),
-                        //             Text(lieu,
-                        //                 style: TextStyle(color: Colors.grey)),
-                        //             SizedBox(height: 8),
-                        //             Row(
-                        //               mainAxisAlignment:
-                        //                   MainAxisAlignment.spaceBetween,
-                        //               mainAxisSize: MainAxisSize.max,
-                        //               children: [
-                        //                 Row(
-                        //                   mainAxisSize: MainAxisSize.min,
-                        //                   mainAxisAlignment:
-                        //                       MainAxisAlignment.start,
-                        //                   children: [
-                        //                     const Text('Statut: '),
-                        //                     estTrouve
-                        //                         ? Text(
-                        //                             'Trouvé',
-                        //                             style: TextStyle(
-                        //                                 color: Colors.green),
-                        //                           )
-                        //                         : Text(
-                        //                             'Non Trouvé',
-                        //                             style: TextStyle(
-                        //                                 color: Colors.red),
-                        //                           ),
-                        //                   ],
-                        //                 ),
-                        //                 Switch(
-                        //                   activeColor: Colors.green,
-                        //                   value: 1 == lostObject['etat'],
-                        //                   onChanged: currentUser == null ||
-                        //                           currentUser!.email !=
-                        //                               lostObject['idUser']
-                        //                       ? (_) {}
-                        //                       : (value) async {
-                        //                           await _service
-                        //                               .toggleFoundStatus(
-                        //                                   lostObjects[index].id,
-                        //                                   value ? 1 : 0);
-                        //                           ScaffoldMessenger.of(context)
-                        //                               .showSnackBar(
-                        //                             SnackBar(
-                        //                               content: Text(
-                        //                                 value
-                        //                                     ? 'Objet marqué comme trouvé!'
-                        //                                     : 'Objet marqué comme perdu!',
-                        //                                 style: TextStyle(
-                        //                                     fontWeight:
-                        //                                         FontWeight.bold),
-                        //                               ),
-                        //                               backgroundColor:
-                        //                                   Colors.green,
-                        //                             ),
-                        //                           );
-                        //                         },
-                        //                 )
-                        //               ],
-                        //             ),
-                        //             Text(
-                        //                 'Date: ${lostObject['date'] ?? 'Unknown'}'),
-                        //             SizedBox(height: 8),
-                        //             Row(
-                        //               mainAxisAlignment: MainAxisAlignment.start,
-                        //               children: [
-                        //                 Text('Signalé par:'),
-                        //                 SizedBox(width: 10),
-                        //                 Text(
-                        //                   lostObject['idUser'] ?? 'Inconnu',
-                        //                   style:
-                        //                       TextStyle(color: Colors.grey[600]),
-                        //                 )
-                        //               ],
-                        //             )
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     );
-                        //   },
-                        // ),
-
-                        );
+                            ),
+                          );
+                        },
+                      ),
+                    );
                   }
                 },
               ),
