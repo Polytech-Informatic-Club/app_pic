@@ -15,8 +15,10 @@ class CreateXoss extends StatelessWidget {
 
   TextEditingController _produitController = new TextEditingController();
   TextEditingController _montantController = new TextEditingController();
+  ValueNotifier _listProduit = new ValueNotifier([]);
   XossService _xossService = XossService();
   final _formKey = GlobalKey<FormState>();
+  ValueNotifier<List<String>> _produits = ValueNotifier([]);
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +31,49 @@ class CreateXoss extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
-              reusableTextFormField("Produits", _produitController, (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Entrer un produit';
-                }
-                return null;
-              }),
+              ValueListenableBuilder<List<String>>(
+                valueListenable: _produits,
+                builder: (context, produits, _) {
+                  return Column(
+                    children: List.generate(produits.length, (index) {
+                      return ListTile(
+                        title: Text(produits[index]),
+                      );
+                    }),
+                  );
+                },
+              ),
+              // Bouton pour ajouter le produit
+              Align(
+                  alignment: Alignment.bottomRight,
+                  child: IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () {
+                      if (_produitController.value.text.isNotEmpty) {
+                        _produits.value = [
+                          ..._produits.value,
+                          _produitController.text
+                        ];
+                        _produitController
+                            .clear(); // Vider le champ après l'ajout
+                      }
+                    },
+                  )),
+              reusableTextFormField(
+                "Produits",
+                _produitController,
+                (value) {
+                  // Vérifier si le produit est déjà dans la liste
+                  if (_produits.value.contains(value)) {
+                    return 'Ce produit existe déjà'; // Produit déjà ajouté
+                  }
+
+                  return null; // Validation réussie
+                },
+              ),
+
               SizedBox(
-                height: 10,
+                height: MediaQuery.sizeOf(context).height * 0.02,
               ),
               reusableTextFormField("Montant total", _montantController,
                   (value) {
@@ -49,13 +86,20 @@ class CreateXoss extends StatelessWidget {
                 height: 10,
               ),
               SubmittedButton("Xoss", () async {
-                if (_formKey.currentState!.validate()) {
+                if (_formKey.currentState!.validate() &&
+                    _produits.value != [] &&
+                    _produitController.text.isNotEmpty) {
+                  _produits.value = [
+                    ..._produits.value,
+                    _produitController.text
+                  ];
                   try {
                     Xoss xoss = Xoss(
                         date: DateTime.now(),
                         id: DateTime.now().toString(),
                         montant: double.parse(_montantController.value.text),
-                        produit: [],
+                        produit: _produits.value,
+                        versement: 0,
                         statut: StatutXoss.IMPAYEE);
                     String code = await _xossService.postXoss(xoss);
                     if (code == "OK") {

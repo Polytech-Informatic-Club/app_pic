@@ -37,6 +37,7 @@ class XossService {
       List<Map<String, dynamic>> data =
           querySnapshot.docs.map((doc) => doc.data()).toList();
       for (var d in data) {
+        print(d);
         list.add(Xoss.fromJson(d));
       }
 
@@ -83,12 +84,11 @@ class XossService {
     }
   }
 
-  Future<Xoss?> updateStatistique(
-      String matchId, String libelle, int value) async {
+  Future<Xoss?> updateXoss(String id, String libelle, dynamic value) async {
     try {
-      DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
+      DocumentReference matchDoc = xossCollection.doc(id);
       await matchDoc.update(
-        {"statistiques.$libelle": FieldValue.increment(value)},
+        {libelle: value},
       );
 
       DocumentSnapshot querySnapshot = await matchDoc.get();

@@ -6,6 +6,7 @@ import 'package:new_app/models/enums/statut_xoss.dart';
 class Xoss {
   final String id; // UUID
   final double montant; // Transaction amount
+  final double versement;
   final DateTime date; // Date of the transaction
   Utilisateur? user; // The user associated with the transaction
   final List<String> produit; // List of product names or IDs
@@ -14,6 +15,7 @@ class Xoss {
   Xoss({
     required this.id,
     required this.montant,
+    required this.versement,
     required this.date,
     this.user,
     required this.produit,
@@ -22,15 +24,17 @@ class Xoss {
 
   factory Xoss.fromJson(Map<String, dynamic> json) {
     return Xoss(
-        id: json['id'] as String,
-        montant: json['montant'] as double,
-        date: DateTime.now(),
-        // date: (json['date'] as Timestamp).toDate(),
-        user: Utilisateur.fromJson(json['user'] as Map<String, dynamic>),
-        produit: List<String>.from(json['produit'] as List<dynamic>),
-        statut: StatutXoss.values
-            .firstWhere((e) => e.toString() == 'StatutXoss.${json['statut']}'),
-        );
+      id: json['id'] as String,
+      montant: json['montant'] as double,
+      // versement: json['versement'],
+      versement: 0,
+      date: DateTime.now(),
+      // date: (json['date'] as Timestamp).toDate(),
+      user: Utilisateur.fromJson(json['user'] as Map<String, dynamic>),
+      produit: List<String>.from(json['produit'] as List<dynamic>),
+      statut: StatutXoss.values
+          .firstWhere((e) => e.toString() == 'StatutXoss.${json['statut']}'),
+    );
   }
 
   // Method to convert a Xoss object to JSON
@@ -38,6 +42,7 @@ class Xoss {
     return {
       'id': id,
       'montant': montant,
+      'versement': versement,
       'date': date.toIso8601String(),
       'user': user!.toJson(),
       'produit': produit,
