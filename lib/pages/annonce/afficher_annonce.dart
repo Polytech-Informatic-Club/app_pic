@@ -157,7 +157,7 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
                 title,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 35,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,

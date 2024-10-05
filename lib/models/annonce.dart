@@ -14,7 +14,6 @@ class Annonce {
   final Categorie categorie;
   final List<Commentaire> comments;
   final int likes;
-  final int dislikes;
   final String partageLien; // Link to share the announcement
 
   Annonce({
@@ -28,7 +27,6 @@ class Annonce {
     required this.categorie,
     required this.comments,
     required this.likes,
-    required this.dislikes,
     required this.partageLien,
   });
 
@@ -50,7 +48,6 @@ class Annonce {
       categorie: Categorie.fromJson(json['categorie']),
       comments: commentList,
       likes: json['likes'] as int,
-      dislikes: json['dislikes'] as int,
       partageLien: json['partageLien'] as String,
     );
   }
@@ -70,7 +67,6 @@ class Annonce {
           .map((comment) => comment.toJson())
           .toList(), // Convert list of Commentaire objects to JSON
       'likes': likes,
-      'dislikes': dislikes,
       'partageLien': partageLien,
     };
   }
@@ -98,7 +94,6 @@ class Annonce {
       date: date ?? this.date,
       dateCreation: dateCreation ?? this.dateCreation,
       likes: likes ?? this.likes,
-      dislikes: dislikes ?? this.dislikes,
       comments: comments ?? this.comments,
       image: image ?? this.image,
       partageLien: partageLien ?? this.partageLien,

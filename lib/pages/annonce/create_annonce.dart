@@ -244,7 +244,6 @@ class CreateAnnonce extends StatelessWidget {
                       description: _descriptionTextController.text,
                       lieu: _lieuTextController.text,
                       likes: 0,
-                      dislikes: 0,
                       id: DateTime.now().millisecondsSinceEpoch.toString(),
                       comments: [],
                       image: _url.value,

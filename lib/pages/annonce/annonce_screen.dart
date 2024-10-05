@@ -66,7 +66,7 @@ class _AnnonceScreenState extends State<AnnonceScreen> {
                   simpleDateformat(annonce.date),
                   getHour(annonce.date),
                   annonce.lieu,
-                  'Divers',
+                  annonce.description,
                 );
               }
             },
