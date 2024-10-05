@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/models/collection.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/pages/drawer/drawer.dart';
 import 'package:new_app/pages/interclasse/create_commission.dart';
 import 'package:new_app/pages/interclasse/football/administrate_one_match.dart';
 import 'package:new_app/pages/interclasse/football/create_match.dart';
+import 'package:new_app/pages/shop/create_article_shop.dart';
+import 'package:new_app/services/shop_service.dart';
 
 import 'package:new_app/services/sport_service.dart';
 import 'package:new_app/widgets/submited_button.dart';
@@ -14,13 +17,10 @@ import 'package:new_app/widgets/match_card.dart';
 class HomeAdminSportTypePage extends StatelessWidget {
   String typeSport;
   HomeAdminSportTypePage(this.typeSport, {super.key});
-
-  List<Widget> matchs = [
-    MatchCard(),
-    MatchCard(),
-    MatchCard(),
-  ];
   final SportService _sportService = SportService();
+  TextEditingController _nomCollectionController = TextEditingController();
+  ValueNotifier<List<Collection?>> _collectionProvider = ValueNotifier([]);
+  ShopService _shopService = ShopService();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +37,50 @@ class HomeAdminSportTypePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
+            SubmittedButton(
+              "Créer une collection",
+              () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Nom de la collection"),
+                      content: TextField(
+                        controller: _nomCollectionController,
+                        decoration: InputDecoration(
+                            hintText: "Entrer le nom de la collection"),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text("Annuler"),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            _shopService.postCollection(Collection(
+                                id: DateTime.now().toString(),
+                                nom: _nomCollectionController.text,
+                                articleShops: [],
+                                date: DateTime.now()));
+                            Navigator.pop(context);
+                          },
+                          child: Text("Confirmer"),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            SubmittedButton("Créer un article", () {
+              changerPage(context, CreateArticleShop());
+            }),
+            SizedBox(
+              height: 10,
+            ),
             SubmittedButton("Créer un match", () {
               changerPage(context, CreateMatch(typeSport));
             }),

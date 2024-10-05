@@ -1,25 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/models/collection.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'dart:async';
 
 import 'package:new_app/pages/shop/shop_blouson.dart';
+import 'package:new_app/services/shop_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 
-class Shop extends StatefulWidget {
-  const Shop({Key? key}) : super(key: key);
+class ShopScreen extends StatefulWidget {
+  const ShopScreen({Key? key}) : super(key: key);
 
   @override
-  State<Shop> createState() => _ShopState();
+  State<ShopScreen> createState() => _ShopScreenState();
 }
 
-class _ShopState extends State<Shop> {
-  final List<String> carouselImages = [
-    'assets/images/market/photo_2024-05-24_12-27-39.jpg',
-    'assets/images/market/photo_2024-05-24_12-27-53.jpg',
-    'assets/images/market/photo_2024-05-24_12-27-08.jpg',
-    'assets/images/market/photo_2024-05-24_12-28-09.jpg',
-  ];
+class _ShopScreenState extends State<ShopScreen> {
 
+final ShopService _shopService =  ShopService();
+
+List<String> carouselImages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCarouselImages();
+  }
+
+  Future<void> _loadCarouselImages() async {
+    Collection? collection = await _shopService.getNewCollection();
+    if (collection != null) {
+      setState(() {
+        carouselImages = collection.articleShops.map((article) => article.image).toList();
+      });
+    }
+  }
   String selectedCategory = 'Tous';
   List<String> categories = [
     'Tous',
@@ -319,7 +333,7 @@ class _ShopCarouselState extends State<ShopCarousel> {
               });
             },
             itemBuilder: (context, index) {
-              return Image.asset(
+              return Image.network(
                 widget.imagePaths[index],
                 fit: BoxFit.cover,
                 height: 650,

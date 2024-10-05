@@ -24,7 +24,7 @@ import 'package:new_app/pages/interclasse/football/home_admin_sport_type_page.da
 import 'package:new_app/pages/interclasse/jeux%20desprit/jeu_esprit.dart';
 import 'package:new_app/pages/interclasse/volley/volley.dart';
 import 'package:new_app/pages/interclasse/interclasse.dart';
-import 'package:new_app/pages/shop/shop.dart';
+import 'package:new_app/pages/shop/shop_screen.dart';
 
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
