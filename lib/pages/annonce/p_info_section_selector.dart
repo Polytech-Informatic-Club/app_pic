@@ -30,8 +30,9 @@ class _PInfoSectionSelectorState extends State<PInfoSectionSelector> {
       child: Column(
         children: [
           Container(
-              width: 50,
-              height: 50,
+              margin: EdgeInsets.symmetric(horizontal: 5),
+              width: 40,
+              height: 40,
               decoration:
                   BoxDecoration(borderRadius: BorderRadius.circular(100)),
               clipBehavior: Clip.hardEdge,

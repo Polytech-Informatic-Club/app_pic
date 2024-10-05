@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, use_build_context_synchronously
+// ignore_for_file: must_be_immutable, use_build_context_synchronously, body_might_complete_normally_nullable
 
 import 'dart:io';
 
@@ -89,192 +89,190 @@ class CreateAnnonce extends StatelessWidget {
         title: Text("Créer une annonce"),
       ),
       body: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          // height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
-              child: Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      20, MediaQuery.of(context).size.height * 0.02, 20, 0),
-                  child: Column(children: <Widget>[
-                    ValueListenableBuilder<String>(
-                        valueListenable: _url,
-                        builder: (context, url, child) {
-                          return url == ""
-                              ? Container(
-                                  height:
-                                      MediaQuery.sizeOf(context).width * 0.6,
-                                  width: MediaQuery.sizeOf(context).width * 0.5,
-                                  decoration: BoxDecoration(
-                                      color: AppColors.gray,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Center(
-                                    child: ValueListenableBuilder<bool>(
-                                        valueListenable: _loading,
-                                        builder: (context, loading, child) {
-                                          return loading
-                                              ? CircularProgressIndicator()
-                                              : Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Center(
-                                                        child:
-                                                            ElevatedButton.icon(
-                                                      style: ButtonStyle(
-                                                          iconColor:
-                                                              WidgetStateProperty
-                                                                  .all(AppColors
-                                                                      .black)),
-                                                      onPressed: () async {
-                                                        String? url =
-                                                            await _userService
-                                                                .uploadImage(
-                                                                    context,
-                                                                    _loading,
-                                                                    _url);
-                                                        if (url != null) {
-                                                          alerteMessageWidget(
-                                                              context,
-                                                              "Fichier enregistré avec succès !",
-                                                              AppColors
-                                                                  .success);
-                                                        } else {
-                                                          alerteMessageWidget(
-                                                              context,
-                                                              "Une erreur s'est produit lors du chargement !",
-                                                              AppColors.echec);
-                                                        }
-                                                      },
-                                                      icon: Icon(
-                                                        Icons.library_add,
-                                                        color: AppColors.black,
-                                                      ),
-                                                      label: Text(
-                                                        "Importer",
-                                                        style: TextStyle(
-                                                          color:
-                                                              AppColors.black,
-                                                        ),
-                                                      ),
-                                                    )),
-                                                  ],
-                                                );
-                                        }),
-                                  ),
-                                )
-                              : Image.network(url);
-                        }),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: ValueListenableBuilder<List<Categorie>>(
-                          valueListenable: _categories,
-                          builder: (context, categories, child) {
-                            return ValueListenableBuilder<Categorie?>(
-                              valueListenable: _selectedCategory,
-                              builder: (context, selectedCategory, child) {
-                                return DropdownButton<Categorie>(
-                                  hint: Text('Catégorie'),
-                                  value: categories.contains(selectedCategory)
-                                      ? selectedCategory
-                                      : null,
-                                  onChanged: (Categorie? newValue) {
-                                    _selectedCategory.value = newValue;
-                                  },
-                                  items: categories
-                                      .map<DropdownMenuItem<Categorie>>(
-                                          (Categorie categorie) {
-                                    return DropdownMenuItem<Categorie>(
-                                      value: categorie,
-                                      child: Text(categorie.libelle),
-                                    );
-                                  }).toList(),
-                                );
+        width: MediaQuery.of(context).size.width,
+        // height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+                20, MediaQuery.of(context).size.height * 0.02, 20, 0),
+            child: Column(
+              children: <Widget>[
+                ValueListenableBuilder<String>(
+                    valueListenable: _url,
+                    builder: (context, url, child) {
+                      return url == ""
+                          ? Container(
+                              height: MediaQuery.sizeOf(context).width * 0.6,
+                              width: MediaQuery.sizeOf(context).width * 0.5,
+                              decoration: BoxDecoration(
+                                  color: AppColors.gray,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Center(
+                                child: ValueListenableBuilder<bool>(
+                                    valueListenable: _loading,
+                                    builder: (context, loading, child) {
+                                      return loading
+                                          ? CircularProgressIndicator()
+                                          : Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Center(
+                                                    child: ElevatedButton.icon(
+                                                  style: ButtonStyle(
+                                                      iconColor:
+                                                          WidgetStateProperty
+                                                              .all(AppColors
+                                                                  .black)),
+                                                  onPressed: () async {
+                                                    String? url =
+                                                        await _userService
+                                                            .uploadImage(
+                                                                context,
+                                                                _loading,
+                                                                _url);
+                                                    if (url != null) {
+                                                      alerteMessageWidget(
+                                                          context,
+                                                          "Fichier enregistré avec succès !",
+                                                          AppColors.success);
+                                                    } else {
+                                                      alerteMessageWidget(
+                                                          context,
+                                                          "Une erreur s'est produit lors du chargement !",
+                                                          AppColors.echec);
+                                                    }
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.library_add,
+                                                    color: AppColors.black,
+                                                  ),
+                                                  label: Text(
+                                                    "Importer",
+                                                    style: TextStyle(
+                                                      color: AppColors.black,
+                                                    ),
+                                                  ),
+                                                )),
+                                              ],
+                                            );
+                                    }),
+                              ),
+                            )
+                          : Image.network(url);
+                    }),
+                SizedBox(
+                  height: 20,
+                ),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: ValueListenableBuilder<List<Categorie>>(
+                      valueListenable: _categories,
+                      builder: (context, categories, child) {
+                        return ValueListenableBuilder<Categorie?>(
+                          valueListenable: _selectedCategory,
+                          builder: (context, selectedCategory, child) {
+                            return DropdownButton<Categorie>(
+                              hint: Text('Catégorie'),
+                              value: categories.contains(selectedCategory)
+                                  ? selectedCategory
+                                  : null,
+                              onChanged: (Categorie? newValue) {
+                                _selectedCategory.value = newValue;
                               },
+                              items: categories
+                                  .map<DropdownMenuItem<Categorie>>(
+                                      (Categorie categorie) {
+                                return DropdownMenuItem<Categorie>(
+                                  value: categorie,
+                                  child: Text(categorie.libelle),
+                                );
+                              }).toList(),
                             );
                           },
-                        )),
+                        );
+                      },
+                    )),
+                SizedBox(
+                  height: 20,
+                ),
+                reusableTextFormField(
+                    "Titre", _titreTextController, (value) {}),
+                SizedBox(
+                  height: 20,
+                ),
+                reusableTextFormField("Lieu", _lieuTextController, (value) {}),
+                SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  onTap: () => _selectDateTime(context),
+                  child: Row(children: [
+                    Icon(Icons.calendar_month),
                     SizedBox(
-                      height: 20,
+                      width: 5,
                     ),
-                    reusableTextFormField(
-                        "Titre", _titreTextController, (value) {}),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    reusableTextFormField(
-                        "Lieu", _lieuTextController, (value) {}),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    GestureDetector(
-                      onTap: () => _selectDateTime(context),
-                      child: Row(children: [
-                        Icon(Icons.calendar_month),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        ValueListenableBuilder<DateTime?>(
-                            valueListenable: _selectedDate,
-                            builder: (context, selectedDate, child) {
-                              return Text(
-                                _selectedDate.value.toString(),
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              );
-                            }),
-                      ]),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    ReusableDescriptionInput(
-                        "Description", _descriptionTextController, (value) {
-                      return null;
-                    }),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    SubmittedButton("Poster", () async {
-                      if (_selectedCategory.value != null) {
-                        Annonce annonce = Annonce(
-                            categorie: _selectedCategory.value!,
-                            titre: _titreTextController.text,
-                            date: DateTime.now(),
-                            dateCreation: _selectedDate.value!,
-                            description: _descriptionTextController.text,
-                            lieu: _lieuTextController.text,
-                            likes: 0,
-                            dislikes: 0,
-                            id: "",
-                            comments: [],
-                            image: _url.value,
-                            partageLien: "");
-                        try {
-                          String code =
-                              await _annonceService.postAnnonce(annonce);
-                          if (code == "OK") {
-                            alerteMessageWidget(
-                                context,
-                                "Annonce créée avec succès !",
-                                AppColors.success);
-                            changerPage(context, AnnonceScreen());
-                          }
-                        } catch (e) {
-                          alerteMessageWidget(
-                              context,
-                              "Une erreur est survie lors de la création.$e",
-                              AppColors.echec);
-                        }
-                      } else {
-                        alerteMessageWidget(
-                            context,
-                            "Vous n'avez pas sélectionné une équipe ou des équipes différentes.",
-                            AppColors.echec);
-                      }
-                    })
-                  ])))),
+                    ValueListenableBuilder<DateTime?>(
+                        valueListenable: _selectedDate,
+                        builder: (context, selectedDate, child) {
+                          return Text(
+                            _selectedDate.value.toString(),
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          );
+                        }),
+                  ]),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                ReusableDescriptionInput(
+                    "Description", _descriptionTextController, (value) {
+                  return null;
+                }),
+                SizedBox(
+                  height: 20,
+                ),
+                SubmittedButton("Poster", () async {
+                  // if (_selectedCategory.value != null) {
+                  Annonce annonce = Annonce(
+                      categorie: _selectedCategory.value!,
+                      titre: _titreTextController.text,
+                      date: DateTime.now(),
+                      dateCreation: _selectedDate.value!,
+                      description: _descriptionTextController.text,
+                      lieu: _lieuTextController.text,
+                      likes: 0,
+                      dislikes: 0,
+                      id: "",
+                      comments: [],
+                      image: _url.value,
+                      partageLien: "");
+                  try {
+                    String code = await _annonceService.postAnnonce(annonce);
+                    if (code == "OK") {
+                      alerteMessageWidget(context,
+                          "Annonce créée avec succès !", AppColors.success);
+                      changerPage(context, AnnonceScreen());
+                    }
+                  } catch (e) {
+                    alerteMessageWidget(
+                        context,
+                        "Une erreur est survie lors de la création.$e",
+                        AppColors.echec);
+                  }
+                }
+                    // else {
+                    //   alerteMessageWidget(
+                    //       context,
+                    //       "Vous n'avez pas sélectionné une équipe ou des équipes différentes.",
+                    //       AppColors.echec);
+                    // }
+                    )
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

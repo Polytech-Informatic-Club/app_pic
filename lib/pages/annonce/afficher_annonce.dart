@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/fonctions.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/submited_button.dart';
 
 class AfficherAnononceScreen extends StatelessWidget {
-  const AfficherAnononceScreen({super.key});
+  final String image;
+  final String titre;
+  final String lieu;
+  final DateTime date;
+  final String description;
+  const AfficherAnononceScreen(
+      {required this.image,
+      required this.titre,
+      required this.lieu,
+      required this.date,
+      required this.description,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +25,7 @@ class AfficherAnononceScreen extends StatelessWidget {
         ),
         extendBodyBehindAppBar: true,
         body: SingleChildScrollView(
-          child: afficherAnnonce(
-            'assets/images/polytech-Info/WhatsApp Image 2024-06-02 at 15.45.03_affac0af.jpg',
-            'Levée des couleurs',
-            "Carré d'arme",
-            'Mardi 15 Juin à 7:50',
-            'Lorem ipsum dolor sit amet consectetur. Quisita vestibulum nisi non molestie sollicitudin porta posuere eget. Ut ut aliquet nisi felis euismod. In sed fermentum massa. Phasellus ornare et adipiscing id fermentum aliquet sit sagittis.',
-          ),
+          child: afficherAnnonce(image, titre, lieu, date, description),
         ));
   }
 
@@ -45,19 +51,16 @@ class AfficherAnononceScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 70),
-
+                  SizedBox(height: 100),
                   Center(
                     child: SizedBox(
-                      height: 400,
-                      child: Image.asset(
+                      height: 370,
+                      child: Image.network(
                         imagePath,
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-
-                  // Texte UNO
                 ],
               ),
             ),
@@ -103,7 +106,7 @@ class AfficherAnononceScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                dateTime,
+                '${simpleDateformat(dateTime)} à ${getHour(date)}',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(

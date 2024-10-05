@@ -167,7 +167,7 @@ Widget eleveWidget(image, nom, genie, numero) {
     ),
     child: ListTile(
       leading: CircleAvatar(
-        backgroundImage: AssetImage(image),
+        backgroundImage: NetworkImage(image),
         radius: 30,
       ),
       title: Text(

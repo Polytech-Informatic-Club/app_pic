@@ -7,7 +7,8 @@ enum RoleType {
   ADMIN_FOOTBALL,
   ADMIN_BASKET,
   ADMIN_VOLLEY,
-  ADMIN_JEUX_ESPRIT
+  ADMIN_JEUX_ESPRIT,
+  ADMIN_MB
 }
 
 class Role {

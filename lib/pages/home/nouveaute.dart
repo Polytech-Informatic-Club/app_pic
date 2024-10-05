@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:new_app/models/annonce.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/pages/annonce/infocard.dart';
@@ -81,7 +82,7 @@ class _NouveauteState extends State<Nouveaute> {
               ),
               if (_value == 1)
                 FutureBuilder<List<Annonce>>(
-                  future: _annonceService.getAllAnnonce(),
+                  future: _annonceService.getAllAnnonces(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
@@ -91,22 +92,21 @@ class _NouveauteState extends State<Nouveaute> {
                       List<Annonce> annonces = snapshot.data ?? [];
                       return Row(
                         children: [
-                          for (var annonce in annonces)
-                            annonce.image.isNotEmpty
-                                ? InfoCard(
-                                    image: Image.network(
-                                      annonce.image,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    widget: widget,
-                                    width:
-                                        MediaQuery.sizeOf(context).height * 0.2,
-                                    height: MediaQuery.sizeOf(context).height *
-                                        0.25,
-                                    borderRadius: 10)
-                                : Container(
-                                    height: 0,
-                                  )
+                          // for (var annonce in annonces)
+                          //   annonce.image.isNotEmpty
+                          //       ? InfoCard(
+                          //           image: Image.network(
+                          //             annonce.image,
+                          //             fit: BoxFit.cover,
+                          //           ),
+                          //           width:
+                          //               MediaQuery.sizeOf(context).height * 0.2,
+                          //           height: MediaQuery.sizeOf(context).height *
+                          //               0.25,
+                          //           borderRadius: 10)
+                          //       : Container(
+                          //           height: 0,
+                          //         )
                         ],
                       );
                     }
@@ -122,25 +122,30 @@ class _NouveauteState extends State<Nouveaute> {
                       return Text('Erreur lors du chargement des annonces');
                     } else {
                       List<Matches> matches = snapshot.data ?? [];
-                      return Row(
-                        children: [
-                          for (var match in matches)
-                            match.photo!.isNotEmpty
-                                ? InfoCard(
-                                    image: Image.network(
-                                      match.photo!,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    widget: widget,
-                                    width:
-                                        MediaQuery.sizeOf(context).height * 0.2,
-                                    height: MediaQuery.sizeOf(context).height *
-                                        0.25,
-                                    borderRadius: 10)
-                                : Container(
-                                    height: 0,
-                                  )
-                        ],
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            for (var match in matches)
+                              match.photo!.isNotEmpty
+                                  ?
+                                  // InfoCard(
+                                  //     image: Image.network(
+                                  //       match.photo!,
+                                  //       fit: BoxFit.cover,
+                                  //     ),
+                                  //     width: MediaQuery.sizeOf(context).height *
+                                  //         0.2,
+                                  //     height:
+                                  //         MediaQuery.sizeOf(context).height *
+                                  //             0.25,
+                                  //   )
+                                  Text('Je vais gérer ca plutard')
+                                  : Container(
+                                      height: 0,
+                                    )
+                          ],
+                        ),
                       );
                     }
                   },

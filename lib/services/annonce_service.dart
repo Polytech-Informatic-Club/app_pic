@@ -9,7 +9,7 @@ class AnnonceService {
   CollectionReference<Map<String, dynamic>> annonceCollection =
       FirebaseFirestore.instance.collection("ANNONCE");
 
-  Future<List<Annonce>> getAllAnnonce() async {
+  Future<List<Annonce>> getAllAnnonces() async {
     List<Annonce> list = [];
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
@@ -110,7 +110,7 @@ class AnnonceService {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await annonceCollection
-              .where('date', isLessThanOrEqualTo: Timestamp.now())
+              .where('categorie.libelle', isEqualTo: "AG")
               .limit(1)
               .get();
 

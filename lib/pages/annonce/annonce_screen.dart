@@ -24,7 +24,7 @@ class _AnnonceScreenState extends State<AnnonceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(40),
+        preferredSize: Size.fromHeight(50),
         child: AppBar(
           leading: Builder(builder: (context) {
             return IconButton(
@@ -46,24 +46,36 @@ class _AnnonceScreenState extends State<AnnonceScreen> {
       body: SingleChildScrollView(
           child: Column(
         children: [
+          SizedBox(
+            height: 10,
+          ),
           FutureBuilder<Annonce?>(
-              future: _annonceService.getNextAG(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Erreur lors du chargement des annonces');
-                } else {
-                  Annonce annonce = snapshot.data!;
-                  return widgetAG(simpleDateformat(annonce.date),
-                      getHour(annonce.date), annonce.lieu, 'Divers');
-                }
-              }),
+            future: _annonceService.getNextAG(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Erreur lors du chargement des annonces');
+              } else if (!snapshot.hasData || snapshot.data == null) {
+                // Si aucune annonce n'est retournée, afficher un widget vide
+                return SizedBox.shrink();
+              } else {
+                // Si une annonce est retournée, afficher le widgetAG
+                Annonce annonce = snapshot.data!;
+                return widgetAG(
+                  simpleDateformat(annonce.date),
+                  getHour(annonce.date),
+                  annonce.lieu,
+                  'Divers',
+                );
+              }
+            },
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 0, 50),
             child: Column(
               children: [
-                const PInfoNouveaute(),
+                PInfoNouveaute(),
                 const SizedBox(
                   height: 40,
                 ),
@@ -87,14 +99,28 @@ class _AnnonceScreenState extends State<AnnonceScreen> {
 
 Widget widgetAG(String date, String heure, String lieu, String sujet) {
   return Padding(
-    padding: const EdgeInsets.all(16.0),
+    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 15),
     child: Stack(
+      clipBehavior: Clip.none,
       children: [
         // Image de fond avec les personnes et le tableau
         Container(
+          margin: EdgeInsets.only(top: 5),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.0), color: jauneClair),
-          height: 200,
+          height: 140,
+        ),
+        Positioned(
+          right: -10,
+          bottom: -10,
+          child: SizedBox(
+            height: 180,
+            child: Image.asset(
+              'assets/images/polytech-Info/schedule.png', // Chemin vers l'image de l'horloge
+              fit: BoxFit.cover,
+              alignment: Alignment.topCenter,
+            ),
+          ),
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(15, 15, 0, 15),
@@ -108,7 +134,6 @@ Widget widgetAG(String date, String heure, String lieu, String sujet) {
                     "Assemblée Générale",
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   SizedBox(height: 5),
@@ -121,7 +146,8 @@ Widget widgetAG(String date, String heure, String lieu, String sujet) {
                       SizedBox(width: 4),
                       Text(
                         date,
-                        style: TextStyle(fontSize: 11),
+                        style:
+                            TextStyle(fontSize: 11, fontFamily: 'InterRegular'),
                       ),
                     ],
                   ),
@@ -134,7 +160,8 @@ Widget widgetAG(String date, String heure, String lieu, String sujet) {
                       SizedBox(width: 4),
                       Text(
                         heure,
-                        style: TextStyle(fontSize: 11),
+                        style:
+                            TextStyle(fontSize: 11, fontFamily: 'InterRegular'),
                       ),
                     ],
                   ),
@@ -147,7 +174,8 @@ Widget widgetAG(String date, String heure, String lieu, String sujet) {
                       SizedBox(width: 4),
                       Text(
                         lieu,
-                        style: TextStyle(fontSize: 11),
+                        style:
+                            TextStyle(fontSize: 11, fontFamily: 'InterRegular'),
                       ),
                     ],
                   ),
@@ -160,42 +188,32 @@ Widget widgetAG(String date, String heure, String lieu, String sujet) {
                       SizedBox(width: 4),
                       Text(
                         sujet,
-                        style: TextStyle(fontSize: 11),
+                        style:
+                            TextStyle(fontSize: 11, fontFamily: 'InterRegular'),
                       ),
                     ],
                   ),
                   SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Action pour "Voir communiqué"
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        )),
-                    child: Text(
-                      "Voir communiqué",
-                      style: TextStyle(color: Colors.white, fontSize: 11),
-                    ),
-                  ),
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     // Action pour "Voir communiqué"
+                  //   },
+                  //   style: ElevatedButton.styleFrom(
+                  //       backgroundColor: Colors.black,
+                  //       padding:
+                  //           EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(10),
+                  //       )),
+                  //   child: Text(
+                  //     "Voir communiqué",
+                  //     style: TextStyle(color: Colors.white, fontSize: 11),
+                  //   ),
+                  // ),
                 ],
               ),
               // Image de l'horloge à droite
             ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 150.0),
-          child: SizedBox(
-            height: 220,
-            child: Image.asset(
-              'assets/images/polytech-Info/schedule.png', // Chemin vers l'image de l'horloge
-              fit: BoxFit.cover,
-              alignment: Alignment.topCenter,
-            ),
           ),
         ),
       ],

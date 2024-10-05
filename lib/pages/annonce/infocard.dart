@@ -1,38 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/fonctions.dart';
+import 'package:new_app/pages/annonce/afficher_annonce.dart';
 import 'package:new_app/utils/app_colors.dart';
 
 class InfoCard extends StatelessWidget {
-  final Image image;
-  final Widget widget;
+  final String image;
   final double width;
   final double height;
-  final double borderRadius;
-
+  final String titre;
+  final String lieu;
+  final DateTime date;
+  final String description;
   const InfoCard(
       {super.key,
       required this.image,
-      required this.widget,
       required this.width,
       required this.height,
-      required this.borderRadius});
+      required this.titre,
+      required this.lieu,
+      required this.date,
+      required this.description});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-      padding: const EdgeInsets.all(3),
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-          color: eptOrange, borderRadius: BorderRadius.circular(borderRadius)),
-      child: Container(
-        width: width,
-        height: height,
-        decoration:
-            BoxDecoration(borderRadius: BorderRadius.circular(borderRadius)),
-        clipBehavior: Clip.hardEdge,
-        child: image,
-      ),
-    );
+    return Builder(builder: (context) {
+      return InkWell(
+        onTap: () {
+          changerPage(
+              context,
+              AfficherAnononceScreen(
+                image: image,
+                titre: titre,
+                date: date,
+                lieu: lieu,
+                description: description,
+              ));
+        },
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+          padding: const EdgeInsets.all(3),
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+              color: eptOrange, borderRadius: BorderRadius.circular(20)),
+          child: Container(
+            width: width,
+            height: height,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+            clipBehavior: Clip.hardEdge,
+            child: Image.network(
+              image,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      );
+    });
   }
 }
