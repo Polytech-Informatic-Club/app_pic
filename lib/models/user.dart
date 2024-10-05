@@ -4,8 +4,7 @@ import 'package:new_app/models/role.dart';
 
 class User {
   final String id;
-  final String username;
-  final String password;
+
   final String prenom;
   final String nom;
   final String email;
@@ -15,8 +14,6 @@ class User {
 
   User({
     required this.id,
-    required this.username,
-    required this.password,
     required this.prenom,
     required this.nom,
     required this.email,
@@ -29,8 +26,6 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'] as String,
-      username: json['username'] as String,
-      password: json['password'] as String,
       prenom: json['prenom'] as String,
       nom: json['nom'] as String,
       email: json['email'] as String,
@@ -44,8 +39,6 @@ class User {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'username': username,
-      'password': password,
       'prenom': prenom,
       'nom': nom,
       'email': email,
