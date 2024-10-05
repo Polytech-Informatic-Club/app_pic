@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
+import 'package:new_app/models/enums/statut_xoss.dart';
 import 'package:new_app/models/xoss.dart';
 import 'package:new_app/pages/drawer/drawer.dart';
 import 'package:new_app/pages/drawer/xoss/create_xoss.dart';
+import 'package:new_app/pages/drawer/xoss/detail_xoss.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'package:new_app/pages/drawer/xoss/historique_xoss.dart';
 import 'package:new_app/services/xoss_service.dart';
@@ -17,11 +19,12 @@ class XossScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   forceMaterialTransparency: true,
-      // ),
-      // extendBodyBehindAppBar: true,
-      body: Padding(
+        // appBar: AppBar(
+        //   forceMaterialTransparency: true,
+        // ),
+        // extendBodyBehindAppBar: true,
+        body: SingleChildScrollView(
+      child: Padding(
         padding: const EdgeInsets.all(0.0),
         child: FutureBuilder<List<Xoss>>(
             future: _xossService.getAllXossOfUserByEmail(
@@ -33,7 +36,22 @@ class XossScreen extends StatelessWidget {
                 return Text('Erreur lors de la récupération des données');
               } else {
                 List<Xoss> xoss = snapshot.data ?? [];
+
                 _xossProvider.value = xoss;
+                double totalMontant =
+                    xoss.fold(0, (sum, item) => sum + item.montant);
+
+                double totalVersement =
+                    xoss.fold(0, (sum, item) => sum + item.versement);
+
+                Text(
+                  '$totalMontant Fcfa',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+
                 return Column(
                   children: [
                     Container(
@@ -64,19 +82,23 @@ class XossScreen extends StatelessWidget {
                             right: 0,
                             child: Column(
                               children: [
-                                Text(
-                                  'Elimane Sall',
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                                if (_xossProvider.value != [])
+                                  Text(
+                                    _xossProvider.value.first.user!.prenom +
+                                        _xossProvider.value.first.user!.nom
+                                            .toUpperCase(),
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 SizedBox(height: 8),
-                                Text(
-                                  '20000 Fcfa',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                                if (_xossProvider.value != [])
+                                  Text(
+                                    '${totalMontant - totalVersement} FCFA',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                               ],
                             ),
                           ),
@@ -125,111 +147,124 @@ class XossScreen extends StatelessWidget {
               }
             }),
       ),
-    );
+    ));
   }
 }
 
 Widget xossWidget(BuildContext context, Xoss xoss) {
-  return Padding(
-      padding: EdgeInsets.all(20),
-      child: Container(
-          // height: MediaQuery.sizeOf(context).height * 0.25,
-          width: double.maxFinite,
-          decoration: BoxDecoration(
-              color: Colors.black, borderRadius: BorderRadius.circular(20)),
-          child: Padding(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  return GestureDetector(
+      onTap: () => changerPage(context, DetailXoss(xoss.id)),
+      child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Container(
+              // height: MediaQuery.sizeOf(context).height * 0.25,
+              width: double.maxFinite,
+              decoration: BoxDecoration(
+                  color: Colors.black, borderRadius: BorderRadius.circular(20)),
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Column(
                   children: [
-                    Text(
-                      " Xossna",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          " Xossna",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ),
+                        Image.asset(xoss.statut.toString().split(".").last ==
+                                StatutXoss.PAYEE.toString().split(".").last
+                            ? "assets/images/xoss/Ellipse_green.png"
+                            : xoss.statut.toString().split(".").last ==
+                                    StatutXoss.ATTENTE
+                                        .toString()
+                                        .split(".")
+                                        .last
+                                ? "assets/images/xoss/Ellipse_white.png"
+                                : "assets/images/xoss/Ellipse_red.png")
+                      ],
                     ),
-                    Image.asset("assets/images/xoss/Ellipse_green.png")
-                  ],
-                ),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(127, 127, 127, 1),
-                          borderRadius: BorderRadius.circular(10)),
-                      width: MediaQuery.sizeOf(context).width * 0.45,
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      // height: 110,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                        child: Scrollbar(
-                          trackVisibility: true,
-                          thumbVisibility: true,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                for (var produit in xoss.produit)
-                                  Row(
-                                    children: [
-                                      SizedBox(width: 20),
-                                      Image.asset(
-                                        "assets/images/xoss/Ellipse_white.png",
-                                      ),
-                                      SizedBox(width: 10),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.3,
-                                        child: Text(
-                                          produit,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: MediaQuery.of(context)
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Color.fromRGBO(127, 127, 127, 1),
+                              borderRadius: BorderRadius.circular(10)),
+                          width: MediaQuery.sizeOf(context).width * 0.45,
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          // height: 110,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                            child: Scrollbar(
+                              trackVisibility: true,
+                              thumbVisibility: true,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    for (var produit in xoss.produit)
+                                      Row(
+                                        children: [
+                                          SizedBox(width: 20),
+                                          Image.asset(
+                                            "assets/images/xoss/Ellipse_white.png",
+                                          ),
+                                          SizedBox(width: 10),
+                                          Container(
+                                            width: MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.05,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                              ],
+                                                0.3,
+                                            child: Text(
+                                              produit,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.05,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.35,
+                          child: Text(
+                            "${xoss.montant} FCFA",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.05,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        )
+                      ],
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.35,
-                      child: Text(
-                        "${xoss.montant} FCFA",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: MediaQuery.of(context).size.width * 0.05,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.01,
+                    ),
+                    Text(
+                      dateCustomformat(xoss.date),
+                      style: TextStyle(color: Colors.white, fontSize: 14),
                     )
                   ],
                 ),
-                SizedBox(
-                  height: MediaQuery.sizeOf(context).height * 0.01,
-                ),
-                Text(
-                  dateCustomformat(xoss.date),
-                  style: TextStyle(color: Colors.white, fontSize: 14),
-                )
-              ],
-            ),
-          )));
+              ))));
 }
