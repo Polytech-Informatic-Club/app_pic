@@ -132,8 +132,8 @@ class AnnonceService {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await annonceCollection
-              .where('date', isGreaterThanOrEqualTo: Timestamp.now())
               .where('categorie.libelle', isEqualTo: "AG")
+              // .where('date', isLessThanOrEqualTo: Timestamp.now())
               .limit(1)
               .get();
 

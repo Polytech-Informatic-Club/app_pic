@@ -75,12 +75,17 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(40)),
                         child: Container(
                             decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(40)),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(40),
+                              border: Border.all(
+                                  width: 1,
+                                  color: jauneClair,
+                                  strokeAlign: BorderSide.strokeAlignOutside),
+                            ),
                             clipBehavior: Clip.hardEdge,
-                            child: Image.asset(
-                              'assets/images/equipe/ibou.jpg',
-                              fit: BoxFit.cover,
+                            child: Image.network(
+                              'https://firebasestorage.googleapis.com/v0/b/ept-app-46930.appspot.com/o/assets%2Fpolytech-info%2Fbde_ept.jpg?alt=media&token=12c1e41f-0d06-4068-8ac6-50e35c146140',
+                              fit: BoxFit.contain,
                             ))),
                   ),
                 ],
