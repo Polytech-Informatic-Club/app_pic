@@ -19,135 +19,137 @@ class XossScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // appBar: AppBar(
-        //   forceMaterialTransparency: true,
-        // ),
-        // extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          forceMaterialTransparency: true,
+        ),
+        extendBodyBehindAppBar: true,
         body: SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(0.0),
-        child: FutureBuilder<List<Xoss>>(
-            future: _xossService.getAllXossOfUserByEmail(
-                FirebaseAuth.instance.currentUser!.email!),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Erreur lors de la récupération des données');
-              } else {
-                List<Xoss> xoss = snapshot.data ?? [];
+          child: Padding(
+            padding: const EdgeInsets.all(0.0),
+            child: FutureBuilder<List<Xoss>>(
+                future: _xossService.getAllXossOfUserByEmail(
+                    FirebaseAuth.instance.currentUser!.email!),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Erreur lors de la récupération des données');
+                  } else {
+                    List<Xoss> xoss = snapshot.data ?? [];
 
-                _xossProvider.value = xoss;
-                double totalMontant =
-                    xoss.fold(0, (sum, item) => sum + item.montant);
+                    _xossProvider.value = xoss;
+                    double totalMontant =
+                        xoss.fold(0, (sum, item) => sum + item.montant);
 
-                double totalVersement =
-                    xoss.fold(0, (sum, item) => sum + item.versement);
+                    double totalVersement =
+                        xoss.fold(0, (sum, item) => sum + item.versement);
 
-                Text(
-                  '$totalMontant Fcfa',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                );
-
-                return Column(
-                  children: [
-                    Container(
-                      height: 200,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(250, 242, 230, 1),
-                        borderRadius: BorderRadius.circular(8.0),
+                    Text(
+                      '$totalMontant Fcfa',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                      child: Stack(
-                        clipBehavior: Clip
-                            .none, // Permet à l'image de sortir du Container
-                        children: [
-                          Positioned(
-                            bottom:
-                                -78, // Positionne l'image en dehors du bas du Container
-                            left: 0,
-                            right: 0,
-                            child: Image.asset(
-                              'assets/images/xoss/xoss_card.png',
-                              width: 100, // Spécifiez une largeur si nécessaire
-                            ),
-                          ),
-                          Positioned(
-                            bottom:
-                                0, // Positionne l'image en dehors du bas du Container
-                            left: -100,
-                            right: 0,
-                            child: Column(
-                              children: [
-                                if (_xossProvider.value != [])
-                                  Text(
-                                    _xossProvider.value.first.user!.prenom +
-                                        _xossProvider.value.first.user!.nom
-                                            .toUpperCase(),
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                SizedBox(height: 8),
-                                if (_xossProvider.value != [])
-                                  Text(
-                                    '${totalMontant - totalVersement} FCFA',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 50),
-                    ElevatedButton(
-                      onPressed: () {
-                        changerPage(context, HistoriqueXoss());
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromRGBO(244, 171, 90, 1),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5))),
-                      child: const Text(
-                        'Historique',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
+                    );
+
+                    return Column(
                       children: [
-                        SizedBox(width: 15),
-                        Text(
-                          'Mes khoss',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                        Container(
+                          height: 200,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Color.fromRGBO(250, 242, 230, 1),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Stack(
+                            clipBehavior: Clip
+                                .none, // Permet à l'image de sortir du Container
+                            children: [
+                              Positioned(
+                                bottom:
+                                    -78, // Positionne l'image en dehors du bas du Container
+                                left: 0,
+                                right: 0,
+                                child: Image.asset(
+                                  'assets/images/xoss/xoss_card.png',
+                                  width:
+                                      100, // Spécifiez une largeur si nécessaire
+                                ),
+                              ),
+                              Positioned(
+                                bottom:
+                                    0, // Positionne l'image en dehors du bas du Container
+                                left: -100,
+                                right: 0,
+                                child: Column(
+                                  children: [
+                                    if (_xossProvider.value != [])
+                                      Text(
+                                        _xossProvider.value.first.user!.prenom +
+                                            ' ' +
+                                            _xossProvider.value.first.user!.nom
+                                                .toUpperCase(),
+                                        style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    SizedBox(height: 8),
+                                    if (_xossProvider.value != [])
+                                      Text(
+                                        '${totalMontant - totalVersement} FCFA',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: GestureDetector(
-                              onTap: () {
-                                changerPage(context, CreateXoss());
-                              },
-                              child: Icon(Icons.add),
-                            ))
+                        SizedBox(height: 50),
+                        ElevatedButton(
+                          onPressed: () {
+                            changerPage(context, HistoriqueXoss());
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color.fromRGBO(244, 171, 90, 1),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5))),
+                          child: const Text(
+                            'Historique',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            SizedBox(width: 15),
+                            Text(
+                              'Mes khoss',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    changerPage(context, CreateXoss());
+                                  },
+                                  child: Icon(Icons.add),
+                                ))
+                          ],
+                        ),
+                        SizedBox(height: 16),
+                        for (var xoss in _xossProvider.value)
+                          xossWidget(context, xoss),
                       ],
-                    ),
-                    SizedBox(height: 16),
-                    for (var xoss in _xossProvider.value)
-                      xossWidget(context, xoss),
-                  ],
-                );
-              }
-            }),
-      ),
-    ));
+                    );
+                  }
+                }),
+          ),
+        ));
   }
 }
 
