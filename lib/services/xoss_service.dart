@@ -31,8 +31,10 @@ class XossService {
     List<Xoss> list = [];
 
     try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await xossCollection.where("user.email", isEqualTo: email).get();
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await xossCollection
+          .where("user.email", isEqualTo: email)
+          .orderBy("date", descending: true)
+          .get();
 
       List<Map<String, dynamic>> data =
           querySnapshot.docs.map((doc) => doc.data()).toList();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/enums/statut_xoss.dart';
 import 'package:new_app/models/xoss.dart';
+import 'package:new_app/services/user_service.dart';
 import 'package:new_app/services/xoss_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 
@@ -11,10 +12,19 @@ class DetailXoss extends StatelessWidget {
 
   final XossService _xossService = XossService();
   ValueNotifier<Xoss?> _xossProvider = ValueNotifier(null);
+  ValueNotifier<String?> _userRole = ValueNotifier(null);
+
   TextEditingController _versementController = TextEditingController();
+
+  final UserService _userService = UserService();
+
+  Future<void> _getUserRole() async {
+    _userRole.value = await _userService.getRole();
+  }
 
   @override
   Widget build(BuildContext context) {
+    _getUserRole();
     return Scaffold(
         appBar: AppBar(),
         body: Padding(
@@ -237,10 +247,15 @@ class DetailXoss extends StatelessWidget {
                                     },
                                     child: Text("PAYER")),
                               if (_xossProvider.value!.statut
-                                      .toString()
-                                      .split(".")
-                                      .last !=
-                                  StatutXoss.PAYEE.toString().split(".").last)
+                                          .toString()
+                                          .split(".")
+                                          .last !=
+                                      StatutXoss.PAYEE
+                                          .toString()
+                                          .split(".")
+                                          .last &&
+                                  _userRole.value!.toUpperCase() ==
+                                      "ADMIN_PSHOP".toUpperCase())
                                 ElevatedButton(
                                     style: ButtonStyle(
                                       backgroundColor:

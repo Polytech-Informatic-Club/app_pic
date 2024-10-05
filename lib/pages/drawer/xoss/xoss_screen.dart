@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
+import 'package:new_app/models/enums/statut_xoss.dart';
 import 'package:new_app/models/xoss.dart';
 import 'package:new_app/pages/drawer/drawer.dart';
 import 'package:new_app/pages/drawer/xoss/create_xoss.dart';
@@ -35,7 +36,22 @@ class XossScreen extends StatelessWidget {
                 return Text('Erreur lors de la récupération des données');
               } else {
                 List<Xoss> xoss = snapshot.data ?? [];
+
                 _xossProvider.value = xoss;
+                double totalMontant =
+                    xoss.fold(0, (sum, item) => sum + item.montant);
+
+                double totalVersement =
+                    xoss.fold(0, (sum, item) => sum + item.versement);
+
+                Text(
+                  '$totalMontant Fcfa',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+
                 return Column(
                   children: [
                     Container(
@@ -66,19 +82,23 @@ class XossScreen extends StatelessWidget {
                             right: 0,
                             child: Column(
                               children: [
-                                Text(
-                                  'Elimane Sall',
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                                if (_xossProvider.value != [])
+                                  Text(
+                                    _xossProvider.value.first.user!.prenom +
+                                        _xossProvider.value.first.user!.nom
+                                            .toUpperCase(),
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 SizedBox(height: 8),
-                                Text(
-                                  '20000 Fcfa',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                                if (_xossProvider.value != [])
+                                  Text(
+                                    '${totalMontant - totalVersement} FCFA',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                               ],
                             ),
                           ),
@@ -155,7 +175,16 @@ Widget xossWidget(BuildContext context, Xoss xoss) {
                               fontWeight: FontWeight.bold,
                               fontSize: 20),
                         ),
-                        Image.asset("assets/images/xoss/Ellipse_green.png")
+                        Image.asset(xoss.statut.toString().split(".").last ==
+                                StatutXoss.PAYEE.toString().split(".").last
+                            ? "assets/images/xoss/Ellipse_green.png"
+                            : xoss.statut.toString().split(".").last ==
+                                    StatutXoss.ATTENTE
+                                        .toString()
+                                        .split(".")
+                                        .last
+                                ? "assets/images/xoss/Ellipse_white.png"
+                                : "assets/images/xoss/Ellipse_red.png")
                       ],
                     ),
                     SizedBox(height: 10),
