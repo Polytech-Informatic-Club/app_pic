@@ -11,15 +11,16 @@ class InfoCard extends StatelessWidget {
   final String lieu;
   final DateTime date;
   final String description;
-  const InfoCard(
-      {super.key,
-      required this.image,
-      required this.width,
-      required this.height,
-      required this.titre,
-      required this.lieu,
-      required this.date,
-      required this.description});
+  InfoCard({
+    super.key,
+    required this.image,
+    required this.width,
+    required this.height,
+    required this.titre,
+    required this.lieu,
+    required this.date,
+    required this.description,
+  });
 
   @override
   Widget build(BuildContext context) {
