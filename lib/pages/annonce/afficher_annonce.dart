@@ -1,9 +1,63 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:new_app/fonctions.dart';
+import 'package:new_app/models/user.dart';
+import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/submited_button.dart';
 
-class AfficherAnononceScreen extends StatelessWidget {
-  const AfficherAnononceScreen({super.key});
+class AfficherAnononceScreen extends StatefulWidget {
+  final String image;
+  final String titre;
+  final String lieu;
+  final DateTime date;
+  final String description;
+  AfficherAnononceScreen(
+      {required this.image,
+      required this.titre,
+      required this.lieu,
+      required this.date,
+      required this.description,
+      super.key});
+
+  @override
+  State<AfficherAnononceScreen> createState() => _AfficherAnononceScreenState();
+}
+
+class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
+  bool isAdmin = false;
+  final UserService _userService = UserService();
+
+  // Initialement, l'utilisateur n'est pas admin
+  String? userId;
+  // Stocker l'ID de l'utilisateur connecté
+  @override
+  void initState() {
+    super.initState();
+    _checkUserRole(); // Appel pour vérifier le rôle de l'utilisateur
+  }
+
+  Future<void> _checkUserRole() async {
+    try {
+      // Récupérer l'utilisateur connecté via FirebaseAuth
+      var user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        userId = user.email;
+
+        // Récupérer le rôle de l'utilisateur à partir du service utilisateur
+        String? role = await _userService.getUserRole(userId!);
+
+        // Vérifier si l'utilisateur est admin
+        if (role == 'ADMIN_MB') {
+          setState(() {
+            isAdmin = true; // Met à jour l'état pour afficher le bouton "+"
+          });
+        }
+      }
+    } catch (e) {
+      print("Erreur lors de la vérification du rôle : $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,14 +66,19 @@ class AfficherAnononceScreen extends StatelessWidget {
           forceMaterialTransparency: true,
         ),
         extendBodyBehindAppBar: true,
+        floatingActionButton: isAdmin
+            ? FloatingActionButton(
+                backgroundColor: AppColors.primary,
+                child: Icon(
+                  Icons.edit,
+                  color: AppColors.black,
+                ),
+                onPressed: () {},
+              )
+            : null,
         body: SingleChildScrollView(
-          child: afficherAnnonce(
-            'assets/images/polytech-Info/WhatsApp Image 2024-06-02 at 15.45.03_affac0af.jpg',
-            'Levée des couleurs',
-            "Carré d'arme",
-            'Mardi 15 Juin à 7:50',
-            'Lorem ipsum dolor sit amet consectetur. Quisita vestibulum nisi non molestie sollicitudin porta posuere eget. Ut ut aliquet nisi felis euismod. In sed fermentum massa. Phasellus ornare et adipiscing id fermentum aliquet sit sagittis.',
-          ),
+          child: afficherAnnonce(widget.image, widget.titre, widget.lieu,
+              widget.date, widget.description),
         ));
   }
 
@@ -45,19 +104,16 @@ class AfficherAnononceScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 70),
-
+                  SizedBox(height: 100),
                   Center(
                     child: SizedBox(
-                      height: 400,
-                      child: Image.asset(
+                      height: 370,
+                      child: Image.network(
                         imagePath,
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-
-                  // Texte UNO
                 ],
               ),
             ),
@@ -103,7 +159,7 @@ class AfficherAnononceScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                dateTime,
+                '${simpleDateformat(dateTime)} à ${getHour(widget.date)}',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(

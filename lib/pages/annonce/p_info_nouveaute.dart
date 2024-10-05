@@ -1,28 +1,62 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/annonce.dart';
 import 'package:new_app/models/categorie.dart';
+import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/pages/annonce/create_annonce.dart';
 import 'package:new_app/pages/annonce/infocard.dart';
 import 'package:new_app/pages/annonce/p_info_section_selector.dart';
 import 'package:new_app/pages/annonce/restauration.dart';
 import 'package:new_app/services/annonce_service.dart';
+import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 
 class PInfoNouveaute extends StatefulWidget {
-  const PInfoNouveaute({super.key});
+  PInfoNouveaute({super.key});
 
   @override
   State<PInfoNouveaute> createState() => _PInfoNouveauteState();
 }
 
 class _PInfoNouveauteState extends State<PInfoNouveaute> {
-  AnnonceService _annonceService = AnnonceService();
+  final UserService _userService = UserService();
+  final AnnonceService _annonceService = AnnonceService();
   int groupValue = 0;
+  bool isAdmin = false; // Initialement, l'utilisateur n'est pas admin
+  String? userId; // Stocker l'ID de l'utilisateur connecté
+
+  @override
+  void initState() {
+    super.initState();
+    _checkUserRole(); // Appel pour vérifier le rôle de l'utilisateur
+  }
+
+  Future<void> _checkUserRole() async {
+    try {
+      // Récupérer l'utilisateur connecté via FirebaseAuth
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        userId = user.email;
+
+        // Récupérer le rôle de l'utilisateur à partir du service utilisateur
+        String? role = await _userService.getUserRole(userId!);
+
+        // Vérifier si l'utilisateur est admin
+        if (role == 'ADMIN_MB') {
+          setState(() {
+            isAdmin = true; // Met à jour l'état pour afficher le bouton "+"
+          });
+        }
+      }
+    } catch (e) {
+      print("Erreur lors de la vérification du rôle : $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isAdmin = true;
     return Column(
       children: [
         Row(
@@ -34,19 +68,19 @@ class _PInfoNouveauteState extends State<PInfoNouveaute> {
                   fontWeight: FontWeight.bold,
                   fontSize: 16),
             ),
-            if (isAdmin) ...[
-              const SizedBox(
-                width: 5,
-              ),
+            if (isAdmin) // Afficher le bouton "+" uniquement si l'utilisateur est admin
+              ...[
+              const SizedBox(width: 5),
               InkWell(
-                  onTap: () {
-                    changerPage(context, CreateAnnonce());
-                  },
-                  child: Image.asset(
-                    "assets/images/polytech-Info/plus.png",
-                    scale: 5,
-                  )),
-            ]
+                onTap: () {
+                  changerPage(context, CreateAnnonce());
+                },
+                child: Image.asset(
+                  "assets/images/polytech-Info/plus.png",
+                  scale: 5,
+                ),
+              ),
+            ],
           ],
         ),
         const SizedBox(
@@ -60,36 +94,50 @@ class _PInfoNouveauteState extends State<PInfoNouveaute> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 FutureBuilder<List<Categorie>>(
-                    future: _annonceService.getAllCategories(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text('Erreur lors du chargement');
-                      } else {
-                        List<Categorie> categories = snapshot.data ?? [];
-                        return Row(
-                          children: [
-                            for (var category in categories)
-                              PInfoSectionSelector(
-                                  value: int.parse(category.id),
-                                  groupValue: groupValue,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      groupValue = value!;
-                                    });
-                                  },
-                                  image: Image.network(
-                                    category.logo,
-                                    scale: 3,
-                                  )),
-                            const SizedBox(
-                              width: 10,
+                  future: _annonceService.getAllCategories(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Erreur lors du chargement');
+                    } else {
+                      List<Categorie> categories = snapshot.data ?? [];
+
+                      // Ajout de l'option "All"
+                      categories.insert(
+                          0,
+                          Categorie(
+                              id: '0',
+                              logo:
+                                  'https://firebasestorage.googleapis.com/v0/b/ept-app-46930.appspot.com/o/assets%2Fpolytech-info%2Fbde_ept.jpg?alt=media&token=12c1e41f-0d06-4068-8ac6-50e35c146140',
+                              libelle: 'All'));
+
+                      return Row(
+                        children: [
+                          for (var category in categories)
+                            PInfoSectionSelector(
+                              value: int.parse(category.id),
+                              groupValue: groupValue,
+                              onChanged: (value) {
+                                setState(() {
+                                  groupValue = value!;
+                                });
+
+                                // Gestion de la sélection de "All"
+                              },
+                              image: Image.network(
+                                category.logo,
+                                scale: 3,
+                              ),
                             ),
-                          ],
-                        );
-                      }
-                    }),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                        ],
+                      );
+                    }
+                  },
+                ),
               ],
             ),
           ),
@@ -98,8 +146,13 @@ class _PInfoNouveauteState extends State<PInfoNouveaute> {
           height: 20,
         ),
         FutureBuilder<List<Annonce>>(
-          future: _annonceService.getAnnoncesByCategorie(
-              Categorie(id: groupValue.toString(), libelle: "", logo: "")),
+          future: groupValue == 0
+              ? _annonceService
+                  .getAllAnnonces() // Récupère toutes les annonces si "All" est sélectionné
+              : _annonceService.getAnnoncesByCategorie(Categorie(
+                  id: groupValue.toString(),
+                  libelle: "",
+                  logo: "")), // Récupère les annonces filtrées par catégorie
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
@@ -113,7 +166,7 @@ class _PInfoNouveauteState extends State<PInfoNouveaute> {
               );
             }
           },
-        ),
+        )
       ],
     );
   }
@@ -137,27 +190,33 @@ class CategorySelection extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: items
-              .map(
-                (Annonce annonce) => annonce.image.isEmpty
-                    ? Restauration(annonce.categorie)
-                    : Container(
-                        padding: const EdgeInsets.all(5),
-                        width: 170,
-                        height: MediaQuery.sizeOf(context).height * 0.3,
-                        decoration: BoxDecoration(
-                            color: AppColors.primary,
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15)),
-                          clipBehavior: Clip.hardEdge,
-                          child: Image.network(
-                            annonce.image,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-              )
+              .map((Annonce annonce) => InfoCard(
+                        image: annonce.image,
+                        width: width,
+                        height: height,
+                        titre: annonce.titre,
+                        lieu: annonce.lieu,
+                        date: annonce.date,
+                        description: annonce.description,
+                      )
+                  // Container(
+                  //   padding: const EdgeInsets.all(5),
+                  //   width: 170,
+                  //   height: MediaQuery.sizeOf(context).height * 0.3,
+                  //   decoration: BoxDecoration(
+                  //       color: AppColors.primary,
+                  //       borderRadius: BorderRadius.circular(15)),
+                  //   child: Container(
+                  //     decoration:
+                  //         BoxDecoration(borderRadius: BorderRadius.circular(15)),
+                  //     clipBehavior: Clip.hardEdge,
+                  //     child: Image.network(
+                  //       annonce.image,
+                  //       fit: BoxFit.cover,
+                  //     ),
+                  //   ),
+                  // ),
+                  )
               .toList(),
         ),
       ),
@@ -166,4 +225,4 @@ class CategorySelection extends StatelessWidget {
 }
 
 double width = 200;
-double height = 320;
+double height = 300;

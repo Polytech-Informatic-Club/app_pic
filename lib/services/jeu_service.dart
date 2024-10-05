@@ -79,46 +79,64 @@ class JeuService {
           .where('email', isEqualTo: email)
           .limit(1)
           .get();
+
       if (userSnapshot.docs.isEmpty) return null;
 
       Map<String, dynamic> userData =
           userSnapshot.docs.first.data() as Map<String, dynamic>;
-
       Utilisateur utilisateur = Utilisateur.fromJson(userData);
 
+      // Rechercher le document de jeu avec l'id spécifié
       QuerySnapshot jeuxSnapshot =
           await jeuxCollection.where('id', isEqualTo: idJeu).limit(1).get();
 
       if (jeuxSnapshot.docs.isEmpty) {
-        print("Document non trouvé");
-        return null; // Le document n'existe pas, retourner null ou gérer l'erreur
+        print("Jeu non trouvé");
+        return null;
       }
 
-      // Récupérer la référence du document trouvé
+      // Récupérer la référence et les données du document trouvé
       DocumentReference matchDoc = jeuxSnapshot.docs.first.reference;
+      Map<String, dynamic> jeuData =
+          jeuxSnapshot.docs.first.data() as Map<String, dynamic>;
 
-      SessionJeu sessionJeu = SessionJeu(
-          date: DateTime.now(),
-          lieu: lieu,
-          id: DateTime.now().toString(),
-          joueurs: [
-            JoueurJeu(
-                id: utilisateur.id!,
-                waiting: true,
-                email: email,
-                prenom: utilisateur.prenom,
-                nom: utilisateur.nom)
-          ],
-          statut: StatutSessionJeu.OUVERTE);
-
-      await matchDoc.update(
-        {
-          'sessions': FieldValue.arrayUnion([sessionJeu.toJson()])
-        },
+      // Créer une nouvelle session
+      SessionJeu nouvelleSession = SessionJeu(
+        date: DateTime.now(),
+        lieu: lieu,
+        id: DateTime.now()
+            .millisecondsSinceEpoch
+            .toString(), // ID de la session sera généré par Firestore
+        joueurs: [], // Liste vide de joueurs initialement
+        creatorId: utilisateur.id!, // ID de l'utilisateur créateur
       );
 
-      DocumentSnapshot querySnapshot = await matchDoc.get();
+      // Créer un nouveau joueur pour l'utilisateur qui crée la session
+      JoueurJeu joueurCreant = JoueurJeu(
+        id: utilisateur.id!,
+        waiting: true,
+        email: email,
+        prenom: utilisateur.prenom,
+        nom: utilisateur.nom,
+      );
 
+      // Ajouter le joueur à la liste des joueurs
+      nouvelleSession.joueurs.add(joueurCreant);
+
+      // Convertir la nouvelle session en JSON
+      Map<String, dynamic> sessionData = nouvelleSession.toJson();
+
+      // Ajouter la session à la liste des sessions existantes
+      List<dynamic> sessions = jeuData['sessions'] ?? [];
+      sessions.add(sessionData);
+
+      // Mettre à jour le document du jeu avec la nouvelle session
+      await matchDoc.update({
+        'sessions': sessions,
+      });
+
+      // Récupérer les données mises à jour
+      DocumentSnapshot querySnapshot = await matchDoc.get();
       return Jeu.fromJson(querySnapshot.data() as Map<String, dynamic>);
     } catch (e) {
       print(e);
@@ -126,7 +144,7 @@ class JeuService {
     }
   }
 
-  Future<Jeu?> postRejoindreSessionJeu(String idJeu) async {
+  Future<Jeu?> rejoindreSessionJeu(String idJeu, String idSession) async {
     try {
       String email = FirebaseAuth.instance.currentUser!.email!;
 
@@ -136,11 +154,11 @@ class JeuService {
           .where('email', isEqualTo: email)
           .limit(1)
           .get();
+
       if (userSnapshot.docs.isEmpty) return null;
 
       Map<String, dynamic> userData =
           userSnapshot.docs.first.data() as Map<String, dynamic>;
-
       Utilisateur utilisateur = Utilisateur.fromJson(userData);
 
       // Rechercher le document de jeu avec l'id spécifié
@@ -159,57 +177,65 @@ class JeuService {
 
       // Récupérer les sessions dans le jeu
       List<dynamic> sessions = jeuData['sessions'] ?? [];
+      Map<String, dynamic>? sessionToJoin;
 
-      // Mettre à jour la première session (ou trouver la session à modifier)
-      if (sessions.isNotEmpty) {
-        Map<String, dynamic> session =
-            sessions.first; // Adapter si plusieurs sessions
-
-        List<dynamic> joueurs = session['joueurs'] ?? [];
-
-        // Vérifier si le joueur existe déjà
-        bool joueurExiste = joueurs.any((joueur) => joueur['email'] == email);
-
-        if (joueurExiste) {
-          return null;
+      // Trouver la session à rejoindre
+      for (var session in sessions) {
+        if (session['id'] == idSession) {
+          sessionToJoin = session;
+          break;
         }
+      }
 
-        // Créer un nouveau joueur
-        JoueurJeu joueurJeu = JoueurJeu(
-            id: utilisateur.id!,
-            waiting: true,
-            email: email,
-            prenom: utilisateur.prenom,
-            nom: utilisateur.nom);
-
-        // Ajouter le joueur à la liste des joueurs
-        joueurs.add(joueurJeu.toJson());
-
-        // Mettre à jour la session avec la nouvelle liste de joueurs
-        session['joueurs'] = joueurs;
-
-        // Mettre à jour le document du jeu avec la session modifiée
-        await matchDoc.update({
-          'sessions':
-              sessions, // Remplacer l'ensemble des sessions mises à jour
-        });
-
-        // Récupérer les données mises à jour
-        DocumentSnapshot querySnapshot = await matchDoc.get();
-
-        return Jeu.fromJson(querySnapshot.data() as Map<String, dynamic>);
-      } else {
-        print("Aucune session trouvée");
+      if (sessionToJoin == null) {
+        print("Session non trouvée");
         return null;
       }
+
+      // Créer un nouveau joueur pour l'utilisateur qui rejoint la session
+      JoueurJeu nouveauJoueur = JoueurJeu(
+        id: utilisateur.id!,
+        waiting: true,
+        email: email,
+        prenom: utilisateur.prenom,
+        nom: utilisateur.nom,
+      );
+
+      // Ajouter le joueur à la liste des joueurs de la session
+      List<dynamic> joueurs = sessionToJoin['joueurs'] ?? [];
+      bool dejaPresent = joueurs.any((j) => j['email'] == email);
+
+      if (!dejaPresent) {
+        joueurs.add(nouveauJoueur.toJson());
+      }
+
+      sessionToJoin['joueurs'] = joueurs;
+
+      // Mettre à jour uniquement la session concernée
+      int indexSession =
+          sessions.indexWhere((session) => session['id'] == idSession);
+      if (indexSession != -1) {
+        sessions[indexSession] = sessionToJoin;
+      }
+
+      // Mettre à jour le document du jeu avec la session modifiée
+      await matchDoc.update({
+        'sessions': sessions,
+      });
+
+      // Récupérer les données mises à jour
+      DocumentSnapshot querySnapshot = await matchDoc.get();
+      return Jeu.fromJson(querySnapshot.data() as Map<String, dynamic>);
     } catch (e) {
       print(e);
       return null;
     }
   }
 
-  Future<Jeu?> quitterSessionJeu(String idJeu, JoueurJeu joueur) async {
+  Future<Jeu?> quitterSessionJeu(String idJeu, String idSession) async {
     try {
+      String email = FirebaseAuth.instance.currentUser!.email!;
+
       // Rechercher le document de jeu avec l'id spécifié
       QuerySnapshot jeuxSnapshot =
           await jeuxCollection.where('id', isEqualTo: idJeu).limit(1).get();
@@ -226,34 +252,42 @@ class JeuService {
 
       // Récupérer les sessions dans le jeu
       List<dynamic> sessions = jeuData['sessions'] ?? [];
+      Map<String, dynamic>? sessionToLeave;
 
-      // Mettre à jour la première session (ou trouver la session à modifier)
-      if (sessions.isNotEmpty) {
-        Map<String, dynamic> session =
-            sessions.first; // Adapter si plusieurs sessions
+      // Trouver la session à quitter
+      for (var session in sessions) {
+        if (session['id'] == idSession) {
+          sessionToLeave = session;
+          break;
+        }
+      }
 
-        List<dynamic> joueurs = session['joueurs'] ?? [];
-
-        // Retirer le joueur de la liste s'il existe
-        joueurs.removeWhere((j) => j['email'] == joueur.email);
-
-        // Mettre à jour la session avec la nouvelle liste de joueurs
-        session['joueurs'] = joueurs;
-
-        // Mettre à jour le document du jeu avec la session modifiée
-        await matchDoc.update({
-          'sessions':
-              sessions, // Remplacer l'ensemble des sessions mises à jour
-        });
-
-        // Récupérer les données mises à jour
-        DocumentSnapshot querySnapshot = await matchDoc.get();
-
-        return Jeu.fromJson(querySnapshot.data() as Map<String, dynamic>);
-      } else {
-        print("Aucune session trouvée");
+      if (sessionToLeave == null) {
+        print("Session non trouvée");
         return null;
       }
+
+      // Retirer le joueur de la liste des joueurs de la session
+      List<dynamic> joueurs = sessionToLeave['joueurs'] ?? [];
+      joueurs.removeWhere((joueur) => joueur['email'] == email);
+
+      sessionToLeave['joueurs'] = joueurs;
+
+      // Mettre à jour uniquement la session concernée
+      int indexSession =
+          sessions.indexWhere((session) => session['id'] == idSession);
+      if (indexSession != -1) {
+        sessions[indexSession] = sessionToLeave;
+      }
+
+      // Mettre à jour le document du jeu avec la session modifiée
+      await matchDoc.update({
+        'sessions': sessions,
+      });
+
+      // Récupérer les données mises à jour
+      DocumentSnapshot querySnapshot = await matchDoc.get();
+      return Jeu.fromJson(querySnapshot.data() as Map<String, dynamic>);
     } catch (e) {
       print(e);
       return null;

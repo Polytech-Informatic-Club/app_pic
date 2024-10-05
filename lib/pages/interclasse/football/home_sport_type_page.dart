@@ -12,18 +12,26 @@ import 'package:new_app/widgets/match_card.dart';
 
 class HomeSportTypePage extends StatefulWidget {
   String typeSport;
-  HomeSportTypePage(this.typeSport, {super.key});
+  String bgImage;
+  String icone;
+  HomeSportTypePage(this.typeSport, this.bgImage, this.icone, {super.key});
 
   @override
   // ignore: library_private_types_in_public_api
   _HomeSportTypePageState createState() =>
       // ignore: unnecessary_this
-      _HomeSportTypePageState(this.typeSport);
+      _HomeSportTypePageState(this.typeSport, this.bgImage, this.icone);
 }
 
 class _HomeSportTypePageState extends State<HomeSportTypePage> {
   final String _typeSport;
-  _HomeSportTypePageState(this._typeSport);
+  final String _bgImage;
+  final String _icone;
+  _HomeSportTypePageState(
+    this._typeSport,
+    this._bgImage,
+    this._icone,
+  );
   final SportService _sportService = SportService();
   @override
   Widget build(BuildContext context) {
@@ -42,7 +50,7 @@ class _HomeSportTypePageState extends State<HomeSportTypePage> {
                 clipBehavior: Clip.none,
                 children: [
                   Image.asset(
-                    'assets/images/football/foot_top_bg.jpg',
+                    _bgImage,
                     height: 200,
                     fit: BoxFit.cover,
                     opacity: AlwaysStoppedAnimation(0.3),
@@ -68,7 +76,7 @@ class _HomeSportTypePageState extends State<HomeSportTypePage> {
                       backgroundColor: Colors.white,
                       radius: 50,
                       backgroundImage: AssetImage(
-                        "assets/images/foot.webp",
+                        _icone,
                       ),
                     ),
                   ),

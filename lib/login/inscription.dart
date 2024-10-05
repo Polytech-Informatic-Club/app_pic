@@ -387,13 +387,9 @@ class Inscription extends StatelessWidget {
                                                     new Utilisateur(
                                                         id: _emailController
                                                             .value.text,
-                                                        username:
-                                                            _emailController
+                                                        prenom:
+                                                            _prenomController
                                                                 .value.text,
-                                                        // password: _passwordController
-                                                        //     .value.text,
-                                                        prenom: _prenomController
-                                                            .value.text,
                                                         nom: _nomController
                                                             .value.text,
                                                         email: _emailController
@@ -405,7 +401,7 @@ class Inscription extends StatelessWidget {
                                                         genie: "",
                                                         promo:
                                                             "#${_promoController.value.text}",
-                                                        role: RoleType.ADMIN);
+                                                        role: RoleType.USER);
                                                 await _userService.setRole(
                                                     RoleType.USER
                                                         .toString()

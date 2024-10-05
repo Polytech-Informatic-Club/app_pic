@@ -72,9 +72,11 @@ class RestaurationItem extends StatelessWidget {
       margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
       padding: const EdgeInsets.all(15),
       width: 350,
-      height: MediaQuery.sizeOf(context).height * 0.2,
+      height: 130,
       decoration: BoxDecoration(
-          color: Colors.black, borderRadius: BorderRadius.circular(10)),
+        color: eptDarkGrey,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
