@@ -11,6 +11,7 @@ class InfoCard extends StatelessWidget {
   final String lieu;
   final DateTime date;
   final String description;
+  final String idAnnonce;
   InfoCard({
     super.key,
     required this.image,
@@ -20,6 +21,7 @@ class InfoCard extends StatelessWidget {
     required this.lieu,
     required this.date,
     required this.description,
+    required this.idAnnonce,
   });
 
   @override
@@ -35,6 +37,7 @@ class InfoCard extends StatelessWidget {
                 date: date,
                 lieu: lieu,
                 description: description,
+                idAnnonce: idAnnonce,
               ));
         },
         child: Container(

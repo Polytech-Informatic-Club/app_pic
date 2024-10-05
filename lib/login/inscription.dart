@@ -9,23 +9,40 @@ import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/alerte_message.dart';
 
-class Inscription extends StatelessWidget {
+class Inscription extends StatefulWidget {
   Inscription({super.key});
+
+  @override
+  State<Inscription> createState() => _InscriptionState();
+}
+
+class _InscriptionState extends State<Inscription> {
   final UserService _userService = UserService();
+
   final TextEditingController _prenomController = TextEditingController();
+
   final TextEditingController _nomController = TextEditingController();
+
   final TextEditingController _telephoneController = TextEditingController();
+
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
+
   final TextEditingController _promoController = TextEditingController();
+
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
   final ValueNotifier<bool> _isSaving = ValueNotifier<bool>(false);
 
   final ValueNotifier<double> _strengthNotifier = ValueNotifier<double>(0);
+
   final ValueNotifier<bool> _passwordsMatchNotifier = ValueNotifier<bool>(true);
+
+  bool _hasStartedTypingPassword = false;
 
   // Fonction pour calculer la force du mot de passe
   void _checkPasswordStrength(String password) {
@@ -106,25 +123,6 @@ class Inscription extends StatelessWidget {
                       child: Column(
                         children: [
                           TextFormField(
-                            controller: _nomController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Entrer un nom valide';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Nom',
-                              labelStyle: TextStyle(fontSize: 14),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-
-                          // Prenom TextField
-                          TextFormField(
                             controller: _prenomController,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -140,6 +138,26 @@ class Inscription extends StatelessWidget {
                               ),
                             ),
                           ),
+                          SizedBox(height: 10),
+                          TextFormField(
+                            controller: _nomController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Entrer un nom valide';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Nom',
+                              labelStyle: TextStyle(fontSize: 14),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                          ),
+
+                          // Prenom TextField
+
                           SizedBox(height: 10),
                           // Mail TextField
                           TextFormField(
@@ -182,11 +200,18 @@ class Inscription extends StatelessWidget {
                           // Mot de passe TextField
                           TextFormField(
                             controller: _passwordController,
-                            obscureText:
-                                true, // Cache le texte pour le champ mot de passe
+                            obscureText: true,
                             onChanged: (value) {
-                              _checkPasswordStrength(
-                                  value); // Appel lors de la saisie
+                              if (value.isNotEmpty) {
+                                setState(() {
+                                  _hasStartedTypingPassword = true;
+                                });
+                              } else {
+                                setState(() {
+                                  _hasStartedTypingPassword = false;
+                                });
+                              }
+                              _checkPasswordStrength(value);
                             },
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -212,7 +237,6 @@ class Inscription extends StatelessWidget {
                                 return null;
                               }
                             },
-
                             decoration: InputDecoration(
                               labelText: 'Mot de passe',
                               labelStyle: TextStyle(fontSize: 14),
@@ -222,52 +246,53 @@ class Inscription extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 10),
-                          // Confirmer mot de passe TextField
-                          // Utilisation de ValueListenableBuilder pour écouter les changements de _strengthNotifier
-                          ValueListenableBuilder<double>(
-                            valueListenable: _strengthNotifier,
-                            builder: (context, strength, child) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Affichage de la barre de progression
-                                  LinearProgressIndicator(
-                                    borderRadius: BorderRadius.circular(10),
-                                    value:
-                                        strength, // Valeur de la force (entre 0.0 et 1.0)
-                                    backgroundColor: Colors.grey[300],
-                                    color: strength <= 0.5
-                                        ? Colors.red
-                                        : (strength <= 0.75
-                                            ? Colors.orange
-                                            : Colors.green),
-                                    minHeight: 10,
-                                  ),
-                                  SizedBox(height: 10),
-                                  // Affichage textuel de la force
-                                  Text(
-                                    strength <= 0.25
-                                        ? 'Mot de passe faible'
-                                        : (strength <= 0.5
-                                            ? 'Mot de passe moyen'
-                                            : (strength <= 0.75
-                                                ? 'Mot de passe fort'
-                                                : 'Mot de passe très fort')),
-                                    style: TextStyle(
+
+                          if (_hasStartedTypingPassword) ...[
+                            ValueListenableBuilder<double>(
+                              valueListenable: _strengthNotifier,
+                              builder: (context, strength, child) {
+                                return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Affichage de la barre de progression
+                                      LinearProgressIndicator(
+                                        borderRadius: BorderRadius.circular(10),
+                                        value:
+                                            strength, // Valeur de la force (entre 0.0 et 1.0)
+                                        backgroundColor: Colors.grey[300],
                                         color: strength <= 0.5
                                             ? Colors.red
                                             : (strength <= 0.75
                                                 ? Colors.orange
-                                                : Colors.green)),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
+                                                : Colors.green),
+                                        minHeight: 10,
+                                      ),
+                                      SizedBox(height: 10),
+                                      // Affichage textuel de la force
+                                      Text(
+                                        strength <= 0.25
+                                            ? 'Mot de passe faible'
+                                            : (strength <= 0.5
+                                                ? 'Mot de passe moyen'
+                                                : (strength <= 0.75
+                                                    ? 'Mot de passe fort'
+                                                    : 'Mot de passe très fort')),
+                                        style: TextStyle(
+                                            color: strength <= 0.5
+                                                ? Colors.red
+                                                : (strength <= 0.75
+                                                    ? Colors.orange
+                                                    : Colors.green)),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                    ]);
+                              },
+                            ),
+                          ],
 
-                          SizedBox(
-                            height: 10,
-                          ),
                           TextFormField(
                             controller: _confirmPasswordController,
                             onChanged: (value) {
@@ -289,26 +314,27 @@ class Inscription extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 10),
-
-                          ValueListenableBuilder<bool>(
-                            valueListenable: _passwordsMatchNotifier,
-                            builder: (context, passwordsMatch, child) {
-                              return Text(
-                                passwordsMatch
-                                    ? 'Les mots de passe correspondent'
-                                    : 'Les mots de passe ne correspondent pas',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: passwordsMatch
-                                      ? Colors.green
-                                      : Colors.red,
-                                ),
-                              );
-                            },
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
+                          if (_passwordController.text != '') ...[
+                            ValueListenableBuilder<bool>(
+                              valueListenable: _passwordsMatchNotifier,
+                              builder: (context, passwordsMatch, child) {
+                                return Text(
+                                  passwordsMatch
+                                      ? 'Les mots de passe correspondent'
+                                      : 'Les mots de passe ne correspondent pas',
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    color: passwordsMatch
+                                        ? Colors.green
+                                        : Colors.red,
+                                  ),
+                                );
+                              },
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ],
                           // Promotion TextField
                           TextFormField(
                             controller: _promoController,

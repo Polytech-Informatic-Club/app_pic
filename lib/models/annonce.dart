@@ -14,7 +14,6 @@ class Annonce {
   final Categorie categorie;
   final List<Commentaire> comments;
   final int likes;
-  final int dislikes;
   final String partageLien; // Link to share the announcement
 
   Annonce({
@@ -28,7 +27,6 @@ class Annonce {
     required this.categorie,
     required this.comments,
     required this.likes,
-    required this.dislikes,
     required this.partageLien,
   });
 
@@ -50,7 +48,6 @@ class Annonce {
       categorie: Categorie.fromJson(json['categorie']),
       comments: commentList,
       likes: json['likes'] as int,
-      dislikes: json['dislikes'] as int,
       partageLien: json['partageLien'] as String,
     );
   }
@@ -70,8 +67,36 @@ class Annonce {
           .map((comment) => comment.toJson())
           .toList(), // Convert list of Commentaire objects to JSON
       'likes': likes,
-      'dislikes': dislikes,
       'partageLien': partageLien,
     };
+  }
+
+  Annonce copyWith({
+    String? id,
+    Categorie? categorie,
+    String? titre,
+    String? description,
+    String? lieu,
+    DateTime? date,
+    DateTime? dateCreation,
+    int? likes,
+    int? dislikes,
+    List<Commentaire>? comments,
+    String? image,
+    String? partageLien,
+  }) {
+    return Annonce(
+      id: id ?? this.id,
+      categorie: categorie ?? this.categorie,
+      titre: titre ?? this.titre,
+      description: description ?? this.description,
+      lieu: lieu ?? this.lieu,
+      date: date ?? this.date,
+      dateCreation: dateCreation ?? this.dateCreation,
+      likes: likes ?? this.likes,
+      comments: comments ?? this.comments,
+      image: image ?? this.image,
+      partageLien: partageLien ?? this.partageLien,
+    );
   }
 }

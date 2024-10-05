@@ -29,7 +29,7 @@ class AnnonceService {
 
   Future<String> postAnnonce(Annonce annonce) async {
     try {
-      await annonceCollection.doc(annonce.titre).set(annonce.toJson());
+      await annonceCollection.doc(annonce.id).set(annonce.toJson());
       return "OK";
     } catch (e) {
       return "Erreur lors de la création de l'annnonce : $e";
@@ -143,6 +143,38 @@ class AnnonceService {
       return null;
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<String> deleteAnnonceById(String annonceId) async {
+    try {
+      // Rechercher l'annonce avec l'ID correspondant
+      QuerySnapshot querySnapshot = await annonceCollection
+          .where('id', isEqualTo: annonceId)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // Suppression du document si trouvé
+        await querySnapshot.docs.first.reference.delete();
+        return "Annonce supprimée avec succès";
+      } else {
+        return "Annonce non trouvée";
+      }
+    } catch (e) {
+      return "Erreur lors de la suppression de l'annonce : $e";
+    }
+  }
+
+  Future<String> updateAnnonce(Annonce annonce) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('ANNONCE')
+          .doc(annonce.id)
+          .update(annonce.toJson());
+      return "OK";
+    } catch (e) {
+      return "Error";
     }
   }
 }
