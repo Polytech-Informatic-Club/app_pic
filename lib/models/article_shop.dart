@@ -10,7 +10,6 @@ class ArticleShop {
   final DateTime dateCreation;
   final String description;
   final String titre;
-  final String lieu;
   final String image;
   final CategorieShop categorie;
   final List<Commande> commandes;
@@ -23,7 +22,6 @@ class ArticleShop {
     required this.dateCreation,
     required this.description,
     required this.titre,
-    required this.lieu,
     required this.image,
     required this.categorie,
     required this.commandes,
@@ -43,7 +41,6 @@ class ArticleShop {
       dateCreation: (json['dateCreation'] as Timestamp).toDate(),
       description: json['description'] as String,
       titre: json['titre'] as String,
-      lieu: json['lieu'] as String,
       image: json['image'] as String,
       // categorie: Categorie(id: "", logo: "", libelle: ""),
       categorie: CategorieShop.fromJson(json['categorie']),
@@ -61,7 +58,6 @@ class ArticleShop {
       'dateCreation': dateCreation,
       'description': description,
       'titre': titre,
-      'lieu': lieu,
       'image': image,
       'categorie': categorie.toJson(),
       'commandes': commandes

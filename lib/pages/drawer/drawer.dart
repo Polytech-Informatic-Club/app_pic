@@ -129,6 +129,7 @@ class _EptDrawerState extends State<EptDrawer> {
                       }),
                       if ([
                         RoleType.ADMIN.toString().split(".").last,
+                        RoleType.ADMIN_MB.toString().split(".").last,
                         RoleType.ADMIN_FOOTBALL.toString().split(".").last,
                         RoleType.ADMIN_BASKETBALL.toString().split(".").last,
                         RoleType.ADMIN_VOLLEYBALL.toString().split(".").last,

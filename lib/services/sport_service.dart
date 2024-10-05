@@ -219,14 +219,12 @@ class SportService {
           user: Utilisateur.fromJson(userData),
           likes: 0,
           dislikes: 0);
-      print(commentaire);
       await matchDoc.update(
         {
           'comments': FieldValue.arrayUnion([commentaire.toJson()])
         },
       );
 
-      print("OK");
       DocumentSnapshot querySnapshot = await matchDoc.get();
 
       return Football.fromJson(querySnapshot.data() as Map<String, dynamic>);
