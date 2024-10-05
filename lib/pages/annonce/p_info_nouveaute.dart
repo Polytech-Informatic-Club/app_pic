@@ -198,6 +198,7 @@ class CategorySelection extends StatelessWidget {
                         lieu: annonce.lieu,
                         date: annonce.date,
                         description: annonce.description,
+                        idAnnonce: annonce.id,
                       )
                   // Container(
                   //   padding: const EdgeInsets.all(5),

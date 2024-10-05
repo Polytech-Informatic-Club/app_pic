@@ -235,15 +235,17 @@ class CreateAnnonce extends StatelessWidget {
                 SubmittedButton("Poster", () async {
                   // if (_selectedCategory.value != null) {
                   Annonce annonce = Annonce(
-                      categorie: _selectedCategory.value!,
+                      categorie: _selectedCategory.value == null
+                          ? Categorie(id: '', libelle: '', logo: '')
+                          : _selectedCategory.value!,
                       titre: _titreTextController.text,
-                      date: DateTime.now(),
-                      dateCreation: _selectedDate.value!,
+                      date: _selectedDate.value!,
+                      dateCreation: DateTime.now(),
                       description: _descriptionTextController.text,
                       lieu: _lieuTextController.text,
                       likes: 0,
                       dislikes: 0,
-                      id: "",
+                      id: DateTime.now().millisecondsSinceEpoch.toString(),
                       comments: [],
                       image: _url.value,
                       partageLien: "");

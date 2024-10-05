@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/user.dart';
+import 'package:new_app/services/annonce_service.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/submited_button.dart';
@@ -12,12 +13,14 @@ class AfficherAnononceScreen extends StatefulWidget {
   final String lieu;
   final DateTime date;
   final String description;
+  final String idAnnonce;
   AfficherAnononceScreen(
       {required this.image,
       required this.titre,
       required this.lieu,
       required this.date,
       required this.description,
+      required this.idAnnonce,
       super.key});
 
   @override
@@ -67,13 +70,26 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
         ),
         extendBodyBehindAppBar: true,
         floatingActionButton: isAdmin
-            ? FloatingActionButton(
-                backgroundColor: AppColors.primary,
-                child: Icon(
-                  Icons.edit,
-                  color: AppColors.black,
-                ),
-                onPressed: () {},
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  FloatingActionButton(
+                    heroTag:
+                        "editButton", // Chaque bouton doit avoir un heroTag unique
+                    onPressed: () {},
+                    backgroundColor: AppColors.primary,
+                    child: Icon(Icons.edit),
+                  ),
+                  SizedBox(width: 10),
+                  FloatingActionButton(
+                    heroTag: "deleteButton", // Unique heroTag
+                    onPressed: () {
+                      _showDeleteConfirmation(context, widget.idAnnonce);
+                    },
+                    backgroundColor: Colors.red,
+                    child: Icon(Icons.delete),
+                  ),
+                ],
               )
             : null,
         body: SingleChildScrollView(
@@ -135,9 +151,11 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
               Text(
                 title,
                 style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 35,
-                    fontWeight: FontWeight.bold),
+                  color: Colors.white,
+                  fontSize: 35,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
               ),
               Text(
                 subtitle,
@@ -189,6 +207,62 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
           ),
         )
       ],
+    );
+  }
+}
+
+void _showDeleteConfirmation(BuildContext context, String id) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Confirmer la suppression'),
+        content: Text('Êtes-vous sûr de vouloir supprimer cette annonce ?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              // Ferme le dialogue si l'utilisateur annule
+              Navigator.of(context).pop();
+            },
+            child: Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () {
+              // Supprime l'annonce et quitte la page
+              _deleteAnnonce(id, context);
+            },
+            child: Text('Supprimer'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+// Fonction pour supprimer l'annonce
+void _deleteAnnonce(String id, BuildContext context) async {
+  try {
+    // Appelle ton service pour supprimer l'annonce
+    await AnnonceService().deleteAnnonceById(id);
+
+    // Affiche un message de succès (si tu veux)
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Annonce supprimée avec succès'),
+      ),
+    );
+
+    // Ferme le dialogue de confirmation
+    Navigator.of(context).pop(); // Ferme le AlertDialog
+
+    // Quitte la page après la suppression
+    Navigator.of(context).pop(); // Ferme la page actuelle
+  } catch (e) {
+    // Si une erreur survient, affiche un message d'erreur
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Erreur lors de la suppression de l\'annonce : $e'),
+      ),
     );
   }
 }
