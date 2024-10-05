@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/user.dart';
+import 'package:new_app/pages/annonce/annonce_screen.dart';
+import 'package:new_app/pages/annonce/edit_annonce.dart';
 import 'package:new_app/services/annonce_service.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
@@ -76,7 +78,10 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
                   FloatingActionButton(
                     heroTag:
                         "editButton", // Chaque bouton doit avoir un heroTag unique
-                    onPressed: () {},
+                    onPressed: () {
+                      changerPage(
+                          context, EditAnnonce(idAnnonce: widget.idAnnonce));
+                    },
                     backgroundColor: AppColors.primary,
                     child: Icon(Icons.edit),
                   ),
@@ -256,7 +261,8 @@ void _deleteAnnonce(String id, BuildContext context) async {
     Navigator.of(context).pop(); // Ferme le AlertDialog
 
     // Quitte la page après la suppression
-    Navigator.of(context).pop(); // Ferme la page actuelle
+    Navigator.of(context).pop();
+    changerPage(context, AnnonceScreen()); // Ferme la page actuelle
   } catch (e) {
     // Si une erreur survient, affiche un message d'erreur
     ScaffoldMessenger.of(context).showSnackBar(

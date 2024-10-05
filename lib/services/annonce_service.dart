@@ -29,7 +29,7 @@ class AnnonceService {
 
   Future<String> postAnnonce(Annonce annonce) async {
     try {
-      await annonceCollection.doc(annonce.titre).set(annonce.toJson());
+      await annonceCollection.doc(annonce.id).set(annonce.toJson());
       return "OK";
     } catch (e) {
       return "Erreur lors de la création de l'annnonce : $e";
@@ -163,6 +163,18 @@ class AnnonceService {
       }
     } catch (e) {
       return "Erreur lors de la suppression de l'annonce : $e";
+    }
+  }
+
+  Future<String> updateAnnonce(Annonce annonce) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('ANNONCE')
+          .doc(annonce.id)
+          .update(annonce.toJson());
+      return "OK";
+    } catch (e) {
+      return "Error";
     }
   }
 }

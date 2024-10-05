@@ -74,4 +74,34 @@ class Annonce {
       'partageLien': partageLien,
     };
   }
+
+  Annonce copyWith({
+    String? id,
+    Categorie? categorie,
+    String? titre,
+    String? description,
+    String? lieu,
+    DateTime? date,
+    DateTime? dateCreation,
+    int? likes,
+    int? dislikes,
+    List<Commentaire>? comments,
+    String? image,
+    String? partageLien,
+  }) {
+    return Annonce(
+      id: id ?? this.id,
+      categorie: categorie ?? this.categorie,
+      titre: titre ?? this.titre,
+      description: description ?? this.description,
+      lieu: lieu ?? this.lieu,
+      date: date ?? this.date,
+      dateCreation: dateCreation ?? this.dateCreation,
+      likes: likes ?? this.likes,
+      dislikes: dislikes ?? this.dislikes,
+      comments: comments ?? this.comments,
+      image: image ?? this.image,
+      partageLien: partageLien ?? this.partageLien,
+    );
+  }
 }

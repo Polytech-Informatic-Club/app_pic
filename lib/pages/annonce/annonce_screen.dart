@@ -72,12 +72,12 @@ class _AnnonceScreenState extends State<AnnonceScreen> {
             },
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 0, 50),
+            padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),
             child: Column(
               children: [
                 PInfoNouveaute(),
                 const SizedBox(
-                  height: 40,
+                  height: 20,
                 ),
                 Container(
                   width: 250,
@@ -85,7 +85,7 @@ class _AnnonceScreenState extends State<AnnonceScreen> {
                   color: Colors.black,
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 20,
                 ),
                 HotTopic(),
               ],
@@ -111,7 +111,7 @@ Widget widgetAG(String date, String heure, String lieu, String sujet) {
           height: 140,
         ),
         Positioned(
-          right: -10,
+          right: -20,
           bottom: -10,
           child: SizedBox(
             height: 180,
