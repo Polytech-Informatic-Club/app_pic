@@ -9,7 +9,7 @@ import 'package:new_app/pages/drawer/compte/compte.dart';
 import 'package:new_app/pages/drawer/famille/famille.dart';
 import 'package:new_app/pages/drawer/propos/a_propos.dart';
 import 'package:new_app/pages/interclasse/football/home_admin_sport_type_page.dart';
-import 'package:new_app/pages/drawer/xoss/xoss.dart';
+import 'package:new_app/pages/drawer/xoss/xoss_screen.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart'; // Import du package url_launcher
@@ -121,7 +121,7 @@ class _EptDrawerState extends State<EptDrawer> {
                       drawerItem(
                           "assets/images/top-left-menu/xoss.png", "Cahier Xoss",
                           () {
-                        changerPage(context, Xoss());
+                        changerPage(context, XossScreen());
                       }),
                       drawerItem("assets/images/top-left-menu/a_propos.png",
                           "A propos", () {

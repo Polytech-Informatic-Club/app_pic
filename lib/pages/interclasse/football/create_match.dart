@@ -227,7 +227,6 @@ class CreateMatch extends StatelessWidget {
                     SizedBox(
                       height: 20,
                     ),
-
                     GestureDetector(
                       onTap: () => _selectDateTime(context),
                       child: Row(children: [
@@ -350,7 +349,7 @@ class CreateMatch extends StatelessWidget {
                                 likers: [],
                                 dislikers: [],
                                 partageLien: "");
-                          } else if (typeSport == "JEUX ESPRIT") {
+                          } else if (typeSport == "JEUX_ESPRIT") {
                             match = JeuxEsprit(
                                 statistiques: {
                                   "bonneReponseA": 0,
@@ -401,30 +400,6 @@ class CreateMatch extends StatelessWidget {
                             AppColors.echec);
                       }
                     })
-                    // signInSignUpButton("Créer", context, false, () {
-                    //   FirebaseFirestore.instance.collection('Matchs').add({
-                    //     "idEquipe1": _equipeTextController.value.text,
-                    //     "idEquipe2": _adversaireTextController.value.text,
-                    //     "redCard1": 0,
-                    //     "redCard2": 0,
-                    //     "yellowCard1": 0,
-                    //     "yellowCard2": 0,
-                    //     "corners1": 0,
-                    //     "corners2": 0,
-                    //     "fautes1": 0,
-                    //     "fautes2": 0,
-                    //     "score1": 0,
-                    //     "score2": 0,
-                    //     "tirs1": 0,
-                    //     "tirs2": 0,
-                    //     "tirsCadres1": 0,
-                    //     "tirsCadres2": 0,
-                    //     "date": selectedDate,
-                    //     "dateCreation": DateTime.now(),
-                    //     "commentaires": [],
-                    //     "likes": 0
-                    //   });
-                    // }),
                   ])))),
     );
   }

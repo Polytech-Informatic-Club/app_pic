@@ -106,11 +106,33 @@ class AnnonceService {
     }
   }
 
+  Future<List<Annonce>> getNextEvenement() async {
+    List<Annonce> list = [];
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await annonceCollection
+              .where("image", isNotEqualTo: "")
+              .where("date", isLessThanOrEqualTo: Timestamp.now())
+              .limit(5)
+              .get();
+
+      List<Map<String, dynamic>> data =
+          querySnapshot.docs.map((doc) => doc.data()).toList();
+      for (var d in data) {
+        list.add(Annonce.fromJson(d));
+      }
+
+      return list;
+    } catch (e) {
+      return [];
+    }
+  }
+
   Future<Annonce?> getNextAG() async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await annonceCollection
-              .where('date', isLessThanOrEqualTo: Timestamp.now())
+              .where('date', isGreaterThanOrEqualTo: Timestamp.now())
               .limit(1)
               .get();
 

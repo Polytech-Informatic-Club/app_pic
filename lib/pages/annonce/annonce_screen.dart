@@ -54,9 +54,13 @@ class _AnnonceScreenState extends State<AnnonceScreen> {
                 } else if (snapshot.hasError) {
                   return Text('Erreur lors du chargement des annonces');
                 } else {
-                  Annonce annonce = snapshot.data!;
-                  return widgetAG(simpleDateformat(annonce.date),
-                      getHour(annonce.date), annonce.lieu, 'Divers');
+                  Annonce? annonce = snapshot.data;
+                  return annonce != null
+                      ? widgetAG(simpleDateformat(annonce.date),
+                          getHour(annonce.date), annonce.lieu, 'Divers')
+                      : Container(
+                          height: 0,
+                        );
                 }
               }),
           Padding(
