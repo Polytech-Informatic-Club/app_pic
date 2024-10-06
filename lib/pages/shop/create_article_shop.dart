@@ -22,6 +22,8 @@ class CreateArticleShop extends StatelessWidget {
   final TextEditingController _descriptionTextController =
       TextEditingController();
   final TextEditingController _titreController = TextEditingController();
+  final TextEditingController _prixController = TextEditingController();
+
   DateTime selectedDate = DateTime.now();
   // ignore: non_constant_identifier_names
   final ShopService _shopService = ShopService();
@@ -251,6 +253,12 @@ class CreateArticleShop extends StatelessWidget {
                     SizedBox(
                       height: 20,
                     ),
+                    reusableTextFormField("Prix", _prixController, (value) {
+                      return null;
+                    }),
+                    SizedBox(
+                      height: 20,
+                    ),
                     ReusableDescriptionInput(
                         "Description", _descriptionTextController, (value) {
                       return null;
@@ -261,6 +269,7 @@ class CreateArticleShop extends StatelessWidget {
                     SubmittedButton("Poster", () async {
                       if (_selectedcollectionA.value != null) {
                         ArticleShop articleShop = ArticleShop(
+                          prix: double.parse(_prixController.value.text),
                           id: DateTime.now().toString(),
                           dateCreation: DateTime.now(),
                           description: _descriptionTextController.value.text,

@@ -1,4 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:new_app/fonctions.dart';
+import 'package:new_app/models/article_shop.dart';
+import 'package:new_app/models/categorie_shop.dart';
 import 'package:new_app/models/collection.dart';
 import 'package:new_app/pages/home/navbar.dart';
 import 'dart:async';
@@ -6,6 +10,7 @@ import 'dart:async';
 import 'package:new_app/pages/shop/shop_blouson.dart';
 import 'package:new_app/services/shop_service.dart';
 import 'package:new_app/utils/app_colors.dart';
+import 'package:new_app/widgets/alerte_message.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({Key? key}) : super(key: key);
@@ -15,10 +20,9 @@ class ShopScreen extends StatefulWidget {
 }
 
 class _ShopScreenState extends State<ShopScreen> {
+  final ShopService _shopService = ShopService();
 
-final ShopService _shopService =  ShopService();
-
-List<String> carouselImages = [];
+  List<String> carouselImages = [];
 
   @override
   void initState() {
@@ -28,42 +32,45 @@ List<String> carouselImages = [];
 
   Future<void> _loadCarouselImages() async {
     Collection? collection = await _shopService.getNewCollection();
+    print(collection);
     if (collection != null) {
       setState(() {
-        carouselImages = collection.articleShops.map((article) => article.image).toList();
+        carouselImages =
+            collection.articleShops.map((article) => article.image).toList();
       });
     }
   }
-  String selectedCategory = 'Tous';
-  List<String> categories = [
-    'Tous',
-    'Tasse',
-    'Bloc-Notes',
-    'Porte-Clé',
-    'Gourde'
+
+  CategorieShop selectedCategory =
+      CategorieShop(id: "", libelle: "Tous", logo: "");
+  List<CategorieShop> categories = [
+    CategorieShop(id: "", libelle: "Tous", logo: ""),
   ];
   String searchQuery = '';
 
-  List<Map<String, dynamic>> getFilteredProducts() {
-    List<Map<String, dynamic>> filteredProducts = List.from(products);
+  Future<List<ArticleShop>> getFilteredProducts() async {
+    List<ArticleShop> products = await _shopService.getAllArticle();
+    print(products);
+
+    List<ArticleShop> filteredProducts = List.from(products);
 
     // Trier les produits commandés en premier
     filteredProducts.sort((a, b) {
-      if (a['commande'] == b['commande']) return 0;
-      if (a['commande']) return -1;
+      if (a.commandes == b.commandes) return 0;
+      if (a.commandes.isEmpty) return -1;
       return 1;
     });
 
     return filteredProducts.where((product) {
-      bool categoryMatch = selectedCategory == 'Tous' ||
-          product['categorie'] == selectedCategory;
+      bool categoryMatch =
+          selectedCategory == 'Tous' || product.categorie == selectedCategory;
       bool searchMatch =
-          product['produit'].toLowerCase().contains(searchQuery.toLowerCase());
+          product.titre.toLowerCase().contains(searchQuery.toLowerCase());
       return categoryMatch && searchMatch;
     }).toList();
   }
 
-  void _showProductDetails(Map<String, dynamic> product) {
+  void _showProductDetails(ArticleShop product, Collection collection) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -71,24 +78,30 @@ List<String> carouselImages = [];
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(product['image_path'] ?? '', height: 200),
+              Image.network(product.image, height: 200),
               SizedBox(height: 10),
-              Text(product['produit'] ?? '',
+              Text(product.titre,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              Text('Catégorie: ${product['categorie'] ?? ''}'),
-              Text('Prix: ${product['prix'] ?? ''} CFA'),
+              Text('Catégorie: ${product.categorie.libelle}'),
+              Text('Prix: ${product.prix} CFA'),
               SizedBox(height: 10),
-              Text(product['description'] ?? ''),
+              Text(product.description),
               SizedBox(height: 20),
               ElevatedButton(
-                child:
-                    Text(product['commande'] == true ? 'Retirer' : 'Commander'),
-                onPressed: () {
-                  setState(() {
-                    product['commande'] = !(product['commande'] ?? false);
-                  });
-                  Navigator.of(context).pop();
-                  _showOrderConfirmation(product['commande'] ?? false);
+                child: Text('Commander'),
+                onPressed: () async {
+                  String code =
+                      await _shopService.postCommande(product, collection);
+                  if (code == "OK") {
+                    Navigator.of(context).pop();
+                    alerteMessageWidget(
+                        context,
+                        "Votre commande a été bien prise en compte.",
+                        AppColors.success);
+                  } else {
+                    alerteMessageWidget(
+                        context, "Echec lors de la commande.", AppColors.echec);
+                  }
                 },
               ),
             ],
@@ -181,17 +194,17 @@ List<String> carouselImages = [];
                           ],
                         ),
                       ),
-                      PopupMenuButton<String>(
-                        onSelected: (String value) {
+                      PopupMenuButton<CategorieShop>(
+                        onSelected: (CategorieShop value) {
                           setState(() {
                             selectedCategory = value;
                           });
                         },
                         itemBuilder: (BuildContext context) {
-                          return categories.map((String choice) {
-                            return PopupMenuItem<String>(
+                          return categories.map((CategorieShop choice) {
+                            return PopupMenuItem<CategorieShop>(
                               value: choice,
-                              child: Text(choice),
+                              child: Text(choice.libelle),
                             );
                           }).toList();
                         },
@@ -223,7 +236,7 @@ List<String> carouselImages = [];
                     ],
                   ),
                   Text(
-                    selectedCategory,
+                    selectedCategory.libelle,
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.blue,
@@ -240,39 +253,93 @@ List<String> carouselImages = [];
                 fontWeight: FontWeight.bold,
               ),
             ),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                List<Map<String, dynamic>> filteredProducts =
-                    getFilteredProducts();
+            Container(child: LayoutBuilder(builder: (context, constraints) {
+              return FutureBuilder<List<Collection>>(
+                  future: _shopService.getAllCollection(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Erreur: ${snapshot.error}');
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Text('Aucun produit trouvé');
+                    }
 
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 30,
-                      mainAxisSpacing: 15,
-                      childAspectRatio: 0.7,
-                    ),
-                    itemCount: filteredProducts.length,
-                    itemBuilder: (context, index) {
-                      final product = filteredProducts[index];
-                      return GestureDetector(
-                        onTap: () => _showProductDetails(product),
-                        child: shopItem(
-                          product['image_path'],
-                          product['produit'],
-                          product['prix'],
-                          product['commande'],
+                    List<Collection> listCollection = snapshot.data!;
+
+                    return Column(
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: listCollection.length,
+                          itemBuilder: (context, index) {
+                            final collection = listCollection[index];
+                            return Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(collection.nom),
+                                    Text(timeAgoCustom(collection.date)),
+                                  ],
+                                ),
+                                GridView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 5,
+                                    childAspectRatio: 0.6,
+                                  ),
+                                  itemCount: collection.articleShops.length,
+                                  itemBuilder: (context, i) {
+                                    final produit = collection.articleShops[i];
+                                    return GestureDetector(
+                                      onTap: () => _showProductDetails(
+                                          produit, collection),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(5),
+                                            width: 170,
+                                            height: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.22,
+                                            decoration: BoxDecoration(
+                                              color: AppColors.primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              child: Image.network(
+                                                produit.image,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                          Text(produit.titre,
+                                              overflow: TextOverflow.ellipsis),
+                                          Text("${produit.prix} FCFA",
+                                              overflow: TextOverflow.ellipsis),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
+                      ],
+                    );
+                  });
+            }))
           ],
         ),
       ),
@@ -321,7 +388,7 @@ class _ShopCarouselState extends State<ShopCarousel> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 650,
+      height: MediaQuery.sizeOf(context).height * 0.6,
       child: Stack(
         children: [
           PageView.builder(
@@ -431,103 +498,53 @@ class _ShopCarouselState extends State<ShopCarousel> {
   }
 }
 
-Widget shopItem(imagePath, productName, price, isOrdered) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Container(
-        padding: const EdgeInsets.all(5),
-        width: 170,
-        height: 190,
-        decoration: BoxDecoration(
-            color: eptLightGrey, borderRadius: BorderRadius.circular(15)),
-        child: Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
-          clipBehavior: Clip.hardEdge,
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-      const SizedBox(
-        height: 5,
-      ),
-      Text(
-        productName,
-        style: const TextStyle(fontSize: 12, color: eptDarkGrey),
-      ),
-      Row(
-        children: [
-          Text(
-            "$price Fcfa",
-            style: const TextStyle(
-              fontFamily: "Inter",
-              fontSize: 16,
-            ),
-          ),
-          if (isOrdered) ...[
-            Image.asset('assets/images/checked.png', height: 20),
-          ],
-        ],
-      ),
-    ],
-  );
-}
-
-final List<Map<String, dynamic>> products = [
-  {
-    'produit': 'Tasse en Céramique',
-    'categorie': 'Tasse',
-    'prix': '3000',
-    'image_path': 'assets/images/market/tasse_50aire.png',
-    'description':
-        'Une tasse en céramique élégante et durable, parfaite pour vos boissons chaudes préférées.',
-    'commande': false,
-  },
-  {
-    'produit': 'Bloc-Notes Écologique',
-    'categorie': 'Bloc-Notes',
-    'prix': '2000',
-    'image_path': 'assets/images/market/bloc_note.png',
-    'description':
-        'Un bloc-notes fabriqué à partir de matériaux recyclés, idéal pour prendre des notes tout en respectant l\'environnement.',
-    'commande': false,
-  },
-  {
-    'produit': 'Porte-Clé en Bois',
-    'categorie': 'Porte-Clé',
-    'prix': '1500',
-    'image_path': 'assets/images/market/porte_cle.png',
-    'description':
-        'Un porte-clé élégant en bois naturel, léger et résistant pour garder vos clés organisées.',
-    'commande': false,
-  },
-  {
-    'produit': 'Gourde Isotherme',
-    'categorie': 'Gourde',
-    'prix': '5000',
-    'image_path': 'assets/images/market/gourde.png',
-    'description':
-        'Une gourde isotherme de haute qualité qui maintient vos boissons chaudes ou froides pendant des heures.',
-    'commande': false,
-  },
-  {
-    'produit': 'Tasse à Café Vintage',
-    'categorie': 'Tasse',
-    'prix': '3500',
-    'image_path': 'assets/images/market/tasse_50aire_2.png',
-    'description':
-        'Une tasse à café au design rétro, parfaite pour ajouter une touche de nostalgie à votre pause café.',
-    'commande': false,
-  },
-  {
-    'produit': 'Carnet de Voyage',
-    'categorie': 'Bloc-Notes',
-    'prix': '2500',
-    'image_path': 'assets/images/market/bloc_note.png',
-    'description':
-        'Un carnet élégant pour consigner vos aventures et souvenirs de voyage.',
-    'commande': false,
-  },
-];
+// Widget shopItem(imagePath, productName, price, isOrdered) {
+//   return Container(
+//       height: 1000,
+//       color: Colors.green,
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         mainAxisSize: MainAxisSize.max,
+//         children: [
+//           Container(
+//             padding: const EdgeInsets.all(5),
+//             width: 170,
+//             height: 190,
+//             decoration: BoxDecoration(
+//                 color: Colors.red,
+//                 // color: eptLightGrey,
+//                 borderRadius: BorderRadius.circular(15)),
+//             child: Container(
+//               decoration:
+//                   BoxDecoration(borderRadius: BorderRadius.circular(15)),
+//               clipBehavior: Clip.hardEdge,
+//               child: Image.network(
+//                 imagePath,
+//                 fit: BoxFit.cover,
+//               ),
+//             ),
+//           ),
+//           const SizedBox(
+//             height: 5,
+//           ),
+//           Text(
+//             productName,
+//             style: const TextStyle(fontSize: 12, color: eptDarkGrey),
+//           ),
+//           Row(
+//             children: [
+//               Text(
+//                 "$price Fcfa",
+//                 style: const TextStyle(
+//                   fontFamily: "Inter",
+//                   fontSize: 16,
+//                 ),
+//               ),
+//               if (isOrdered) ...[
+//                 Image.asset('assets/images/checked.png', height: 20),
+//               ],
+//             ],
+//           ),
+//         ],
+//       ));
+// }

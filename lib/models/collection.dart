@@ -17,15 +17,15 @@ class Collection {
   // Factory method to create an Collection object from JSON
   factory Collection.fromJson(Map<String, dynamic> json) {
     // Parse the 'ArticleShops' list from JSON and map it to a list of ArticleShop objects
-    var ArticleShopsFromJson = json['articleShops'] as List<dynamic>;
-    List<ArticleShop> ArticleShopsList =
-        ArticleShopsFromJson.map((item) => ArticleShop.fromJson(item)).toList();
+    var articleShopsFromJson = json['articleShops'] as List<dynamic>;
+    List<ArticleShop> articleShopsList =
+        articleShopsFromJson.map((item) => ArticleShop.fromJson(item)).toList();
 
     return Collection(
       id: json['id'] as String,
       nom: json['nom'] as String,
       date: (json['date'] as Timestamp).toDate(),
-      articleShops: ArticleShopsList,
+      articleShops: articleShopsList,
     );
   }
 
@@ -35,7 +35,8 @@ class Collection {
       'id': id,
       'nom': nom,
       'date': date,
-      'articleShops': articleShops.map((ArticleShop) => ArticleShop.toJson())
+      'articleShops': articleShops
+          .map((articleShop) => articleShop.toJson())
           .toList(), // Convert list of ArticleShop objects to JSON
     };
   }

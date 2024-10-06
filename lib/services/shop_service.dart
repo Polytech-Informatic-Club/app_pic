@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:new_app/models/article_shop.dart';
 import 'package:new_app/models/categorie_shop.dart';
 import 'package:new_app/models/collection.dart';
+import 'package:new_app/models/commande.dart';
 import 'package:new_app/models/utilisateur.dart';
 
 class ShopService {
@@ -34,6 +35,7 @@ class ShopService {
       return [];
     }
   }
+
   Future<Collection?> getNewCollection() async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
@@ -41,8 +43,7 @@ class ShopService {
 
       Map<String, dynamic> data =
           querySnapshot.docs.map((doc) => doc.data()).first;
-    
-
+      print(data);
       return Collection.fromJson(data);
     } catch (e) {
       return null;
@@ -60,6 +61,24 @@ class ShopService {
       for (var d in data) {
         print(d);
         list.add(CategorieShop.fromJson(d));
+      }
+
+      return list;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<ArticleShop>> getAllArticle() async {
+    List<ArticleShop> list = [];
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await articleCollection.get();
+
+      List<Map<String, dynamic>> data =
+          querySnapshot.docs.map((doc) => doc.data()).toList();
+      for (var d in data) {
+        list.add(ArticleShop.fromJson(d));
       }
 
       return list;
@@ -113,26 +132,51 @@ class ShopService {
     }
   }
 
-  // Future<String> postShop(Collection collection) async {
-  //   try {
-  //     String email = FirebaseAuth.instance.currentUser!.email!;
-  //     // Récupérer l'utilisateur avec l'email
-  //     QuerySnapshot userSnapshot = await _firestore
-  //         .collection("USER")
-  //         .where('email', isEqualTo: email)
-  //         .limit(1)
-  //         .get();
-  //     if (userSnapshot.docs.isEmpty) return "";
-  //     Map<String, dynamic> userData =
-  //         userSnapshot.docs.first.data() as Map<String, dynamic>;
-  //     Utilisateur utilisateur = Utilisateur.fromJson(userData);
-  //     Shop.user = utilisateur;
-  //     await ShopCollection.doc(Shop.id).set(Shop.toJson());
-  //     return "OK";
-  //   } catch (e) {
-  //     return "Erreur lors de la création du match : $e";
-  //   }
-  // }
+  Future<String> postCommande(
+      ArticleShop produit, Collection collection) async {
+    try {
+      String email = FirebaseAuth.instance.currentUser!.email!;
+      DocumentSnapshot userSnapshot =
+          await _firestore.collection("USER").doc(email).get();
+      if (userSnapshot.data() == null) return "KO";
+
+      Map<String, dynamic> userData =
+          userSnapshot.data() as Map<String, dynamic>;
+      Commande commande = Commande(
+        date: DateTime.now(),
+        id: DateTime.now().toIso8601String(),
+        user: Utilisateur.fromJson(userData),
+        nombre: 1,
+        produit: produit.titre,
+      );
+
+      DocumentSnapshot doc =
+          await collectionCollection.doc(collection.id).get();
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+      List<dynamic> articleShops = data['articleShops'];
+
+      for (var article in articleShops) {
+        if (article['id'] == produit.id) {
+          // Ajouter la commande dans la liste des commandes
+          List<dynamic> commandes = article['commandes'] ?? [];
+          commandes.add(commande.toJson());
+          article['commandes'] = commandes;
+          break;
+        }
+      }
+      await collectionCollection.doc(collection.id).update({
+        'articleShops': articleShops,
+      });
+
+      print("Mise à jour réussie !");
+
+      print("OK");
+      return "OK";
+    } catch (e) {
+      return "Erreur lors de la création de la commande : $e";
+    }
+  }
 
   Future<Collection?> getCollectionId(String id) async {
     try {
@@ -145,6 +189,18 @@ class ShopService {
       return null;
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<List<String>> getCarouselImages(String collectionId) async {
+    try {
+      Collection? collection = await getCollectionId(collectionId);
+      if (collection != null) {
+        return collection.articleShops.map((article) => article.image).toList();
+      }
+      return [];
+    } catch (e) {
+      return [];
     }
   }
 

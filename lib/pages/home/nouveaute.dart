@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:new_app/models/annonce.dart';
+import 'package:new_app/models/article_shop.dart';
+import 'package:new_app/models/collection.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/pages/annonce/infocard.dart';
 import 'package:new_app/pages/annonce/p_info_nouveaute.dart';
 import 'package:new_app/pages/home/section_selector.dart';
 import 'package:new_app/services/annonce_service.dart';
+import 'package:new_app/services/shop_service.dart';
 import 'package:new_app/services/sport_service.dart';
+import 'package:new_app/utils/app_colors.dart';
 
 class Nouveaute extends StatefulWidget {
   const Nouveaute({super.key});
@@ -18,6 +22,7 @@ class Nouveaute extends StatefulWidget {
 class _NouveauteState extends State<Nouveaute> {
   AnnonceService _annonceService = AnnonceService();
   SportService _sportService = SportService();
+  ShopService _shopService = ShopService();
   int _value = 1;
   @override
   Widget build(BuildContext context) {
@@ -92,21 +97,34 @@ class _NouveauteState extends State<Nouveaute> {
                       List<Annonce> annonces = snapshot.data ?? [];
                       return Row(
                         children: [
-                          // for (var annonce in annonces)
-                          //   annonce.image.isNotEmpty
-                          //       ? InfoCard(
-                          //           image: Image.network(
-                          //             annonce.image,
-                          //             fit: BoxFit.cover,
-                          //           ),
-                          //           width:
-                          //               MediaQuery.sizeOf(context).height * 0.2,
-                          //           height: MediaQuery.sizeOf(context).height *
-                          //               0.25,
-                          //           borderRadius: 10)
-                          //       : Container(
-                          //           height: 0,
-                          //         )
+                          for (var annonce in annonces)
+                            annonce.image.isNotEmpty
+                                ? Container(
+                                    padding: const EdgeInsets.all(5),
+                                    margin: const EdgeInsets.all(5),
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 0.4,
+                                    height: MediaQuery.sizeOf(context).height *
+                                        0.25,
+                                    decoration: BoxDecoration(
+                                        color: AppColors.primary,
+                                        // color: eptLightGrey,
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      clipBehavior: Clip.hardEdge,
+                                      child: Image.network(
+                                        annonce.image,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    height: 0,
+                                  )
                         ],
                       );
                     }
@@ -128,22 +146,84 @@ class _NouveauteState extends State<Nouveaute> {
                           children: [
                             for (var match in matches)
                               match.photo!.isNotEmpty
-                                  ?
-                                  // InfoCard(
-                                  //     image: Image.network(
-                                  //       match.photo!,
-                                  //       fit: BoxFit.cover,
-                                  //     ),
-                                  //     width: MediaQuery.sizeOf(context).height *
-                                  //         0.2,
-                                  //     height:
-                                  //         MediaQuery.sizeOf(context).height *
-                                  //             0.25,
-                                  //   )
-                                  Text('Je vais gérer ca plutard')
+                                  ? Container(
+                                      padding: const EdgeInsets.all(5),
+                                      margin: const EdgeInsets.all(5),
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.4,
+                                      height:
+                                          MediaQuery.sizeOf(context).height *
+                                              0.25,
+                                      decoration: BoxDecoration(
+                                          color: AppColors.primary,
+                                          // color: eptLightGrey,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        clipBehavior: Clip.hardEdge,
+                                        child: Image.network(
+                                          match.photo!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    )
                                   : Container(
                                       height: 0,
                                     )
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                ),
+              if (_value == 3)
+                FutureBuilder<Collection?>(
+                  future: _shopService.getNewCollection(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Erreur lors du chargement des annonces');
+                    } else {
+                      Collection? collection = snapshot.data ?? null;
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            if (collection != null)
+                              for (var articleShop in collection.articleShops)
+                                articleShop.image.isNotEmpty
+                                    ? Container(
+                                        padding: const EdgeInsets.all(5),
+                                        margin: const EdgeInsets.all(5),
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.4,
+                                        height:
+                                            MediaQuery.sizeOf(context).height *
+                                                0.25,
+                                        decoration: BoxDecoration(
+                                            color: AppColors.primary,
+                                            // color: eptLightGrey,
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          clipBehavior: Clip.hardEdge,
+                                          child: Image.network(
+                                            articleShop.image,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        height: 0,
+                                      )
                           ],
                         ),
                       );
