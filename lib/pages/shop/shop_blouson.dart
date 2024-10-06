@@ -1,22 +1,37 @@
 // ignore_for_file: camel_case_types
 
 import 'package:flutter/material.dart';
+import 'package:new_app/models/article_shop.dart';
 import 'dart:async';
 
+import 'package:new_app/models/collection.dart';
+import 'package:new_app/services/shop_service.dart';
+import 'package:new_app/utils/app_colors.dart';
+import 'package:new_app/widgets/alerte_message.dart';
+
 class blousonPage extends StatefulWidget {
-  const blousonPage({super.key});
+  Collection collection;
+  blousonPage(this.collection, {super.key});
 
   @override
-  _Blouson_PageState createState() => _Blouson_PageState();
+  _Blouson_PageState createState() => _Blouson_PageState(collection);
 }
 
 class _Blouson_PageState extends State<blousonPage> {
-  final List<String> carouselImages = [
-    'assets/images/market/photo_2024-05-24_12-27-39.jpg',
-    'assets/images/market/photo_2024-05-24_12-27-53.jpg',
-    'assets/images/market/photo_2024-05-24_12-27-08.jpg',
-    'assets/images/market/photo_2024-05-24_12-28-09.jpg',
-  ];
+  Collection _collection;
+  _Blouson_PageState(this._collection);
+  final ShopService _shopService = ShopService();
+  List<String> carouselImages = [];
+  Future<void> _loadCarouselImages() async {
+    Collection? collection = await _shopService.getNewCollection();
+    print(collection);
+    if (collection != null) {
+      setState(() {
+        carouselImages =
+            collection.articleShops.map((article) => article.image).toList();
+      });
+    }
+  }
 
   int _currentPage = 0;
   late Timer _timer;
@@ -25,7 +40,8 @@ class _Blouson_PageState extends State<blousonPage> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+    _loadCarouselImages();
+    _timer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
       if (_currentPage < carouselImages.length - 1) {
         _currentPage++;
       } else {
@@ -65,7 +81,7 @@ class _Blouson_PageState extends State<blousonPage> {
     );
   }
 
-  void _showProductDetails() {
+  void _showProductDetails(ArticleShop articleShop, Collection collection) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -73,20 +89,30 @@ class _Blouson_PageState extends State<blousonPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(carouselImages[_currentPage], height: 200),
+              Image.network(carouselImages[_currentPage], height: 200),
               SizedBox(height: 10),
-              Text("Blouson 2024",
+              Text(articleShop.titre,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              Text('Catégorie: Classe Polytechnicienne'),
-              Text('Prix: 5000 CFA'),
+              Text('Catégorie: ${articleShop.categorie.libelle}'),
+              Text('Prix: ${articleShop.prix} CFA'),
               SizedBox(height: 10),
-              Text('Description du blouson: Un blouson stylé et confortable.'),
+              Text('Description: ${articleShop.description}'),
               SizedBox(height: 20),
               ElevatedButton(
                 child: Text('Commander'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  _showOrderConfirmation();
+                    onPressed: () async {
+                  String code =
+                      await _shopService.postCommande(articleShop, collection);
+                  if (code == "OK") {
+                    Navigator.of(context).pop();
+                    alerteMessageWidget(
+                        context,
+                        "Votre commande a été bien prise en compte.",
+                        AppColors.success);
+                  } else {
+                    alerteMessageWidget(
+                        context, "Echec lors de la commande.", AppColors.echec);
+                  }
                 },
               ),
             ],
@@ -117,9 +143,9 @@ class _Blouson_PageState extends State<blousonPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Stack(
+        backgroundColor: Colors.black,
+        body: SafeArea(
+            child: Stack(
           children: [
             // Carousel
             Positioned.fill(
@@ -132,7 +158,7 @@ class _Blouson_PageState extends State<blousonPage> {
                   });
                 },
                 itemBuilder: (context, index) {
-                  return Image.asset(
+                  return Image.network(
                     carouselImages[index],
                     fit: BoxFit.cover,
                     width: double.infinity,
@@ -185,36 +211,49 @@ class _Blouson_PageState extends State<blousonPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "Blousons 2024",
+                      widget.collection.nom,
                       style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Cursive'),
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Cursive',
+                      ),
                     ),
                     SizedBox(height: 5),
                     Text(
                       "Classe Polytechnicienne",
                       style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w300),
+                        fontSize: 18,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
                     SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: _showProductDetails,
+                      onPressed: () {
+                        // Récupérer l'article correspondant à l'image affichée
+                        _showProductDetails(
+                          widget.collection.articleShops.firstWhere(
+                            (article) =>
+                                article.image == carouselImages[_currentPage],
+                          ),
+                          widget.collection
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         padding:
                             EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text('Commander',
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white)),
+                          Text(
+                            'Commander',
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
                           SizedBox(width: 5),
                           Icon(Icons.shopping_cart, color: Colors.white),
                         ],
@@ -225,8 +264,6 @@ class _Blouson_PageState extends State<blousonPage> {
               ),
             ),
           ],
-        ),
-      ),
-    );
+        )));
   }
 }

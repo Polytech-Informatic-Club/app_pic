@@ -23,6 +23,7 @@ class _ShopScreenState extends State<ShopScreen> {
   final ShopService _shopService = ShopService();
 
   List<String> carouselImages = [];
+  Collection? _collection = null;
 
   @override
   void initState() {
@@ -32,9 +33,9 @@ class _ShopScreenState extends State<ShopScreen> {
 
   Future<void> _loadCarouselImages() async {
     Collection? collection = await _shopService.getNewCollection();
-    print(collection);
     if (collection != null) {
       setState(() {
+        _collection = collection;
         carouselImages =
             collection.articleShops.map((article) => article.image).toList();
       });
@@ -144,7 +145,11 @@ class _ShopScreenState extends State<ShopScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ShopCarousel(imagePaths: carouselImages),
+            if (_collection != null)
+              ShopCarousel(
+                imagePaths: carouselImages,
+                collection: _collection!,
+              ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               child: Column(
@@ -349,8 +354,9 @@ class _ShopScreenState extends State<ShopScreen> {
 
 class ShopCarousel extends StatefulWidget {
   final List<String> imagePaths;
+  Collection collection;
 
-  const ShopCarousel({super.key, required this.imagePaths});
+  ShopCarousel({super.key, required this.collection, required this.imagePaths});
 
   @override
   _ShopCarouselState createState() => _ShopCarouselState();
@@ -460,7 +466,8 @@ class _ShopCarouselState extends State<ShopCarousel> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => blousonPage()),
+                              builder: (context) =>
+                                  blousonPage(widget.collection)),
                         );
                       },
                       child: Container(
