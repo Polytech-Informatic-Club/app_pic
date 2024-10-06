@@ -164,6 +164,28 @@ class UserService {
     }
   }
 
+  Future<String> getParam(String param) async {
+    try {
+      // Récupère le document correspondant à l'utilisateur dans Firestore
+      DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+          await _firestore.collection("PARAMETRE").doc(param).get();
+
+      if (docSnapshot.exists) {
+        // Si le document existe, récupère les données de l'utilisateur
+        Map<String, dynamic>? data = docSnapshot.data();
+
+        if (data != null && data.containsKey(param)) {
+          // Retourne le rôle de l'utilisateur si disponible
+          return data[param];
+        }
+      }
+
+      return ""; // Retourne null si le rôle n'est pas trouvé
+    } catch (e) {
+      return ""; // Gestion des erreurs
+    }
+  }
+
   Future<String?> uploadImage(
       BuildContext context, ValueNotifier _loading, ValueNotifier _url) async {
     final XFile? pickedImage =

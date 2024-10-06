@@ -12,7 +12,8 @@ import 'package:new_app/services/jeu_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+
+   HomePage( {super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
