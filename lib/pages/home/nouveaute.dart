@@ -11,6 +11,7 @@ import 'package:new_app/services/annonce_service.dart';
 import 'package:new_app/services/shop_service.dart';
 import 'package:new_app/services/sport_service.dart';
 import 'package:new_app/utils/app_colors.dart';
+import 'package:new_app/utils/app_colors.dart';
 
 class Nouveaute extends StatefulWidget {
   const Nouveaute({super.key});
@@ -39,7 +40,7 @@ class _NouveauteState extends State<Nouveaute> {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
           child: Column(
             children: [
               Row(
