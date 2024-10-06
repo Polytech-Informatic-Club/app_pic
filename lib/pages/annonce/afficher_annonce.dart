@@ -1,7 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
+import 'package:new_app/models/annonce.dart';
+import 'package:new_app/models/categorie.dart';
+import 'package:new_app/models/commentaires.dart';
 import 'package:new_app/models/user.dart';
+import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/pages/annonce/annonce_screen.dart';
 import 'package:new_app/pages/annonce/edit_annonce.dart';
 import 'package:new_app/services/annonce_service.dart';
@@ -32,14 +36,25 @@ class AfficherAnononceScreen extends StatefulWidget {
 class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
   bool isAdmin = false;
   final UserService _userService = UserService();
-
-  // Initialement, l'utilisateur n'est pas admin
+  final AnnonceService _annonceService = AnnonceService();
+  Annonce? _currentAnnonce;
   String? userId;
-  // Stocker l'ID de l'utilisateur connecté
+
   @override
   void initState() {
     super.initState();
-    _checkUserRole(); // Appel pour vérifier le rôle de l'utilisateur
+    _checkUserRole();
+    Future<void> _loadAnnonce() async {
+      // Récupérer l'annonce
+      Annonce? annonce = await _annonceService.getAnnonceId(widget.idAnnonce);
+      if (annonce != null) {
+        setState(() {
+          _currentAnnonce = annonce;
+        });
+      }
+    }
+
+    _loadAnnonce();
   }
 
   Future<void> _checkUserRole() async {
@@ -49,13 +64,11 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
       if (user != null) {
         userId = user.email;
 
-        // Récupérer le rôle de l'utilisateur à partir du service utilisateur
         String? role = await _userService.getUserRole(userId!);
 
-        // Vérifier si l'utilisateur est admin
         if (role == 'ADMIN_MB') {
           setState(() {
-            isAdmin = true; // Met à jour l'état pour afficher le bouton "+"
+            isAdmin = true;
           });
         }
       }
@@ -103,7 +116,7 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
         ));
   }
 
-  Widget afficherAnnonce(imagePath, title, subtitle, dateTime, description) {
+  Widget afficherAnnonce(imagePath, title, lieu, dateTime, description) {
     return Column(
       children: [
         Stack(
@@ -163,7 +176,7 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
                 textAlign: TextAlign.center,
               ),
               Text(
-                subtitle,
+                lieu,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               )
             ],

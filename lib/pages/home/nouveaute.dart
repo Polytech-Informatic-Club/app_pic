@@ -7,6 +7,7 @@ import 'package:new_app/pages/annonce/p_info_nouveaute.dart';
 import 'package:new_app/pages/home/section_selector.dart';
 import 'package:new_app/services/annonce_service.dart';
 import 'package:new_app/services/sport_service.dart';
+import 'package:new_app/utils/app_colors.dart';
 
 class Nouveaute extends StatefulWidget {
   const Nouveaute({super.key});
@@ -34,7 +35,7 @@ class _NouveauteState extends State<Nouveaute> {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
           child: Column(
             children: [
               Row(
@@ -90,24 +91,48 @@ class _NouveauteState extends State<Nouveaute> {
                       return Text('Erreur lors du chargement des annonces');
                     } else {
                       List<Annonce> annonces = snapshot.data ?? [];
-                      return Row(
-                        children: [
-                          // for (var annonce in annonces)
-                          //   annonce.image.isNotEmpty
-                          //       ? InfoCard(
-                          //           image: Image.network(
-                          //             annonce.image,
-                          //             fit: BoxFit.cover,
-                          //           ),
-                          //           width:
-                          //               MediaQuery.sizeOf(context).height * 0.2,
-                          //           height: MediaQuery.sizeOf(context).height *
-                          //               0.25,
-                          //           borderRadius: 10)
-                          //       : Container(
-                          //           height: 0,
-                          //         )
-                        ],
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            for (var annonce in annonces)
+                              annonce.image.isNotEmpty
+                                  ? Container(
+                                      margin: const EdgeInsets.fromLTRB(
+                                          0, 0, 20, 0),
+                                      padding: const EdgeInsets.all(3),
+                                      width: MediaQuery.sizeOf(context).height *
+                                          0.18,
+                                      height:
+                                          MediaQuery.sizeOf(context).height *
+                                              0.25,
+                                      decoration: BoxDecoration(
+                                          color: eptOrange,
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.sizeOf(context).height *
+                                                0.18,
+                                        height:
+                                            MediaQuery.sizeOf(context).height *
+                                                0.25,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        clipBehavior: Clip.hardEdge,
+                                        child: Image.network(
+                                          annonce.image,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      height: 0,
+                                    )
+                          ],
+                        ),
                       );
                     }
                   },
@@ -128,19 +153,36 @@ class _NouveauteState extends State<Nouveaute> {
                           children: [
                             for (var match in matches)
                               match.photo!.isNotEmpty
-                                  ?
-                                  // InfoCard(
-                                  //     image: Image.network(
-                                  //       match.photo!,
-                                  //       fit: BoxFit.cover,
-                                  //     ),
-                                  //     width: MediaQuery.sizeOf(context).height *
-                                  //         0.2,
-                                  //     height:
-                                  //         MediaQuery.sizeOf(context).height *
-                                  //             0.25,
-                                  //   )
-                                  Text('Je vais gérer ca plutard')
+                                  ? Container(
+                                      margin: const EdgeInsets.fromLTRB(
+                                          0, 0, 20, 0),
+                                      padding: const EdgeInsets.all(3),
+                                      width: MediaQuery.sizeOf(context).height *
+                                          0.18,
+                                      height:
+                                          MediaQuery.sizeOf(context).height *
+                                              0.25,
+                                      decoration: BoxDecoration(
+                                          color: eptOrange,
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.sizeOf(context).height *
+                                                0.18,
+                                        height:
+                                            MediaQuery.sizeOf(context).height *
+                                                0.25,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        clipBehavior: Clip.hardEdge,
+                                        child: Image.network(
+                                          match.photo!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    )
                                   : Container(
                                       height: 0,
                                     )

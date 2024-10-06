@@ -94,7 +94,7 @@ class _FamillePolytechnicienneScreenState
               _filteredPromos.isNotEmpty
                   ? Column(
                       children: [
-                        for (var promo in _filteredPromos)
+                        for (var promo in _filteredPromos.reversed)
                           promoWidget(promo.logo, promo.nom, promo.total,
                               promo.devise, PromotionPage(promo.nom)),
                       ],
