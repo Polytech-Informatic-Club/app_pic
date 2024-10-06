@@ -15,7 +15,7 @@ import 'package:new_app/utils/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart'; // Import du package url_launcher
 
 class EptDrawer extends StatefulWidget {
-  EptDrawer({super.key});
+  const EptDrawer({super.key});
 
   @override
   State<EptDrawer> createState() => _EptDrawerState();
@@ -40,213 +40,235 @@ class _EptDrawerState extends State<EptDrawer> {
   Widget build(BuildContext context) {
     double size = 100;
     return Drawer(
-      backgroundColor: eptLighterOrange,
-      child: FutureBuilder<Utilisateur?>(
-        future: _userService
-            .getUserByEmail(FirebaseAuth.instance.currentUser!.email!),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(
-                child: Text('Erreur lors de la récupération des données'));
-          } else {
-            final user = snapshot.data;
-            return Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    padding: EdgeInsets.symmetric(horizontal: 30),
-                    children: [
-                      const SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: size,
-                            height: size,
-                            padding: const EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(200),
-                              color: eptOrange,
-                            ),
-                            child: Container(
-                              width: size,
-                              height: size,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(200),
-                              ),
-                              clipBehavior: Clip.hardEdge,
-                              child: user!.photo != ""
-                                  ? Image.network(
-                                      "${user.photo}",
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Container(),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Column(
-                        children: [
-                          Text(
-                            '${user.prenom} ${user.nom.toUpperCase()}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                          Text(
-                            user.role.toString().split(".").last,
-                            style: TextStyle(
-                              fontFamily: "InterRegular",
-                              fontSize: 11,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Divider(thickness: 1, color: Colors.black),
-                      const SizedBox(height: 20),
-                      drawerItem(
-                          "assets/images/top-left-menu/compte.png", "Compte",
-                          () {
-                        changerPage(context, CompteScreen());
-                      }),
-                      drawerItem("assets/images/top-left-menu/famille.png",
-                          "Famille Polytechnicienne", () {
-                        changerPage(context, FamillePolytechnicienneScreen());
-                      }),
-                      drawerItem(
-                          "assets/images/top-left-menu/xoss.png", "Cahier Xoss",
-                          () {
-                        changerPage(context, XossScreen());
-                      }),
-                      drawerItem("assets/images/top-left-menu/a_propos.png",
-                          "A propos", () {
-                        changerPage(context, AProposPage());
-                      }),
-                      if ([
-                        RoleType.ADMIN.toString().split(".").last,
-                        RoleType.ADMIN_MB.toString().split(".").last,
-                        RoleType.ADMIN_FOOTBALL.toString().split(".").last,
-                        RoleType.ADMIN_BASKETBALL.toString().split(".").last,
-                        RoleType.ADMIN_VOLLEYBALL.toString().split(".").last,
-                        RoleType.ADMIN_JEUX_ESPRIT.toString().split(".").last
-                      ].contains(user.role.toString().split(".").last))
-                        drawerItem(
-                          "assets/images/top-left-menu/paramètres.png",
-                          'Administration  ${user.role.toString().split(".").last.split("_").sublist(1).join(" ").toLowerCase()}',
-                          () {
-                            changerPage(
-                              context,
-                              HomeAdminSportTypePage(
-                                user.role
-                                    .toString()
-                                    .split(".")
-                                    .last
-                                    .split("_")
-                                    .sublist(1)
-                                    .join("_"),
-                              ),
-                            );
-                          },
-                        ),
-                      const SizedBox(height: 5),
-                      Divider(thickness: 1, color: Colors.black),
-                      const SizedBox(height: 20),
-                      // Icônes des réseaux sociaux avec liens
-                      drawerItem(
-                        "assets/images/top-left-menu/facebook.png",
-                        "Facebook",
-                        () {
-                          _ouvrirLien(
-                              "https://www.facebook.com/profile.php?id=100075396502307");
-                        },
-                        isLink: true,
-                      ),
-                      drawerItem(
-                        "assets/images/top-left-menu/instagram.png",
-                        "Instagram",
-                        () {
-                          _ouvrirLien(
-                              "https://www.instagram.com/bde_ept?igsh=MWdxamV4dGhjNWE3aA==");
-                        },
-                        isLink: true,
-                      ),
-                      drawerItem(
-                        "assets/images/top-left-menu/x.png",
-                        "X (Twitter)",
-                        () {
-                          _ouvrirLien("https://x.com/bde_ept?s=21");
-                        },
-                        isLink: true,
-                      ),
-                      drawerItem(
-                        "assets/images/top-left-menu/linkedin.png",
-                        "LinkedIn",
-                        () {
-                          _ouvrirLien(
-                              "https://www.linkedin.com/company/bureau-des-el%C3%A8ves-ept/");
-                        },
-                        isLink: true,
-                      ),
-                      const SizedBox(height: 20),
-                      // Bouton Déconnexion
-                      InkWell(
-                        onTap: () {
-                          _userService.signOut();
-                          changerPage(context, LoginScreen());
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(5),
-                          width: 150,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: eptOrange,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                "assets/images/top-left-menu/sortie.png",
-                                scale: 4,
-                              ),
-                              const SizedBox(width: 10),
-                              const Text(
-                                "Déconnexion",
-                                style: TextStyle(
-                                  fontSize: 12,
+        backgroundColor: eptLighterOrange,
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                children: [
+                  const SizedBox(height: 30),
+                  FutureBuilder(
+                    future: _userService.getUserByEmail(
+                        FirebaseAuth.instance.currentUser!.email!),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(
+                            child: Text(
+                                'Erreur lors de la récupération des données'));
+                      } else {
+                        final user = snapshot.data;
+                        return Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: size,
+                                  height: size,
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(200),
+                                    color: eptOrange,
+                                  ),
+                                  child: Container(
+                                    width: size,
+                                    height: size,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(200),
+                                    ),
+                                    clipBehavior: Clip.hardEdge,
+                                    child: user!.photo != ""
+                                        ? Image.network(
+                                            "${user.photo}",
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Container(),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Column(
+                              children: [
+                                Text(
+                                  '${user.prenom} ${user.nom.toUpperCase()}',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                Text(
+                                  user.role.toString().split(".").last,
+                                  style: TextStyle(
+                                    fontFamily: "InterRegular",
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  Divider(thickness: 1, color: Colors.black),
+                  const SizedBox(height: 20),
+                  drawerItem("assets/images/top-left-menu/compte.png", "Compte",
+                      () {
+                    changerPage(context, CompteScreen());
+                  }),
+                  drawerItem("assets/images/top-left-menu/famille.png",
+                      "Famille Polytechnicienne", () {
+                    changerPage(context, FamillePolytechnicienneScreen());
+                  }),
+                  drawerItem(
+                      "assets/images/top-left-menu/xoss.png", "Cahier Xoss",
+                      () {
+                    changerPage(context, XossScreen());
+                  }),
+                  drawerItem(
+                      "assets/images/top-left-menu/a_propos.png", "A propos",
+                      () {
+                    changerPage(context, AProposPage());
+                  }),
+                  FutureBuilder(
+                    future: _userService.getUserByEmail(
+                        FirebaseAuth.instance.currentUser!.email!),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return LinearProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: const Text('Erreur de chargement'),
+                        );
+                      } else {
+                        final user = snapshot.data;
+                        if ([
+                          RoleType.ADMIN.toString().split(".").last,
+                          RoleType.ADMIN_MB.toString().split(".").last,
+                          RoleType.ADMIN_FOOTBALL.toString().split(".").last,
+                          RoleType.ADMIN_BASKETBALL.toString().split(".").last,
+                          RoleType.ADMIN_VOLLEYBALL.toString().split(".").last,
+                          RoleType.ADMIN_JEUX_ESPRIT.toString().split(".").last
+                        ].contains(user?.role.toString().split(".").last)) {
+                          return drawerItem(
+                            "assets/images/top-left-menu/paramètres.png",
+                            'Administration  ${user?.role.toString().split(".").last.split("_").sublist(1).join(" ").toLowerCase()}',
+                            () {
+                              changerPage(
+                                context,
+                                HomeAdminSportTypePage(
+                                  user!.role
+                                      .toString()
+                                      .split(".")
+                                      .last
+                                      .split("_")
+                                      .sublist(1)
+                                      .join("_"),
+                                ),
+                              );
+                            },
+                          );
+                        } else {
+                          return Text('');
+                        }
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 5),
+                  Divider(thickness: 1, color: Colors.black),
+                  const SizedBox(height: 20),
+                  // Icônes des réseaux sociaux avec liens
+                  drawerItem(
+                    "assets/images/top-left-menu/facebook.png",
+                    "Facebook",
+                    () {
+                      _ouvrirLien(
+                          "https://www.facebook.com/profile.php?id=100075396502307");
+                    },
+                    isLink: true,
+                  ),
+                  drawerItem(
+                    "assets/images/top-left-menu/instagram.png",
+                    "Instagram",
+                    () {
+                      _ouvrirLien(
+                          "https://www.instagram.com/bde_ept?igsh=MWdxamV4dGhjNWE3aA==");
+                    },
+                    isLink: true,
+                  ),
+                  drawerItem(
+                    "assets/images/top-left-menu/x.png",
+                    "X (Twitter)",
+                    () {
+                      _ouvrirLien("https://x.com/bde_ept?s=21");
+                    },
+                    isLink: true,
+                  ),
+                  drawerItem(
+                    "assets/images/top-left-menu/linkedin.png",
+                    "LinkedIn",
+                    () {
+                      _ouvrirLien(
+                          "https://www.linkedin.com/company/bureau-des-el%C3%A8ves-ept/");
+                    },
+                    isLink: true,
+                  ),
+                  const SizedBox(height: 20),
+                  // Bouton Déconnexion
+                  InkWell(
+                    onTap: () {
+                      _userService.signOut();
+                      changerPage(context, LoginScreen());
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      width: 150,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: eptOrange,
+                        borderRadius: BorderRadius.circular(5),
                       ),
-                      const SizedBox(height: 20),
-                    ],
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            "assets/images/top-left-menu/sortie.png",
+                            scale: 4,
+                          ),
+                          const SizedBox(width: 10),
+                          const Text(
+                            "Déconnexion",
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-                const Text(
-                  "PolyApp version 1.0.0",
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: eptDarkGrey,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 5,
-                  color: eptOrange,
-                ),
-              ],
-            );
-          }
-        },
-      ),
-    );
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+            const Text(
+              "PolyApp version 1.0.0",
+              style: TextStyle(
+                fontSize: 10,
+                color: eptDarkGrey,
+              ),
+            ),
+            const SizedBox(height: 5),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 5,
+              color: eptOrange,
+            ),
+          ],
+        ));
   }
 }
 
