@@ -46,30 +46,30 @@ class MyApp extends StatelessWidget {
 
 // Fonction de vérification de la version
   void _verifyVersion(BuildContext context) async {
-    await AppVersionUpdate.checkForUpdates(
-      appleId: '284882215',
-      playStoreId: 'com.zhiliaoapp.musically',
-    ).then((result) async {
-      if (result.canUpdate!) {
-        // Afficher une boîte de dialogue pour la mise à jour
-        await AppVersionUpdate.showAlertUpdate(
-          appVersionResult: result,
-          context: context,
-          backgroundColor: Colors.grey[200],
-          title: 'Une nouvelle version est disponible.',
-          titleTextStyle: const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.w600, fontSize: 24.0),
-          content:
-              'Voulez-vous mettre à jour votre application à la dernière version?',
-          contentTextStyle: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w400,
-          ),
-          updateButtonText: 'METTRE À JOUR',
-          cancelButtonText: 'PLUS TARD',
-        );
-      }
-    });
+    // await AppVersionUpdate.checkForUpdates(
+    //   appleId: '284882215',
+    //   playStoreId: 'com.zhiliaoapp.musically',
+    // ).then((result) async {
+    //   if (result.canUpdate!) {
+    //     // Afficher une boîte de dialogue pour la mise à jour
+    //     await AppVersionUpdate.showAlertUpdate(
+    //       appVersionResult: result,
+    //       context: context,
+    //       backgroundColor: Colors.grey[200],
+    //       title: 'Une nouvelle version est disponible.',
+    //       titleTextStyle: const TextStyle(
+    //           color: Colors.black, fontWeight: FontWeight.w600, fontSize: 24.0),
+    //       content:
+    //           'Voulez-vous mettre à jour votre application à la dernière version?',
+    //       contentTextStyle: const TextStyle(
+    //         color: Colors.black,
+    //         fontWeight: FontWeight.w400,
+    //       ),
+    //       updateButtonText: 'METTRE À JOUR',
+    //       cancelButtonText: 'PLUS TARD',
+    //     );
+    //   }
+    // });
   }
 
   @override
@@ -95,38 +95,38 @@ class MyApp extends StatelessWidget {
 class AuthHandler extends StatelessWidget {
   final UserService _userService = UserService();
   Future<void> _verifyVersion(BuildContext context) async {
-    String appleId = await _userService.getParam("appleId");
-    String playStoreId = await _userService.getParam("playStoreId");
-    await AppVersionUpdate.checkForUpdates(
-            appleId: appleId, playStoreId: playStoreId, country: "Sénégal")
-        .then((result) async {
-      if (result.canUpdate!) {
-        // Afficher une boîte de dialogue pour la mise à jour
-        await AppVersionUpdate.showAlertUpdate(
-          appVersionResult: result,
-          context: context,
-          backgroundColor: Colors.grey[200],
-          title: 'Nouvelle version disponible',
-          titleTextStyle: const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.w600, fontSize: 24.0),
-          content:
-              'Une nouvelle version de l\'application est disponible. Voulez-vous mettre à jour ?',
-          contentTextStyle: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w400,
-          ),
-          updateButtonText: 'Mettre à jour',
-          updateButtonStyle: ButtonStyle(
-            backgroundColor:
-                MaterialStateProperty.all<Color>(AppColors.success),
-          ),
-          cancelButtonText: 'Plus tard',
-          cancelButtonStyle: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(AppColors.echec),
-          ),
-        );
-      }
-    });
+    // String appleId = await _userService.getParam("appleId");
+    // String playStoreId = await _userService.getParam("playStoreId");
+    // await AppVersionUpdate.checkForUpdates(
+    //         appleId: appleId, playStoreId: playStoreId, country: "Sénégal")
+    //     .then((result) async {
+    //   if (result.canUpdate!) {
+    //     // Afficher une boîte de dialogue pour la mise à jour
+    //     await AppVersionUpdate.showAlertUpdate(
+    //       appVersionResult: result,
+    //       context: context,
+    //       backgroundColor: Colors.grey[200],
+    //       title: 'Nouvelle version disponible',
+    //       titleTextStyle: const TextStyle(
+    //           color: Colors.black, fontWeight: FontWeight.w600, fontSize: 24.0),
+    //       content:
+    //           'Une nouvelle version de l\'application est disponible. Voulez-vous mettre à jour ?',
+    //       contentTextStyle: TextStyle(
+    //         color: Colors.black,
+    //         fontWeight: FontWeight.w400,
+    //       ),
+    //       updateButtonText: 'Mettre à jour',
+    //       updateButtonStyle: ButtonStyle(
+    //         backgroundColor:
+    //             MaterialStateProperty.all<Color>(AppColors.success),
+    //       ),
+    //       cancelButtonText: 'Plus tard',
+    //       cancelButtonStyle: ButtonStyle(
+    //         backgroundColor: MaterialStateProperty.all<Color>(AppColors.echec),
+    //       ),
+    //     );
+    //   }
+    // });
   }
 
   @override

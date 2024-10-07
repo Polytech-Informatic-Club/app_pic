@@ -83,10 +83,7 @@ class RestaurationItem extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-                fontFamily: "Inter",
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.bold),
+                color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
           ),
           const SizedBox(
             height: 5,
@@ -95,7 +92,7 @@ class RestaurationItem extends StatelessWidget {
               text: TextSpan(
             text: content,
             style: const TextStyle(
-              fontFamily: "Inter",
+              fontFamily: "InterRegular",
               color: Colors.white,
               fontSize: 12,
             ),
@@ -106,7 +103,7 @@ class RestaurationItem extends StatelessWidget {
             children: [
               Text(
                 timeAgoCustom(date),
-                style: TextStyle(color: AppColors.white),
+                style: TextStyle(color: AppColors.white, fontSize: 12),
               ),
               const SizedBox(),
               isBourse

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/annonce.dart';
-import 'package:new_app/pages/annonce/hot_topic.dart';
+import 'package:new_app/pages/annonce/hot_topics.dart';
 import 'package:new_app/pages/annonce/p_info_nouveaute.dart';
 import 'package:new_app/services/annonce_service.dart';
 import 'package:new_app/utils/app_colors.dart';
@@ -87,7 +87,7 @@ class _AnnonceScreenState extends State<AnnonceScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                HotTopic(),
+                HotTopics(),
               ],
             ),
           ),
