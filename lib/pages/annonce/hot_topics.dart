@@ -154,7 +154,16 @@ Widget _buildCategorySection(
         ],
       ),
       SizedBox(height: 10),
-      ...topics.map((topic) => _buildHotTopicTile(topic, isBourse)).toList(),
+      SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            ...topics
+                .map((topic) => _buildHotTopicTile(topic, isBourse))
+                .toList(),
+          ],
+        ),
+      )
     ],
   );
 }
