@@ -2,8 +2,10 @@
 
 import 'package:app_version_update/app_version_update.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:new_app/firebase_options.dart';
 import 'package:new_app/login/inscription.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/models/football.dart';
@@ -29,11 +31,47 @@ import 'package:new_app/pages/shop/shop_screen.dart';
 
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:new_app/services/notification_service.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() async {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  ///await Firebase.initializeApp();
+
+  print("Handling a background message: ${message.messageId}");
+}
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  requestNotificationPermission();
+
+  await FirebaseMessaging.instance.setAutoInitEnabled(true);
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.notification?.title}');
+
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
+    }
+  });
+  FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    if (user == null) {
+      userauth = false;
+    } else {
+      userauth = true;
+    }
+  });
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  //print('Message data: $fcmToken');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await initializeDateFormatting(
@@ -54,7 +92,6 @@ class MyApp extends StatelessWidget {
         // Afficher une boîte de dialogue pour la mise à jour
         await AppVersionUpdate.showAlertUpdate(
           appVersionResult: result,
-          context: context,
           backgroundColor: Colors.grey[200],
           title: 'Une nouvelle version est disponible.',
           titleTextStyle: const TextStyle(

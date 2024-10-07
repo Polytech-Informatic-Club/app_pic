@@ -11,18 +11,19 @@ class Utilisateur {
   final String? telephone;
   final String? photo; // This could be a URL
   final RoleType? role;
+  String? token;
 
-  Utilisateur({
-    this.id,
-    this.promo,
-    this.genie,
-    required this.prenom,
-    required this.nom,
-    required this.email,
-    this.telephone,
-    this.photo,
-    this.role,
-  });
+  Utilisateur(
+      {this.id,
+      this.promo,
+      this.genie,
+      required this.prenom,
+      required this.nom,
+      required this.email,
+      this.telephone,
+      this.photo,
+      this.role,
+      this.token});
 
   // Factory method to create a Utilisateur object from JSON
   Utilisateur.fromJson(Map<String, dynamic> json)
@@ -36,7 +37,8 @@ class Utilisateur {
         photo = json['photo'] as String,
         role = RoleType.values.firstWhere(
           (e) => e.toString().split('.').last == json['role'],
-        );
+        ),
+        token = json['token'] as String;
 
   // Method to convert a Utilisateur object to JSON
   Map<String, dynamic> toJson() {
@@ -44,13 +46,13 @@ class Utilisateur {
       'id': id,
       'promo': promo,
       'genie': genie,
-
       'prenom': prenom,
       'nom': nom,
       'email': email,
       'telephone': telephone,
       'photo': photo,
-      'role': role.toString().split('.').last
+      'role': role.toString().split('.').last,
+      'token': token
       // 'role': role.toJson(), // Converts enum to string
     };
   }
