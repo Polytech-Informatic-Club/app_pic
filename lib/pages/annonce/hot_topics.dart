@@ -74,7 +74,7 @@ class _HotTopicsState extends State<HotTopics> {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              ...topics
+              ...topics.reversed
                   .map((topic) => _buildHotTopicTile(topic, isBourse))
                   .toList(),
             ],
