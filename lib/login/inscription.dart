@@ -492,9 +492,12 @@ class _InscriptionState extends State<Inscription> {
                                                     changerPage(
                                                         context, HomePage());
                                                   }
-                                                } catch (e) {}
+                                                } catch (e) {
+                                                   _isSaving.value=false;
+                                                }
                                               }
                                             } catch (e) {
+                                              _isSaving.value=false;
                                               alerteMessageWidget(
                                                   context,
                                                   "Mot de passe ou email invalide.",
