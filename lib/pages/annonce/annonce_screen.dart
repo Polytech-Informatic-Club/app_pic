@@ -140,7 +140,7 @@ Widget widgetAG(String date, String heure, String lieu, String sujet) {
                   Row(
                     children: [
                       Icon(
-                        Icons.location_on,
+                        Icons.calendar_month,
                         size: 20,
                       ),
                       SizedBox(width: 4),
@@ -168,7 +168,7 @@ Widget widgetAG(String date, String heure, String lieu, String sujet) {
                   Row(
                     children: [
                       Icon(
-                        Icons.apartment,
+                        Icons.location_on,
                         size: 20,
                       ),
                       SizedBox(width: 4),
@@ -182,7 +182,7 @@ Widget widgetAG(String date, String heure, String lieu, String sujet) {
                   Row(
                     children: [
                       Icon(
-                        Icons.category,
+                        Icons.record_voice_over,
                         size: 20,
                       ),
                       SizedBox(width: 4),
