@@ -202,7 +202,6 @@ class _HotTopicsState extends State<HotTopics> {
 
   @override
   Widget build(BuildContext context) {
-    bool isAdmin = true;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

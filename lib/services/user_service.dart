@@ -17,6 +17,9 @@ class UserService {
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   CollectionReference userCollection =
       FirebaseFirestore.instance.collection("USER");
+      
+  CollectionReference tokenCollection =
+      FirebaseFirestore.instance.collection("TOKEN");
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<Map<String, dynamic>> getUserData() async {
@@ -183,6 +186,15 @@ class UserService {
       return ""; // Retourne null si le rôle n'est pas trouvé
     } catch (e) {
       return ""; // Gestion des erreurs
+    }
+  }
+
+  Future<String> postToken(String token, String role) async {
+    try {
+      await tokenCollection.doc(token).set({"token": postToken, "role": role});
+      return "OK";
+    } catch (e) {
+      return "Erreur lors de l'ajout de l'Utilisateur : $e";
     }
   }
 

@@ -8,6 +8,7 @@ import 'package:new_app/login/login.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/alerte_message.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Inscription extends StatefulWidget {
   Inscription({super.key});
@@ -43,6 +44,38 @@ class _InscriptionState extends State<Inscription> {
   final ValueNotifier<bool> _passwordsMatchNotifier = ValueNotifier<bool>(true);
 
   bool _hasStartedTypingPassword = false;
+  String? mtoken;
+  void _requestPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true);
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print("User granted permission");
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print("User granted provisional permission");
+    } else {
+      print("User declined or has not accepted permission");
+    }
+  }
+
+  void getToken() async {
+    await FirebaseMessaging.instance.getToken().then((token) {
+      setState(() {
+        mtoken = token;
+        print("My token is $mtoken");
+      });
+      // saveToken(token!);
+    });
+  }
 
   // Fonction pour calculer la force du mot de passe
   void _checkPasswordStrength(String password) {
@@ -67,6 +100,14 @@ class _InscriptionState extends State<Inscription> {
   void _checkPasswordsMatch() {
     _passwordsMatchNotifier.value =
         _passwordController.text == _confirmPasswordController.text;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _requestPermission();
+    getToken();
   }
 
   @override
@@ -408,7 +449,8 @@ class _InscriptionState extends State<Inscription> {
                                                 _passwordController.text.trim(),
                                               );
 
-                                              if (user != null) {
+                                              if (user != null &&
+                                                  mtoken != null) {
                                                 Utilisateur utilisateur =
                                                     new Utilisateur(
                                                         id: _emailController
@@ -425,6 +467,7 @@ class _InscriptionState extends State<Inscription> {
                                                                 .value.text,
                                                         photo: "",
                                                         genie: "",
+                                                        token: mtoken,
                                                         promo:
                                                             "#${_promoController.value.text}",
                                                         role: RoleType.USER);
@@ -433,6 +476,13 @@ class _InscriptionState extends State<Inscription> {
                                                         .toString()
                                                         .split('.')
                                                         .last);
+                                                await _userService.postToken(
+                                                    mtoken!,
+                                                    RoleType.USER
+                                                        .toString()
+                                                        .split('.')
+                                                        .last);
+
                                                 try {
                                                   String code =
                                                       await _userService

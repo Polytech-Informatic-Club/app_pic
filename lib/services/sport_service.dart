@@ -14,6 +14,7 @@ import 'package:new_app/models/joueur.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/models/volleyball.dart';
+import 'package:new_app/services/notification_service.dart';
 
 class SportService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -22,6 +23,9 @@ class SportService {
 
   CollectionReference commissionCollection =
       FirebaseFirestore.instance.collection("COMMISSION");
+
+  CollectionReference tokenCollection =
+      FirebaseFirestore.instance.collection("TOKEN");
 
 // Football SERVICE
   Future<List<Equipe>> getEquipeList() async {
@@ -48,6 +52,18 @@ class SportService {
               football.equipeB.nom +
               football.date.toString())
           .set(football.toJson());
+
+      // var tokensSnapshot = await tokenCollection.get();
+      // List<String> tokens = tokensSnapshot.docs
+      //     .map((doc) => doc['token'])
+      //     .toList() as List<String>;
+
+      String token =
+          "cz3LdrHWTfi7kVAPdciW27:APA91bEVGqT7Ru6lsRKLLNrhZ82MWrgSaVKLNRBykhpIdZETs8UH13lEdUtvezqB27CteMn9qBqg3hQ6GZrVNeMCTzuXNmKHh2s9mI19-DiJ_L_CjMevR7tMqsnqY9tXigXqMbpJV6PP";
+      // for (var token in tokens) {
+      sendPushMessage(token, "Un nouveau match bla bla", "Un nouveau match");
+      // }
+
       return "OK";
     } catch (e) {
       return "Erreur lors de la création du match : $e";
@@ -204,7 +220,6 @@ class SportService {
           .where('email', isEqualTo: email)
           .limit(1)
           .get();
-      print("OK2");
       if (userSnapshot.docs.isEmpty) return null;
 
       Map<String, dynamic> userData =
@@ -272,7 +287,8 @@ class SportService {
   }
 
   Future<Football?> addButeur(String matchId, Joueur joueur, int minute,
-      String libelleScore, String libelleBut, [int increment = 1]) async {
+      String libelleScore, String libelleBut,
+      [int increment = 1]) async {
     try {
       DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
       But but = But(

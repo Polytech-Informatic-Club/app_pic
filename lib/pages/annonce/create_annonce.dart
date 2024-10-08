@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously, body_might_complete_normally_nullable
 
 import 'dart:io';
+import 'package:intl/intl.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -32,13 +33,19 @@ class CreateAnnonce extends StatelessWidget {
       TextEditingController();
   final TextEditingController _titreTextController = TextEditingController();
   final TextEditingController _lieuTextController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+    DateTime.now().hour,
+    DateTime.now().minute,
+  );
   final UserService _userService = UserService();
   final AnnonceService _annonceService = AnnonceService();
 
   final ValueNotifier<List<Categorie>> _categories = ValueNotifier([]);
   final ValueNotifier<Categorie?> _selectedCategory = ValueNotifier(null);
-  final ValueNotifier<DateTime?> _selectedDate = ValueNotifier(DateTime.now());
+  final ValueNotifier<DateTime> _selectedDate = ValueNotifier(DateTime.now());
   final ValueNotifier<bool> _loading = ValueNotifier(false);
   final ValueNotifier<String> _url = ValueNotifier("");
 
@@ -221,11 +228,12 @@ class CreateAnnonce extends StatelessWidget {
                     SizedBox(
                       width: 5,
                     ),
-                    ValueListenableBuilder<DateTime?>(
+                    ValueListenableBuilder<DateTime>(
                         valueListenable: _selectedDate,
                         builder: (context, selectedDate, child) {
                           return Text(
-                            _selectedDate.value.toString(),
+                            DateFormat('yyyy-MM-dd HH:mm')
+                                .format(_selectedDate.value),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           );
                         }),

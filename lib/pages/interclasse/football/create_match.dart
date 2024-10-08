@@ -1,7 +1,7 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously
 
 import 'dart:io';
-
+import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,13 @@ class CreateMatch extends StatelessWidget {
   CreateMatch(this.typeSport, {super.key});
   final TextEditingController _descriptionTextController =
       TextEditingController();
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+    DateTime.now().hour,
+    DateTime.now().minute,
+  );
   // ignore: non_constant_identifier_names
   final SportService _SportService = SportService();
   final UserService _userService = UserService();
@@ -36,7 +42,13 @@ class CreateMatch extends StatelessWidget {
   final ValueNotifier<List<Equipe>> _equipes = ValueNotifier([]);
   final ValueNotifier<Equipe?> _selectedEquipeA = ValueNotifier(null);
   final ValueNotifier<Equipe?> _selectedEquipeB = ValueNotifier(null);
-  final ValueNotifier<DateTime?> _selectedDate = ValueNotifier(DateTime.now());
+  final ValueNotifier<DateTime> _selectedDate = ValueNotifier(DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+    DateTime.now().hour,
+    DateTime.now().minute,
+  ));
   final ValueNotifier<bool> _loading = ValueNotifier(false);
   final ValueNotifier<String> _url = ValueNotifier("");
 
@@ -248,6 +260,16 @@ class CreateMatch extends StatelessWidget {
                           },
                         ),
 
+
+                        ValueListenableBuilder<DateTime>(
+                            valueListenable: _selectedDate,
+                            builder: (context, selectedDate, child) {
+                              return Text(
+                                  DateFormat('yyyy-MM-dd HH:mm').format(
+                                  _selectedDate.value),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              );
+                            }),
                       ]),
                     ),
                     SizedBox(
