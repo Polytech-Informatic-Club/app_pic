@@ -4,11 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 // import 'firebase_options.dart';
@@ -115,7 +110,7 @@ void sendPushMessage(String token, String body, String title) async {
 //           },
 //           "to": token
 //         }));
-    
+
 //     print("Response status: ${response.statusCode}");
 //     print("Response body: ${response.body}");
 //   } catch (e) {
@@ -172,4 +167,3 @@ Future<void> requestNotificationPermission() async {
   print('Notification permission granted: ${settings.authorizationStatus}');
 }
 
- 
