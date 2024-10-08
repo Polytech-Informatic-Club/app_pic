@@ -12,6 +12,7 @@ import 'package:new_app/services/annonce_service.dart';
 import 'package:new_app/services/hot_topic_service.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
+import 'package:new_app/widgets/ept_button.dart';
 
 class HotTopics extends StatefulWidget {
   HotTopics({super.key});
@@ -89,10 +90,8 @@ class _HotTopicsState extends State<HotTopics> {
         }
       },
       child: RestaurationItem(
-          title: topic.title,
-          date: topic.dateCreation,
-          content: topic.content,
-          isBourse: isBourse),
+        hotTopic: topic,
+      ),
     );
   }
 
@@ -251,8 +250,79 @@ class _HotTopicsState extends State<HotTopics> {
   }
 }
 
-// Fonction pour ouvrir le fichier Excel (tu peux l'implémenter)
-void openExcelFile(String? excelFileUrl) {
-  // Logique pour ouvrir le fichier Excel
-  print('Ouverture du fichier Excel: $excelFileUrl');
+class RestaurationItem extends StatelessWidget {
+  final HotTopic hotTopic;
+
+  const RestaurationItem({super.key, required this.hotTopic});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+      padding: const EdgeInsets.all(15),
+      width: 350,
+      height: 130,
+      decoration: BoxDecoration(
+        color: eptDarkGrey,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            hotTopic.title,
+            style: const TextStyle(
+                color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            hotTopic.content,
+            style: const TextStyle(
+              fontFamily: "InterRegular",
+              color: Colors.white,
+              fontSize: 12,
+            ),
+          ),
+          Spacer(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                timeAgoCustom(hotTopic.dateCreation),
+                style: TextStyle(color: AppColors.white, fontSize: 12),
+              ),
+              const SizedBox(),
+              hotTopic.category == 'bourse' && hotTopic.fileUrl != null
+                  ? EptButton(
+                      title: "Voir le fichier",
+                      width: 150,
+                      height: 30,
+                      borderRadius: 5,
+                      color: Colors.white,
+                      fontColor: Colors.black,
+                      fontsize: 12,
+                      onTap: () async {
+                        if (hotTopic.fileUrl != null) {
+                          // Ouvrir le fichier Excel
+                          await openExcelFile(hotTopic.fileUrl!);
+                        }
+                      },
+                    )
+                  : Container(height: 0),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Future<void> openExcelFile(String fileUrl) async {
+    // Logique pour ouvrir le fichier (peut inclure une redirection vers un visualiseur de fichiers)
+    print("Opening file at $fileUrl");
+    // Utilise un package comme url_launcher pour ouvrir le lien dans un navigateur ou une application externe.
+    // Example:
+    // await launch(fileUrl);
+  }
 }

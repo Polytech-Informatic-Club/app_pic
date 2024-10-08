@@ -108,7 +108,7 @@ class RestaurationItem extends StatelessWidget {
               const SizedBox(),
               isBourse
                   ? EptButton(
-                      title: "Voir communiqué",
+                      title: "Voir le fichier",
                       width: 150,
                       height: 30,
                       borderRadius: 5,
