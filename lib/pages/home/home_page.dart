@@ -12,8 +12,7 @@ import 'package:new_app/services/jeu_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 
 class HomePage extends StatefulWidget {
-
-   HomePage( {super.key});
+  HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -145,8 +144,7 @@ Widget _buildGameIcons() {
                             onTap: () {
                               changerPage(context, GameScreen(i.id));
                             },
-                            child: _buildGameIcon(
-                                i.logo, i.nom, '4 joueurs en attente')),
+                            child: _buildGameIcon(i.logo, i.nom)),
                     ],
                   )
                 : Text("Aucun jeu n'est disponible");
@@ -155,8 +153,7 @@ Widget _buildGameIcons() {
   );
 }
 
-Widget _buildGameIcon(
-    String imagePath, String gameName, String playersWaiting) {
+Widget _buildGameIcon(String imagePath, String gameName) {
   return Column(
     children: [
       Container(
@@ -177,8 +174,6 @@ Widget _buildGameIcon(
       ),
       SizedBox(height: 8),
       Text(gameName),
-      Text(playersWaiting,
-          style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold)),
     ],
   );
 }
