@@ -82,9 +82,9 @@ class _EptDrawerState extends State<EptDrawer> {
                                     clipBehavior: Clip.hardEdge,
                                     child: user?.photo != ""
                                         ? Image.network(
-                                      "${user?.photo}",
-                                      fit: BoxFit.cover,
-                                    )
+                                            "${user?.photo}",
+                                            fit: BoxFit.cover,
+                                          )
                                         : Container(),
                                   ),
                                 ),
@@ -118,23 +118,23 @@ class _EptDrawerState extends State<EptDrawer> {
                   Divider(thickness: 1, color: Colors.black),
                   const SizedBox(height: 20),
                   drawerItem("assets/images/top-left-menu/compte.png", "Compte",
-                          () {
-                        changerPage(context, CompteScreen());
-                      }),
+                      () {
+                    changerPage(context, CompteScreen());
+                  }),
                   drawerItem("assets/images/top-left-menu/famille.png",
                       "Famille Polytechnicienne", () {
-                        changerPage(context, FamillePolytechnicienneScreen());
-                      }),
+                    changerPage(context, FamillePolytechnicienneScreen());
+                  }),
                   drawerItem(
                       "assets/images/top-left-menu/xoss.png", "Cahier Xoss",
-                          () {
-                        changerPage(context, XossScreen());
-                      }),
+                      () {
+                    changerPage(context, XossScreen());
+                  }),
                   drawerItem(
                       "assets/images/top-left-menu/a_propos.png", "A propos",
-                          () {
-                        changerPage(context, AProposPage());
-                      }),
+                      () {
+                    changerPage(context, AProposPage());
+                  }),
                   FutureBuilder(
                     future: _userService.getUserByEmail(
                         FirebaseAuth.instance.currentUser!.email!),
@@ -158,7 +158,7 @@ class _EptDrawerState extends State<EptDrawer> {
                           return drawerItem(
                             "assets/images/top-left-menu/paramètres.png",
                             'Administration  ${user?.role.toString().split(".").last.split("_").sublist(1).join(" ").toLowerCase()}',
-                                () {
+                            () {
                               changerPage(
                                 context,
                                 HomeAdminSportTypePage(
@@ -174,7 +174,7 @@ class _EptDrawerState extends State<EptDrawer> {
                             },
                           );
                         } else {
-                          return Text('');
+                          return SizedBox();
                         }
                       }
                     },
@@ -185,8 +185,8 @@ class _EptDrawerState extends State<EptDrawer> {
                   // Icônes des réseaux sociaux avec liens
                   drawerItem(
                     "assets/images/top-left-menu/facebook.png",
-                    "Facebook",
-                        () {
+                    "@bde_ept",
+                    () {
                       _ouvrirLien(
                           "https://www.facebook.com/profile.php?id=100075396502307");
                     },
@@ -194,8 +194,8 @@ class _EptDrawerState extends State<EptDrawer> {
                   ),
                   drawerItem(
                     "assets/images/top-left-menu/instagram.png",
-                    "Instagram",
-                        () {
+                    "@bde_ept",
+                    () {
                       _ouvrirLien(
                           "https://www.instagram.com/bde_ept?igsh=MWdxamV4dGhjNWE3aA==");
                     },
@@ -203,16 +203,16 @@ class _EptDrawerState extends State<EptDrawer> {
                   ),
                   drawerItem(
                     "assets/images/top-left-menu/x.png",
-                    "X (Twitter)",
-                        () {
+                    "@bde_ept",
+                    () {
                       _ouvrirLien("https://x.com/bde_ept?s=21");
                     },
                     isLink: true,
                   ),
                   drawerItem(
                     "assets/images/top-left-menu/linkedin.png",
-                    "LinkedIn",
-                        () {
+                    "Bureau Des Elèves EPT",
+                    () {
                       _ouvrirLien(
                           "https://www.linkedin.com/company/bureau-des-el%C3%A8ves-ept/");
                     },

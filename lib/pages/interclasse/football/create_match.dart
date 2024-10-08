@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/basket.dart';
 import 'package:new_app/models/enums/sport_type.dart';
@@ -246,6 +247,20 @@ class CreateMatch extends StatelessWidget {
                         SizedBox(
                           width: 5,
                         ),
+                        ValueListenableBuilder<DateTime?>(
+                          valueListenable: _selectedDate,
+                          builder: (context, selectedDate, child) {
+                            String formattedDate = selectedDate != null
+                                ? DateFormat('dd MMMM yyyy').format(selectedDate)
+                                : 'Pas de date sélectionnée';
+                            return Text(
+                              formattedDate,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            );
+                          },
+                        ),
+
+
                         ValueListenableBuilder<DateTime>(
                             valueListenable: _selectedDate,
                             builder: (context, selectedDate, child) {

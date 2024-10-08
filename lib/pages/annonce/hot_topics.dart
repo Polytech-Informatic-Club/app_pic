@@ -13,6 +13,8 @@ import 'package:new_app/services/hot_topic_service.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/ept_button.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class HotTopics extends StatefulWidget {
   HotTopics({super.key});
@@ -72,7 +74,7 @@ class _HotTopicsState extends State<HotTopics> {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              ...topics
+              ...topics.reversed
                   .map((topic) => _buildHotTopicTile(topic, isBourse))
                   .toList(),
             ],
@@ -202,7 +204,6 @@ class _HotTopicsState extends State<HotTopics> {
 
   @override
   Widget build(BuildContext context) {
-    bool isAdmin = true;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -319,10 +320,10 @@ class RestaurationItem extends StatelessWidget {
   }
 
   Future<void> openExcelFile(String fileUrl) async {
-    // Logique pour ouvrir le fichier (peut inclure une redirection vers un visualiseur de fichiers)
-    print("Opening file at $fileUrl");
-    // Utilise un package comme url_launcher pour ouvrir le lien dans un navigateur ou une application externe.
-    // Example:
-    // await launch(fileUrl);
+    // Vérifie si l'URL peut être lancée
+    if (await canLaunchUrlString(fileUrl)) {
+      // Ouvre le fichier via l'URL dans le navigateur ou une application externe
+      await launchUrlString(fileUrl);
+    }
   }
 }

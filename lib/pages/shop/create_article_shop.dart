@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/article_shop.dart';
 import 'package:new_app/models/categorie_shop.dart';
@@ -241,13 +242,18 @@ class CreateArticleShop extends StatelessWidget {
                           width: 5,
                         ),
                         ValueListenableBuilder<DateTime?>(
-                            valueListenable: _selectedDate,
-                            builder: (context, selectedDate, child) {
-                              return Text(
-                                _selectedDate.value.toString(),
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              );
-                            }),
+                          valueListenable: _selectedDate,
+                          builder: (context, selectedDate, child) {
+                            String formattedDate = selectedDate != null
+                                ? DateFormat('dd MMMM yyyy').format(selectedDate)
+                                : 'Pas de date sélectionnée';
+                            return Text(
+                              formattedDate,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            );
+                          },
+                        ),
+
                       ]),
                     ),
                     SizedBox(
