@@ -27,7 +27,13 @@ class CreateMatch extends StatelessWidget {
   CreateMatch(this.typeSport, {super.key});
   final TextEditingController _descriptionTextController =
       TextEditingController();
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+    DateTime.now().hour,
+    DateTime.now().minute,
+  );
   // ignore: non_constant_identifier_names
   final SportService _SportService = SportService();
   final UserService _userService = UserService();

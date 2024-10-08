@@ -26,7 +26,13 @@ class _EditAnnonceState extends State<EditAnnonce> {
       TextEditingController();
   final TextEditingController _titreTextController = TextEditingController();
   final TextEditingController _lieuTextController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+    DateTime.now().hour,
+    DateTime.now().minute,
+  );
   final AnnonceService _annonceService = AnnonceService();
   final UserService _userService = UserService();
 
