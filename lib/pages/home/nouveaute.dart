@@ -11,7 +11,6 @@ import 'package:new_app/services/annonce_service.dart';
 import 'package:new_app/services/shop_service.dart';
 import 'package:new_app/services/sport_service.dart';
 import 'package:new_app/utils/app_colors.dart';
-import 'package:new_app/utils/app_colors.dart';
 
 class Nouveaute extends StatefulWidget {
   const Nouveaute({super.key});
@@ -96,37 +95,41 @@ class _NouveauteState extends State<Nouveaute> {
                       return Text('Erreur lors du chargement des annonces');
                     } else {
                       List<Annonce> annonces = snapshot.data ?? [];
-                      return Row(
-                        children: [
-                          for (var annonce in annonces)
-                            annonce.image.isNotEmpty
-                                ? Container(
-                                    padding: const EdgeInsets.all(5),
-                                    margin: const EdgeInsets.all(5),
-                                    width:
-                                        MediaQuery.sizeOf(context).width * 0.4,
-                                    height: MediaQuery.sizeOf(context).height *
-                                        0.25,
-                                    decoration: BoxDecoration(
-                                        color: AppColors.primary,
-                                        // color: eptLightGrey,
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    child: Container(
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            for (var annonce in annonces)
+                              annonce.image.isNotEmpty
+                                  ? Container(
+                                      padding: const EdgeInsets.all(5),
+                                      margin: const EdgeInsets.all(5),
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.4,
+                                      height:
+                                          MediaQuery.sizeOf(context).height *
+                                              0.25,
                                       decoration: BoxDecoration(
+                                          color: AppColors.primary,
+                                          // color: eptLightGrey,
                                           borderRadius:
                                               BorderRadius.circular(15)),
-                                      clipBehavior: Clip.hardEdge,
-                                      child: Image.network(
-                                        annonce.image,
-                                        fit: BoxFit.cover,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        clipBehavior: Clip.hardEdge,
+                                        child: Image.network(
+                                          annonce.image,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                : Container(
-                                    height: 0,
-                                  )
-                        ],
+                                    )
+                                  : Container(
+                                      height: 0,
+                                    )
+                          ],
+                        ),
                       );
                     }
                   },
