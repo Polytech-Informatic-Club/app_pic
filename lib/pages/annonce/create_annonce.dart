@@ -196,12 +196,21 @@ class CreateAnnonce extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
-                reusableTextFormField(
-                    "Titre", _titreTextController, (value) {}),
+                reusableTextFormField("Titre", _titreTextController, (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Veuillez rentrer un titre";
+                  }
+                  return null;
+                }),
                 SizedBox(
                   height: 20,
                 ),
-                reusableTextFormField("Lieu", _lieuTextController, (value) {}),
+                reusableTextFormField("Lieu", _lieuTextController, (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Veuillez rentrer un lieu";
+                  }
+                  return null;
+                }),
                 SizedBox(
                   height: 20,
                 ),
@@ -232,43 +241,46 @@ class CreateAnnonce extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
-                SubmittedButton("Poster", () async {
-                  // if (_selectedCategory.value != null) {
-                  Annonce annonce = Annonce(
-                      categorie: _selectedCategory.value == null
-                          ? Categorie(id: '', libelle: '', logo: '')
-                          : _selectedCategory.value!,
-                      titre: _titreTextController.text,
-                      date: _selectedDate.value!,
-                      dateCreation: DateTime.now(),
-                      description: _descriptionTextController.text,
-                      lieu: _lieuTextController.text,
-                      likes: 0,
-                      id: DateTime.now().millisecondsSinceEpoch.toString(),
-                      comments: [],
-                      image: _url.value,
-                      partageLien: "");
-                  try {
-                    String code = await _annonceService.postAnnonce(annonce);
-                    if (code == "OK") {
-                      alerteMessageWidget(context,
-                          "Annonce créée avec succès !", AppColors.success);
-                      changerPage(context, AnnonceScreen());
+                SubmittedButton(
+                  "Poster",
+                  () async {
+                    if (_url != ValueNotifier("")) {
+                      Annonce annonce = Annonce(
+                          categorie: _selectedCategory.value == null
+                              ? Categorie(id: '', libelle: '', logo: '')
+                              : _selectedCategory.value!,
+                          titre: _titreTextController.text,
+                          date: _selectedDate.value!,
+                          dateCreation: DateTime.now(),
+                          description: _descriptionTextController.text,
+                          lieu: _lieuTextController.text,
+                          likes: 0,
+                          id: DateTime.now().millisecondsSinceEpoch.toString(),
+                          comments: [],
+                          image: _url.value,
+                          partageLien: "");
+                      try {
+                        String code =
+                            await _annonceService.postAnnonce(annonce);
+                        if (code == "OK") {
+                          alerteMessageWidget(context,
+                              "Annonce créée avec succès !", AppColors.success);
+                          changerPage(context, AnnonceScreen());
+                        }
+                      } catch (e) {
+                        alerteMessageWidget(
+                            context,
+                            "Une erreur est survie lors de la création.$e",
+                            AppColors.echec);
+                      }
+                    } else {
+                      alerteMessageWidget(
+                          context,
+                          "Vous devez selectionner une image.",
+                          AppColors.echec);
                     }
-                  } catch (e) {
-                    alerteMessageWidget(
-                        context,
-                        "Une erreur est survie lors de la création.$e",
-                        AppColors.echec);
-                  }
-                }
-                    // else {
-                    //   alerteMessageWidget(
-                    //       context,
-                    //       "Vous n'avez pas sélectionné une équipe ou des équipes différentes.",
-                    //       AppColors.echec);
-                    // }
-                    )
+                  },
+                )
               ],
             ),
           ),
