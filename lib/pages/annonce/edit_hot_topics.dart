@@ -11,29 +11,43 @@ import 'dart:io';
 import 'package:new_app/widgets/reusable_widgets.dart';
 import 'package:new_app/widgets/submited_button.dart';
 
-class CreateHotTopicScreen extends StatefulWidget {
+class EditHotTopicScreen extends StatefulWidget {
+  final HotTopic hotTopic; // Le Hot Topic à modifier
+
+  EditHotTopicScreen({required this.hotTopic});
+
   @override
-  _CreateHotTopicScreenState createState() => _CreateHotTopicScreenState();
+  _EditHotTopicScreenState createState() => _EditHotTopicScreenState();
 }
 
-class _CreateHotTopicScreenState extends State<CreateHotTopicScreen> {
+class _EditHotTopicScreenState extends State<EditHotTopicScreen> {
   final _formKey = GlobalKey<FormState>();
   HotTopicService _hotTopicService = HotTopicService();
   String? _selectedCategory;
   String? _excelFileUrl; // URL du fichier Excel si joint
   File? _selectedFile;
 
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
+  late TextEditingController _titleController;
+  late TextEditingController _descriptionController;
 
   // Liste des catégories disponibles
   final List<String> _categories = ['restauration', 'bourse'];
 
   @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.hotTopic.title);
+    _descriptionController =
+        TextEditingController(text: widget.hotTopic.content);
+    _selectedCategory = widget.hotTopic.category;
+    _excelFileUrl = widget.hotTopic.fileUrl; // URL du fichier existant
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Créer un Hot Topic'),
+        title: Text('Modifier le Hot Topic'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -86,16 +100,22 @@ class _CreateHotTopicScreenState extends State<CreateHotTopicScreen> {
                 },
               ),
               SizedBox(height: 16),
-              // Affiche un bouton si la catégorie sélectionnée est "bourse"
               if (_selectedCategory == 'bourse')
                 ElevatedButton(
                   onPressed: _selectFile,
                   child: Text(_selectedFile == null
-                      ? 'Joindre un fichier Excel'
+                      ? (_excelFileUrl == null
+                          ? 'Joindre un fichier Excel'
+                          : 'Changer le fichier Excel')
                       : 'Changer le fichier Excel'),
                 ),
+              if (_excelFileUrl != null && _selectedFile == null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text('Fichier existant : $_excelFileUrl'),
+                ),
               SizedBox(height: 16),
-              SubmittedButton('Créer le Hot Topic', _submitHotTopic),
+              Center(child: SubmittedButton('Confirmer', _submitHotTopic)),
             ],
           ),
         ),
@@ -117,41 +137,34 @@ class _CreateHotTopicScreenState extends State<CreateHotTopicScreen> {
     }
   }
 
-  // Soumettre le hot topic
+  // Soumettre la mise à jour du Hot Topic
   Future<void> _submitHotTopic() async {
     if (_formKey.currentState!.validate()) {
       try {
-        String? fileUrl;
+        String? fileUrl = _excelFileUrl;
 
-        // Si un fichier est sélectionné, uploader dans Firebase Storage
+        // Si un nouveau fichier est sélectionné, uploader dans Firebase Storage
         if (_selectedFile != null) {
           fileUrl = await _uploadExcelFile(_selectedFile!);
         }
 
-        // Créer une instance de HotTopic
-        HotTopic newHotTopic = HotTopic(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
+        // Créer une instance de HotTopic mise à jour
+        HotTopic updatedHotTopic = HotTopic(
+          id: widget.hotTopic.id, // Conserver l'ID d'origine
           title: _titleController.text,
           content: _descriptionController.text,
           category: _selectedCategory!,
           fileUrl: fileUrl,
-          dateCreation: DateTime.now(),
+          dateCreation:
+              widget.hotTopic.dateCreation, // Conserver la date d'origine
         );
 
-        // Sauvegarder dans Firestore
-        await _hotTopicService.createHotTopic(newHotTopic);
+        // Mettre à jour dans Firestore
+        await _hotTopicService.updateHotTopic(updatedHotTopic);
         changerPage(context, AnnonceScreen());
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Hot Topic créé avec succès')),
+          SnackBar(content: Text('Hot Topic modifié avec succès')),
         );
-
-        // Vider les champs après la création
-        _titleController.clear();
-        _descriptionController.clear();
-        setState(() {
-          _selectedCategory = null;
-          _selectedFile = null;
-        });
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Erreur : $e')),

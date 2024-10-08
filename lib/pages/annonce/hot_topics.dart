@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/categorie.dart';
 import 'package:new_app/models/hot_topic.dart';
+import 'package:new_app/pages/annonce/annonce_screen.dart';
 import 'package:new_app/pages/annonce/create_hot_topic.dart';
+import 'package:new_app/pages/annonce/edit_hot_topics.dart';
 import 'package:new_app/pages/annonce/restauration.dart';
 import 'package:new_app/pages/annonce/rex_row.dart';
 import 'package:new_app/services/annonce_service.dart';
@@ -31,6 +33,132 @@ class _HotTopicsState extends State<HotTopics> {
     super.initState();
     _checkUserRole(); // Appel pour vérifier le rôle de l'utilisateur
     _loadHotTopics();
+  }
+
+  Widget _buildCategorySection(
+      String title, String iconPath, List<HotTopic> topics,
+      {bool isBourse = false}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(2),
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                  color: orange, borderRadius: BorderRadius.circular(5)),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Image.asset(
+                  iconPath,
+                  scale: 3,
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Text(
+              title,
+              style: TextStyle(fontSize: 14),
+            ),
+          ],
+        ),
+        SizedBox(height: 10),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              ...topics
+                  .map((topic) => _buildHotTopicTile(topic, isBourse))
+                  .toList(),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildHotTopicTile(HotTopic topic, bool isBourse) {
+    return GestureDetector(
+      onLongPress: () {
+        if (isAdmin) {
+          _showAdminDialog(context, topic);
+        }
+      },
+      child: RestaurationItem(
+          title: topic.title,
+          date: topic.dateCreation,
+          content: topic.content,
+          isBourse: isBourse),
+    );
+  }
+
+  void _showAdminDialog(BuildContext context, HotTopic hotTopic) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Actions administratives'),
+          content: Text('Que voulez-vous faire avec ce Hot Topic ?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                changerPage(context, EditHotTopicScreen(hotTopic: hotTopic));
+              },
+              child: Text('Modifier'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Demander confirmation avant de supprimer
+                _confirmDelete(context, hotTopic.id);
+              },
+              child: Text('Supprimer'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Fermer le dialogue
+              },
+              child: Text('Annuler'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _confirmDelete(BuildContext context, String hotTopicId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmation de suppression'),
+          content: Text('Êtes-vous sûr de vouloir supprimer ce Hot Topic ?'),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                await _hotTopicService.deleteHotTopic(
+                    hotTopicId); // Appelle la fonction de suppression
+                Navigator.of(context).pop(); // Ferme le dialogue
+                changerPage(context, AnnonceScreen());
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Hot Topic supprimé avec succès')),
+                );
+              },
+              child: Text('Supprimer'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Fermer le dialogue
+              },
+              child: Text('Annuler'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> _loadHotTopics() async {
@@ -121,59 +249,6 @@ class _HotTopicsState extends State<HotTopics> {
       ],
     );
   }
-}
-
-Widget _buildCategorySection(
-    String title, String iconPath, List<HotTopic> topics,
-    {bool isBourse = false}) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(2),
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-                color: orange, borderRadius: BorderRadius.circular(5)),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(5)),
-              child: Image.asset(
-                iconPath,
-                scale: 3,
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Text(
-            title,
-            style: TextStyle(fontSize: 14),
-          ),
-        ],
-      ),
-      SizedBox(height: 10),
-      SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            ...topics
-                .map((topic) => _buildHotTopicTile(topic, isBourse))
-                .toList(),
-          ],
-        ),
-      )
-    ],
-  );
-}
-
-Widget _buildHotTopicTile(HotTopic topic, bool isBourse) {
-  return RestaurationItem(
-      title: topic.title,
-      date: topic.dateCreation,
-      content: topic.content,
-      isBourse: isBourse);
 }
 
 // Fonction pour ouvrir le fichier Excel (tu peux l'implémenter)
