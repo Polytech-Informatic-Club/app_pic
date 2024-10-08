@@ -251,7 +251,7 @@ class CreateMatch extends StatelessWidget {
                             builder: (context, selectedDate, child) {
                               return Text(
                                   DateFormat('yyyy-MM-dd HH:mm').format(
-                                  _selectedDate),
+                                  _selectedDate.value),
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               );
                             }),

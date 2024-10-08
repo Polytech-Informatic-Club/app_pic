@@ -10,6 +10,8 @@ import 'package:new_app/widgets/alerte_message.dart';
 import 'package:new_app/widgets/reusable_description_input.dart';
 import 'package:new_app/widgets/reusable_widgets.dart';
 import 'package:new_app/widgets/submited_button.dart';
+import 'package:intl/intl.dart';
+
 
 class EditAnnonce extends StatefulWidget {
   final String idAnnonce; // L'annonce que l'on veut modifier
@@ -38,7 +40,7 @@ class _EditAnnonceState extends State<EditAnnonce> {
 
   final ValueNotifier<List<Categorie>> _categories = ValueNotifier([]);
   final ValueNotifier<Categorie?> _selectedCategory = ValueNotifier(null);
-  final ValueNotifier<DateTime?> _selectedDate = ValueNotifier(DateTime.now());
+  final ValueNotifier<DateTime> _selectedDate = ValueNotifier(DateTime.now());
   final ValueNotifier<bool> _loading = ValueNotifier(false);
   final ValueNotifier<String> _url = ValueNotifier("");
 
@@ -220,11 +222,12 @@ class _EditAnnonceState extends State<EditAnnonce> {
                   child: Row(children: [
                     Icon(Icons.calendar_month),
                     SizedBox(width: 5),
-                    ValueListenableBuilder<DateTime?>(
+                    ValueListenableBuilder<DateTime>(
                         valueListenable: _selectedDate,
                         builder: (context, selectedDate, child) {
                           return Text(
-                            _selectedDate.value.toString(),
+                            DateFormat('yyyy-MM-dd HH:mm')
+                                .format(_selectedDate.value),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           );
                         }),
