@@ -54,6 +54,7 @@ class ArticleShop {
     );
   }
 
+
   // Method to convert an ArticleShop object to JSON
   Map<String, dynamic> toJson() {
     return {

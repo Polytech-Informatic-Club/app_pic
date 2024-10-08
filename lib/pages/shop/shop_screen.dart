@@ -54,6 +54,7 @@ class _ShopScreenState extends State<ShopScreen> {
   }
 
 
+
   Future<void> _loadCategories() async {
     List<CategorieShop>? loadedCategories = await _shopService.getAllCategorieShop();
     if (loadedCategories != null) {
