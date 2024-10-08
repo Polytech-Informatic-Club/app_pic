@@ -21,7 +21,7 @@ String formatDateTime(DateTime dateTime) {
       DateFormat.EEEE('fr'); // Format pour le jour de la semaine en français
   final DateFormat dateFormat =
       DateFormat('d MMMM yyyy', 'fr'); // Format pour le jour, mois et année
-  final DateFormat timeFormat = DateFormat('HH\'h\'mm'); // Format pour l'heure
+  final DateFormat timeFormat = DateFormat('HH:mm'); // Format pour l'heure
 
   // Obtenir les parties du format
   String dayOfWeek = dayFormat.format(dateTime).capitalize();
@@ -82,7 +82,7 @@ String simpleDateformat(DateTime d) {
 }
 
 String getHour(DateTime d) {
-  final newFormatter = DateFormat("hh:mm", "fr");
+  final newFormatter = DateFormat("HH:mm", "fr");
   final newFormatString = newFormatter.format(d);
 
   final result =

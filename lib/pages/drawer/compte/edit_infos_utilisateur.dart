@@ -197,8 +197,7 @@ class _EditInfosUtilisateurState extends State<EditInfosUtilisateur> {
                       onChanged: (String? newValue) {
                         setState(() {
                           _selectedGenie = newValue;
-                          _genieTextController.text =
-                              newValue!; // Mettre à jour le TextEditingController
+                          _genieTextController.text = newValue!;
                         });
                       },
                       validator: (value) {
