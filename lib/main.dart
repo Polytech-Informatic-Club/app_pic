@@ -132,17 +132,17 @@ class AuthHandler extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Utilisation de StreamBuilder pour écouter les changements d'état de l'utilisateur
-    return FutureBuilder(
-        future: _verifyVersion(
-            context), // Vérification de la version lors de la construction
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(
-                  child:
-                      CircularProgressIndicator()), // Indicateur de chargement
-            );
-          }
+    // return FutureBuilder(
+    //     future: _verifyVersion(
+    //         context), // Vérification de la version lors de la construction
+    //     builder: (context, snapshot) {
+    //       if (snapshot.connectionState == ConnectionState.waiting) {
+    //         return const Scaffold(
+    //           body: Center(
+    //               child:
+    //                   CircularProgressIndicator()), // Indicateur de chargement
+    //         );
+    //       }
           return StreamBuilder<User?>(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
@@ -163,8 +163,8 @@ class AuthHandler extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 ),
               );
-            },
-          );
+            // },
+          // );
         });
   }
 }

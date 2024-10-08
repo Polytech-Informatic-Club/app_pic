@@ -32,7 +32,13 @@ class CreateAnnonce extends StatelessWidget {
       TextEditingController();
   final TextEditingController _titreTextController = TextEditingController();
   final TextEditingController _lieuTextController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+    DateTime.now().hour,
+    DateTime.now().minute,
+  );
   final UserService _userService = UserService();
   final AnnonceService _annonceService = AnnonceService();
 

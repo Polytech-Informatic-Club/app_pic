@@ -24,7 +24,13 @@ class CreateArticleShop extends StatelessWidget {
   final TextEditingController _titreController = TextEditingController();
   final TextEditingController _prixController = TextEditingController();
 
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+    DateTime.now().hour,
+    DateTime.now().minute,
+  );
   // ignore: non_constant_identifier_names
   final ShopService _shopService = ShopService();
   final UserService _userService = UserService();
