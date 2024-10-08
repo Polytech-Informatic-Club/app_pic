@@ -38,6 +38,14 @@ class _EditInfosUtilisateurState extends State<EditInfosUtilisateur> {
 
   bool _isLoading = true; // Pour gérer l'affichage du CircularProgressIndicator
   Utilisateur? _user; // Stocke les informations de l'utilisateur
+  String? _selectedGenie;
+  final List<String> _genies = [
+    'GIT',
+    'GC',
+    'GEM',
+    'GI',
+    'GA',
+  ];
 
   @override
   void initState() {
@@ -173,10 +181,33 @@ class _EditInfosUtilisateurState extends State<EditInfosUtilisateur> {
                     SizedBox(
                       height: 20,
                     ),
-                    reusableTextFormField("Génie", _genieTextController,
-                        (value) {
-                      return null;
-                    }),
+                    DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        labelText: 'Sélectionner un génie',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                      ),
+                      value: _selectedGenie,
+                      items: _genies.map((String genie) {
+                        return DropdownMenuItem<String>(
+                          value: genie,
+                          child: Text(genie),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedGenie = newValue;
+                          _genieTextController.text =
+                              newValue!; // Mettre à jour le TextEditingController
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Veuillez sélectionner un génie';
+                        }
+                        return null;
+                      },
+                    ),
                     SizedBox(
                       height: 20,
                     ),

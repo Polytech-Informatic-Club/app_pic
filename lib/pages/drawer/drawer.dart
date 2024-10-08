@@ -185,7 +185,7 @@ class _EptDrawerState extends State<EptDrawer> {
                   // Icônes des réseaux sociaux avec liens
                   drawerItem(
                     "assets/images/top-left-menu/facebook.png",
-                    "Facebook",
+                    "@bde_ept",
                     () {
                       _ouvrirLien(
                           "https://www.facebook.com/profile.php?id=100075396502307");
@@ -194,7 +194,7 @@ class _EptDrawerState extends State<EptDrawer> {
                   ),
                   drawerItem(
                     "assets/images/top-left-menu/instagram.png",
-                    "Instagram",
+                    "@bde_ept",
                     () {
                       _ouvrirLien(
                           "https://www.instagram.com/bde_ept?igsh=MWdxamV4dGhjNWE3aA==");
@@ -203,7 +203,7 @@ class _EptDrawerState extends State<EptDrawer> {
                   ),
                   drawerItem(
                     "assets/images/top-left-menu/x.png",
-                    "X (Twitter)",
+                    "@bde_ept",
                     () {
                       _ouvrirLien("https://x.com/bde_ept?s=21");
                     },
@@ -211,7 +211,7 @@ class _EptDrawerState extends State<EptDrawer> {
                   ),
                   drawerItem(
                     "assets/images/top-left-menu/linkedin.png",
-                    "LinkedIn",
+                    "Bureau Des Elèves EPT",
                     () {
                       _ouvrirLien(
                           "https://www.linkedin.com/company/bureau-des-el%C3%A8ves-ept/");
