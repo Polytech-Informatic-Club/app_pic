@@ -83,18 +83,16 @@ class XossScreen extends StatelessWidget {
                                 right: 0,
                                 child: Column(
                                   children: [
-                                    if (_xossProvider.value != [])
+                                    if (_xossProvider.value.isNotEmpty)
                                       Text(
-                                        _xossProvider.value.first.user!.prenom +
-                                            ' ' +
-                                            _xossProvider.value.first.user!.nom
-                                                .toUpperCase(),
+                                        '${_xossProvider.value.first.user!.prenom} ${_xossProvider.value.first.user!.nom
+                                                .toUpperCase()}',
                                         style: TextStyle(
                                             fontSize: 17,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     SizedBox(height: 8),
-                                    if (_xossProvider.value != [])
+                                    if (_xossProvider.value.isNotEmpty)
                                       Text(
                                         '${totalMontant - totalVersement} FCFA',
                                         style: TextStyle(
