@@ -106,32 +106,26 @@ class _DetailMatchScreenState extends State<DetailMatchScreen> {
                                           fontSize: 24,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    Container(
-                                        height:
-                                            MediaQuery.sizeOf(context).height *
-                                                0.1,
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            children: [
-                                              CircleAvatar(
-                                                  radius:
-                                                      MediaQuery.sizeOf(context)
-                                                              .width *
-                                                          0.1,
-                                                  backgroundImage: NetworkImage(
-                                                    match.equipeB.logo,
-                                                  )),
-                                              SizedBox(height: 10),
-                                              Text(
-                                                match.equipeB.nom,
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ],
+                                    SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          CircleAvatar(
+                                              radius: MediaQuery.sizeOf(context)
+                                                      .width *
+                                                  0.1,
+                                              backgroundImage: NetworkImage(
+                                                match.equipeB.logo,
+                                              )),
+                                          SizedBox(height: 10),
+                                          Text(
+                                            match.equipeB.nom,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                        ))
+                                        ],
+                                      ),
+                                    )
                                   ],
                                 ),
                                 SizedBox(height: 20),

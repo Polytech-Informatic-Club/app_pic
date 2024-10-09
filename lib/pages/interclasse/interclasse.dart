@@ -87,11 +87,11 @@ class InterclassePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 8),
                   Text(
                     'Sous-Commissions',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 8),
                   SizedBox(height: 16),
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 10),
@@ -160,7 +160,7 @@ class InterclassePage extends StatelessWidget {
                                               i.scoreEquipeA,
                                               i.scoreEquipeB,
                                               i.equipeA.logo,
-                                              i.equipeA.logo,
+                                              i.equipeB.logo,
                                               DetailMatchScreen(
                                                   i.id,
                                                   i.sport.name
