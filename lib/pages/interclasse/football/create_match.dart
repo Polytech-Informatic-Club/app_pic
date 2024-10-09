@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/basket.dart';
 import 'package:new_app/models/enums/sport_type.dart';
@@ -15,6 +14,7 @@ import 'package:new_app/models/jeux_esprit.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/models/volleyball.dart';
 import 'package:new_app/pages/interclasse/football/home_admin_sport_type_page.dart';
+import 'package:new_app/pages/interclasse/interclasse.dart';
 import 'package:new_app/services/sport_service.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
@@ -23,11 +23,18 @@ import 'package:new_app/widgets/reusable_description_input.dart';
 import 'package:new_app/widgets/reusable_widgets.dart';
 import 'package:new_app/widgets/submited_button.dart';
 
-class CreateMatch extends StatelessWidget {
+class CreateMatch extends StatefulWidget {
   String typeSport;
   CreateMatch(this.typeSport, {super.key});
+
+  @override
+  State<CreateMatch> createState() => _CreateMatchState();
+}
+
+class _CreateMatchState extends State<CreateMatch> {
   final TextEditingController _descriptionTextController =
       TextEditingController();
+
   DateTime selectedDate = DateTime(
     DateTime.now().year,
     DateTime.now().month,
@@ -35,13 +42,18 @@ class CreateMatch extends StatelessWidget {
     DateTime.now().hour,
     DateTime.now().minute,
   );
+
   // ignore: non_constant_identifier_names
   final SportService _SportService = SportService();
+
   final UserService _userService = UserService();
 
   final ValueNotifier<List<Equipe>> _equipes = ValueNotifier([]);
+
   final ValueNotifier<Equipe?> _selectedEquipeA = ValueNotifier(null);
+
   final ValueNotifier<Equipe?> _selectedEquipeB = ValueNotifier(null);
+
   final ValueNotifier<DateTime> _selectedDate = ValueNotifier(DateTime(
     DateTime.now().year,
     DateTime.now().month,
@@ -49,8 +61,19 @@ class CreateMatch extends StatelessWidget {
     DateTime.now().hour,
     DateTime.now().minute,
   ));
+
   final ValueNotifier<bool> _loading = ValueNotifier(false);
+
   final ValueNotifier<String> _url = ValueNotifier("");
+
+  TextEditingController _sportController = TextEditingController();
+  String? _selectedSport;
+  final List<String> _sports = [
+    'FOOTBALL',
+    'BASKETBALL',
+    'VOLLEYBALL',
+    'JEUX_ESPRIT',
+  ];
 
   Future<void> _loadEquipes() async {
     List<Equipe> equipes = await _SportService.getEquipeList();
@@ -70,8 +93,7 @@ class CreateMatch extends StatelessWidget {
       // Sélectionner l'heure après la date
       final TimeOfDay? pickedTime = await showTimePicker(
         context: context,
-        initialTime:
-            TimeOfDay.fromDateTime(_selectedDate.value ?? DateTime.now()),
+        initialTime: TimeOfDay.fromDateTime(_selectedDate.value),
       );
 
       if (pickedTime != null) {
@@ -240,6 +262,38 @@ class CreateMatch extends StatelessWidget {
                     SizedBox(
                       height: 20,
                     ),
+                    if (widget.typeSport == 'MB') ...[
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: 'Sélectionner un sport',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                        ),
+                        value: _selectedSport,
+                        items: _sports.map((String genie) {
+                          return DropdownMenuItem<String>(
+                            value: genie,
+                            child: Text(genie),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedSport = newValue;
+                            _sportController.text = newValue!;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Veuillez sélectionner un génie';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ] else
+                      ...[],
                     GestureDetector(
                       onTap: () => _selectDateTime(context),
                       child: Row(children: [
@@ -251,7 +305,8 @@ class CreateMatch extends StatelessWidget {
                           valueListenable: _selectedDate,
                           builder: (context, selectedDate, child) {
                             String formattedDate = selectedDate != null
-                                ? DateFormat('dd MMMM yyyy').format(selectedDate)
+                                ? DateFormat('dd MMMM yyyy')
+                                    .format(selectedDate)
                                 : 'Pas de date sélectionnée';
                             return Text(
                               formattedDate,
@@ -259,14 +314,12 @@ class CreateMatch extends StatelessWidget {
                             );
                           },
                         ),
-
-
                         ValueListenableBuilder<DateTime>(
                             valueListenable: _selectedDate,
                             builder: (context, selectedDate, child) {
                               return Text(
-                                  DateFormat('yyyy-MM-dd HH:mm').format(
-                                  _selectedDate.value),
+                                DateFormat('yyyy-MM-dd HH:mm')
+                                    .format(_selectedDate.value),
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               );
                             }),
@@ -283,12 +336,15 @@ class CreateMatch extends StatelessWidget {
                       height: 20,
                     ),
                     SubmittedButton("Créer", () async {
+                      if (widget.typeSport == 'MB') {
+                        widget.typeSport = _sportController.text;
+                      }
                       if (_selectedEquipeA.value != null &&
                           _selectedEquipeB.value != null &&
                           _selectedEquipeA.value != _selectedEquipeB.value) {
                         dynamic match;
                         try {
-                          if (typeSport == "FOOTBALL") {
+                          if (widget.typeSport == "FOOTBALL") {
                             match = Football(
                                 statistiques: {
                                   "redCardA": 0,
@@ -309,8 +365,8 @@ class CreateMatch extends StatelessWidget {
                                 description:
                                     _descriptionTextController.value.text,
                                 photo: _url.value,
-                                id: "${_selectedEquipeA.value!.nom} VS ${_selectedEquipeB.value!.nom}${_selectedDate.value!}",
-                                date: _selectedDate.value!,
+                                id: "${_selectedEquipeA.value!.nom} VS ${_selectedEquipeB.value!.nom}${_selectedDate.value}",
+                                date: _selectedDate.value,
                                 equipeA: _selectedEquipeA.value!,
                                 equipeB: _selectedEquipeB.value!,
                                 dateCreation: DateTime.now(),
@@ -321,7 +377,7 @@ class CreateMatch extends StatelessWidget {
                                 likers: [],
                                 dislikers: [],
                                 partageLien: "");
-                          } else if (typeSport == "BASKETBALL") {
+                          } else if (widget.typeSport == "BASKETBALL") {
                             match = Basket(
                                 statistiques: {
                                   "point3A": 0,
@@ -338,8 +394,8 @@ class CreateMatch extends StatelessWidget {
                                 description:
                                     _descriptionTextController.value.text,
                                 photo: _url.value,
-                                id: "${_selectedEquipeA.value!.nom} VS ${_selectedEquipeB.value!.nom}${_selectedDate.value!}",
-                                date: _selectedDate.value!,
+                                id: "${_selectedEquipeA.value!.nom} VS ${_selectedEquipeB.value!.nom}${_selectedDate.value}",
+                                date: _selectedDate.value,
                                 equipeA: _selectedEquipeA.value!,
                                 equipeB: _selectedEquipeB.value!,
                                 dateCreation: DateTime.now(),
@@ -350,7 +406,7 @@ class CreateMatch extends StatelessWidget {
                                 likers: [],
                                 dislikers: [],
                                 partageLien: "");
-                          } else if (typeSport == "VOLLEYBALL") {
+                          } else if (widget.typeSport == "VOLLEYBALL") {
                             match = Volleyball(
                                 statistiques: {
                                   "goalA": 0,
@@ -365,8 +421,8 @@ class CreateMatch extends StatelessWidget {
                                 description:
                                     _descriptionTextController.value.text,
                                 photo: _url.value,
-                                id: "${_selectedEquipeA.value!.nom} VS ${_selectedEquipeB.value!.nom}${_selectedDate.value!}",
-                                date: _selectedDate.value!,
+                                id: "${_selectedEquipeA.value!.nom} VS ${_selectedEquipeB.value!.nom}${_selectedDate.value}",
+                                date: _selectedDate.value,
                                 equipeA: _selectedEquipeA.value!,
                                 equipeB: _selectedEquipeB.value!,
                                 dateCreation: DateTime.now(),
@@ -377,7 +433,7 @@ class CreateMatch extends StatelessWidget {
                                 likers: [],
                                 dislikers: [],
                                 partageLien: "");
-                          } else if (typeSport == "JEUX_ESPRIT") {
+                          } else if (widget.typeSport == "JEUX_ESPRIT") {
                             match = JeuxEsprit(
                                 statistiques: {
                                   "bonneReponseA": 0,
@@ -388,8 +444,8 @@ class CreateMatch extends StatelessWidget {
                                 description:
                                     _descriptionTextController.value.text,
                                 photo: _url.value,
-                                id: "${_selectedEquipeA.value!.nom} VS ${_selectedEquipeB.value!.nom}${_selectedDate.value!}",
-                                date: _selectedDate.value!,
+                                id: "${_selectedEquipeA.value!.nom} VS ${_selectedEquipeB.value!.nom}${_selectedDate.value}",
+                                date: _selectedDate.value,
                                 equipeA: _selectedEquipeA.value!,
                                 equipeB: _selectedEquipeB.value!,
                                 dateCreation: DateTime.now(),
@@ -409,8 +465,9 @@ class CreateMatch extends StatelessWidget {
                                   context,
                                   "Match crée avec succès !",
                                   AppColors.success);
-                              changerPage(
-                                  context, HomeAdminSportTypePage(typeSport));
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              changerPage(context, InterclassePage());
                             }
                           } catch (e) {
                             return null;

@@ -21,12 +21,14 @@ class HomeAdminSportTypePage extends StatelessWidget {
   final ShopService _shopService = ShopService();
   final SportService _sportService = SportService();
   final UserService _userService = UserService();
-  final TextEditingController _nomCollectionController = TextEditingController();
+  final TextEditingController _nomCollectionController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _userService.getUserByEmail(FirebaseAuth.instance.currentUser!.email!),
+      future: _userService
+          .getUserByEmail(FirebaseAuth.instance.currentUser!.email!),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -40,7 +42,8 @@ class HomeAdminSportTypePage extends StatelessWidget {
           if (userRole == "ADMIN_MB") {
             return _buildAdminMBPage(context); // Page complète pour ADMIN_MB
           } else if (userRole == "ADMIN_FOOTBALL") {
-            return _buildAdminFootballPage(context); // Page limitée pour ADMIN_FOOTBALL
+            return _buildAdminFootballPage(
+                context); // Page limitée pour ADMIN_FOOTBALL
           } else {
             return _buildAccessDeniedPage(); // Page vierge avec message d'accès refusé
           }
@@ -57,7 +60,7 @@ class HomeAdminSportTypePage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: MediaQuery.sizeOf(context).height * 0.1),
+          padding: EdgeInsets.symmetric(vertical: 10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -78,7 +81,13 @@ class HomeAdminSportTypePage extends StatelessWidget {
               SubmittedButton("Créer un match", () {
                 changerPage(context, CreateMatch(typeSport));
               }),
-
+              SizedBox(
+                height: 5,
+              ),
+              Text('Listes des matchs à administrer'),
+              SizedBox(
+                height: 5,
+              ),
               _buildMatchList(typeSport),
             ],
           ),
@@ -95,7 +104,7 @@ class HomeAdminSportTypePage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: MediaQuery.sizeOf(context).height * 0.1),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -105,6 +114,10 @@ class HomeAdminSportTypePage extends StatelessWidget {
                 changerPage(context, CreateMatch(typeSport));
               }),
               SizedBox(height: 10),
+              Text("Liste des matchs à administrer"),
+              SizedBox(
+                height: 10,
+              ),
               _buildMatchList(typeSport),
             ],
           ),
@@ -130,7 +143,8 @@ class HomeAdminSportTypePage extends StatelessWidget {
           title: Text("Nom de la collection"),
           content: TextField(
             controller: _nomCollectionController,
-            decoration: InputDecoration(hintText: "Entrer le nom de la collection"),
+            decoration:
+                InputDecoration(hintText: "Entrer le nom de la collection"),
           ),
           actions: [
             TextButton(
@@ -157,43 +171,40 @@ class HomeAdminSportTypePage extends StatelessWidget {
 
   Widget _buildMatchList(String typeSport) {
     return FutureBuilder<List<Matches>>(
-      future: _sportService.getListMatchFootball(typeSport), // Vérifiez bien cette méthode
+      future: (typeSport != 'MB')
+          ? _sportService.getListMatchFootball(typeSport)
+          : _sportService.getAllMatch(), // Vérifiez bien cette méthode
       builder: (context, snapshot) {
         // Si en attente de la réponse
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
-        }
-        // En cas d'erreur
-        else if (snapshot.hasError) {
-          // Ajoutez un message de débogage pour voir l'erreur
-          print("Erreur lors de la récupération des matchs : ${snapshot.error}");
+        } else if (snapshot.hasError) {
           return Text('Erreur lors du chargement des matchs');
-        }
-        // Une fois les données chargées
-        else {
+        } else {
           List<Matches> matches = snapshot.data ?? [];
 
-          // Ajout d'un message de débogage pour vérifier la taille de la liste
-          print("Nombre de matchs récupérés : ${matches.length}");
-
-          // Vérifiez si des matchs ont été récupérés
           if (matches.isNotEmpty) {
             return Column(
               children: matches.map((match) {
-                // Ajout d'un message de débogage pour voir les détails du match
-                print("Match récupéré : ${match.equipeA.nom} vs ${match.equipeB.nom}");
-
-                return buildMatchCard(
-                  context,
-                  match.id,
-                  dateCustomformat(match.date),
-                  match.equipeA.nom,
-                  match.equipeB.nom,
-                  match.scoreEquipeA,
-                  match.scoreEquipeB,
-                  match.equipeA.logo,
-                  match.equipeB.logo,
-                  AdministrateOneFootball(match.id, match.sport.name),
+                return Column(
+                  children: [
+                    Text(match.sport.name),
+                    buildMatchCard(
+                      context,
+                      match.id,
+                      dateCustomformat(match.date),
+                      match.equipeA.nom,
+                      match.equipeB.nom,
+                      match.scoreEquipeA,
+                      match.scoreEquipeB,
+                      match.equipeA.logo,
+                      match.equipeB.logo,
+                      AdministrateOneFootball(match.id, match.sport.name),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    )
+                  ],
                 );
               }).toList(),
             );
@@ -204,5 +215,4 @@ class HomeAdminSportTypePage extends StatelessWidget {
       },
     );
   }
-
 }

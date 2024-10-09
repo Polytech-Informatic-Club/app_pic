@@ -148,28 +148,21 @@ class _EptDrawerState extends State<EptDrawer> {
                       } else {
                         final user = snapshot.data;
                         if ([
-                          RoleType.ADMIN.toString().split(".").last,
-                          RoleType.ADMIN_MB.toString().split(".").last,
-                          RoleType.ADMIN_FOOTBALL.toString().split(".").last,
-                          RoleType.ADMIN_BASKETBALL.toString().split(".").last,
-                          RoleType.ADMIN_VOLLEYBALL.toString().split(".").last,
-                          RoleType.ADMIN_JEUX_ESPRIT.toString().split(".").last
-                        ].contains(user?.role.toString().split(".").last)) {
+                          RoleType.ADMIN.toString(),
+                          RoleType.ADMIN_MB.toString(),
+                          RoleType.ADMIN_FOOTBALL.toString(),
+                          RoleType.ADMIN_BASKETBALL.toString(),
+                          RoleType.ADMIN_VOLLEYBALL.toString(),
+                          RoleType.ADMIN_JEUX_ESPRIT.toString()
+                        ].contains(user?.role.toString())) {
                           return drawerItem(
                             "assets/images/top-left-menu/paramètres.png",
-                            'Administration  ${user?.role.toString().split(".").last.split("_").sublist(1).join(" ").toLowerCase()}',
+                            'Administration ${user?.role.toString().split("_").last.toLowerCase()}',
                             () {
                               changerPage(
                                 context,
                                 HomeAdminSportTypePage(
-                                  user!.role
-                                      .toString()
-                                      .split(".")
-                                      .last
-                                      .split("_")
-                                      .sublist(1)
-                                      .join("_"),
-                                ),
+                                    user!.role.toString().split("_").last),
                               );
                             },
                           );
