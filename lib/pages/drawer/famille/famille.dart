@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/promo.dart';
+import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/pages/drawer/famille/promo.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
@@ -35,7 +36,75 @@ class _FamillePolytechnicienneScreenState
     super.dispose();
   }
 
-  // Charger la liste des promos
+  Future<int> getTailleListe(String nom) async {
+    Future<List<Utilisateur>> futureListe = _userService.getAllUserInPromo(
+        nom); // Remplace par ta méthode qui retourne Future<List>
+
+    // Attendre que le Future soit complété
+    List<Utilisateur> maListe = await futureListe;
+
+    int tailleListe = maListe.length;
+    return tailleListe;
+  }
+
+  Widget promoWidget(logo, nom, devise, page) {
+    return Builder(builder: (context) {
+      return Column(
+        children: [
+          InkWell(
+            onTap: () {
+              changerPage(context, page);
+            },
+            child: Card(
+              elevation: 0,
+              color: eptLighterOrange,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: ListTile(
+                leading: CircleAvatar(
+                  radius: 35,
+                  backgroundImage: NetworkImage(logo), // Chemin de l'image
+                ),
+                title: Text(
+                  nom,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                subtitle: Text(devise),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.person),
+                    SizedBox(width: 4),
+                    // Text('${getTailleListe(nom)}'),
+                    FutureBuilder<int>(
+                        future: getTailleListe(
+                            nom), // Appelle ta fonction Future ici
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator(); // Affiche un indicateur de chargement en attendant la valeur
+                          } else if (snapshot.hasError) {
+                            return Text('Erreur : ${snapshot.error}');
+                          } else if (snapshot.hasData) {
+                            return Text('${snapshot.data}');
+                          } else {
+                            return Text('??');
+                          }
+                        })
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          )
+        ],
+      );
+    });
+  }
+
   Future<void> _loadPromos() async {
     final promos = await _userService.getListPromo();
     setState(() {
@@ -95,8 +164,8 @@ class _FamillePolytechnicienneScreenState
                   ? Column(
                       children: [
                         for (var promo in _filteredPromos.reversed)
-                          promoWidget(promo.logo, promo.nom, promo.total,
-                              promo.devise, PromotionPage(promo.nom)),
+                          promoWidget(promo.logo, promo.nom, promo.devise,
+                              PromotionPage(promo.nom)),
                       ],
                     )
                   : Text("Aucun résultat trouvé"),
@@ -106,47 +175,4 @@ class _FamillePolytechnicienneScreenState
       ),
     );
   }
-}
-
-Widget promoWidget(logo, nom, nombre, devise, page) {
-  return Builder(builder: (context) {
-    return Column(
-      children: [
-        InkWell(
-          onTap: () {
-            changerPage(context, page);
-          },
-          child: Card(
-            elevation: 0,
-            color: eptLighterOrange,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: ListTile(
-              leading: CircleAvatar(
-                radius: 35,
-                backgroundImage: NetworkImage(logo), // Chemin de l'image
-              ),
-              title: Text(
-                nom,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-              subtitle: Text(devise),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.person),
-                  SizedBox(width: 4),
-                  Text(nombre),
-                ],
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        )
-      ],
-    );
-  });
 }

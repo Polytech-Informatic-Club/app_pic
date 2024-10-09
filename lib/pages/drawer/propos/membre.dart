@@ -8,8 +8,10 @@ class MembreEquipe extends StatelessWidget {
   String description;
   String contact;
   String message;
+  String linkedin;
+  String github;
   MembreEquipe(this.nom, this.image, this.role, this.description, this.contact,
-      this.message,
+      this.message, this.linkedin, this.github,
       {super.key});
 
   @override
@@ -69,7 +71,7 @@ class MembreEquipe extends StatelessWidget {
                           style: TextStyle(fontSize: 16),
                         ),
                         SizedBox(
-                          height: 10,
+                          height: 5,
                         ),
                         Text(
                           description,
@@ -103,33 +105,34 @@ class MembreEquipe extends StatelessWidget {
                 ),
               ],
             ),
-            // Autres contacts (à compléter avec les icônes et titres correspondants)
+            SizedBox(height: 5),
             Row(
               children: [
                 Image.asset(
-                  'assets/images/top-left-menu/x.png',
-                  width: 30,
+                  'assets/images/top-left-menu/linkedin.png',
+                  width: 25,
                 ),
                 SizedBox(
                   width: 5,
                 ),
                 Text(
-                  '@iboudia',
+                  linkedin,
                   style: TextStyle(fontFamily: 'InterMedium'),
                 ),
               ],
             ),
+            SizedBox(height: 5),
             Row(
               children: [
                 Image.asset(
-                  'assets/images/top-left-menu/instagram.png',
-                  width: 30,
+                  'assets/images/top-left-menu/github.png',
+                  width: 25,
                 ),
                 SizedBox(
                   width: 5,
                 ),
                 Text(
-                  '@iboudia',
+                  github,
                   style: TextStyle(fontFamily: 'InterMedium'),
                 ),
               ],
@@ -152,7 +155,7 @@ class MembreEquipe extends StatelessWidget {
                   color: eptLighterOrange,
                   borderRadius: BorderRadius.circular(10)),
               child: Text(
-                'Lorem ipsum dolor sit amet consectetur. Dis amet ullamcorper etiam facilisis. At pretium duis donec nec laoreet sem feugiat quam tincidunt. Amet tellus arcu ut tortor nulla euismod ullamcorper velit adipiscing. Justo in morbi elit tellus. Magna nulla fermentum aliquam aliquam sit enim.',
+                message,
                 style: TextStyle(fontFamily: 'InterMedium'),
               ),
             ),

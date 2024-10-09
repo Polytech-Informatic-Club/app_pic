@@ -65,22 +65,28 @@ class AProposPage extends StatelessWidget {
               // Exemple de membres de l'équipe avec image et nom
               List<Map<String, String>> equipe = [
                 {
-                  "imagePath": "assets/images/membre5.jpg",
+                  "imagePath": "assets/images/equipe/Elimane.jpg",
                   "name": "Elimane SALL",
                   "role": "Lead Backend Developer",
                   "description":
-                      "En cinquième année lors du développement de l'application, un élément de la 47ème promotion.",
-                  "contact": "77 777 77 77",
-                  "message": "Envoyer un message"
+                      "Durant ce projet, nous étions chargés d'intégrer les API.",
+                  "contact": "77 209 95 38",
+                  "message":
+                      "En tant qu'élève ingenieur, nous avons une obligation d'etre au service de notre nation. Toujours au service de notre nation.",
+                  "linkedin": "",
+                  "github": "",
                 },
                 {
                   "imagePath": "assets/images/equipe/ibou.jpg",
                   "name": "Ibrahima DIA",
                   "role": "Lead Frontend Developer",
                   "description":
-                      "En deuxième année lors du développement de l'application, un élément de la 50ème promotion.",
-                  "contact": "77 888 88 88",
-                  "message": "Envoyer un message"
+                      "En TC2 lors du développement de l'application, chargé d'intégrer l'ensemble des interfaces visuelles.",
+                  "contact": "77 474 88 97",
+                  "message":
+                      "En tant que passionné par l'IT et amateur de développement mobile c'était un réel plaisir de participer à ce projet. De plus travailler en collaboration avec mes anciens m'a été très bénéfiques car ils m'ont donné pas mal de hints. Bref j'espère que cette application perdurera durant des années et nous comptons sur les générations futures pour continuer à maintenir le code et y apporter des améliorations.",
+                  "linkedin": "Ibrahima DIA",
+                  "github": "ibou-dia",
                 },
                 {
                   "imagePath": "assets/images/membre4.jpg",
@@ -89,7 +95,9 @@ class AProposPage extends StatelessWidget {
                   "description":
                       "En troisième année lors du développement de l'application, un élément de la 49ème promotion.",
                   "contact": "77 999 99 99",
-                  "message": "Envoyer un message"
+                  "message": "Envoyer un message",
+                  "linkedin": "",
+                  "github": "",
                 },
                 {
                   "imagePath": "assets/images/membre3.jpg",
@@ -98,16 +106,21 @@ class AProposPage extends StatelessWidget {
                   "description":
                       "En deuxième année lors du développement de l'application, un élément de la 50ème promotion.",
                   "contact": "77 123 45 67",
-                  "message": "Envoyer un message"
+                  "message": "Envoyer un message",
+                  "linkedin": "",
+                  "github": "",
                 },
                 {
-                  "imagePath": "assets/images/codiallo.jpg",
+                  "imagePath": "assets/images/equipe/codiallo.jpg",
                   "name": "Cheikh Oumar DIALLO",
                   "role": "Frontend Developer",
                   "description":
-                      "En deuxième année lors du développement de l'application, un élément de la 50ème promotion.",
+                      "Durant ce projet, nous étions chargé de coder les interfaces qu'a faites le designer",
                   "contact": "77 418 94 39",
-                  "message": "Envoyer un message"
+                  "message":
+                      "Cette application a été créée par des élèves ingénieurs comme vous. N'hésitez pas à apporter également votre contribution à l'édifice de l'école polytechnique de Thiès.",
+                  "linkedin": "co_diallo_",
+                  "github": "cheikhouma",
                 },
                 {
                   "imagePath": "assets/images/membre6.jpg",
@@ -116,7 +129,9 @@ class AProposPage extends StatelessWidget {
                   "description":
                       "En deuxième année lors du développement de l'application, un élément de la 50ème promotion.",
                   "contact": "77 345 67 89",
-                  "message": "Envoyer un message"
+                  "message": "Envoyer un message",
+                  "linkedin": "",
+                  "github": "",
                 },
                 {
                   "imagePath": "assets/images/membre7.jpg",
@@ -125,27 +140,33 @@ class AProposPage extends StatelessWidget {
                   "description":
                       "En deuxième année lors du développement de l'application, un élément de la 50ème promotion.",
                   "contact": "77 456 78 90",
-                  "message": "Envoyer un message"
+                  "message": "Envoyer un message",
+                  "linkedin": "",
+                  "github": "",
                 },
                 {
-                  "imagePath": "assets/images/aminou.jpg",
-                  "name": "Mouhamed Aminou NIANG",
-                  "role": "Project Manager",
+                  "imagePath": "assets/images/equipe/aminou.jpg",
+                  "name": "Mohamed Aminou NIANG",
+                  "role": " Project manager ",
                   "description":
-                      "En première année lors du développement de l'application, un élément de la 51ème promotion.",
-                  "contact": "77 567 89 01",
-                  "message": "Envoyer un message"
+                      "Durant ce projet, nous étions chargés de distribuer les taches et de suivre l’évolution de l’application .",
+                  "contact": "77 258 42 81",
+                  "message":
+                      "En tant qu'élève ingenieur, nous avons une obligation d'etre au service de notre nation. Toujours au service de notre nation.",
+                  "linkedin": "Mohamed Aminou Niang ",
+                  "github": "aminouniang ",
                 },
               ];
 
-              // Retourne un membre en fonction de l'index
               return equipeMembre(
-                equipe[index]["imagePath"]!, // Chemin de l'image
-                equipe[index]["name"]!, // Nom
-                equipe[index]["role"]!, // Rôle
-                equipe[index]["description"]!, // Description
-                equipe[index]["contact"]!, // Contact
-                equipe[index]["message"]!, // Message
+                equipe[index]["imagePath"]!,
+                equipe[index]["name"]!,
+                equipe[index]["role"]!,
+                equipe[index]["description"]!,
+                equipe[index]["contact"]!,
+                equipe[index]["message"]!,
+                equipe[index]["linkedin"]!,
+                equipe[index]["github"]!,
               );
             },
           ),
@@ -155,19 +176,15 @@ class AProposPage extends StatelessWidget {
   }
 }
 
-Widget equipeMembre(
-  image,
-  nom,
-  String role,
-  String description,
-  String contact,
-  String message,
-) {
+Widget equipeMembre(image, nom, String role, String description, String contact,
+    String message, String linkedin, String github) {
   return Builder(builder: (context) {
     return InkWell(
       onTap: () {
-        changerPage(context,
-            MembreEquipe(nom, image, role, description, contact, message));
+        changerPage(
+            context,
+            MembreEquipe(nom, image, role, description, contact, message,
+                linkedin, github));
       },
       child: Column(
         children: [

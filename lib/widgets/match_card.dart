@@ -72,7 +72,7 @@ Widget buildMatchCard(
                           Row(
                             children: [
                               Text(
-                                "$equipe2 : ",
+                                "$score2 : ",
                                 style: TextStyle(
                                   color: score1 < score2
                                       ? AppColors.success
@@ -82,7 +82,7 @@ Widget buildMatchCard(
                                 ),
                               ),
                               Text(
-                                "$score2",
+                                equipe2,
                                 style: TextStyle(
                                   color: score1 < score2
                                       ? AppColors.success
