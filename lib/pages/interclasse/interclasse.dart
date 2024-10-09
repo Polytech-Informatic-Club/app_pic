@@ -127,9 +127,22 @@ class InterclassePage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 24),
-                  Text(
-                    'Derniers matchs',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  Row(
+                    children: [
+                      Text(
+                        'Derniers matchs',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () => changerPage(context, AllMatch()),
+                        child: Text(
+                          "Voir tout",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      )
+                    ],
                   ),
                   SizedBox(height: 8),
                   FutureBuilder<List<Matches>>(
@@ -174,22 +187,9 @@ class InterclassePage extends StatelessWidget {
                               : Text("Aucun match trouvé.");
                         }
                       }),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Matchs à venir',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      GestureDetector(
-                        onTap: () => changerPage(context, AllMatch()),
-                        child: Text(
-                          "Voir tout",
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      )
-                    ],
+                  Text(
+                    'Matchs à venir',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 8),
                   FutureBuilder<List<Matches>>(

@@ -70,6 +70,16 @@ class SportService {
     }
   }
 
+  Future<String> removeMatch(String id) async {
+    try {
+      await _firestore.collection("MATCH").doc(id).delete();
+
+      return "ok";
+    } catch (e) {
+      return "Erreur : $e";
+    }
+  }
+
   Future<List<Matches>> getLastMatch() async {
     List<Matches> list = [];
     try {
@@ -366,15 +376,8 @@ class SportService {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
           .collection("MATCH")
-          // .where('sport', isEqualTo: sportType.toString().split('.').last)
-          // .where('date', isGreaterThanOrEqualTo: dd)
-          // .where('date', isLessThanOrEqualTo: df)
-          // .where('equipeA.nom', isEqualTo: equipe)
-          // .where('equipeB.nom',
-          //     isEqualTo: equipe,
-          //     isNotEqualTo: equipe) // Vérifie dans les deux équipes
+          .orderBy("date", descending: true)
           .get();
-
       List<Map<String, dynamic>> data =
           querySnapshot.docs.map((doc) => doc.data()).toList();
       for (var d in data) {

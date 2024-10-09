@@ -33,6 +33,26 @@ class _HomeSportTypePageState extends State<HomeSportTypePage> {
     this._icone,
   );
   final SportService _sportService = SportService();
+  String nomSport = "";
+
+  Future<void> getNomSport() async {
+    if (_typeSport == "FOOTBALL") {
+      nomSport = "Football";
+    } else if (_typeSport == "BASKETBALL") {
+      nomSport = "Basketball";
+    } else if (_typeSport == "JEUX_ESPRIT") {
+      nomSport = "Jeux d'Esprit";
+    } else if (_typeSport == "VOLLEYBALL") {
+      nomSport = "Volleyball";
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getNomSport();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,7 +106,7 @@ class _HomeSportTypePageState extends State<HomeSportTypePage> {
             SizedBox(height: 60),
             Center(
                 child: Text(
-              _typeSport.split("_").join(" "),
+              nomSport,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             )),
             SizedBox(height: 5),
@@ -190,7 +210,7 @@ class _HomeSportTypePageState extends State<HomeSportTypePage> {
                                               i.scoreEquipeA,
                                               i.scoreEquipeB,
                                               i.equipeA.logo,
-                                              i.equipeA.logo,
+                                              i.equipeB.logo,
                                               DetailMatchScreen(
                                                   i.id,
                                                   i.sport.name

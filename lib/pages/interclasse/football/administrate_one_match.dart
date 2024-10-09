@@ -36,19 +36,54 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
 
   final TextEditingController _commentairController = TextEditingController();
 
+  void _showDeleteConfirmation(BuildContext context, String id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmer la suppression'),
+          content: Text('Êtes-vous sûr de vouloir supprimer ce match ?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Ferme le dialogue si l'utilisateur annule
+                Navigator.of(context).pop();
+              },
+              child: Text('Annuler'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Supprime l'annonce et quitte la page
+                _sportService.removeMatch(id);
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Match supprimée avec succès'),
+                ));
+              },
+              child: Text('Supprimer'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.orange[50],
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red,
+        onPressed: () {
+          _showDeleteConfirmation(context, _id);
+        },
+        child: Icon(Icons.delete),
+      ),
       appBar: AppBar(
         backgroundColor: jauneClair,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
         title: Text(
           "Gérer le match",
           style: TextStyle(color: Colors.black),

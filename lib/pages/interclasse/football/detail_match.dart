@@ -536,7 +536,7 @@ Widget statisticFootball(Football match) {
       SizedBox(
         width: 16,
       ),
-      statisticCard(Icons.sports_soccer, "fautes",
+      statisticCard(Icons.error_outline, "fautes",
           match.statistiques["fautesA"]!, match.statistiques["fautesB"]!),
     ],
   );
