@@ -547,23 +547,23 @@ Widget statisticBasket(Basket match) {
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      statisticCard(Icons.sports, "1 point", match.statistiques["point1A"]!,
-          match.statistiques["point1B"]!),
+      statisticCard(Icons.sports_basketball, "1er", match.statistiques["1erA"]!,
+          match.statistiques["1erB"]!),
       SizedBox(
         width: 30,
       ),
-      statisticCard(Icons.sports, "2 points", match.statistiques["point2A"]!,
-          match.statistiques["point2B"]!),
+      statisticCard(Icons.sports_basketball, "2ème",
+          match.statistiques["2emeA"]!, match.statistiques["2emeB"]!),
       SizedBox(
         width: 30,
       ),
-      statisticCard(Icons.sports, "3 points", match.statistiques["point3A"]!,
-          match.statistiques["point3B"]!),
+      statisticCard(Icons.sports_basketball, "3ème",
+          match.statistiques["3emeA"]!, match.statistiques["3emeB"]!),
       SizedBox(
         width: 30,
       ),
-      statisticCard(Icons.sports_soccer, "fautes",
-          match.statistiques["fautesA"]!, match.statistiques["fautesB"]!),
+      statisticCard(Icons.sports_basketball, "4ème",
+          match.statistiques["4emeA"]!, match.statistiques["4emeB"]!),
     ],
   );
 }
@@ -573,21 +573,18 @@ Widget statisticVolleyball(Volleyball match) {
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      statisticCard(Icons.sports, "Gold", match.statistiques["goalA"]!,
-          match.statistiques["goalB"]!),
+      statisticCard(Icons.sports_volleyball, "Set 1",
+          match.statistiques["Set1A"]!, match.statistiques["Set1B"]!),
       SizedBox(
         width: 30,
       ),
-      statisticCard(
-          Icons.sports,
-          "highest streak",
-          match.statistiques["highestStreakA"]!,
-          match.statistiques["highestStreakB"]!),
+      statisticCard(Icons.sports_volleyball, "Set 2",
+          match.statistiques["Set2A"]!, match.statistiques["Set2B"]!),
       SizedBox(
         width: 30,
       ),
-      statisticCard(Icons.sports_soccer, "fautes",
-          match.statistiques["fautesA"]!, match.statistiques["fautesB"]!),
+      statisticCard(Icons.sports_volleyball, "Set 3",
+          match.statistiques["Set3A"]!, match.statistiques["Set3B"]!),
     ],
   );
 }
@@ -598,10 +595,20 @@ Widget statisticJeuxEsprit(JeuxEsprit match) {
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       statisticCard(
-          Icons.sports,
-          "Bonne réponse",
-          match.statistiques["bonneReponseA"]!,
-          match.statistiques["bonneReponseB"]!),
+        Icons.hourglass_bottom,
+        "Mi-temp 1",
+        match.statistiques["miTemp1A"]!,
+        match.statistiques["miTemp1B"]!,
+      ),
+      SizedBox(
+        width: 30,
+      ),
+      statisticCard(
+        Icons.hourglass_full,
+        "Mi-temp 2",
+        match.statistiques["miTemp2A"]!,
+        match.statistiques["miTemp2B"]!,
+      ),
       SizedBox(
         width: 30,
       ),

@@ -380,14 +380,14 @@ class _CreateMatchState extends State<CreateMatch> {
                           } else if (widget.typeSport == "BASKETBALL") {
                             match = Basket(
                                 statistiques: {
-                                  "point3A": 0,
-                                  "point3B": 0,
-                                  "point2A": 0,
-                                  "point2B": 0,
-                                  "point1A": 0,
-                                  "point1B": 0,
-                                  "fautesA": 0,
-                                  "fautesB": 0,
+                                  "1erA": 0,
+                                  "1erB": 0,
+                                  "2emeA": 0,
+                                  "2emeB": 0,
+                                  "3emeA": 0,
+                                  "3emeB": 0,
+                                  "4emeA": 0,
+                                  "4emeB": 0,
                                 },
                                 buteursA: [],
                                 buteursB: [],
@@ -409,12 +409,12 @@ class _CreateMatchState extends State<CreateMatch> {
                           } else if (widget.typeSport == "VOLLEYBALL") {
                             match = Volleyball(
                                 statistiques: {
-                                  "goalA": 0,
-                                  "goalB": 0,
-                                  "highestStreakA": 0,
-                                  "highestStreakB": 0,
-                                  "fautesA": 0,
-                                  "fautesB": 0,
+                                  "Set1A": 0,
+                                  "Set1B": 0,
+                                  "Set2A": 0,
+                                  "Set2B": 0,
+                                  "Set3A": 0,
+                                  "Set3B": 0,
                                 },
                                 buteursA: [],
                                 buteursB: [],
@@ -436,8 +436,10 @@ class _CreateMatchState extends State<CreateMatch> {
                           } else if (widget.typeSport == "JEUX_ESPRIT") {
                             match = JeuxEsprit(
                                 statistiques: {
-                                  "bonneReponseA": 0,
-                                  "bonneReponseB": 0,
+                                  "miTemp1A": 0,
+                                  "miTemp1B": 0,
+                                  "miTemp2A": 0,
+                                  "miTemp2B": 0,
                                 },
                                 buteursA: [],
                                 buteursB: [],
