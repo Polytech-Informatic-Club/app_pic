@@ -127,6 +127,7 @@ class SportService {
           .collection("MATCH")
           .where("date", isGreaterThanOrEqualTo: Timestamp.now())
           .where("sport", isEqualTo: typeSport)
+          .orderBy('date', descending: true)
           .limit(1)
           .get();
       return Matches.fromJson(querySnapshot.docs.first.data());
