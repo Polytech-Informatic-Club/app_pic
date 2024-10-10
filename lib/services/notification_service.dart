@@ -62,7 +62,7 @@ void sendPushMessage(String token, String body, String title) async {
       headers: <String, String>{
         "Content-Type": "application/json",
         "Authorization":
-            "Bearer AAAAVIafLa0:APA91bEHCxiZ0-FI8AfGSxwYiPZDOd30TNgRlLXA9hhqmf8dglueUuAuTigHbAUkGl7hZXWEWMCUmreF59ITkQsDRpMonsgAcCAVE43ipc1onphXPCSU25j2tBKRl9zT2U0bqLMBS1Ye",  // Clé API de Firebase Cloud Messaging v1 (besoin de token OAuth 2.0 pour long terme)
+              "key=AAAAVIafLa0:APA91bEHCxiZ0-FI8AfGSxwYiPZDOd30TNgRlLXA9hhqmf8dglueUuAuTigHbAUkGl7hZXWEWMCUmreF59ITkQsDRpMonsgAcCAVE43ipc1onphXPCSU25j2tBKRl9zT2U0bqLMBS1Ye"
       },
       body: jsonEncode(<String, dynamic>{
         "message": {

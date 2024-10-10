@@ -220,7 +220,9 @@ class _DetailMatchScreenState extends State<DetailMatchScreen> {
                                 const EdgeInsets.symmetric(horizontal: 20.0),
                             child: Align(
                                 alignment: Alignment.center,
-                                child: Row(
+                                child:SingleChildScrollView(
+    scrollDirection: Axis.horizontal,
+    child:  Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
@@ -345,7 +347,7 @@ class _DetailMatchScreenState extends State<DetailMatchScreen> {
                                     if (_typeSport == "JEUX_ESPRIT")
                                       statisticJeuxEsprit(match),
                                   ],
-                                )),
+                             ) )),
                           ),
                           SizedBox(height: 20),
 
@@ -543,7 +545,7 @@ Widget statisticFootball(Football match) {
 }
 
 Widget statisticBasket(Basket match) {
-  return Row(
+  return   Row(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
@@ -565,7 +567,7 @@ Widget statisticBasket(Basket match) {
       statisticCard(Icons.sports_basketball, "4ème",
           match.statistiques["4emeA"]!, match.statistiques["4emeB"]!),
     ],
-  );
+   );
 }
 
 Widget statisticVolleyball(Volleyball match) {

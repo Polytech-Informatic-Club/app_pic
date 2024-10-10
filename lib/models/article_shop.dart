@@ -43,8 +43,8 @@ class ArticleShop {
       dateCreation: (json['dateCreation'] as Timestamp).toDate(),
       description: json['description'] as String,
       titre: json['titre'] as String,
-      // prix: (json['prix'] as int).toDouble(),
-      prix: 0,
+      prix: (json['prix'] as num).toDouble(),
+      // prix: 0,
       image: json['image'] as String,
       categorie: CategorieShop.fromJson(json['categorie']),
       commandes: commandeList,
@@ -53,7 +53,6 @@ class ArticleShop {
       partageLien: json['partageLien'] as String,
     );
   }
-
 
   // Method to convert an ArticleShop object to JSON
   Map<String, dynamic> toJson() {

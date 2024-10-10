@@ -37,7 +37,8 @@ class Collection {
       'date': date,
       'articleShops': articleShops
           .map((articleShop) => articleShop.toJson())
-          .toList(), // Convert list of ArticleShop objects to JSON
+          .toList(),
+           // Convert list of ArticleShop objects to JSON
     };
   }
 }
