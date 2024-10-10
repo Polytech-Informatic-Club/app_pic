@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void changerPage(BuildContext context, Widget destination) {
   Navigator.push(
@@ -88,4 +89,15 @@ String getHour(DateTime d) {
   final result =
       newFormatString[0].toUpperCase() + newFormatString.substring(1);
   return result;
+}
+
+void ouvrirLien(BuildContext context, String url) async {
+  final Uri uri = Uri.parse(Uri.encodeFull(url)); // Encode l'URL
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Impossible d\'ouvrir le lien')),
+    );
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/utils/app_colors.dart';
+import 'package:new_app/fonctions.dart';
 
 class MembreEquipe extends StatelessWidget {
   String nom;
@@ -115,9 +116,18 @@ class MembreEquipe extends StatelessWidget {
                 SizedBox(
                   width: 5,
                 ),
-                Text(
-                  linkedin,
-                  style: TextStyle(fontFamily: 'InterMedium'),
+                InkWell(
+                  onTap: () {
+                    ouvrirLien(context, linkedin);
+                  },
+                  child: SizedBox(
+                    width: 300,
+                    child: Text(
+                      linkedin,
+                      style: TextStyle(fontFamily: 'InterMedium'),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -131,9 +141,14 @@ class MembreEquipe extends StatelessWidget {
                 SizedBox(
                   width: 5,
                 ),
-                Text(
-                  github,
-                  style: TextStyle(fontFamily: 'InterMedium'),
+                InkWell(
+                  onTap: () {
+                    ouvrirLien(context, github);
+                  },
+                  child: Text(
+                    github,
+                    style: TextStyle(fontFamily: 'InterMedium'),
+                  ),
                 ),
               ],
             ),

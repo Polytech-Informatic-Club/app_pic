@@ -6,14 +6,12 @@ class Promo {
   final String nom;
   final String devise;
   final String logo;
-  final String total;
 
   Promo({
     required this.id,
     required this.nom,
     required this.devise,
     required this.logo,
-    required this.total,
   });
 
   // Factory method to create an Promo object from JSON
@@ -23,7 +21,6 @@ class Promo {
       nom: json['nom'] as String,
       devise: json['devise'] as String,
       logo: json['logo'] as String,
-      total: json['total'] as String,
     );
   }
 
@@ -34,7 +31,6 @@ class Promo {
       'nom': nom,
       'devise': devise,
       'logo': logo,
-      'total': total,
     };
   }
 }

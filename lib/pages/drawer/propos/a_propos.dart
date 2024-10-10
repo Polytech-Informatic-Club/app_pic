@@ -55,7 +55,7 @@ class AProposPage extends StatelessWidget {
         SizedBox(height: 20),
         Expanded(
           child: GridView.builder(
-            itemCount: 8, // 9 membres au total
+            itemCount: 7, // 9 membres au total
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3, // 3 colonnes
               crossAxisSpacing: 20,
@@ -67,48 +67,51 @@ class AProposPage extends StatelessWidget {
                 {
                   "imagePath": "assets/images/equipe/Elimane.jpg",
                   "name": "Elimane SALL",
-                  "role": "Lead Backend Developer",
+                  "role": "Backend Developer",
                   "description":
                       "Durant ce projet, nous étions chargés d'intégrer les API.",
                   "contact": "77 209 95 38",
                   "message":
                       "En tant qu'élève ingenieur, nous avons une obligation d'etre au service de notre nation. Toujours au service de notre nation.",
-                  "linkedin": "",
-                  "github": "",
+                  "linkedin": "https://www.linkedin.com/in/elimane-sall/",
+                  "github": "https://github.com/ElimaneSall",
                 },
                 {
                   "imagePath": "assets/images/equipe/ibou.jpg",
                   "name": "Ibrahima DIA",
-                  "role": "Lead Frontend Developer",
+                  "role": "Full Stack Developer",
                   "description":
-                      "En TC2 lors du développement de l'application, chargé d'intégrer l'ensemble des interfaces visuelles.",
+                      "Chargé d'intégrer l'ensemble des interfaces visuelles de l'application et que d'assurer la bonne communication entre ces dernières et la base de donnée.",
                   "contact": "77 474 88 97",
                   "message":
-                      "En tant que passionné par l'IT et amateur de développement mobile c'était un réel plaisir de participer à ce projet. De plus travailler en collaboration avec mes anciens m'a été très bénéfiques car ils m'ont donné pas mal de hints. Bref j'espère que cette application perdurera durant des années et nous comptons sur les générations futures pour continuer à maintenir le code et y apporter des améliorations.",
-                  "linkedin": "Ibrahima DIA",
-                  "github": "ibou-dia",
+                      "En tant que passionné par l'IT et amateur de développement mobile c'était un réel plaisir de participer à ce projet. De plus étant en TC2 à cette époque travailler en collaboration avec des anciens était très enrichissant. Bref j'espère que cette application perdurera et nous comptons sur les générations futures pour continuer à la maintenir et y apporter des améliorations.",
+                  "linkedin":
+                      "https://www.linkedin.com/in/ibrahima-dia-1b6992294/",
+                  "github": "https://github.com/ibou-dia",
                 },
                 {
-                  "imagePath": "assets/images/membre4.jpg",
-                  "name": "Mouhamadou Diouf CISSÉ",
-                  "role": "Project Manager/Developer",
+                  "imagePath": "assets/images/equipe/Diouf.jpg",
+                  "name": "Mouhamadou Diouf CISSE",
+                  "role": "Project Manager / Developer",
                   "description":
-                      "En troisième année lors du développement de l'application, un élément de la 49ème promotion.",
-                  "contact": "77 999 99 99",
-                  "message": "Envoyer un message",
-                  "linkedin": "",
-                  "github": "",
+                      "Le rôle central du projet manager dans le domaine informatique est celui d'un véritable chef d'orchestre, coordonnant avec brio le déroulement des projets depuis leur conception jusqu'à leur réalisation finale.",
+                  "contact": "70 653 07 76",
+                  "message":
+                      "Nous ne pouvons pas prédire où nous conduira la Révolution Informatique. Tout ce que nous savons avec certitude, c’est que, quand on y sera enfin, on n’aura pas assez de RAM.",
+                  "linkedin":
+                      "https://www.linkedin.com/in/mouhamadou-diouf-ciss%C3%A9-9303a12aa/",
+                  "github": "https://github.com/killer-pro ",
                 },
                 {
-                  "imagePath": "assets/images/membre3.jpg",
-                  "name": "Mouhamed El Amine SEMBENE",
-                  "role": "UI/UX Designer",
+                  "imagePath": "assets/images/equipe/Sembene.jpg",
+                  "name": "Mohamed El Amine SEMBENE",
+                  "role": "UI/UX designer",
                   "description":
-                      "En deuxième année lors du développement de l'application, un élément de la 50ème promotion.",
-                  "contact": "77 123 45 67",
-                  "message": "Envoyer un message",
-                  "linkedin": "",
-                  "github": "",
+                      "Chargé de la concetption du prototype figma et du fonctionnement de certaines fonctionnalités",
+                  "contact": "77 301 07 16",
+                  "message": "...",
+                  "linkedin": "null",
+                  "github": "null",
                 },
                 {
                   "imagePath": "assets/images/equipe/codiallo.jpg",
@@ -119,42 +122,33 @@ class AProposPage extends StatelessWidget {
                   "contact": "77 418 94 39",
                   "message":
                       "Cette application a été créée par des élèves ingénieurs comme vous. N'hésitez pas à apporter également votre contribution à l'édifice de l'école polytechnique de Thiès.",
-                  "linkedin": "co_diallo_",
-                  "github": "cheikhouma",
+                  "linkedin":
+                      "https://www.linkedin.com/in/cheikh-oumar-diallo-470a50268/",
+                  "github": "https://github.com/cheikhouma",
                 },
                 {
                   "imagePath": "assets/images/membre6.jpg",
                   "name": "Amath THIAM",
                   "role": "Backend Developer",
                   "description":
-                      "En deuxième année lors du développement de l'application, un élément de la 50ème promotion.",
-                  "contact": "77 345 67 89",
-                  "message": "Envoyer un message",
-                  "linkedin": "",
-                  "github": "",
-                },
-                {
-                  "imagePath": "assets/images/membre7.jpg",
-                  "name": "Abdou Salam MBOUP",
-                  "role": "UI/UX Designer",
-                  "description":
-                      "En deuxième année lors du développement de l'application, un élément de la 50ème promotion.",
-                  "contact": "77 456 78 90",
-                  "message": "Envoyer un message",
-                  "linkedin": "",
-                  "github": "",
+                      "Durant ce projet, nous étions chargés d'intégrer les API et gérer la base de données",
+                  "contact": "76 130 97 97",
+                  "message": "Simple is better than complex.",
+                  "linkedin": "404 Not Found",
+                  "github": "https://github.com/xoss7",
                 },
                 {
                   "imagePath": "assets/images/equipe/aminou.jpg",
                   "name": "Mohamed Aminou NIANG",
                   "role": " Project manager ",
                   "description":
-                      "Durant ce projet, nous étions chargés de distribuer les taches et de suivre l’évolution de l’application .",
+                      "Le project manager  est un leader visionnaire, orchestrant avec brio la collaboration entre les équipes techniques et les parties prenantes.En somme, il est le pilier sur lequel repose la réussite du projet, alliant stratégie et adaptabilité.",
                   "contact": "77 258 42 81",
                   "message":
-                      "En tant qu'élève ingenieur, nous avons une obligation d'etre au service de notre nation. Toujours au service de notre nation.",
-                  "linkedin": "Mohamed Aminou Niang ",
-                  "github": "aminouniang ",
+                      "Osez innover, l'élève ingénieur doit se donner des defis et les relever ! Travail-Discipline-Solidarité notre credo. Dédicace à la 51e promotion et à la famille polytechnicienne.",
+                  "linkedin":
+                      "https://www.linkedin.com/in/mohamed-aminou-niang-5865592b0/",
+                  "github": "https://github.com/aminouniang",
                 },
               ];
 
