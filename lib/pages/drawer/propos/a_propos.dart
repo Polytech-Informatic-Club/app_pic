@@ -84,7 +84,7 @@ class AProposPage extends StatelessWidget {
                       "Chargé d'intégrer l'ensemble des interfaces visuelles de l'application et que d'assurer la bonne communication entre ces dernières et la base de donnée.",
                   "contact": "77 474 88 97",
                   "message":
-                      "En tant que passionné par l'IT et amateur de développement mobile c'était un réel plaisir de participer à ce projet. De plus étant en TC2 à cette époque travailler en collaboration avec des anciens était très enrichissant. Bref j'espère que cette application perdurera et nous comptons sur les générations futures pour continuer à la maintenir et y apporter des améliorations.",
+                      "En tant que passionné d'IT et amateur de développement mobile c'était un réel plaisir de participer à ce projet. De plus étant en TC2 à cette époque travailler en collaboration avec des anciens était très enrichissant. Bref j'espère que cette application perdurera et nous comptons sur les générations futures pour continuer à la maintenir et y apporter des améliorations.",
                   "linkedin":
                       "https://www.linkedin.com/in/ibrahima-dia-1b6992294/",
                   "github": "https://github.com/ibou-dia",
@@ -127,7 +127,7 @@ class AProposPage extends StatelessWidget {
                   "github": "https://github.com/cheikhouma",
                 },
                 {
-                  "imagePath": "assets/images/membre6.jpg",
+                  "imagePath": "assets/images/equipe/Amath.jpg",
                   "name": "Amath THIAM",
                   "role": "Backend Developer",
                   "description":
