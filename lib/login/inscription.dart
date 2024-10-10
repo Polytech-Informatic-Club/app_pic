@@ -227,6 +227,12 @@ class _InscriptionState extends State<Inscription> {
                               if (value == null || value.isEmpty) {
                                 return 'Entrer un mail valide';
                               }
+                              String pattern = r'^[a-zA-Z0-9]+@ept\.sn$';
+                              RegExp regex = RegExp(pattern);
+
+                              if (!regex.hasMatch(value)) {
+                                return 'Veuillez entrer votre mail EPT';
+                              }
                               return null;
                             },
                             decoration: InputDecoration(
@@ -493,11 +499,11 @@ class _InscriptionState extends State<Inscription> {
                                                         context, HomePage());
                                                   }
                                                 } catch (e) {
-                                                   _isSaving.value=false;
+                                                  _isSaving.value = false;
                                                 }
                                               }
                                             } catch (e) {
-                                              _isSaving.value=false;
+                                              _isSaving.value = false;
                                               alerteMessageWidget(
                                                   context,
                                                   "Mot de passe ou email invalide.",
