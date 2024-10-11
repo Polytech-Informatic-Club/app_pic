@@ -6,10 +6,12 @@ import 'package:new_app/models/jeu.dart';
 import 'package:new_app/pages/home/jeux/game_screen.dart';
 import 'package:new_app/pages/drawer/drawer.dart';
 import 'package:new_app/pages/home/navbar.dart';
-import 'package:new_app/pages/home/nouveaute.dart';
+//import 'package:new_app/pages/home/nouveaute.dart';
 import 'package:new_app/pages/interclasse/interclasse.dart';
 import 'package:new_app/services/jeu_service.dart';
 import 'package:new_app/utils/app_colors.dart';
+
+import '../annonce/p_info_nouveaute.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -99,7 +101,8 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Nouveaute(),
+                  //Nouveaute(),
+                  PInfoNouveaute(),
 
                   SizedBox(height: 30),
 
