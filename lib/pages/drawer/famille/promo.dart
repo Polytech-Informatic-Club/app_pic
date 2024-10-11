@@ -5,23 +5,24 @@ import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 
 class PromotionPage extends StatefulWidget {
-  String nomPromo;
-  PromotionPage(this.nomPromo, {super.key});
+  final String nomPromo;
+  PromotionPage(this.nomPromo, {Key? key}) : super(key: key);
 
   @override
   _PromotionPageState createState() => _PromotionPageState();
 }
 
 class _PromotionPageState extends State<PromotionPage> {
-  UserService _userService = UserService();
-  TextEditingController _searchController = TextEditingController();
+  final UserService _userService = UserService();
+  final TextEditingController _searchController = TextEditingController();
   List<Utilisateur> _utilisateurs = [];
   List<Utilisateur> _filteredUtilisateurs = [];
+  Promo? _promo;
 
   @override
   void initState() {
     super.initState();
-    _loadUtilisateurs();
+    _loadData();
     _searchController.addListener(_filterUtilisateurs);
   }
 
@@ -31,30 +32,28 @@ class _PromotionPageState extends State<PromotionPage> {
     super.dispose();
   }
 
-  // Charger les utilisateurs de la promo
-  Future<void> _loadUtilisateurs() async {
+  Future<void> _loadData() async {
     final utilisateurs = await _userService.getAllUserInPromo(widget.nomPromo);
+    final promo = await _userService.getListByName(widget.nomPromo);
     setState(() {
       _utilisateurs = utilisateurs;
       _filteredUtilisateurs = _utilisateurs;
+      _promo = promo;
     });
   }
 
-  // Filtrer les utilisateurs en fonction de la recherche
   void _filterUtilisateurs() {
     final query = _searchController.text.toLowerCase();
-    setState(() {
-      _filteredUtilisateurs = _utilisateurs.where((utilisateur) {
-        final fullName =
-            '${utilisateur.prenom} ${utilisateur.nom}'.toLowerCase();
-        final genie = utilisateur.genie?.toLowerCase() ?? '';
-        final telephone = utilisateur.telephone ?? '';
+    _filteredUtilisateurs = _utilisateurs.where((utilisateur) {
+      final fullName = '${utilisateur.prenom} ${utilisateur.nom}'.toLowerCase();
+      final genie = utilisateur.genie?.toLowerCase() ?? '';
+      final telephone = utilisateur.telephone ?? '';
 
-        return fullName.contains(query) ||
-            genie.contains(query) ||
-            telephone.contains(query);
-      }).toList();
-    });
+      return fullName.contains(query) ||
+          genie.contains(query) ||
+          telephone.contains(query);
+    }).toList();
+    setState(() {}); // Trigger rebuild only for filtered list
   }
 
   @override
@@ -72,92 +71,95 @@ class _PromotionPageState extends State<PromotionPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 60),
-              FutureBuilder<Promo?>(
-                  future: _userService.getListByName(widget.nomPromo),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Erreur lors de la récupération des données');
-                    } else {
-                      final promo = snapshot.data;
-
-                      return Center(
-                        child: Column(
-                          children: [
-                            Image.network(
-                              promo!.logo,
-                              height: 150,
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              'Promotion ${promo.nom}',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              'Devise: "${promo.devise}"',
-                              style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  }),
+              _buildPromoHeader(),
               SizedBox(height: 20),
-              // Barre de recherche
-              Center(
-                child: SizedBox(
-                  height: 30,
-                  width: 250,
-                  child: TextField(
-                    controller:
-                        _searchController, // Controller pour la recherche
-                    decoration: InputDecoration(
-                      hintText: 'chercher',
-                      hintStyle:
-                          TextStyle(fontSize: 12, fontFamily: 'InterMedium'),
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                    ),
-                  ),
-                ),
-              ),
+              _buildSearchBar(),
               SizedBox(height: 20),
-              // Affichage des utilisateurs
-              _filteredUtilisateurs.isNotEmpty
-                  ? Column(
-                      children: [
-                        for (var utilisateur in _filteredUtilisateurs)
-                          eleveWidget(
-                            utilisateur.photo,
-                            "${utilisateur.prenom} ${utilisateur.nom.toUpperCase()}",
-                            utilisateur.genie ?? 'Aucun génie spécifié',
-                            utilisateur.telephone ?? 'Numéro non disponible',
-                          ),
-                      ],
-                    )
-                  : Text("Aucun utilisateur trouvé"),
+              _buildUserList(),
             ],
           ),
         ),
       ),
     );
   }
+
+  Widget _buildPromoHeader() {
+    if (_promo == null) {
+      return CircularProgressIndicator();
+    }
+    return Center(
+      child: Column(
+        children: [
+          Image.network(
+            _promo!.logo,
+            height: 150,
+          ),
+          SizedBox(height: 10),
+          Text(
+            'Promotion ${_promo!.nom}',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 5),
+          Text(
+            'Devise: "${_promo!.devise}"',
+            style: TextStyle(
+              fontStyle: FontStyle.italic,
+              color: Colors.grey[600],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchBar() {
+    return Center(
+      child: SizedBox(
+        height: 30,
+        width: 250,
+        child: TextField(
+          controller: _searchController,
+          decoration: InputDecoration(
+            hintText: 'chercher',
+            hintStyle: TextStyle(fontSize: 12, fontFamily: 'InterMedium'),
+            prefixIcon: Icon(Icons.search),
+            border: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            filled: true,
+            fillColor: Colors.grey[200],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUserList() {
+    if (_filteredUtilisateurs.isEmpty) {
+      return Text("Aucun utilisateur trouvé");
+    }
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: _filteredUtilisateurs.length,
+      itemBuilder: (context, index) {
+        final utilisateur = _filteredUtilisateurs[index];
+        return eleveWidget(
+          utilisateur.photo,
+          "${utilisateur.prenom} ${utilisateur.nom.toUpperCase()}",
+          utilisateur.genie ?? 'Aucun génie spécifié',
+          utilisateur.telephone ?? 'Numéro non disponible',
+        );
+      },
+    );
+  }
 }
 
-Widget eleveWidget(image, nom, genie, numero) {
+Widget eleveWidget(String? photoUrl, String nom, String genie, String numero) {
   return Card(
     margin: EdgeInsets.symmetric(vertical: 5),
     elevation: 0,
@@ -167,7 +169,12 @@ Widget eleveWidget(image, nom, genie, numero) {
     ),
     child: ListTile(
       leading: CircleAvatar(
-        backgroundImage: NetworkImage(image),
+        backgroundImage: photoUrl != null && photoUrl.isNotEmpty
+            ? NetworkImage(photoUrl)
+            : null,
+        child: photoUrl == null || photoUrl.isEmpty
+            ? Icon(Icons.person)
+            : null,
         radius: 30,
       ),
       title: Text(
