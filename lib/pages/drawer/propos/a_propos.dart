@@ -22,7 +22,7 @@ class AProposPage extends StatelessWidget {
             children: [
               SizedBox(height: 20),
               Text(
-                "Lorem ipsum dolor sit amet consectetur. Dis amet ullamcorper etiam facilisis. At pretium duis donec nec laoreet sem feugiat quam tincidunt. Amet tellus arcu ut tortor nulla euismod ullamcorper velit adipiscing. Justo in morbi elit tellus. Magna nulla fermentum aliquam aliquam sit enim. Non dignissim sed netus adipiscing morbi sagittis. Orci et tellus massa velit nulla. ",
+                "En tant qu'élèves ingénieurs/ingénieurs passionnés par l'informatique, nous avons développé cette application intuitive, exprimant notre gratitude envers l’école. Elle centralise l'ensemble des activités sociales orchestrées par le BDE, facilitant ainsi la participation et l'engagement de la communauté polytechnicienne VIVA EPT.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
@@ -92,7 +92,7 @@ class AProposPage extends StatelessWidget {
                 {
                   "imagePath": "assets/images/equipe/Diouf.jpg",
                   "name": "Mouhamadou Diouf CISSE",
-                  "role": "Project Manager / Developer",
+                  "role": "Project Manager / Developer_full_stack",
                   "description":
                       "Le rôle central du projet manager dans le domaine informatique est celui d'un véritable chef d'orchestre, coordonnant avec brio le déroulement des projets depuis leur conception jusqu'à leur réalisation finale.",
                   "contact": "70 653 07 76",
