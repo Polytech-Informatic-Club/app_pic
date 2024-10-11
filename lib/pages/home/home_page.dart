@@ -6,6 +6,7 @@ import 'package:new_app/models/jeu.dart';
 import 'package:new_app/pages/home/jeux/game_screen.dart';
 import 'package:new_app/pages/drawer/drawer.dart';
 import 'package:new_app/pages/home/navbar.dart';
+import 'package:new_app/pages/home/nouveaute.dart';
 //import 'package:new_app/pages/home/nouveaute.dart';
 import 'package:new_app/pages/interclasse/interclasse.dart';
 import 'package:new_app/services/jeu_service.dart';
@@ -102,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //Nouveaute(),
-                  PInfoNouveaute(),
+                  Nouveaute(),
 
                   SizedBox(height: 30),
 
