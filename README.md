@@ -1,6 +1,5 @@
-# new_app
-
-A new Flutter project.
+# PolyApp
+Application destiné au eleve ingenieur, qui regroupe toute les activités sociale du bde.
 
 ## Getting Started
 
