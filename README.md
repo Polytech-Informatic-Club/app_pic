@@ -1,5 +1,5 @@
 # PolyApp
-Application destiné au eleve ingenieur, qui regroupe toute les activités sociale du bde.
+Application destiné aux eleves ingenieurs, qui regroupe toute les activités sociales du BDE.
 
 ## Getting Started
 
