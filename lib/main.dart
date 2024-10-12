@@ -87,7 +87,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [Locale('fr')], // Support de la locale française
-      home: CompteScreen(),
+      home: AuthHandler(),
     );
   }
 }
