@@ -4,6 +4,7 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/pages/drawer/compte/compte.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/alerte_message.dart';
+import 'package:new_app/widgets/ept_button.dart';
 import 'package:new_app/widgets/reusable_widgets.dart';
 import 'package:new_app/widgets/submited_button.dart';
 
@@ -28,6 +29,8 @@ class _EditPasswordState extends State<EditPassword> {
   bool _hasStartedTypingPassword = false;
   final ValueNotifier<bool> _passwordsMatchNotifier = ValueNotifier(false);
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,56 +44,61 @@ class _EditPasswordState extends State<EditPassword> {
           child: Padding(
             padding: EdgeInsets.fromLTRB(
                 20, MediaQuery.of(context).size.height * 0.02, 20, 0),
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  controller: _currentPasswordController,
-                  obscureText: !_isCurrentPasswordVisible,
-                  decoration: InputDecoration(
-                    labelText: 'Mot de passe actuel',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30)),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _isCurrentPasswordVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    controller: _currentPasswordController,
+                    obscureText: !_isCurrentPasswordVisible,
+                    decoration: InputDecoration(
+                      labelText: 'Mot de passe actuel',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30)),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isCurrentPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isCurrentPasswordVisible =
+                                !_isCurrentPasswordVisible;
+                          });
+                        },
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _isCurrentPasswordVisible =
-                              !_isCurrentPasswordVisible;
-                        });
-                      },
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Veuillez entrer votre mot de passe actuel';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Veuillez entrer votre mot de passe actuel';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 20),
-                _buildNewPasswordField(),
-                SizedBox(height: 20),
-                _buildConfirmPasswordField(),
-                SizedBox(height: 20),
-                SubmittedButton("Valider", () async {
-                  if (_newPasswordController.text.isEmpty ||
-                      _confirmNewPasswordController.text.isEmpty ||
-                      _newPasswordController.text !=
+                  SizedBox(height: 20),
+                  _buildNewPasswordField(),
+                  SizedBox(height: 20),
+                  _buildConfirmPasswordField(),
+                  SizedBox(height: 20),
+                  SubmittedButton(
+                    "Valider",
+                    () async {
+                      if (_newPasswordController.text !=
                           _confirmNewPasswordController.text) {
-                    alerteMessageWidget(
-                      context,
-                      "Les nouveaux mots de passe ne correspondent pas.",
-                      AppColors.echec,
-                    );
-                    return;
-                  }
-                  changerPage(context, CompteScreen());
-                }),
-              ],
+                        alerteMessageWidget(
+                          context,
+                          "Les nouveaux mots de passe ne correspondent pas.",
+                          AppColors.echec,
+                        );
+                        return;
+                      } else if (_formKey.currentState!.validate()) {
+                        await _updatePassword();
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -135,8 +143,8 @@ class _EditPasswordState extends State<EditPassword> {
               return 'Le mot de passe doit contenir au moins une majuscule';
             } else if (!RegExp(r'[0-9]').hasMatch(value)) {
               return 'Le mot de passe doit contenir au moins un chiffre';
-            } else if (!RegExp(r'[!@#\$&*~]').hasMatch(value)) {
-              return 'Le mot de passe doit contenir au moins un caractère spécial';
+            } else if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
+              return 'Le mot de passe doit contenir un caractère spécial';
             }
             return null;
           },
@@ -192,6 +200,11 @@ class _EditPasswordState extends State<EditPassword> {
           onChanged: (value) {
             _checkPasswordsMatch();
           },
+          validator: (value) {
+            if ((value == null || value.isEmpty)) {
+              return "Veuillez entrer un mot de passe valide";
+            }
+          },
           decoration: InputDecoration(
             labelText: 'Confirmer nouveau mot de passe',
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
@@ -210,19 +223,6 @@ class _EditPasswordState extends State<EditPassword> {
           ),
         ),
         SizedBox(height: 10),
-        ValueListenableBuilder<bool>(
-          valueListenable: _passwordsMatchNotifier,
-          builder: (context, passwordsMatch, child) {
-            return Text(
-              passwordsMatch
-                  ? 'Les mots de passe correspondent'
-                  : 'Les mots de passe ne correspondent pas',
-              style: TextStyle(
-                color: passwordsMatch ? Colors.green : Colors.red,
-              ),
-            );
-          },
-        ),
       ],
     );
   }
@@ -232,12 +232,63 @@ class _EditPasswordState extends State<EditPassword> {
     if (password.length >= 8) strength += 0.25;
     if (RegExp(r'[A-Z]').hasMatch(password)) strength += 0.25;
     if (RegExp(r'[0-9]').hasMatch(password)) strength += 0.25;
-    if (RegExp(r'[!@#\$&*~]').hasMatch(password)) strength += 0.25;
+    if (RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) strength += 0.25;
     _strengthNotifier.value = strength;
   }
 
   void _checkPasswordsMatch() {
     _passwordsMatchNotifier.value =
         _newPasswordController.text == _confirmNewPasswordController.text;
+  }
+
+  Future<void> _updatePassword() async {
+    // Démarre le chargement
+    _loading.value = true;
+
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: _currentPasswordController.text,
+        );
+
+        await user.reauthenticateWithCredential(credential);
+
+        await user.updatePassword(_newPasswordController.text);
+
+        Navigator.pop(context);
+        alerteMessageWidget(
+          context,
+          "Le mot de passe a été mis à jour avec succès",
+          Colors.green,
+        );
+
+        _currentPasswordController.clear();
+        _newPasswordController.clear();
+        _confirmNewPasswordController.clear();
+      }
+    } catch (e) {
+      String errorMessage;
+
+      if (e is FirebaseAuthException) {
+        if (e.code == 'wrong-password') {
+          errorMessage = 'Le mot de passe actuel est incorrect.';
+        } else {
+          errorMessage = 'Une erreur est survenue: ${e.message}';
+        }
+      } else {
+        errorMessage = 'Une erreur inattendue est survenue.';
+      }
+
+      alerteMessageWidget(
+        context,
+        errorMessage,
+        AppColors.echec,
+      );
+    } finally {
+      _loading.value = false;
+    }
   }
 }

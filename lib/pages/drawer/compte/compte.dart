@@ -167,7 +167,7 @@ class CompteScreen extends StatelessWidget {
                       child: Text(user.genie!),
                     ),
                     SizedBox(
-                      height: 50,
+                      height: 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -184,7 +184,8 @@ class CompteScreen extends StatelessWidget {
                                   WidgetStatePropertyAll(AppColors.primary)),
                         ),
                       ],
-                    )
+                    ),
+                    SizedBox(height: 50),
                   ],
                 );
               }
