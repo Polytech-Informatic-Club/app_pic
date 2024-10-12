@@ -29,6 +29,8 @@ class _InscriptionState extends State<Inscription> {
   final TextEditingController _emailController = TextEditingController();
 
   final TextEditingController _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
 
   final TextEditingController _promoController = TextEditingController();
 
@@ -247,7 +249,7 @@ class _InscriptionState extends State<Inscription> {
                           // Mot de passe TextField
                           TextFormField(
                             controller: _passwordController,
-                            obscureText: true,
+                            obscureText: _isPasswordVisible,
                             onChanged: (value) {
                               if (value.isNotEmpty) {
                                 setState(() {
@@ -289,6 +291,19 @@ class _InscriptionState extends State<Inscription> {
                               labelStyle: TextStyle(fontSize: 14),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isPasswordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isPasswordVisible =
+                                        !_isPasswordVisible; // Basculer la visibilité du mot de passe
+                                  });
+                                },
                               ),
                             ),
                           ),
@@ -351,12 +366,25 @@ class _InscriptionState extends State<Inscription> {
                               }
                               return null;
                             },
-                            obscureText: true,
+                            obscureText: _isConfirmPasswordVisible,
                             decoration: InputDecoration(
                               labelText: 'Confirmer mot de passe',
                               labelStyle: TextStyle(fontSize: 14),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isPasswordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isPasswordVisible =
+                                        !_isPasswordVisible; // Basculer la visibilité du mot de passe
+                                  });
+                                },
                               ),
                             ),
                           ),

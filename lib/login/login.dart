@@ -9,11 +9,22 @@ import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/alerte_message.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final UserService _userService = UserService();
+
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
+
+  bool _isPasswordVisible = false;
+  // Visibilite
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -91,7 +102,7 @@ class LoginScreen extends StatelessWidget {
                           SizedBox(height: 20),
                           TextFormField(
                             controller: _passwordController,
-                            obscureText: true,
+                            obscureText: !_isPasswordVisible,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Entrer un mot de passe valide valide';
@@ -103,6 +114,19 @@ class LoginScreen extends StatelessWidget {
                               labelStyle: TextStyle(fontSize: 14),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isPasswordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isPasswordVisible =
+                                        !_isPasswordVisible; // Basculer la visibilité du mot de passe
+                                  });
+                                },
                               ),
                             ),
                           ),

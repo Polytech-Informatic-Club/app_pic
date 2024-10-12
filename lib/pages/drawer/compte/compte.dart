@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/pages/drawer/compte/edit_infos_utilisateur.dart';
+import 'package:new_app/pages/drawer/compte/edit_password.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 
@@ -168,6 +169,22 @@ class CompteScreen extends StatelessWidget {
                     SizedBox(
                       height: 50,
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () =>
+                              {changerPage(context, EditPassword())},
+                          child: Text(
+                            "Modifier le mot de passe",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  WidgetStatePropertyAll(AppColors.primary)),
+                        ),
+                      ],
+                    )
                   ],
                 );
               }

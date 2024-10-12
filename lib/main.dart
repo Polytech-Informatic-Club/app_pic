@@ -87,7 +87,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [Locale('fr')], // Support de la locale française
-      home: AuthHandler(),
+      home: CompteScreen(),
     );
   }
 }
@@ -143,27 +143,27 @@ class AuthHandler extends StatelessWidget {
     //                   CircularProgressIndicator()), // Indicateur de chargement
     //         );
     //       }
-          return StreamBuilder<User?>(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              // Si l'utilisateur est connecté, afficher la page d'accueil
-              if (snapshot.connectionState == ConnectionState.active) {
-                User? user = snapshot.data;
+    return StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          // Si l'utilisateur est connecté, afficher la page d'accueil
+          if (snapshot.connectionState == ConnectionState.active) {
+            User? user = snapshot.data;
 
-                if (user == null) {
-                  return LoginScreen(); // Utilisateur non connecté -> Page de connexion
-                } else {
-                  return HomePage(); // Utilisateur connecté -> Page d'accueil
-                }
-              }
+            if (user == null) {
+              return LoginScreen(); // Utilisateur non connecté -> Page de connexion
+            } else {
+              return HomePage(); // Utilisateur connecté -> Page d'accueil
+            }
+          }
 
-              // Pendant que la connexion est en cours de vérification, afficher un chargement
-              return Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            // },
+          // Pendant que la connexion est en cours de vérification, afficher un chargement
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+          // },
           // );
         });
   }
