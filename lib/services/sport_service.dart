@@ -344,6 +344,35 @@ class SportService {
     }
   }
 
+  Future<dynamic> updateFinPeriode(
+      String matchId, String libelle, int value1, int value2, String typeSport) async {
+    try {
+      DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
+      await matchDoc.update(
+        {"statistiques.${libelle}A": FieldValue.increment(value1)},
+      );
+       await matchDoc.update(
+        {"statistiques.${libelle}B": FieldValue.increment(value2)},
+      );
+
+      DocumentSnapshot querySnapshot = await matchDoc.get();
+
+      return {
+        "BASKETBALL":
+            Basket.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "FOOTBALL":
+            Football.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "VOLLEYBALL":
+            Volleyball.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "JEUX_ESPRIT":
+            JeuxEsprit.fromJson(querySnapshot.data() as Map<String, dynamic>)
+      }[typeSport];
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   Future<dynamic> addButeur(String matchId, Joueur joueur, int minute,
       String libelleScore, String libelleBut, String typeSport,
       [int increment = 1]) async {
@@ -399,28 +428,21 @@ class SportService {
             FieldValue.increment(-buteur.point),
       });
 
-      // Logs pour débogage
-      print("Removing buteur: ${buteur.toJson()}");
-      print("Points to remove: ${buteur.point}");
-      print("Team: $team");
-
       // Mise à jour spécifique au Basketball
       if (typeSport == "BASKETBALL") {
         if (buteur.point == 1) {
-          print("Updating 1erA/1erB");
           batch.update(matchDoc, {
-            team == 'A' ? 'statistiques.1erA' : 'statistiques.1erB': FieldValue.increment(-buteur.point),
+            team == 'A' ? 'statistiques.point1A' : 'statistiques.point1B':
+                FieldValue.increment(-buteur.point),
           });
         } else if (buteur.point == 2) {
-          print("Updating 2emeA/2emeB");
           batch.update(matchDoc, {
-            team == 'A' ? 'statistiques.2emeA' : 'statistiques.2emeB':
+            team == 'A' ? 'statistiques.point2A' : 'statistiques.point2B':
                 FieldValue.increment(-buteur.point),
           });
         } else if (buteur.point == 3) {
-          print("Updating 3emeA/3emeB");
           batch.update(matchDoc, {
-            team == 'A' ? 'statistiques.3emeA' : 'statistiques.3emeB':
+            team == 'A' ? 'statistiques.point3A' : 'statistiques.point3B':
                 FieldValue.increment(-buteur.point),
           });
         } else {
