@@ -447,7 +447,7 @@ class _CreateMatchState extends State<CreateMatch> {
                                 likers: [],
                                 dislikers: [],
                                 partageLien: "");
-                          } else if (widget.typeSport == "ESPRIT") {
+                          } else if (widget.typeSport == "JEUX_ESPRIT") {
                             match = JeuxEsprit(
                                 statistiques: {
                                   "miTemp1A": 0,
