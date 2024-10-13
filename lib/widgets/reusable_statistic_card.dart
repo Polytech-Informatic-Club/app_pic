@@ -751,323 +751,406 @@ Widget statisticVolleyballCard(ValueNotifier matchProvider,
     BuildContext context, SportService _sportService, String _typeSport) {
   return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // Statistics Icons
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(Icons.sports_soccer, size: 32),
-                Text("Goals"),
-                Text("${matchProvider.value!.statistiques["goalA"].toString()} "
-                    " - ${matchProvider.value!.statistiques["goalB"].toString()}"),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        Map<String, dynamic> resultat = await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return updateGoldDialog(
-                              context,
-                              matchProvider.value!.equipeA.joueurs,
-                            );
-                          },
-                        );
+      child: Column(children: [
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Statistics Icons
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.sports_soccer, size: 32),
+                  Text("Goals"),
+                  Text(
+                      "${matchProvider.value!.statistiques["goalA"].toString()} "
+                      " - ${matchProvider.value!.statistiques["goalB"].toString()}"),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          Map<String, dynamic> resultat = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return updateGoldDialog(
+                                context,
+                                matchProvider.value!.equipeA.joueurs,
+                              );
+                            },
+                          );
 
-                        Joueur? joueur = resultat["joueur"];
-                        int? minute = resultat["minute"];
-                        if (joueur != null) {
-                          matchProvider.value = await _sportService.addButeur(
-                              matchProvider.value!.id,
-                              joueur,
-                              minute!,
-                              "scoreEquipeA",
-                              "buteursA",
-                              _typeSport);
-                          matchProvider.value =
-                              await _sportService.updateStatistique(
-                                  matchProvider.value!.id,
-                                  "goalA",
-                                  1,
-                                  _typeSport);
-                        }
-                      },
-                      icon: Icon(
-                        Icons.edit,
-                        color: AppColors.primary,
+                          Joueur? joueur = resultat["joueur"];
+                          int? minute = resultat["minute"];
+                          if (joueur != null) {
+                            matchProvider.value = await _sportService.addButeur(
+                                matchProvider.value!.id,
+                                joueur,
+                                minute!,
+                                "scoreEquipeA",
+                                "buteursA",
+                                _typeSport);
+                            matchProvider.value =
+                                await _sportService.updateStatistique(
+                                    matchProvider.value!.id,
+                                    "goalA",
+                                    1,
+                                    _typeSport);
+                          }
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: AppColors.primary,
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () async {
-                        Map<String, dynamic> resultat = await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return updateGoldDialog(
-                              context,
-                              matchProvider.value!.equipeA.joueurs,
-                            );
-                          },
-                        );
+                      IconButton(
+                        onPressed: () async {
+                          Map<String, dynamic> resultat = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return updateGoldDialog(
+                                context,
+                                matchProvider.value!.equipeA.joueurs,
+                              );
+                            },
+                          );
 
-                        Joueur? joueur = resultat["joueur"];
-                        int? minute = resultat["minute"];
-                        if (joueur != null) {
-                          matchProvider.value = await _sportService.addButeur(
-                              matchProvider.value!.id,
-                              joueur,
-                              minute!,
-                              "scoreEquipeB",
-                              "buteursB",
-                              _typeSport);
-                          matchProvider.value =
-                              await _sportService.updateStatistique(
-                                  matchProvider.value!.id,
-                                  "goalB",
-                                  1,
-                                  _typeSport);
-                        }
-                      },
-                      icon: Icon(
-                        Icons.edit,
-                        color: AppColors.primary,
+                          Joueur? joueur = resultat["joueur"];
+                          int? minute = resultat["minute"];
+                          if (joueur != null) {
+                            matchProvider.value = await _sportService.addButeur(
+                                matchProvider.value!.id,
+                                joueur,
+                                minute!,
+                                "scoreEquipeB",
+                                "buteursB",
+                                _typeSport);
+                            matchProvider.value =
+                                await _sportService.updateStatistique(
+                                    matchProvider.value!.id,
+                                    "goalB",
+                                    1,
+                                    _typeSport);
+                          }
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: AppColors.primary,
+                        ),
                       ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(Icons.sports_soccer, size: 32),
-                Text("Highest streak"),
-                Text(
-                    "${matchProvider.value!.statistiques["highestStreakA"].toString()} "
-                    " - ${matchProvider.value!.statistiques["highestStreakB"].toString()}"),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        bool confirm = await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return updateStatisticDialog(context);
-                          },
-                        );
+                    ],
+                  )
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.sports_soccer, size: 32),
+                  Text("Highest streak"),
+                  Text(
+                      "${matchProvider.value!.statistiques["highestStreakA"].toString()} "
+                      " - ${matchProvider.value!.statistiques["highestStreakB"].toString()}"),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          bool confirm = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return updateStatisticDialog(context);
+                            },
+                          );
 
-                        if (confirm || !confirm) {
-                          matchProvider.value =
-                              await _sportService.updateStatistique(
-                                  matchProvider.value!.id,
-                                  "highestStreakA",
-                                  confirm ? 1 : -1,
-                                  _typeSport);
-                        }
-                      },
-                      icon: Icon(
-                        Icons.edit,
-                        color: AppColors.primary,
+                          if (confirm || !confirm) {
+                            matchProvider.value =
+                                await _sportService.updateStatistique(
+                                    matchProvider.value!.id,
+                                    "highestStreakA",
+                                    confirm ? 1 : -1,
+                                    _typeSport);
+                          }
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: AppColors.primary,
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () async {
-                        bool confirm = await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return updateStatisticDialog(context);
-                          },
-                        );
+                      IconButton(
+                        onPressed: () async {
+                          bool confirm = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return updateStatisticDialog(context);
+                            },
+                          );
 
-                        if (confirm || !confirm) {
-                          matchProvider.value =
-                              await _sportService.updateStatistique(
-                                  matchProvider.value!.id,
-                                  "highestStreakB",
-                                  confirm ? 1 : -1,
-                                  _typeSport);
-                        }
-                      },
-                      icon: Icon(
-                        Icons.edit,
-                        color: AppColors.primary,
+                          if (confirm || !confirm) {
+                            matchProvider.value =
+                                await _sportService.updateStatistique(
+                                    matchProvider.value!.id,
+                                    "highestStreakB",
+                                    confirm ? 1 : -1,
+                                    _typeSport);
+                          }
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: AppColors.primary,
+                        ),
                       ),
-                    ),
-                  ],
-                )
-              ],
-            ),
+                    ],
+                  )
+                ],
+              ),
 
-            Column(
-              children: [
-                Icon(Icons.error_outline, size: 32),
-                Text("Fautes"),
-                Text(
-                    "${matchProvider.value!.statistiques["fautesA"].toString()} - ${matchProvider.value!.statistiques["fautesB"].toString()}"),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        bool confirm = await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return updateStatisticDialog(context);
-                          },
-                        );
+              Column(
+                children: [
+                  Icon(Icons.error_outline, size: 32),
+                  Text("Fautes"),
+                  Text(
+                      "${matchProvider.value!.statistiques["fautesA"].toString()} - ${matchProvider.value!.statistiques["fautesB"].toString()}"),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          bool confirm = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return updateStatisticDialog(context);
+                            },
+                          );
 
-                        if (confirm || !confirm) {
-                          matchProvider.value =
-                              await _sportService.updateStatistique(
-                                  matchProvider.value!.id,
-                                  "fautesA",
-                                  confirm ? 1 : -1,
-                                  _typeSport);
-                        }
-                      },
-                      icon: Icon(
-                        Icons.edit,
-                        color: AppColors.primary,
+                          if (confirm || !confirm) {
+                            matchProvider.value =
+                                await _sportService.updateStatistique(
+                                    matchProvider.value!.id,
+                                    "fautesA",
+                                    confirm ? 1 : -1,
+                                    _typeSport);
+                          }
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: AppColors.primary,
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () async {
-                        bool confirm = await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return updateStatisticDialog(context);
-                          },
-                        );
+                      IconButton(
+                        onPressed: () async {
+                          bool confirm = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return updateStatisticDialog(context);
+                            },
+                          );
 
-                        if (confirm || !confirm) {
-                          // ignore: avoid_print
-                          print("Faute B");
+                          if (confirm || !confirm) {
+                            // ignore: avoid_print
+                            print("Faute B");
 
-                          matchProvider.value =
-                              await _sportService.updateStatistique(
-                                  matchProvider.value!.id,
-                                  "fautesB",
-                                  confirm ? 1 : -1,
-                                  _typeSport);
-                        }
-                      },
-                      icon: Icon(
-                        Icons.edit,
-                        color: AppColors.primary,
+                            matchProvider.value =
+                                await _sportService.updateStatistique(
+                                    matchProvider.value!.id,
+                                    "fautesB",
+                                    confirm ? 1 : -1,
+                                    _typeSport);
+                          }
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: AppColors.primary,
+                        ),
                       ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ],
+                    ],
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
-      ));
+        TextButton(
+          onPressed: () async {
+            Map<String, dynamic> resultat = await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return finPeriodeMatch(
+                  context,
+                  ['Set1', 'Set2', 'Set3'],
+                );
+              },
+            );
+            if (resultat.isNotEmpty) {
+              matchProvider.value = await _sportService.updateFinPeriode(
+                matchProvider.value!.id,
+                resultat["periode"],
+                resultat["scoreA"],
+                resultat["scoreB"],
+                _typeSport,
+              );
+            }
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Fin quart-temps",
+                style: TextStyle(color: AppColors.white),
+              ),
+              // Icon(Icons.close),
+            ],
+          ),
+          style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(AppColors.primary)),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        statisticVolleyball(matchProvider.value)
+      ]));
 }
 
 Widget statisticJeuxEspritsCard(ValueNotifier matchProvider,
     BuildContext context, SportService _sportService, String _typeSport) {
   return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // Statistics Icons
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(Icons.sports_soccer, size: 32),
-                Text("Bonnes réponses"),
-                Text(
-                    "${matchProvider.value!.statistiques["bonneReponseA"].toString()} "
-                    " - ${matchProvider.value!.statistiques["bonneReponseB"].toString()}"),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        Map<String, dynamic> resultat = await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return updateGoldWithPointDialog(
-                              context,
-                              matchProvider.value!.equipeA.joueurs,
-                            );
-                          },
-                        );
+      child: Column(children: [
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Statistics Icons
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.sports_soccer, size: 32),
+                  Text("Bonnes réponses"),
+                  Text(
+                      "${matchProvider.value!.statistiques["bonneReponseA"].toString()} "
+                      " - ${matchProvider.value!.statistiques["bonneReponseB"].toString()}"),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          Map<String, dynamic> resultat = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return updateGoldWithPointDialog(
+                                context,
+                                matchProvider.value!.equipeA.joueurs,
+                              );
+                            },
+                          );
 
-                        Joueur? joueur = resultat["joueur"];
-                        int? minute = resultat["minute"];
-                        int? point = resultat["point"];
+                          Joueur? joueur = resultat["joueur"];
+                          int? minute = resultat["minute"];
+                          int? point = resultat["point"];
 
-                        if (joueur != null) {
-                          matchProvider.value = await _sportService.addButeur(
-                              matchProvider.value!.id,
-                              joueur,
-                              minute!,
-                              "scoreEquipeA",
-                              "buteursA",
-                              _typeSport,
-                              point!);
-                          matchProvider.value =
-                              await _sportService.updateStatistique(
-                                  matchProvider.value!.id,
-                                  "bonneReponseA",
-                                  point,
-                                  _typeSport);
-                        }
-                      },
-                      icon: Icon(
-                        Icons.edit,
-                        color: AppColors.primary,
+                          if (joueur != null) {
+                            matchProvider.value = await _sportService.addButeur(
+                                matchProvider.value!.id,
+                                joueur,
+                                minute!,
+                                "scoreEquipeA",
+                                "buteursA",
+                                _typeSport,
+                                point!);
+                            matchProvider.value =
+                                await _sportService.updateStatistique(
+                                    matchProvider.value!.id,
+                                    "bonneReponseA",
+                                    point,
+                                    _typeSport);
+                          }
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: AppColors.primary,
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () async {
-                        Map<String, dynamic> resultat = await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return updateGoldWithPointDialog(
-                              context,
-                              matchProvider.value!.equipeA.joueurs,
-                            );
-                          },
-                        );
+                      IconButton(
+                        onPressed: () async {
+                          Map<String, dynamic> resultat = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return updateGoldWithPointDialog(
+                                context,
+                                matchProvider.value!.equipeA.joueurs,
+                              );
+                            },
+                          );
 
-                        Joueur? joueur = resultat["joueur"];
-                        int? minute = resultat["minute"];
-                        int? point = resultat["point"];
+                          Joueur? joueur = resultat["joueur"];
+                          int? minute = resultat["minute"];
+                          int? point = resultat["point"];
 
-                        if (joueur != null) {
-                          matchProvider.value = await _sportService.addButeur(
-                              matchProvider.value!.id,
-                              joueur,
-                              minute!,
-                              "scoreEquipeB",
-                              "buteursB",
-                              _typeSport,
-                              point!);
-                          matchProvider.value =
-                              await _sportService.updateStatistique(
-                                  matchProvider.value!.id,
-                                  "bonneReponseB",
-                                  point,
-                                  _typeSport);
-                        }
-                      },
-                      icon: Icon(
-                        Icons.edit,
-                        color: AppColors.primary,
+                          if (joueur != null) {
+                            matchProvider.value = await _sportService.addButeur(
+                                matchProvider.value!.id,
+                                joueur,
+                                minute!,
+                                "scoreEquipeB",
+                                "buteursB",
+                                _typeSport,
+                                point!);
+                            matchProvider.value =
+                                await _sportService.updateStatistique(
+                                    matchProvider.value!.id,
+                                    "bonneReponseB",
+                                    point,
+                                    _typeSport);
+                          }
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: AppColors.primary,
+                        ),
                       ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ],
+                    ],
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
-      ));
+        TextButton(
+          onPressed: () async {
+            Map<String, dynamic> resultat = await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return finPeriodeMatch(
+                  context,
+                  ['miTemp1', 'miTemp2'],
+                );
+              },
+            );
+            if (resultat.isNotEmpty) {
+              matchProvider.value = await _sportService.updateFinPeriode(
+                matchProvider.value!.id,
+                resultat["periode"],
+                resultat["scoreA"],
+                resultat["scoreB"],
+                _typeSport,
+              );
+            }
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Fin de période",
+                style: TextStyle(color: AppColors.white),
+              ),
+              // Icon(Icons.close),
+            ],
+          ),
+          style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(AppColors.primary)),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        statisticJeuxEsprit(matchProvider.value)
+      ]));
 }
