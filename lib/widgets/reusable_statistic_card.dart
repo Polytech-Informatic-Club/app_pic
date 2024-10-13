@@ -106,7 +106,7 @@ Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
                 Icon(Icons.sports_soccer, size: 32),
                 Text("tirs"),
                 Text(
-                    "${matchProvider.value!.statistiques["point1A"].toString()} "
+                    "${matchProvider.value!.statistiques["1erA"].toString()} "
                     " - ${matchProvider.value!.statistiques["tirsB"].toString()}"),
                 Row(
                   children: [
@@ -123,7 +123,7 @@ Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
                           matchProvider.value =
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
-                                  "point1A",
+                                  "1erA",
                                   confirm ? 1 : -1,
                                   _typeSport);
                         }
@@ -166,7 +166,7 @@ Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
                 Icon(Icons.sports, size: 32),
                 Text("tirs cadrés"),
                 Text(
-                    "${matchProvider.value!.statistiques["point2A"].toString()} - ${matchProvider.value!.statistiques["point2B"].toString()}"),
+                    "${matchProvider.value!.statistiques["1erA"].toString()} - ${matchProvider.value!.statistiques["1erB"].toString()}"),
                 Row(
                   children: [
                     IconButton(
@@ -182,7 +182,7 @@ Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
                           matchProvider.value =
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
-                                  "point2A",
+                                  "1erA",
                                   confirm ? 1 : -1,
                                   _typeSport);
                         }
@@ -206,7 +206,7 @@ Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
                           matchProvider.value =
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
-                                  "point2B",
+                                  "1erB",
                                   confirm ? 1 : -1,
                                   _typeSport);
                         }
@@ -388,8 +388,8 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                 Icon(Icons.sports_soccer, size: 32),
                 Text("Un point"),
                 Text(
-                    "${matchProvider.value!.statistiques["point1A"].toString()} "
-                    " - ${matchProvider.value!.statistiques["point1B"].toString()}"),
+                    "${matchProvider.value!.statistiques["1erA"].toString()} "
+                    " - ${matchProvider.value!.statistiques["1erB"].toString()}"),
                 Row(
                   children: [
                     IconButton(
@@ -413,11 +413,11 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                               minute!,
                               "scoreEquipeA",
                               "buteursA",
-                              _typeSport);
+                              _typeSport,1);
                           matchProvider.value =
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
-                                  "point1A",
+                                  "1erA",
                                   1,
                                   _typeSport);
                         }
@@ -448,11 +448,11 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                               minute!,
                               "scoreEquipeB",
                               "buteursB",
-                              _typeSport);
+                              _typeSport,1);
                           matchProvider.value =
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
-                                  "point1B",
+                                  "1erB",
                                   1,
                                   _typeSport);
                         }
@@ -471,7 +471,7 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                 Icon(Icons.sports, size: 32),
                 Text("Deux points"),
                 Text(
-                    "${matchProvider.value!.statistiques["point2A"].toString()} - ${matchProvider.value!.statistiques["point2B"].toString()}"),
+                    "${matchProvider.value!.statistiques["2emeA"].toString()} - ${matchProvider.value!.statistiques["2emeB"].toString()}"),
                 Row(
                   children: [
                     IconButton(
@@ -495,11 +495,11 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                               minute!,
                               "scoreEquipeA",
                               "buteursA",
-                              _typeSport);
+                              _typeSport,2);
                           matchProvider.value =
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
-                                  "point2A",
+                                  "2emeA",
                                   2,
                                   _typeSport);
                         }
@@ -530,11 +530,11 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                               minute!,
                               "scoreEquipeB",
                               "buteursB",
-                              _typeSport);
+                              _typeSport,2);
                           matchProvider.value =
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
-                                  "point2B",
+                                  "2emeB",
                                   2,
                                   _typeSport);
                         }
@@ -554,8 +554,8 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                 Icon(Icons.sports_soccer, size: 32),
                 Text("Trois points"),
                 Text(
-                    "${matchProvider.value!.statistiques["highestStreakA"].toString()} "
-                    " - ${matchProvider.value!.statistiques["highestStreakB"].toString()}"),
+                    "${matchProvider.value!.statistiques["3emeA"].toString()} "
+                    " - ${matchProvider.value!.statistiques["3emeB"].toString()}"),
                 Row(
                   children: [
                     IconButton(
@@ -579,11 +579,12 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                               minute!,
                               "scoreEquipeA",
                               "buteursA",
-                              _typeSport);
+                              _typeSport,
+                              3);
                           matchProvider.value =
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
-                                  "highestStreakA",
+                                  "3emeA",
                                   3,
                                   _typeSport);
                         }
@@ -614,11 +615,11 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                               minute!,
                               "scoreEquipeB",
                               "buteursB",
-                              _typeSport);
+                              _typeSport,3);
                           matchProvider.value =
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
-                                  "highestStreakB",
+                                  "3emeB",
                                   3,
                                   _typeSport);
                         }
@@ -638,7 +639,7 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                 Icon(Icons.error_outline, size: 32),
                 Text("fautes"),
                 Text(
-                    "${matchProvider.value!.statistiques["fautesA"].toString()} - ${matchProvider.value!.statistiques["fautesB"].toString()}"),
+                    "${matchProvider.value!.statistiques["4emeA"].toString()} - ${matchProvider.value!.statistiques["4emeB"].toString()}"),
                 Row(
                   children: [
                     IconButton(
@@ -654,7 +655,7 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                           matchProvider.value =
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
-                                  "fautesA",
+                                  "4emeA",
                                   confirm ? 1 : -1,
                                   _typeSport);
                         }
@@ -680,7 +681,7 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                           matchProvider.value =
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
-                                  "fautesB",
+                                  "4emeB",
                                   confirm ? 1 : -1,
                                   _typeSport);
                         }

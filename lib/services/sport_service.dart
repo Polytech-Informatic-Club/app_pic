@@ -353,7 +353,8 @@ class SportService {
           joueur: joueur,
           id: DateTime.now().toString(),
           date: DateTime.now(),
-          minute: minute);
+          minute: minute,
+          point: increment);
       await matchDoc.update(
         {
           libelleBut: FieldValue.arrayUnion([but.toJson()]),
@@ -362,7 +363,6 @@ class SportService {
       );
 
       DocumentSnapshot querySnapshot = await matchDoc.get();
-      print(querySnapshot.data());
 
       return {
         "BASKETBALL":
@@ -381,19 +381,60 @@ class SportService {
   }
 
   Future<dynamic> removeButeur(
-      String matchId, But buteur, String team, String typeSport, [int increment = -1]) async {
+    String matchId,
+    But buteur,
+    String team,
+    String typeSport,
+  ) async {
     try {
       DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
 
-      await matchDoc.update({
+      WriteBatch batch = _firestore.batch();
+
+      // Supprimer le buteur et mettre à jour le score
+      batch.update(matchDoc, {
         team == 'A' ? 'buteursA' : 'buteursB':
-            FieldValue.arrayRemove([buteur.toJson()])
-      });
-        await matchDoc.update({
+            FieldValue.arrayRemove([buteur.toJson()]),
         team == 'A' ? 'scoreEquipeA' : 'scoreEquipeB':
-            FieldValue.increment(increment)
+            FieldValue.increment(-buteur.point),
       });
 
+      // Logs pour débogage
+      print("Removing buteur: ${buteur.toJson()}");
+      print("Points to remove: ${buteur.point}");
+      print("Team: $team");
+
+      // Mise à jour spécifique au Basketball
+      if (typeSport == "BASKETBALL") {
+        if (buteur.point == 1) {
+          print("Updating 1erA/1erB");
+          batch.update(matchDoc, {
+            team == 'A' ? 'statistiques.1erA' : 'statistiques.1erB': FieldValue.increment(-buteur.point),
+          });
+        } else if (buteur.point == 2) {
+          print("Updating 2emeA/2emeB");
+          batch.update(matchDoc, {
+            team == 'A' ? 'statistiques.2emeA' : 'statistiques.2emeB':
+                FieldValue.increment(-buteur.point),
+          });
+        } else if (buteur.point == 3) {
+          print("Updating 3emeA/3emeB");
+          batch.update(matchDoc, {
+            team == 'A' ? 'statistiques.3emeA' : 'statistiques.3emeB':
+                FieldValue.increment(-buteur.point),
+          });
+        } else {
+          print("No matching point condition");
+        }
+      }
+
+      // Appliquer toutes les mises à jour
+      try {
+        await batch.commit();
+      } catch (e) {
+        print("ERROR: " + e.toString());
+      }
+      // Récupérer le document mis à jour
       DocumentSnapshot querySnapshot = await matchDoc.get();
 
       return {
@@ -404,10 +445,10 @@ class SportService {
         "VOLLEYBALL":
             Volleyball.fromJson(querySnapshot.data() as Map<String, dynamic>),
         "JEUX_ESPRIT":
-            JeuxEsprit.fromJson(querySnapshot.data() as Map<String, dynamic>)
+            JeuxEsprit.fromJson(querySnapshot.data() as Map<String, dynamic>),
       }[typeSport];
     } catch (e) {
-      print(e);
+      print("Error removing buteur: $e");
       return null;
     }
   }

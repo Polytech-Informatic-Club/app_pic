@@ -6,22 +6,23 @@ class But {
   String id;
   DateTime date;
   Joueur joueur;
-  int minute; // Nouveau champ ajouté
+  int minute;
+  int point;
 
-  But({
-    required this.id,
-    required this.date,
-    required this.joueur,
-    required this.minute, // Ajouter minute dans le constructeur
-  });
+  But(
+      {required this.id,
+      required this.date,
+      required this.joueur,
+      required this.minute,
+      required this.point});
 
   factory But.fromJson(Map<String, dynamic> json) {
     return But(
-      id: json['id'] as String,
-      date: (json['date'] as Timestamp).toDate(),
-      joueur: Joueur.fromJson(json['joueur']),
-      minute: json['minute'] as int, // Convertir minute
-    );
+        id: json['id'] as String,
+        date: (json['date'] as Timestamp).toDate(),
+        joueur: Joueur.fromJson(json['joueur']),
+        minute: json['minute'] as int, // Convertir minute
+        point: json['point'] as int);
   }
 
   Map<String, dynamic> toJson() {
@@ -30,6 +31,7 @@ class But {
       'date': date,
       'joueur': joueur.toJson(),
       'minute': minute, // Ajouter minute à toJson
+      'point': point
     };
   }
 }

@@ -291,13 +291,16 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                                                     );
 
                                                                     if (confirm) {
-                                                                      matchProvider.value = await _sportService.removeButeur(
-                                                                          _match
-                                                                              .id,
-                                                                          butteur,
-                                                                          'A',
-                                                                          _typeSport,
-                                                                          -1);
+                                                                      matchProvider
+                                                                              .value =
+                                                                          await _sportService
+                                                                              .removeButeur(
+                                                                        _match
+                                                                            .id,
+                                                                        butteur,
+                                                                        'A',
+                                                                        _typeSport,
+                                                                      );
                                                                     }
                                                                   },
                                                                   child: Icon(
@@ -423,13 +426,16 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                                                     );
 
                                                                     if (confirm) {
-                                                                      matchProvider.value = await _sportService.removeButeur(
-                                                                          _match
-                                                                              .id,
-                                                                          butteur,
-                                                                          'B',
-                                                                          _typeSport,
-                                                                          -1);
+                                                                      matchProvider
+                                                                              .value =
+                                                                          await _sportService
+                                                                              .removeButeur(
+                                                                        _match
+                                                                            .id,
+                                                                        butteur,
+                                                                        'B',
+                                                                        _typeSport,
+                                                                      );
                                                                     }
                                                                   },
                                                                   child: Icon(

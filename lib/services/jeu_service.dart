@@ -355,30 +355,4 @@ class JeuService {
     }
   }
 
-  Future<Football?> addButeur(String matchId, Joueur joueur, int minute,
-      String libelleScore, String libelleBut,
-      [int increment = 1]) async {
-    try {
-      DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
-      But but = But(
-          joueur: joueur,
-          id: DateTime.now().toString(),
-          date: DateTime.now(),
-          minute: minute);
-      await matchDoc.update(
-        {
-          libelleBut: FieldValue.arrayUnion([but.toJson()]),
-          libelleScore: FieldValue.increment(increment)
-        },
-      );
-
-      DocumentSnapshot querySnapshot = await matchDoc.get();
-      print(querySnapshot.data());
-
-      return Football.fromJson(querySnapshot.data() as Map<String, dynamic>);
-    } catch (e) {
-      print(e);
-      return null;
-    }
   }
-}

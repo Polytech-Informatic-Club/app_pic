@@ -41,7 +41,7 @@ class HomeAdminSportTypePage extends StatelessWidget {
           // Vérifie le rôle de l'utilisateur
           if (userRole == "ADMIN_MB") {
             return _buildAdminMBPage(context); // Page complète pour ADMIN_MB
-          } else if (userRole == "ADMIN_FOOTBALL") {
+          } else if (userRole == "ADMIN_FOOTBALL" || userRole == "ADMIN_BASKETBALL") {
             return _buildAdminFootballPage(
                 context); // Page limitée pour ADMIN_FOOTBALL
           } else {
