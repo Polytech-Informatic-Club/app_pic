@@ -17,7 +17,7 @@ class UserService {
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   CollectionReference userCollection =
       FirebaseFirestore.instance.collection("USER");
-      
+
   CollectionReference tokenCollection =
       FirebaseFirestore.instance.collection("TOKEN");
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -278,6 +278,43 @@ class UserService {
       return list;
     } catch (e) {
       return [];
+    }
+  }
+
+  Future<bool> changePassword(
+      String currentPassword, String newPassword) async {
+    final user = FirebaseAuth.instance.currentUser;
+    print(currentPassword + newPassword);
+
+    final credential = EmailAuthProvider.credential(
+      email: user!.email!,
+      password: currentPassword,
+    );
+    print(currentPassword + newPassword);
+
+    try {
+      // Re-authenticate the user
+      await user.reauthenticateWithCredential(credential);
+
+      // Update the password
+      await user.updatePassword(newPassword);
+      print('Password changed successfully');
+      return true;
+    } catch (e) {
+      print('Error: $e');
+    }
+    return false;
+  }
+
+  Future<bool> resetAccount(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      print('Password reset email sent');
+      return true;
+    } catch (e) {
+      print('Error: $e');
+
+      return false;
     }
   }
 }

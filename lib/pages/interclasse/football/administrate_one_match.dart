@@ -8,6 +8,7 @@ import 'package:new_app/models/joueur.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/services/sport_service.dart';
 import 'package:new_app/utils/app_colors.dart';
+import 'package:new_app/widgets/alerte_message.dart';
 import 'package:new_app/widgets/comment_widget.dart';
 import 'package:new_app/widgets/delete_confirmed_dialog.dart';
 import 'package:new_app/widgets/reusable_comment_input.dart';
@@ -59,9 +60,8 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Match supprimée avec succès'),
-                ));
+                alerteMessageWidget(
+                    context, "Match supprimée avec succès", AppColors.success);
               },
               child: Text('Supprimer'),
             ),
@@ -79,7 +79,10 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
         onPressed: () {
           _showDeleteConfirmation(context, _id);
         },
-        child: Icon(Icons.delete),
+        child: Icon(
+          Icons.delete,
+          color: Colors.black,
+        ),
       ),
       appBar: AppBar(
         backgroundColor: jauneClair,
@@ -238,7 +241,8 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                                                     joueur,
                                                                     minute!,
                                                                     "scoreEquipeA",
-                                                                    "buteursA");
+                                                                    "buteursA",
+                                                                    _typeSport);
                                                           }
                                                         },
                                                         icon: Icon(
@@ -261,12 +265,53 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                                               in matchProvider
                                                                   .value!
                                                                   .buteursA!)
-                                                            Text(
-                                                              "${butteur.joueur.nom} (${butteur.minute}')",
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white),
-                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                Text(
+                                                                  "${butteur.joueur.nom} (${butteur.minute}')",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white),
+                                                                ),
+                                                                GestureDetector(
+                                                                  onTap:
+                                                                      () async {
+                                                                    bool
+                                                                        confirm =
+                                                                        await showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (BuildContext
+                                                                              context) {
+                                                                        return deleteConfirmedDialog(
+                                                                            context,
+                                                                            "Voulez-vous retirer le buteur ?");
+                                                                      },
+                                                                    );
+
+                                                                    if (confirm) {
+                                                                      matchProvider.value = await _sportService.removeButeur(
+                                                                          _match
+                                                                              .id,
+                                                                          butteur,
+                                                                          'A',
+                                                                          _typeSport,
+                                                                          -1);
+                                                                    }
+                                                                  },
+                                                                  child: Icon(
+                                                                    Icons
+                                                                        .delete,
+                                                                    color: AppColors
+                                                                        .echec,
+                                                                    size: MediaQuery.sizeOf(context)
+                                                                            .width *
+                                                                        0.05,
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            )
                                                         ],
                                                       )))
                                                 ],
@@ -328,7 +373,8 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                                                     joueur,
                                                                     minute!,
                                                                     "scoreEquipeB",
-                                                                    "buteursB");
+                                                                    "buteursB",
+                                                                    _typeSport);
                                                           }
                                                         },
                                                         icon: Icon(
@@ -351,12 +397,53 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                                               in matchProvider
                                                                   .value!
                                                                   .buteursB!)
-                                                            Text(
-                                                              "${butteur.joueur.nom} (${butteur.minute}')",
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white),
-                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                Text(
+                                                                  "${butteur.joueur.nom} (${butteur.minute}')",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white),
+                                                                ),
+                                                                GestureDetector(
+                                                                  onTap:
+                                                                      () async {
+                                                                    bool
+                                                                        confirm =
+                                                                        await showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (BuildContext
+                                                                              context) {
+                                                                        return deleteConfirmedDialog(
+                                                                            context,
+                                                                            "Voulez-vous retirer le buteur ?");
+                                                                      },
+                                                                    );
+
+                                                                    if (confirm) {
+                                                                      matchProvider.value = await _sportService.removeButeur(
+                                                                          _match
+                                                                              .id,
+                                                                          butteur,
+                                                                          'B',
+                                                                          _typeSport,
+                                                                          -1);
+                                                                    }
+                                                                  },
+                                                                  child: Icon(
+                                                                    Icons
+                                                                        .delete,
+                                                                    color: AppColors
+                                                                        .echec,
+                                                                    size: MediaQuery.sizeOf(context)
+                                                                            .width *
+                                                                        0.05,
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            )
                                                         ],
                                                       )))
                                                 ],
@@ -380,18 +467,18 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                               SizedBox(height: 10),
                               // Statistics Row
                               if (_typeSport == "FOOTBALL")
-                                statisticFootballCard(
-                                    matchProvider, context, _sportService),
+                                statisticFootballCard(matchProvider, context,
+                                    _sportService, _typeSport),
                               if (_typeSport == "BASKETBALL")
-                                statisticBasketballCard(
-                                    matchProvider, context, _sportService),
+                                statisticBasketballCard(matchProvider, context,
+                                    _sportService, _typeSport),
 
                               if (_typeSport == "VOLLEYBALL")
-                                statisticVolleyballCard(
-                                    matchProvider, context, _sportService),
+                                statisticVolleyballCard(matchProvider, context,
+                                    _sportService, _typeSport),
                               if (_typeSport == "JEUX_ESPRIT")
-                                statisticJeuxEspritsCard(
-                                    matchProvider, context, _sportService),
+                                statisticJeuxEspritsCard(matchProvider, context,
+                                    _sportService, _typeSport),
                               SizedBox(height: 20),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -425,11 +512,13 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                               matchProvider.value =
                                                   await _sportService
                                                       .removeLikeMatch(
-                                                          _match.id);
+                                                          _match.id,
+                                                          _typeSport);
                                             } else {
                                               matchProvider.value =
                                                   await _sportService
-                                                      .likerMatch(_match.id);
+                                                      .likerMatch(_match.id,
+                                                          _typeSport);
                                             }
                                           }),
                                       Text(matchProvider.value!.likers!.length
@@ -474,7 +563,8 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                                           .addCommentMatch(
                                                               _match.id,
                                                               _commentairController
-                                                                  .value.text);
+                                                                  .value.text,
+                                                              _typeSport);
                                                   _isPressCommment.value =
                                                       !_isPressCommment.value;
                                                 })
@@ -517,7 +607,8 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                                       await _sportService
                                                           .removeCommentMatch(
                                                               _match.id,
-                                                              comment);
+                                                              comment,
+                                                              _typeSport);
                                                 }
                                               }
                                             },

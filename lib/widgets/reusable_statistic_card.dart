@@ -5,7 +5,7 @@ import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/update_statistic_dialog.dart';
 
 Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
-    SportService _sportService) {
+    SportService _sportService, String _typeSport) {
   return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: SingleChildScrollView(
@@ -63,7 +63,8 @@ Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "yellowCardA",
-                                  confirm ? 1 : -1);
+                                  confirm ? 1 : -1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -85,7 +86,8 @@ Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "redCardA",
-                                  confirm ? 1 : -1);
+                                  confirm ? 1 : -1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -122,7 +124,8 @@ Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "point1A",
-                                  confirm ? 1 : -1);
+                                  confirm ? 1 : -1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -145,7 +148,8 @@ Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "tirsB",
-                                  confirm ? 1 : -1);
+                                  confirm ? 1 : -1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -179,7 +183,8 @@ Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "point2A",
-                                  confirm ? 1 : -1);
+                                  confirm ? 1 : -1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -202,7 +207,8 @@ Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "point2B",
-                                  confirm ? 1 : -1);
+                                  confirm ? 1 : -1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -236,7 +242,8 @@ Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "fautesA",
-                                  confirm ? 1 : -1);
+                                  confirm ? 1 : -1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -261,7 +268,8 @@ Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "fautesB",
-                                  confirm ? 1 : -1);
+                                  confirm ? 1 : -1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -323,7 +331,8 @@ Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "yellowCardB",
-                                  confirm ? 1 : -1);
+                                  confirm ? 1 : -1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -345,7 +354,8 @@ Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "redCardB",
-                                  confirm ? 1 : -1);
+                                  confirm ? 1 : -1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -363,7 +373,7 @@ Widget statisticFootballCard(ValueNotifier matchProvider, BuildContext context,
 }
 
 Widget statisticBasketballCard(ValueNotifier matchProvider,
-    BuildContext context, SportService _sportService) {
+    BuildContext context, SportService _sportService, String _typeSport) {
   return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: SingleChildScrollView(
@@ -402,10 +412,14 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                               joueur,
                               minute!,
                               "scoreEquipeA",
-                              "buteursA");
+                              "buteursA",
+                              _typeSport);
                           matchProvider.value =
                               await _sportService.updateStatistique(
-                                  matchProvider.value!.id, "point1A", 1);
+                                  matchProvider.value!.id,
+                                  "point1A",
+                                  1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -433,10 +447,14 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                               joueur,
                               minute!,
                               "scoreEquipeB",
-                              "buteursB");
+                              "buteursB",
+                              _typeSport);
                           matchProvider.value =
                               await _sportService.updateStatistique(
-                                  matchProvider.value!.id, "point1B", 1);
+                                  matchProvider.value!.id,
+                                  "point1B",
+                                  1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -476,10 +494,14 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                               joueur,
                               minute!,
                               "scoreEquipeA",
-                              "buteursA");
+                              "buteursA",
+                              _typeSport);
                           matchProvider.value =
                               await _sportService.updateStatistique(
-                                  matchProvider.value!.id, "point2A", 2);
+                                  matchProvider.value!.id,
+                                  "point2A",
+                                  2,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -507,10 +529,14 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                               joueur,
                               minute!,
                               "scoreEquipeB",
-                              "buteursB");
+                              "buteursB",
+                              _typeSport);
                           matchProvider.value =
                               await _sportService.updateStatistique(
-                                  matchProvider.value!.id, "point2B", 2);
+                                  matchProvider.value!.id,
+                                  "point2B",
+                                  2,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -552,10 +578,14 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                               joueur,
                               minute!,
                               "scoreEquipeA",
-                              "buteursA");
+                              "buteursA",
+                              _typeSport);
                           matchProvider.value =
                               await _sportService.updateStatistique(
-                                  matchProvider.value!.id, "highestStreakA", 3);
+                                  matchProvider.value!.id,
+                                  "highestStreakA",
+                                  3,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -583,10 +613,14 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                               joueur,
                               minute!,
                               "scoreEquipeB",
-                              "buteursB");
+                              "buteursB",
+                              _typeSport);
                           matchProvider.value =
                               await _sportService.updateStatistique(
-                                  matchProvider.value!.id, "highestStreakB", 3);
+                                  matchProvider.value!.id,
+                                  "highestStreakB",
+                                  3,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -621,7 +655,8 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "fautesA",
-                                  confirm ? 1 : -1);
+                                  confirm ? 1 : -1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -646,7 +681,8 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "fautesB",
-                                  confirm ? 1 : -1);
+                                  confirm ? 1 : -1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -664,7 +700,7 @@ Widget statisticBasketballCard(ValueNotifier matchProvider,
 }
 
 Widget statisticVolleyballCard(ValueNotifier matchProvider,
-    BuildContext context, SportService _sportService) {
+    BuildContext context, SportService _sportService, String _typeSport) {
   return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: SingleChildScrollView(
@@ -702,10 +738,14 @@ Widget statisticVolleyballCard(ValueNotifier matchProvider,
                               joueur,
                               minute!,
                               "scoreEquipeA",
-                              "buteursA");
+                              "buteursA",
+                              _typeSport);
                           matchProvider.value =
                               await _sportService.updateStatistique(
-                                  matchProvider.value!.id, "goalA", 1);
+                                  matchProvider.value!.id,
+                                  "goalA",
+                                  1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -733,10 +773,14 @@ Widget statisticVolleyballCard(ValueNotifier matchProvider,
                               joueur,
                               minute!,
                               "scoreEquipeB",
-                              "buteursB");
+                              "buteursB",
+                              _typeSport);
                           matchProvider.value =
                               await _sportService.updateStatistique(
-                                  matchProvider.value!.id, "goalB", 1);
+                                  matchProvider.value!.id,
+                                  "goalB",
+                                  1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -772,7 +816,8 @@ Widget statisticVolleyballCard(ValueNotifier matchProvider,
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "highestStreakA",
-                                  confirm ? 1 : -1);
+                                  confirm ? 1 : -1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -794,7 +839,8 @@ Widget statisticVolleyballCard(ValueNotifier matchProvider,
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "highestStreakB",
-                                  confirm ? 1 : -1);
+                                  confirm ? 1 : -1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -829,7 +875,8 @@ Widget statisticVolleyballCard(ValueNotifier matchProvider,
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "fautesA",
-                                  confirm ? 1 : -1);
+                                  confirm ? 1 : -1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -854,7 +901,8 @@ Widget statisticVolleyballCard(ValueNotifier matchProvider,
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "fautesB",
-                                  confirm ? 1 : -1);
+                                  confirm ? 1 : -1,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -872,7 +920,7 @@ Widget statisticVolleyballCard(ValueNotifier matchProvider,
 }
 
 Widget statisticJeuxEspritsCard(ValueNotifier matchProvider,
-    BuildContext context, SportService _sportService) {
+    BuildContext context, SportService _sportService, String _typeSport) {
   return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: SingleChildScrollView(
@@ -914,12 +962,14 @@ Widget statisticJeuxEspritsCard(ValueNotifier matchProvider,
                               minute!,
                               "scoreEquipeA",
                               "buteursA",
+                              _typeSport,
                               point!);
                           matchProvider.value =
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "bonneReponseA",
-                                  point);
+                                  point,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(
@@ -950,12 +1000,14 @@ Widget statisticJeuxEspritsCard(ValueNotifier matchProvider,
                               minute!,
                               "scoreEquipeB",
                               "buteursB",
+                              _typeSport,
                               point!);
                           matchProvider.value =
                               await _sportService.updateStatistique(
                                   matchProvider.value!.id,
                                   "bonneReponseB",
-                                  point);
+                                  point,
+                                  _typeSport);
                         }
                       },
                       icon: Icon(

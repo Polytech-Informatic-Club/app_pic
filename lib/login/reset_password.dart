@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/login/inscription.dart';
-import 'package:new_app/login/reset_password.dart';
+import 'package:new_app/login/login.dart';
 import 'package:new_app/models/role.dart';
 import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/pages/home/home_page.dart';
@@ -10,21 +10,18 @@ import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/alerte_message.dart';
 
-class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+class ResetPasswordScreen extends StatefulWidget {
+  ResetPasswordScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final UserService _userService = UserService();
 
   final TextEditingController _emailController = TextEditingController();
 
-  final TextEditingController _passwordController = TextEditingController();
-
-  bool _isPasswordVisible = false;
   // Visibilite
   final _formKey = GlobalKey<FormState>();
 
@@ -59,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     children: [
                       Text(
-                        'Connexion',
+                        'Réinitialisation',
                         style: TextStyle(
                           fontSize: 27,
                           fontWeight: FontWeight.bold,
@@ -88,60 +85,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: _emailController,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Entrer un mail valide';
+                                return 'Entrer un votre email.';
                               }
                               return null;
                             },
                             decoration: InputDecoration(
-                              labelText: 'Mail EPT',
+                              labelText: 'Votre mail EPT',
                               labelStyle: TextStyle(fontSize: 14),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          TextFormField(
-                            controller: _passwordController,
-                            obscureText: !_isPasswordVisible,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Entrer un mot de passe valide valide';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Mot de passe',
-                              labelStyle: TextStyle(fontSize: 14),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _isPasswordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _isPasswordVisible =
-                                        !_isPasswordVisible; // Basculer la visibilité du mot de passe
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: () async {
-                                print("Ok");
-                                changerPage(context, ResetPasswordScreen());
-                              },
-                              child: Text(
-                                'Mot de passe oublié ?',
-                                style: TextStyle(color: orange),
                               ),
                             ),
                           ),
@@ -150,21 +102,28 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 try {
-                                  User? user = await _userService
-                                      .signInWithEmailAndPassword(
-                                    _emailController.text.trim(),
-                                    _passwordController.text.trim(),
-                                  );
+                                  bool? user = await _userService.resetAccount(
+                                      _emailController.value.text);
                                   String? role = await _userService
                                       .getUserRole(_emailController.text);
-                                  if (user != null && role != null) {
+                                  if (user && role != null) {
                                     _userService.setRole(role);
-                                    changerPage(context, HomePage());
+
+                                    changerPage(context, LoginScreen());
+                                    alerteMessageWidget(
+                                        context,
+                                        "Un mail vous a été envoyé.",
+                                        AppColors.success);
+                                  } else {
+                                    alerteMessageWidget(
+                                        context,
+                                        "Le mail n'existe pas. Merci de fournir un mail valide.",
+                                        AppColors.echec);
                                   }
                                 } catch (e) {
                                   alerteMessageWidget(
                                       context,
-                                      "Mot de passe ou email invalide.",
+                                      "Un problème est survenu lors de la réinitialisation. Merci de contacter votre administrateur.",
                                       AppColors.echec);
                                 }
                               }
@@ -178,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             child: Text(
-                              'Se connecter',
+                              'Réinitialiser',
                               style:
                                   TextStyle(fontSize: 16, color: Colors.black),
                             ),

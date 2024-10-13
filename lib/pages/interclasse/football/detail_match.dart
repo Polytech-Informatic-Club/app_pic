@@ -390,11 +390,11 @@ class _DetailMatchScreenState extends State<DetailMatchScreen> {
                                                 _match.value =
                                                     await _sportService
                                                         .removeLikeMatch(
-                                                            match.id);
+                                                            match.id, _typeSport);
                                               } else {
                                                 _match.value =
                                                     await _sportService
-                                                        .likerMatch(match.id);
+                                                        .likerMatch(match.id, _typeSport);
                                               }
                                             }),
                                         Text(_match.value!.likers!.length
@@ -436,7 +436,7 @@ class _DetailMatchScreenState extends State<DetailMatchScreen> {
                                                   .addCommentMatch(
                                                       match.id,
                                                       _commentairController
-                                                          .value.text);
+                                                          .value.text, _typeSport);
                                               _isPressCommment.value =
                                                   !_isPressCommment.value;
                                             })
@@ -483,7 +483,7 @@ class _DetailMatchScreenState extends State<DetailMatchScreen> {
                                                         await _sportService
                                                             .removeCommentMatch(
                                                                 match.id,
-                                                                comment);
+                                                                comment, _typeSport);
                                                   }
                                                 } else {}
                                               },

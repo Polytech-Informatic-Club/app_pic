@@ -140,23 +140,22 @@ class SportService {
     try {
       DocumentSnapshot<Map<String, dynamic>> querySnapshot =
           await _firestore.collection("MATCH").doc(id).get();
-      return typeSport == "BASKETBALL"
-          ? Basket.fromJson(querySnapshot.data()!)
-          : typeSport == "FOOTBALL"
-              ? Football.fromJson(querySnapshot.data()!)
-              : typeSport == "VOLLEYBALL"
-                  ? Volleyball.fromJson(querySnapshot.data()!)
-                  : typeSport == "JEUX_ESPRIT"
-                      ? JeuxEsprit.fromJson(querySnapshot.data()!)
-                      : null;
+      return {
+        "BASKETBALL":
+            Basket.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "FOOTBALL":
+            Football.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "VOLLEYBALL":
+            Volleyball.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "JEUX_ESPRIT":
+            JeuxEsprit.fromJson(querySnapshot.data() as Map<String, dynamic>)
+      }[typeSport];
     } catch (e) {
       return null;
     }
   }
 
-  Future<Football?> likerMatch(
-    String matchId,
-  ) async {
+  Future<dynamic> likerMatch(String matchId, String typeSport) async {
     try {
       String email = FirebaseAuth.instance.currentUser!.email!;
 
@@ -181,14 +180,23 @@ class SportService {
 
       DocumentSnapshot querySnapshot = await matchDoc.get();
 
-      return Football.fromJson(querySnapshot.data() as Map<String, dynamic>);
+      return {
+        "BASKETBALL":
+            Basket.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "FOOTBALL":
+            Football.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "VOLLEYBALL":
+            Volleyball.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "JEUX_ESPRIT":
+            JeuxEsprit.fromJson(querySnapshot.data() as Map<String, dynamic>)
+      }[typeSport];
     } catch (e) {
       print(e);
       return null;
     }
   }
 
-  Future<Football?> removeLikeMatch(String matchId) async {
+  Future<dynamic> removeLikeMatch(String matchId, typeSport) async {
     try {
       String email = FirebaseAuth.instance.currentUser!.email!;
 
@@ -214,14 +222,26 @@ class SportService {
 
       DocumentSnapshot querySnapshot = await matchDoc.get();
 
-      return Football.fromJson(querySnapshot.data() as Map<String, dynamic>);
+      return {
+        "BASKETBALL":
+            Basket.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "FOOTBALL":
+            Football.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "VOLLEYBALL":
+            Volleyball.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "JEUX_ESPRIT":
+            JeuxEsprit.fromJson(querySnapshot.data() as Map<String, dynamic>)
+      }[typeSport];
+
+      ;
     } catch (e) {
       print(e);
       return null;
     }
   }
 
-  Future<Football?> addCommentMatch(String matchId, String content) async {
+  Future<dynamic> addCommentMatch(
+      String matchId, String content, typeSport) async {
     try {
       String email = FirebaseAuth.instance.currentUser!.email!;
 
@@ -253,15 +273,24 @@ class SportService {
 
       DocumentSnapshot querySnapshot = await matchDoc.get();
 
-      return Football.fromJson(querySnapshot.data() as Map<String, dynamic>);
+      return {
+        "BASKETBALL":
+            Basket.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "FOOTBALL":
+            Football.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "VOLLEYBALL":
+            Volleyball.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "JEUX_ESPRIT":
+            JeuxEsprit.fromJson(querySnapshot.data() as Map<String, dynamic>)
+      }[typeSport];
     } catch (e) {
       print(e);
       return null;
     }
   }
 
-  Future<Football?> removeCommentMatch(
-      String matchId, Commentaire commentaire) async {
+  Future<dynamic> removeCommentMatch(
+      String matchId, Commentaire commentaire, String typeSport) async {
     try {
       DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
 
@@ -273,15 +302,24 @@ class SportService {
 
       DocumentSnapshot querySnapshot = await matchDoc.get();
 
-      return Football.fromJson(querySnapshot.data() as Map<String, dynamic>);
+      return {
+        "BASKETBALL":
+            Basket.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "FOOTBALL":
+            Football.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "VOLLEYBALL":
+            Volleyball.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "JEUX_ESPRIT":
+            JeuxEsprit.fromJson(querySnapshot.data() as Map<String, dynamic>)
+      }[typeSport];
     } catch (e) {
       print(e);
       return null;
     }
   }
 
-  Future<Football?> updateStatistique(
-      String matchId, String libelle, int value) async {
+  Future<dynamic> updateStatistique(
+      String matchId, String libelle, int value, String typeSport) async {
     try {
       DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
       await matchDoc.update(
@@ -290,15 +328,24 @@ class SportService {
 
       DocumentSnapshot querySnapshot = await matchDoc.get();
 
-      return Football.fromJson(querySnapshot.data() as Map<String, dynamic>);
+      return {
+        "BASKETBALL":
+            Basket.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "FOOTBALL":
+            Football.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "VOLLEYBALL":
+            Volleyball.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "JEUX_ESPRIT":
+            JeuxEsprit.fromJson(querySnapshot.data() as Map<String, dynamic>)
+      }[typeSport];
     } catch (e) {
       print(e);
       return null;
     }
   }
 
-  Future<Football?> addButeur(String matchId, Joueur joueur, int minute,
-      String libelleScore, String libelleBut,
+  Future<dynamic> addButeur(String matchId, Joueur joueur, int minute,
+      String libelleScore, String libelleBut, String typeSport,
       [int increment = 1]) async {
     try {
       DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
@@ -317,7 +364,48 @@ class SportService {
       DocumentSnapshot querySnapshot = await matchDoc.get();
       print(querySnapshot.data());
 
-      return Football.fromJson(querySnapshot.data() as Map<String, dynamic>);
+      return {
+        "BASKETBALL":
+            Basket.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "FOOTBALL":
+            Football.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "VOLLEYBALL":
+            Volleyball.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "JEUX_ESPRIT":
+            JeuxEsprit.fromJson(querySnapshot.data() as Map<String, dynamic>)
+      }[typeSport];
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<dynamic> removeButeur(
+      String matchId, But buteur, String team, String typeSport, [int increment = -1]) async {
+    try {
+      DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
+
+      await matchDoc.update({
+        team == 'A' ? 'buteursA' : 'buteursB':
+            FieldValue.arrayRemove([buteur.toJson()])
+      });
+        await matchDoc.update({
+        team == 'A' ? 'scoreEquipeA' : 'scoreEquipeB':
+            FieldValue.increment(increment)
+      });
+
+      DocumentSnapshot querySnapshot = await matchDoc.get();
+
+      return {
+        "BASKETBALL":
+            Basket.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "FOOTBALL":
+            Football.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "VOLLEYBALL":
+            Volleyball.fromJson(querySnapshot.data() as Map<String, dynamic>),
+        "JEUX_ESPRIT":
+            JeuxEsprit.fromJson(querySnapshot.data() as Map<String, dynamic>)
+      }[typeSport];
     } catch (e) {
       print(e);
       return null;
