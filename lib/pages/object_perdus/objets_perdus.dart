@@ -456,238 +456,251 @@ class _ObjetsPerdusState extends State<ObjetsPerdus> {
                               'photoURL']; // Nullable: May not have a photo
                           bool estTrouve = lostObject['etat'] != 0;
 
-                          return GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text(description),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          details != '' ? details : "Pas d'infos supplémentaires",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        SizedBox(
-                                            height:
-                                                20), // Add some space before the separator
-                                        Divider(
-                                            thickness:
-                                                1.0), // Visual separator (line)
-
-                                        // Full name of the person who reported the lost object
-                                        SizedBox(height: 10),
-                                        FutureBuilder(
-                                          future: _service.getUserByEmail(
-                                              lostObject['idUser']),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.waiting) {
-                                              return LinearProgressIndicator();
-                                            } else {
-                                              Map<String, dynamic>? signalant =
-                                                  snapshot.data;
-                                              return Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  (signalant == null
-                                                      ? 'Inconnu'
-                                                      : '${signalant["prenom"]} ${signalant["nom"]} ${signalant["promo"]}'), // Full name of the reporter
+                          return Card(
+                            color: eptLightOrange,
+                            elevation: 3,
+                            margin: EdgeInsets.all(8.0),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text(description),
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  details != ''
+                                                      ? details
+                                                      : "Pas d'infos supplémentaires",
                                                   style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16,
-                                                    color: Colors
-                                                        .blueAccent, // You can customize the color and style here
-                                                  ),
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
-                                              );
-                                            }
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                    actions: [
-                                      ElevatedButton(
-                                        style: ButtonStyle(
-                                          backgroundColor:
-                                              WidgetStateProperty.all<Color>(
-                                                  const Color.fromRGBO(
-                                                      244, 171, 90, 1)),
-                                          shape: WidgetStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                            ),
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text(
-                                          'Fermer',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                              color: Colors.white),
-                                        ),
-                                      )
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            child: Card(
-                              color: eptLightOrange,
-                              elevation: 3,
-                              margin: EdgeInsets.all(8.0),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    if (photoUrl != null)
-                                      Image.network(
-                                        photoUrl,
-                                        height: 120,
-                                        width: double.infinity,
-                                        fit: BoxFit.cover,
-                                      )
-                                    else
-                                      Container(
-                                        height: 120, // Ajustement de la hauteur
-                                        color: eptLightOrange,
-                                        child: Center(
-                                          child: Icon(Icons.image_not_supported,
-                                              size: 50),
-                                        ),
-                                      ),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      description,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                      ),
-                                      maxLines:
-                                          1, // Limite de ligne pour éviter trop de texte
-                                      overflow: TextOverflow
-                                          .ellipsis, // Texte trop long coupé avec '...'
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.place,
-                                          size: 15,
-                                        ),
-                                        SizedBox(width: 5),
-                                        Text(
-                                          lieu == '' ? 'unknown' : lieu,
-                                          style: TextStyle(
-                                            fontSize: 10,
-                                            fontFamily: 'InterRegular',
-                                          ),
-                                          maxLines: 1, // Limite de ligne
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.calendar_month,
-                                          size: 15,
-                                        ),
-                                        SizedBox(width: 5),
-                                        Text(
-                                          date == '' ? 'unknown' : date,
-                                          style: TextStyle(
-                                            fontSize: 10,
-                                            fontFamily: 'InterRegular',
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            estTrouve
-                                                ? Text(
-                                                    'Trouvé',
-                                                    style: TextStyle(
-                                                      color: Colors.green,
-                                                      fontSize: 10,
-                                                    ),
-                                                  )
-                                                : Text(
-                                                    'Non Trouvé',
-                                                    style: TextStyle(
-                                                      color: Colors.red,
-                                                      fontSize: 10,
-                                                    ),
-                                                  ),
-                                          ],
-                                        ),
-                                        currentUser != null &&
-                                                currentUser!.email ==
-                                                    lostObject['idUser']
-                                            ? SizedBox(
-                                                height: 10,
-                                                width: 40,
-                                                child: Transform.scale(
-                                                  scale: 0.5,
-                                                  child: Switch(
-                                                    activeColor: Colors.green,
-                                                    value:
-                                                        1 == lostObject['etat'],
-                                                    onChanged: (value) async {
-                                                      await _service
-                                                          .toggleFoundStatus(
-                                                        lostObjects[index].id,
-                                                        value ? 1 : 0,
-                                                      );
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                        SnackBar(
-                                                          content: Text(
-                                                            value
-                                                                ? 'Objet marqué comme trouvé!'
-                                                                : 'Objet marqué comme perdu!',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
+                                                SizedBox(
+                                                    height:
+                                                        20), // Add some space before the separator
+                                                Divider(
+                                                    thickness:
+                                                        1.0), // Visual separator (line)
+
+                                                // Full name of the person who reported the lost object
+                                                SizedBox(height: 10),
+                                                FutureBuilder(
+                                                  future:
+                                                      _service.getUserByEmail(
+                                                          lostObject['idUser']),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return LinearProgressIndicator();
+                                                    } else {
+                                                      Map<String, dynamic>?
+                                                          signalant =
+                                                          snapshot.data;
+                                                      return Align(
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: Text(
+                                                          (signalant == null
+                                                              ? 'Inconnu'
+                                                              : '${signalant["prenom"]} ${signalant["nom"]} ${signalant["promo"]}'), // Full name of the reporter
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 16,
+                                                            color: Colors
+                                                                .blueAccent, // You can customize the color and style here
                                                           ),
-                                                          backgroundColor:
-                                                              Colors.green,
                                                         ),
                                                       );
-                                                    },
+                                                    }
+                                                  },
+                                                )
+                                              ],
+                                            ),
+                                            actions: [
+                                              ElevatedButton(
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      WidgetStateProperty.all<
+                                                              Color>(
+                                                          const Color.fromRGBO(
+                                                              244, 171, 90, 1)),
+                                                  shape: WidgetStateProperty.all<
+                                                      RoundedRectangleBorder>(
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8.0),
+                                                    ),
                                                   ),
                                                 ),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text(
+                                                  'Fermer',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18,
+                                                      color: Colors.white),
+                                                ),
                                               )
-                                            : Container(),
-                                      ],
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: photoUrl != null
+                                        ? Image.network(
+                                            photoUrl,
+                                            height: 120,
+                                            width: double.infinity,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Container(
+                                            height:
+                                                120, // Ajustement de la hauteur
+                                            color: eptLightOrange,
+                                            child: Center(
+                                              child: Icon(
+                                                  Icons.image_not_supported,
+                                                  size: 50),
+                                            ),
+                                          ),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    description,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
                                     ),
-                                  ],
-                                ),
+                                    maxLines:
+                                        1, // Limite de ligne pour éviter trop de texte
+                                    overflow: TextOverflow
+                                        .ellipsis, // Texte trop long coupé avec '...'
+                                  ),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.place,
+                                        size: 15,
+                                      ),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        lieu == '' ? 'unknown' : lieu,
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontFamily: 'InterRegular',
+                                        ),
+                                        maxLines: 1, // Limite de ligne
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.calendar_month,
+                                        size: 15,
+                                      ),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        date == '' ? 'unknown' : date,
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontFamily: 'InterRegular',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          estTrouve
+                                              ? Text(
+                                                  'Trouvé',
+                                                  style: TextStyle(
+                                                    color: Colors.green,
+                                                    fontSize: 10,
+                                                  ),
+                                                )
+                                              : Text(
+                                                  'Non Trouvé',
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 10,
+                                                  ),
+                                                ),
+                                        ],
+                                      ),
+                                      currentUser != null &&
+                                              currentUser!.email ==
+                                                  lostObject['idUser']
+                                          ? SizedBox(
+                                              height: 10,
+                                              width: 40,
+                                              child: Transform.scale(
+                                                scale: 0.5,
+                                                child: Switch(
+                                                  activeColor: Colors.green,
+                                                  value:
+                                                      1 == lostObject['etat'],
+                                                  onChanged: (value) async {
+                                                    await _service
+                                                        .toggleFoundStatus(
+                                                      lostObjects[index].id,
+                                                      value ? 1 : 0,
+                                                    );
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(
+                                                          value
+                                                              ? 'Objet marqué comme trouvé!'
+                                                              : 'Objet marqué comme perdu!',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                        backgroundColor:
+                                                            Colors.green,
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                           );
