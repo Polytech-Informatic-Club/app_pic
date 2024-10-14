@@ -12,7 +12,6 @@ import 'package:new_app/widgets/reusable_widgets.dart';
 import 'package:new_app/widgets/submited_button.dart';
 import 'package:intl/intl.dart';
 
-
 class EditAnnonce extends StatefulWidget {
   final String idAnnonce; // L'annonce que l'on veut modifier
 
@@ -81,7 +80,7 @@ class _EditAnnonceState extends State<EditAnnonce> {
   Future<void> _selectDateTime(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: _selectedDate.value!,
+      initialDate: _selectedDate.value,
       firstDate: DateTime(2015, 8),
       lastDate: DateTime(2101),
     );
@@ -89,8 +88,7 @@ class _EditAnnonceState extends State<EditAnnonce> {
     if (pickedDate != null) {
       final TimeOfDay? pickedTime = await showTimePicker(
         context: context,
-        initialTime:
-            TimeOfDay.fromDateTime(_selectedDate.value ?? DateTime.now()),
+        initialTime: TimeOfDay.fromDateTime(_selectedDate.value),
       );
 
       if (pickedTime != null) {
@@ -251,7 +249,7 @@ class _EditAnnonceState extends State<EditAnnonce> {
                     categorie:
                         _selectedCategory.value ?? _currentAnnonce!.categorie,
                     titre: _titreTextController.text,
-                    date: _selectedDate.value!,
+                    date: _selectedDate.value,
                     description: _descriptionTextController.text,
                     lieu: _lieuTextController.text,
                     image: _url.value,

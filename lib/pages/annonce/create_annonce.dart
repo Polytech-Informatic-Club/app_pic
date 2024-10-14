@@ -67,8 +67,7 @@ class CreateAnnonce extends StatelessWidget {
       // Sélectionner l'heure après la date
       final TimeOfDay? pickedTime = await showTimePicker(
         context: context,
-        initialTime:
-            TimeOfDay.fromDateTime(_selectedDate.value ?? DateTime.now()),
+        initialTime: TimeOfDay.fromDateTime(_selectedDate.value),
       );
 
       if (pickedTime != null) {
@@ -258,7 +257,7 @@ class CreateAnnonce extends StatelessWidget {
                               ? Categorie(id: '', libelle: '', logo: '')
                               : _selectedCategory.value!,
                           titre: _titreTextController.text,
-                          date: _selectedDate.value!,
+                          date: _selectedDate.value,
                           dateCreation: DateTime.now(),
                           description: _descriptionTextController.text,
                           lieu: _lieuTextController.text,

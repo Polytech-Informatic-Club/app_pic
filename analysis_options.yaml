@@ -16,7 +16,6 @@ analyzer:
     prefer_const_literals_to_create_immutables: ignore
     unused_field: ignore
     unused_import: ignore
-include: package:flutter_lints/flutter.yaml
 
 linter:
   # The lint rules applied to this project can be customized in the

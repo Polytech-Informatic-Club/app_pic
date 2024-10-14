@@ -136,7 +136,7 @@ class _HomeSportTypePageState extends State<HomeSportTypePage> {
                                   child: Row(
                                     children: [
                                       for (var i in commissions.membres)
-                                        MemberCard(title: i.poste)
+                                        MemberCard(role: i.poste)
                                     ],
                                   ))
                               : Text(
@@ -271,23 +271,34 @@ Widget _afficheFollowingMatch(String id, String affiche, String description,
 }
 
 class MemberCard extends StatelessWidget {
-  final String title;
-  const MemberCard({super.key, required this.title});
+  final String role;
+  const MemberCard({super.key, required this.role});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CircleAvatar(
-          radius: 30,
-          backgroundColor: Colors.grey[300],
-        ),
-        SizedBox(height: 5),
-        Text(title),
-      ],
-    ));
+    return SizedBox(
+      width: 100,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            role,
+            style: TextStyle(fontSize: 12),
+          ),
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: AppColors.primary,
+            backgroundImage: AssetImage('assetName'),
+          ),
+          Text(
+            'Mouhamadou Mourtada Kamara',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 12),
+          ),
+          SizedBox(height: 5),
+        ],
+      ),
+    );
   }
 }

@@ -186,10 +186,14 @@ Widget widgetAG(String date, String heure, String lieu, String sujet) {
                         size: 20,
                       ),
                       SizedBox(width: 4),
-                      Text(
-                        sujet,
-                        style:
-                            TextStyle(fontSize: 11, fontFamily: 'InterRegular'),
+                      SizedBox(
+                        width: 200,
+                        child: Text(
+                          sujet,
+                          style: TextStyle(
+                              fontSize: 11, fontFamily: 'InterRegular'),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
                   ),

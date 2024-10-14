@@ -232,8 +232,6 @@ class SportService {
         "JEUX_ESPRIT":
             JeuxEsprit.fromJson(querySnapshot.data() as Map<String, dynamic>)
       }[typeSport];
-
-      ;
     } catch (e) {
       print(e);
       return null;
@@ -344,14 +342,14 @@ class SportService {
     }
   }
 
-  Future<dynamic> updateFinPeriode(
-      String matchId, String libelle, int value1, int value2, String typeSport) async {
+  Future<dynamic> updateFinPeriode(String matchId, String libelle, int value1,
+      int value2, String typeSport) async {
     try {
       DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
       await matchDoc.update(
         {"statistiques.${libelle}A": FieldValue.increment(value1)},
       );
-       await matchDoc.update(
+      await matchDoc.update(
         {"statistiques.${libelle}B": FieldValue.increment(value2)},
       );
 

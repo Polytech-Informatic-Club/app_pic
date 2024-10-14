@@ -160,6 +160,7 @@ class _PInfoNouveauteState extends State<PInfoNouveaute> {
               return Text('Erreur lors du chargement des annonces');
             } else {
               List<Annonce> annonces = snapshot.data ?? [];
+              annonces.sort((a, b) => b.dateCreation.compareTo(a.dateCreation));
               return CategorySelection(
                 items: annonces,
                 value: groupValue,
