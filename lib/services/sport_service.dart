@@ -372,6 +372,135 @@ class SportService {
     }
   }
 
+  Future<dynamic> updateBasketScore(
+      String matchId, String libelle, int value1, int value2) async {
+    try {
+      DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
+
+      // Met à jour les valeurs du quart temps
+      await matchDoc.update({
+        "statistiques.${libelle}A": value1,
+        "statistiques.${libelle}B": value2,
+      });
+
+      // Récupère les valeurs actuelles des autres quarts temps
+      DocumentSnapshot querySnapshot = await matchDoc.get();
+      Map<String, dynamic> data = querySnapshot.data() as Map<String, dynamic>;
+
+      int premierA = data['statistiques']['1erA'] ?? 0;
+      int deuxiemeA = data['statistiques']['2emeA'] ?? 0;
+      int troisiemeA = data['statistiques']['3emeA'] ?? 0;
+      int quatriemeA = data['statistiques']['4emeA'] ?? 0;
+
+      int premierB = data['statistiques']['1erB'] ?? 0;
+      int deuxiemeB = data['statistiques']['2emeB'] ?? 0;
+      int troisiemeB = data['statistiques']['3emeB'] ?? 0;
+      int quatriemeB = data['statistiques']['4emeB'] ?? 0;
+
+      // Calcul des scores totaux
+      int scoreEquipeA = premierA + deuxiemeA + troisiemeA + quatriemeA;
+      int scoreEquipeB = premierB + deuxiemeB + troisiemeB + quatriemeB;
+
+      // Met à jour les scores totaux des équipes
+      await matchDoc.update({
+        "scoreEquipeA": scoreEquipeA,
+        "scoreEquipeB": scoreEquipeB,
+      });
+
+      // Récupère à nouveau les données après la mise à jour
+      querySnapshot = await matchDoc.get();
+
+      return Basket.fromJson(querySnapshot.data() as Map<String, dynamic>);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<dynamic> updateVolleyScore(
+      String matchId, String libelle, int value1, int value2) async {
+    try {
+      DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
+
+      // Met à jour les valeurs des sets
+      await matchDoc.update({
+        "statistiques.${libelle}A": value1,
+        "statistiques.${libelle}B": value2,
+      });
+
+      // Récupère les valeurs actuelles des sets
+      DocumentSnapshot querySnapshot = await matchDoc.get();
+      Map<String, dynamic> data = querySnapshot.data() as Map<String, dynamic>;
+
+      int set1A = data['statistiques']['Set1A'] ?? 0;
+      int set2A = data['statistiques']['Set2A'] ?? 0;
+      int set3A = data['statistiques']['Set3A'] ?? 0;
+
+      int set1B = data['statistiques']['Set1B'] ?? 0;
+      int set2B = data['statistiques']['Set2B'] ?? 0;
+      int set3B = data['statistiques']['Set3B'] ?? 0;
+
+      // Calcul des scores totaux
+      int scoreEquipeA = set1A + set2A + set3A;
+      int scoreEquipeB = set1B + set2B + set3B;
+
+      // Met à jour les scores totaux des équipes
+      await matchDoc.update({
+        "scoreEquipeA": scoreEquipeA,
+        "scoreEquipeB": scoreEquipeB,
+      });
+
+      // Récupère à nouveau les données après la mise à jour
+      querySnapshot = await matchDoc.get();
+
+      return Volleyball.fromJson(querySnapshot.data() as Map<String, dynamic>);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<dynamic> updateJEScore(
+      String matchId, String libelle, int value1, int value2) async {
+    try {
+      DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
+
+      // Met à jour les valeurs des mi-temps
+      await matchDoc.update({
+        "statistiques.${libelle}A": value1,
+        "statistiques.${libelle}B": value2,
+      });
+
+      // Récupère les valeurs actuelles des mi-temps
+      DocumentSnapshot querySnapshot = await matchDoc.get();
+      Map<String, dynamic> data = querySnapshot.data() as Map<String, dynamic>;
+
+      int miTemp1A = data['statistiques']['miTemp1A'] ?? 0;
+      int miTemp2A = data['statistiques']['miTemp2A'] ?? 0;
+
+      int miTemp1B = data['statistiques']['miTemp1B'] ?? 0;
+      int miTemp2B = data['statistiques']['miTemp2B'] ?? 0;
+
+      // Calcul des scores totaux
+      int scoreEquipeA = miTemp1A + miTemp2A;
+      int scoreEquipeB = miTemp1B + miTemp2B;
+
+      // Met à jour les scores totaux des équipes
+      await matchDoc.update({
+        "scoreEquipeA": scoreEquipeA,
+        "scoreEquipeB": scoreEquipeB,
+      });
+
+      // Récupère à nouveau les données après la mise à jour
+      querySnapshot = await matchDoc.get();
+
+      return JeuxEsprit.fromJson(querySnapshot.data() as Map<String, dynamic>);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   Future<dynamic> addButeur(String matchId, Joueur joueur, int minute,
       String libelleScore, String libelleBut, String typeSport,
       [int increment = 1]) async {

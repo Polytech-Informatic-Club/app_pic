@@ -388,14 +388,6 @@ class _CreateMatchState extends State<CreateMatch> {
                                   "3emeB": 0,
                                   "4emeA": 0,
                                   "4emeB": 0,
-                                  'point1A': 0,
-                                  'point1B': 0,
-                                  'point2A': 0,
-                                  'point2B': 0,
-                                  'point3A': 0,
-                                  'point3B': 0,
-                                  'fauteA': 0,
-                                  'fauteB': 0,
                                 },
                                 buteursA: [],
                                 buteursB: [],
@@ -417,12 +409,6 @@ class _CreateMatchState extends State<CreateMatch> {
                           } else if (widget.typeSport == "VOLLEYBALL") {
                             match = Volleyball(
                                 statistiques: {
-                                  "goalA": 0,
-                                  "goalB": 0,
-                                  "highestStreakA": 0,
-                                  "highestStreakB": 0,
-                                  "fautesA": 0,
-                                  "fautesB": 0,
                                   "Set1A": 0,
                                   "Set1B": 0,
                                   "Set2A": 0,

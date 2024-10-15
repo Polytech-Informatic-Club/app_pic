@@ -253,70 +253,62 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                                       ),
                                                   ]),
                                                   Container(
-                                                      height: MediaQuery.sizeOf(
-                                                                  context)
-                                                              .height *
-                                                          0.1,
                                                       child:
                                                           SingleChildScrollView(
                                                               child: Column(
-                                                        children: [
-                                                          for (var butteur
-                                                              in matchProvider
-                                                                  .value!
-                                                                  .buteursA!)
-                                                            Row(
-                                                              children: [
-                                                                Text(
-                                                                  "${butteur.joueur.nom} (${butteur.minute}')",
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white),
-                                                                ),
-                                                                GestureDetector(
-                                                                  onTap:
-                                                                      () async {
-                                                                    bool
-                                                                        confirm =
-                                                                        await showDialog(
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (BuildContext
-                                                                              context) {
-                                                                        return deleteConfirmedDialog(
-                                                                            context,
-                                                                            "Voulez-vous retirer le buteur ?");
-                                                                      },
-                                                                    );
-
-                                                                    if (confirm) {
-                                                                      matchProvider
-                                                                              .value =
-                                                                          await _sportService
-                                                                              .removeButeur(
-                                                                        _match
-                                                                            .id,
-                                                                        butteur,
-                                                                        'A',
-                                                                        _typeSport,
-                                                                      );
-                                                                    }
+                                                    children: [
+                                                      for (var butteur
+                                                          in matchProvider
+                                                              .value!.buteursA!)
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              "${butteur.joueur.nom} (${butteur.minute}')",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                            GestureDetector(
+                                                              onTap: () async {
+                                                                bool confirm =
+                                                                    await showDialog(
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (BuildContext
+                                                                          context) {
+                                                                    return deleteConfirmedDialog(
+                                                                        context,
+                                                                        "Voulez-vous retirer le buteur ?");
                                                                   },
-                                                                  child: Icon(
-                                                                    Icons
-                                                                        .delete,
-                                                                    color: AppColors
-                                                                        .echec,
-                                                                    size: MediaQuery.sizeOf(context)
-                                                                            .width *
-                                                                        0.05,
-                                                                  ),
-                                                                )
-                                                              ],
+                                                                );
+
+                                                                if (confirm) {
+                                                                  matchProvider
+                                                                          .value =
+                                                                      await _sportService
+                                                                          .removeButeur(
+                                                                    _match.id,
+                                                                    butteur,
+                                                                    'A',
+                                                                    _typeSport,
+                                                                  );
+                                                                }
+                                                              },
+                                                              child: Icon(
+                                                                Icons.delete,
+                                                                color: AppColors
+                                                                    .echec,
+                                                                size: MediaQuery.sizeOf(
+                                                                            context)
+                                                                        .width *
+                                                                    0.05,
+                                                              ),
                                                             )
-                                                        ],
-                                                      )))
+                                                          ],
+                                                        )
+                                                    ],
+                                                  )))
                                                 ],
                                               ),
                                               Text(
@@ -388,70 +380,62 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                                       ),
                                                   ]),
                                                   Container(
-                                                      height: MediaQuery.sizeOf(
-                                                                  context)
-                                                              .height *
-                                                          0.1,
                                                       child:
                                                           SingleChildScrollView(
                                                               child: Column(
-                                                        children: [
-                                                          for (var butteur
-                                                              in matchProvider
-                                                                  .value!
-                                                                  .buteursB!)
-                                                            Row(
-                                                              children: [
-                                                                Text(
-                                                                  "${butteur.joueur.nom} (${butteur.minute}')",
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white),
-                                                                ),
-                                                                GestureDetector(
-                                                                  onTap:
-                                                                      () async {
-                                                                    bool
-                                                                        confirm =
-                                                                        await showDialog(
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (BuildContext
-                                                                              context) {
-                                                                        return deleteConfirmedDialog(
-                                                                            context,
-                                                                            "Voulez-vous retirer le buteur ?");
-                                                                      },
-                                                                    );
-
-                                                                    if (confirm) {
-                                                                      matchProvider
-                                                                              .value =
-                                                                          await _sportService
-                                                                              .removeButeur(
-                                                                        _match
-                                                                            .id,
-                                                                        butteur,
-                                                                        'B',
-                                                                        _typeSport,
-                                                                      );
-                                                                    }
+                                                    children: [
+                                                      for (var butteur
+                                                          in matchProvider
+                                                              .value!.buteursB!)
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              "${butteur.joueur.nom} (${butteur.minute}')",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                            GestureDetector(
+                                                              onTap: () async {
+                                                                bool confirm =
+                                                                    await showDialog(
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (BuildContext
+                                                                          context) {
+                                                                    return deleteConfirmedDialog(
+                                                                        context,
+                                                                        "Voulez-vous retirer le buteur ?");
                                                                   },
-                                                                  child: Icon(
-                                                                    Icons
-                                                                        .delete,
-                                                                    color: AppColors
-                                                                        .echec,
-                                                                    size: MediaQuery.sizeOf(context)
-                                                                            .width *
-                                                                        0.05,
-                                                                  ),
-                                                                )
-                                                              ],
+                                                                );
+
+                                                                if (confirm) {
+                                                                  matchProvider
+                                                                          .value =
+                                                                      await _sportService
+                                                                          .removeButeur(
+                                                                    _match.id,
+                                                                    butteur,
+                                                                    'B',
+                                                                    _typeSport,
+                                                                  );
+                                                                }
+                                                              },
+                                                              child: Icon(
+                                                                Icons.delete,
+                                                                color: AppColors
+                                                                    .echec,
+                                                                size: MediaQuery.sizeOf(
+                                                                            context)
+                                                                        .width *
+                                                                    0.05,
+                                                              ),
                                                             )
-                                                        ],
-                                                      )))
+                                                          ],
+                                                        )
+                                                    ],
+                                                  )))
                                                 ],
                                               ),
                                             ],
