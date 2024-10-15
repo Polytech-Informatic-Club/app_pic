@@ -12,6 +12,8 @@ import 'package:new_app/services/annonce_service.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/submited_button.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
 class AfficherAnononceScreen extends StatefulWidget {
   final String image;
@@ -20,14 +22,16 @@ class AfficherAnononceScreen extends StatefulWidget {
   final DateTime date;
   final String description;
   final String idAnnonce;
-  AfficherAnononceScreen(
-      {required this.image,
-      required this.titre,
-      required this.lieu,
-      required this.date,
-      required this.description,
-      required this.idAnnonce,
-      super.key});
+
+  AfficherAnononceScreen({
+    required this.image,
+    required this.titre,
+    required this.lieu,
+    required this.date,
+    required this.description,
+    required this.idAnnonce,
+    super.key,
+  });
 
   @override
   State<AfficherAnononceScreen> createState() => _AfficherAnononceScreenState();
@@ -44,17 +48,17 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
   void initState() {
     super.initState();
     _checkUserRole();
-    Future<void> _loadAnnonce() async {
-      // Récupérer l'annonce
-      Annonce? annonce = await _annonceService.getAnnonceId(widget.idAnnonce);
-      if (annonce != null) {
-        setState(() {
-          _currentAnnonce = annonce;
-        });
-      }
-    }
-
     _loadAnnonce();
+  }
+
+  Future<void> _loadAnnonce() async {
+    // Récupérer l'annonce
+    Annonce? annonce = await _annonceService.getAnnonceId(widget.idAnnonce);
+    if (annonce != null) {
+      setState(() {
+        _currentAnnonce = annonce;
+      });
+    }
   }
 
   Future<void> _checkUserRole() async {
@@ -80,40 +84,44 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          forceMaterialTransparency: true,
+      appBar: AppBar(
+        forceMaterialTransparency: true,
+      ),
+      extendBodyBehindAppBar: true,
+      floatingActionButton: isAdmin
+          ? Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: "editButton",
+            onPressed: () {
+              changerPage(context, EditAnnonce(idAnnonce: widget.idAnnonce));
+            },
+            backgroundColor: AppColors.primary,
+            child: Icon(Icons.edit),
+          ),
+          SizedBox(width: 10),
+          FloatingActionButton(
+            heroTag: "deleteButton",
+            onPressed: () {
+              _showDeleteConfirmation(context, widget.idAnnonce);
+            },
+            backgroundColor: Colors.red,
+            child: Icon(Icons.delete),
+          ),
+        ],
+      )
+          : null,
+      body: SingleChildScrollView(
+        child: afficherAnnonce(
+          widget.image,
+          widget.titre,
+          widget.lieu,
+          widget.date,
+          widget.description,
         ),
-        extendBodyBehindAppBar: true,
-        floatingActionButton: isAdmin
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  FloatingActionButton(
-                    heroTag:
-                        "editButton", // Chaque bouton doit avoir un heroTag unique
-                    onPressed: () {
-                      changerPage(
-                          context, EditAnnonce(idAnnonce: widget.idAnnonce));
-                    },
-                    backgroundColor: AppColors.primary,
-                    child: Icon(Icons.edit),
-                  ),
-                  SizedBox(width: 10),
-                  FloatingActionButton(
-                    heroTag: "deleteButton", // Unique heroTag
-                    onPressed: () {
-                      _showDeleteConfirmation(context, widget.idAnnonce);
-                    },
-                    backgroundColor: Colors.red,
-                    child: Icon(Icons.delete),
-                  ),
-                ],
-              )
-            : null,
-        body: SingleChildScrollView(
-          child: afficherAnnonce(widget.image, widget.titre, widget.lieu,
-              widget.date, widget.description),
-        ));
+      ),
+    );
   }
 
   Widget afficherAnnonce(imagePath, title, lieu, dateTime, description) {
@@ -126,13 +134,11 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
               height: 470,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(
-                      'assets/images/polytech-Info/white_bg_ept.png'), // Image de fond à ajouter dans 'assets'
+                  image: AssetImage('assets/images/polytech-Info/white_bg_ept.png'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-
             // Contenu de la page
             SingleChildScrollView(
               child: Column(
@@ -140,11 +146,21 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
                 children: [
                   SizedBox(height: 100),
                   Center(
-                    child: SizedBox(
-                      height: 370,
-                      child: Image.network(
-                        imagePath,
-                        fit: BoxFit.cover,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FullScreenImage(imageUrl: imagePath),
+                          ),
+                        );
+                      },
+                      child: SizedBox(
+                        height: 370,
+                        child: Image.network(
+                          imagePath,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -153,9 +169,7 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
             ),
           ],
         ),
-        SizedBox(
-          height: 10,
-        ),
+        SizedBox(height: 10),
         Container(
           height: 10,
           decoration: BoxDecoration(color: jauneClair),
@@ -178,7 +192,7 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
               Text(
                 lieu,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              )
+              ),
             ],
           ),
         ),
@@ -186,9 +200,7 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
           height: 10,
           decoration: BoxDecoration(color: jauneClair),
         ),
-        SizedBox(
-          height: 20,
-        ),
+        SizedBox(height: 20),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: Column(
@@ -198,9 +210,7 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
                 '${simpleDateformat(dateTime)} à ${getHour(widget.date)}',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(
-                height: 10,
-              ),
+              SizedBox(height: 10),
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(16),
@@ -211,76 +221,87 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      description,
-                    ),
+                    Text(description),
                   ],
                 ),
               ),
-
               SizedBox(height: 10),
-
-              // Bouton "Rejoindre"
             ],
           ),
-        )
+        ),
       ],
     );
   }
+
+  void _showDeleteConfirmation(BuildContext context, String id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmer la suppression'),
+          content: Text('Êtes-vous sûr de vouloir supprimer cette annonce ?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Annuler'),
+            ),
+            TextButton(
+              onPressed: () {
+                _deleteAnnonce(id, context);
+              },
+              child: Text('Supprimer'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteAnnonce(String id, BuildContext context) async {
+    try {
+      await AnnonceService().deleteAnnonceById(id);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Annonce supprimée avec succès')),
+      );
+      Navigator.of(context).pop(); // Ferme le dialogue de confirmation
+      Navigator.of(context).pop(); // Ferme la page actuelle
+      changerPage(context, AnnonceScreen());
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erreur lors de la suppression de l\'annonce : $e')),
+      );
+    }
+  }
 }
 
-void _showDeleteConfirmation(BuildContext context, String id) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Confirmer la suppression'),
-        content: Text('Êtes-vous sûr de vouloir supprimer cette annonce ?'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              // Ferme le dialogue si l'utilisateur annule
-              Navigator.of(context).pop();
-            },
-            child: Text('Annuler'),
+class FullScreenImage extends StatelessWidget {
+  final String imageUrl;
+
+  FullScreenImage({required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          PhotoView(
+            imageProvider: NetworkImage(imageUrl),
+            minScale: PhotoViewComputedScale.contained * 1,
+            maxScale: PhotoViewComputedScale.covered * 5,
           ),
-          TextButton(
-            onPressed: () {
-              // Supprime l'annonce et quitte la page
-              _deleteAnnonce(id, context);
-            },
-            child: Text('Supprimer'),
+          Positioned(
+            top: 40,
+            right: 20,
+            child: IconButton(
+              icon: Icon(Icons.close, color: Colors.white, size: 30),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
         ],
-      );
-    },
-  );
-}
-
-// Fonction pour supprimer l'annonce
-void _deleteAnnonce(String id, BuildContext context) async {
-  try {
-    // Appelle ton service pour supprimer l'annonce
-    await AnnonceService().deleteAnnonceById(id);
-
-    // Affiche un message de succès (si tu veux)
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Annonce supprimée avec succès'),
-      ),
-    );
-
-    // Ferme le dialogue de confirmation
-    Navigator.of(context).pop(); // Ferme le AlertDialog
-
-    // Quitte la page après la suppression
-    Navigator.of(context).pop();
-    changerPage(context, AnnonceScreen()); // Ferme la page actuelle
-  } catch (e) {
-    // Si une erreur survient, affiche un message d'erreur
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Erreur lors de la suppression de l\'annonce : $e'),
       ),
     );
   }
