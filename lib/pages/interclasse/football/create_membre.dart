@@ -4,9 +4,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
-import 'package:new_app/models/membre.dart'; // Assure-toi d'avoir un modèle pour Membre
+import 'package:new_app/models/membre.dart';
 import 'package:new_app/services/sport_service.dart';
-import 'package:new_app/services/user_service.dart'; // Service pour gérer les membres
+import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/alerte_message.dart';
 import 'package:new_app/widgets/reusable_description_input.dart';
@@ -30,33 +30,6 @@ class _CreateMemberState extends State<CreateMemberPage> {
   final SportService _sportService = SportService();
   final UserService _userService = UserService();
 
-  Future<void> _uploadImage() async {
-    final XFile? pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedImage == null) {
-      return; // Pas d'image choisie
-    }
-
-    String filename = pickedImage.name;
-    File imageFile = File(pickedImage.path);
-
-    Reference reference = FirebaseStorage.instance.ref(filename);
-
-    try {
-      _loading.value = true; // Démarre le chargement
-      await reference.putFile(imageFile);
-      setState(() async {
-        _url.value = await reference.getDownloadURL().toString();
-        _loading.value = false;
-      }); // Met à jour l'URL
-      // Arrête le chargement
-    } catch (error) {
-      _loading.value = false; // Arrête le chargement en cas d'erreur
-      alerteMessageWidget(context,
-          "Une erreur s'est produite lors du chargement !", AppColors.echec);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,14 +45,14 @@ class _CreateMemberState extends State<CreateMemberPage> {
               ValueListenableBuilder<String>(
                 valueListenable: _url,
                 builder: (context, url, child) {
-                  return url.isEmpty
-                      ? Container(
-                          height: MediaQuery.of(context).size.width * 0.6,
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          decoration: BoxDecoration(
-                              color: AppColors.gray,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Center(
+                  return Container(
+                    height: MediaQuery.of(context).size.width * 0.6,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    decoration: BoxDecoration(
+                        color: AppColors.gray,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: url.isEmpty
+                        ? Center(
                             child: ValueListenableBuilder<bool>(
                                 valueListenable: _loading,
                                 builder: (context, loading, child) {
@@ -112,10 +85,12 @@ class _CreateMemberState extends State<CreateMemberPage> {
                                                   color: AppColors.black)),
                                         );
                                 }),
+                          )
+                        : Image.network(
+                            url,
+                            fit: BoxFit.cover,
                           ),
-                        )
-                      : Image.network(
-                          url); // Affiche l'image après le téléchargement
+                  );
                 },
               ),
               SizedBox(height: 20),
@@ -136,9 +111,7 @@ class _CreateMemberState extends State<CreateMemberPage> {
                     image: _url.value,
                     role: _roleController.text,
                     sport: widget.sport,
-                    id: DateTime.now()
-                        .millisecondsSinceEpoch
-                        .toString(), // Ajoute d'autres attributs si nécessaire
+                    id: DateTime.now().millisecondsSinceEpoch.toString(),
                   );
                   await _sportService.ajouterMembre(newMembre);
                   alerteMessageWidget(

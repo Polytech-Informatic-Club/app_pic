@@ -598,4 +598,24 @@ class SportService {
       print("Erreur lors de la suppression du membre : $e");
     }
   }
+
+  Future<void> modifierMembre(Membre membre) async {
+    try {
+      // Référence à la collection des membres
+      CollectionReference membresCollection = _firestore.collection('MEMBRES');
+
+      // Mise à jour du membre dans Firestore
+      await membresCollection.doc(membre.id).update({
+        'nom': membre.nom,
+        'image': membre.image,
+        'role': membre.role,
+        'sport': membre.sport,
+      });
+
+      print("Membre modifié avec succès !");
+    } catch (e) {
+      print("Erreur lors de la modification du membre : $e");
+      throw e; // Tu peux gérer l'erreur comme tu le souhaites
+    }
+  }
 }

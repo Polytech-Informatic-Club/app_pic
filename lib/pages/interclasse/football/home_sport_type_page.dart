@@ -9,6 +9,7 @@ import 'package:new_app/models/membre.dart';
 import 'package:new_app/models/user.dart';
 import 'package:new_app/pages/interclasse/football/create_membre.dart';
 import 'package:new_app/pages/interclasse/football/detail_match.dart';
+import 'package:new_app/pages/interclasse/football/edit_delete_membre.dart';
 import 'package:new_app/services/sport_service.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
@@ -189,16 +190,23 @@ class _HomeSportTypePageState extends State<HomeSportTypePage> {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: membres.map((membre) {
-                              return InkWell(
-                                onLongPress: () {
-                                  // ici je vais implémenter la suppréssion
-                                },
-                                child: MemberCard(
-                                  role: membre.role,
-                                  nom: membre.nom,
-                                  image: membre.image,
-                                ),
-                              );
+                              return isAdmin
+                                  ? InkWell(
+                                      onTap: () {
+                                        changerPage(context,
+                                            EditMemberPage(membre: membre));
+                                      },
+                                      child: MemberCard(
+                                        role: membre.role,
+                                        nom: membre.nom,
+                                        image: membre.image,
+                                      ),
+                                    )
+                                  : MemberCard(
+                                      role: membre.role,
+                                      nom: membre.nom,
+                                      image: membre.image,
+                                    );
                             }).toList(),
                           ),
                         );
@@ -349,7 +357,10 @@ class MemberCard extends StatelessWidget {
         children: [
           Text(
             role,
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(
+              fontSize: 12,
+              fontFamily: 'InterRegular',
+            ),
           ),
           CircleAvatar(
             radius: 30,
@@ -359,7 +370,10 @@ class MemberCard extends StatelessWidget {
           Text(
             nom,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 11),
+            style: TextStyle(
+              fontSize: 11,
+              fontFamily: 'InterRegular',
+            ),
           ),
         ],
       ),
