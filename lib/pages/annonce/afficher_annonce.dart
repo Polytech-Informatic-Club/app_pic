@@ -14,6 +14,17 @@ import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/submited_button.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';  // Nécessaire pour ouvrir les liens dans le navigateur
+
+// Fonction pour ouvrir les liens
+Future<void> _onOpenLink(LinkableElement link) async {
+  if (await canLaunch(link.url)) {
+    await launch(link.url);
+  } else {
+    throw 'Could not launch ${link.url}';
+  }
+}
 
 class AfficherAnononceScreen extends StatefulWidget {
   final String image;
@@ -221,7 +232,12 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(description),
+                    Linkify(
+                      onOpen: _onOpenLink,
+                      text: description,
+                      style: TextStyle(fontSize: 16),
+                      linkStyle: TextStyle(color: Colors.blue),
+                    ),
                   ],
                 ),
               ),
