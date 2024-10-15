@@ -1,12 +1,16 @@
 // ignore_for_file: must_be_immutable, no_logic_in_create_state
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/commission.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/models/membre.dart';
+import 'package:new_app/models/user.dart';
+import 'package:new_app/pages/interclasse/football/create_membre.dart';
 import 'package:new_app/pages/interclasse/football/detail_match.dart';
 import 'package:new_app/services/sport_service.dart';
+import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/match_card.dart';
 
@@ -33,7 +37,32 @@ class _HomeSportTypePageState extends State<HomeSportTypePage> {
     this._icone,
   );
   final SportService _sportService = SportService();
+  final UserService _userService = UserService();
+
   String nomSport = "";
+  bool isAdmin = false;
+  String? userId;
+
+  late Future<List<Membre>> _futureMembres;
+
+  Future<void> _checkUserRole() async {
+    try {
+      var user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        userId = user.email;
+
+        String? role = await _userService.getUserRole(userId!);
+
+        if (role == 'ADMIN_MB') {
+          setState(() {
+            isAdmin = true;
+          });
+        }
+      }
+    } catch (e) {
+      print("Erreur lors de la vérification du rôle : $e");
+    }
+  }
 
   Future<void> getNomSport() async {
     if (_typeSport == "FOOTBALL") {
@@ -51,6 +80,8 @@ class _HomeSportTypePageState extends State<HomeSportTypePage> {
   void initState() {
     super.initState();
     getNomSport();
+    _checkUserRole();
+    _futureMembres = _sportService.getMembresParSport(widget.typeSport);
   }
 
   @override
@@ -116,33 +147,64 @@ class _HomeSportTypePageState extends State<HomeSportTypePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    'Membres',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  Row(
+                    children: [
+                      Text(
+                        'Membres',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      if (isAdmin) ...[
+                        const SizedBox(width: 5),
+                        InkWell(
+                          onTap: () {
+                            changerPage(context,
+                                CreateMemberPage(sport: widget.typeSport));
+                          },
+                          child: Image.asset(
+                            "assets/images/polytech-Info/plus.png",
+                            scale: 5,
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
-                  FutureBuilder<Commission?>(
-                      future: _sportService.getMembresCommission(_typeSport),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text('Erreur lors du chargement');
-                        } else {
-                          Commission? commissions = snapshot.data;
-                          return commissions != null
-                              ? SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    children: [
-                                      for (var i in commissions.membres)
-                                        MemberCard(role: i.poste)
-                                    ],
-                                  ))
-                              : Text(
-                                  "Aucun membre de la sous-commission ${_typeSport.split("_").join(" ").toLowerCase()}");
-                        }
-                      }),
+                  FutureBuilder<List<Membre>>(
+                    future: _futureMembres,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(
+                            child:
+                                Text('Erreur lors du chargement des membres'));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Center(
+                            child: Text('Aucun membre trouvé pour ce sport'));
+                      } else {
+                        // Si les membres sont chargés correctement, on les affiche
+                        List<Membre> membres = snapshot.data!;
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: membres.map((membre) {
+                              return InkWell(
+                                onLongPress: () {
+                                  // ici je vais implémenter la suppréssion
+                                },
+                                child: MemberCard(
+                                  role: membre.role,
+                                  nom: membre.nom,
+                                  image: membre.image,
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        );
+                      }
+                    },
+                  ),
                   SizedBox(height: 20),
                   Text(
                     'Prochain-évènement',
@@ -272,7 +334,10 @@ Widget _afficheFollowingMatch(String id, String affiche, String description,
 
 class MemberCard extends StatelessWidget {
   final String role;
-  const MemberCard({super.key, required this.role});
+  final String nom;
+  final String image;
+  const MemberCard(
+      {super.key, required this.role, required this.nom, required this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -289,14 +354,13 @@ class MemberCard extends StatelessWidget {
           CircleAvatar(
             radius: 30,
             backgroundColor: AppColors.primary,
-            backgroundImage: AssetImage('assetName'),
+            backgroundImage: NetworkImage(image),
           ),
           Text(
-            'Mouhamadou Mourtada Kamara',
+            nom,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(fontSize: 11),
           ),
-          SizedBox(height: 5),
         ],
       ),
     );

@@ -19,7 +19,6 @@ class AnnonceScreen extends StatefulWidget {
 class _AnnonceScreenState extends State<AnnonceScreen> {
   AnnonceService _annonceService = AnnonceService();
   bool annonceAvailable = true;
-  bool isAdmin = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

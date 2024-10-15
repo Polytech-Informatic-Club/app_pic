@@ -12,6 +12,7 @@ import 'package:new_app/models/football.dart';
 import 'package:new_app/models/jeux_esprit.dart';
 import 'package:new_app/models/joueur.dart';
 import 'package:new_app/models/match.dart';
+import 'package:new_app/models/membre.dart';
 import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/models/volleyball.dart';
 import 'package:new_app/services/notification_service.dart';
@@ -493,33 +494,33 @@ class SportService {
     }
   }
 
-  Future<Commission?> getMembresCommission(String libelle) async {
-    try {
-      QuerySnapshot<Map<String, dynamic>> filteredSnapshot = await _firestore
-          .collection("COMMISSION")
-          .where("nom", isEqualTo: libelle)
-          .limit(1)
-          .get();
+  // Future<Commission?> getMembresCommission(String libelle) async {
+  //   try {
+  //     QuerySnapshot<Map<String, dynamic>> filteredSnapshot = await _firestore
+  //         .collection("COMMISSION")
+  //         .where("nom", isEqualTo: libelle)
+  //         .limit(1)
+  //         .get();
 
-      if (filteredSnapshot.docs.isEmpty) {
-        return null;
-      }
-      var data = filteredSnapshot.docs.first.data();
-      return Commission.fromJson(data);
-    } catch (e) {
-      print("Erreur: $e");
-      return null;
-    }
-  }
+  //     if (filteredSnapshot.docs.isEmpty) {
+  //       return null;
+  //     }
+  //     var data = filteredSnapshot.docs.first.data();
+  //     return Commission.fromJson(data);
+  //   } catch (e) {
+  //     print("Erreur: $e");
+  //     return null;
+  //   }
+  // }
 
-  Future<String> postCommission(Commission commission) async {
-    try {
-      await commissionCollection.doc(commission.nom).set(commission.toJson());
-      return "OK";
-    } catch (e) {
-      return "Erreur lors de la création du match : $e";
-    }
-  }
+  // Future<String> postCommission(Commission commission) async {
+  //   try {
+  //     await commissionCollection.doc(commission.nom).set(commission.toJson());
+  //     return "OK";
+  //   } catch (e) {
+  //     return "Erreur lors de la création du match : $e";
+  //   }
+  // }
 
   Future<List<Matches>> getAllMatch() async {
     List<Matches> list = [];
@@ -548,6 +549,53 @@ class SportService {
       return football;
     } catch (e) {
       return {};
+    }
+  }
+
+  Future<void> ajouterMembre(Membre membre) async {
+    CollectionReference membres =
+        FirebaseFirestore.instance.collection('MEMBRES');
+    try {
+      await membres.doc(membre.id).set({
+        'image': membre.image,
+        'nom': membre.nom,
+        'role': membre.role,
+        'sport': membre.sport,
+        'id': membre.id
+      });
+      print("Membre ajouté avec succès");
+    } catch (e) {
+      print("Erreur lors de l'ajout du membre : $e");
+    }
+  }
+
+  Future<List<Membre>> getMembresParSport(String sport) async {
+    CollectionReference membres =
+        FirebaseFirestore.instance.collection('MEMBRES');
+
+    try {
+      QuerySnapshot querySnapshot =
+          await membres.where('sport', isEqualTo: sport).get();
+
+      // Parcourir les documents et créer une liste d'objets Membre
+      return querySnapshot.docs.map((doc) {
+        return Membre.fromJson(doc.data() as Map<String, dynamic>);
+      }).toList();
+    } catch (e) {
+      print("Erreur lors de la récupération des membres : $e");
+      return [];
+    }
+  }
+
+  Future<void> supprimerMembre(String membreId) async {
+    CollectionReference membres =
+        FirebaseFirestore.instance.collection('MEMBRES');
+
+    try {
+      await membres.doc(membreId).delete();
+      print("Membre supprimé avec succès");
+    } catch (e) {
+      print("Erreur lors de la suppression du membre : $e");
     }
   }
 }

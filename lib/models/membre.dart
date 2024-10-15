@@ -1,39 +1,31 @@
-import 'package:new_app/models/utilisateur.dart';
-import 'package:uuid/uuid.dart';
-
-class Membre extends Utilisateur {
+class Membre {
+  final String role;
+  final String nom;
+  final String image;
+  final String sport;
   final String id;
-  final String poste;
 
-  Membre(
-      {required this.id,
-      required this.poste,
-      required email,
-      required prenom,
-      required nom})
-      : super(email: email, prenom: prenom, nom: nom);
+  Membre({
+    required this.role,
+    required this.nom,
+    required this.image,
+    required this.sport,
+    required this.id,
+  });
 
-  // Factory method to create a Membre object from JSON
+  // Méthode pour convertir l'objet en map (pour Firestore)
+  Map<String, dynamic> toJson() {
+    return {'role': role, 'nom': nom, 'image': image, 'sport': sport, 'id': id};
+  }
+
+  // Méthode pour créer un objet Membre à partir d'un document Firestore
   factory Membre.fromJson(Map<String, dynamic> json) {
     return Membre(
-        email: json['email'] as String,
-        id: json['id'],
-        poste: json['poste'],
-        prenom: json['prenom'],
-        nom: json['nom'] as String);
-  }
-  // : id = json['id'] as String,
-  //   poste = json['poste'] as String,
-  //   // super.fromJson(json);
-
-  // Method to convert a Membre object to JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'nom': nom,
-      'prenom': prenom,
-      'email': email,
-      'poste': poste,
-    };
+      role: json['role'],
+      nom: json['nom'],
+      image: json['image'],
+      sport: json['sport'],
+      id: json['id'],
+    );
   }
 }

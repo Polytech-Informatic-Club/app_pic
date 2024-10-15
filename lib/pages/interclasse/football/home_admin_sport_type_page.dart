@@ -69,9 +69,9 @@ class HomeAdminSportTypePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
-              SubmittedButton("Créer une commission", () {
-                changerPage(context, CreateCommission(typeSport));
-              }),
+              // SubmittedButton("Créer une commission", () {
+              //   changerPage(context, CreateCommission(typeSport));
+              // }),
               SizedBox(height: 10),
               SubmittedButton("Créer une collection", () {
                 _showCreateCollectionDialog(context);

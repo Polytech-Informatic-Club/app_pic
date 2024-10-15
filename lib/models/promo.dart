@@ -1,4 +1,3 @@
-import 'package:new_app/models/membre.dart';
 import 'package:uuid/uuid.dart';
 
 class Promo {
