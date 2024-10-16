@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:new_app/fonctions.dart';
+import 'package:new_app/pages/annonce/edit_categorie.dart';
 import 'package:new_app/services/annonce_service.dart';
 import 'dart:io';
 
@@ -121,6 +123,67 @@ class _AddCategoriePageState extends State<AddCategoriePage> {
                     onPressed: _ajouterCategorie,
                     child: Text('Ajouter la Catégorie'),
                   ),
+            SizedBox(
+              height: 50,
+            ),
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('CATEGORIE')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.hasError) {
+                  return Center(
+                      child: Text(
+                          'Erreur lors de la récupération des catégories.'));
+                }
+
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return Center(child: Text('Aucune catégorie trouvée.'));
+                }
+
+                // Récupérer les catégories à partir des documents Firestore
+
+                List<DocumentSnapshot> categories = snapshot.data!.docs;
+
+                return ListView.builder(
+                  shrinkWrap: true, // Ajouté pour adapter la hauteur
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    // Chaque catégorie
+                    var categorieDoc = categories[index];
+
+                    // Convertir le DocumentSnapshot en un objet Categorie
+                    Categorie categorie = Categorie(
+                      id: categorieDoc.id, // L'ID du document
+                      libelle: categorieDoc['libelle'],
+                      logo: categorieDoc['logo'],
+                    );
+
+                    return ListTile(
+                      onTap: () {
+                        changerPage(
+                            context, EditCategoriePage(categorie: categorie));
+                      },
+                      leading: categorie.logo.isNotEmpty
+                          ? SizedBox(
+                              width: 50,
+                              child: Image.network(
+                                categorie.logo,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : Icon(Icons.image_not_supported),
+                      title: Text(categorie.libelle),
+                    );
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),

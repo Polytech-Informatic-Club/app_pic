@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:new_app/pages/annonce/addCategorie.dart';
+import 'package:new_app/pages/annonce/add_categorie.dart';
 import 'package:new_app/pages/interclasse/football/voir_match_admin.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/models/collection.dart';
