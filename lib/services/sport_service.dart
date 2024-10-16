@@ -377,13 +377,11 @@ class SportService {
     try {
       DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
 
-      // Met à jour les valeurs du quart temps
       await matchDoc.update({
         "statistiques.${libelle}A": value1,
         "statistiques.${libelle}B": value2,
       });
 
-      // Récupère les valeurs actuelles des autres quarts temps
       DocumentSnapshot querySnapshot = await matchDoc.get();
       Map<String, dynamic> data = querySnapshot.data() as Map<String, dynamic>;
 
@@ -397,17 +395,14 @@ class SportService {
       int troisiemeB = data['statistiques']['3emeB'] ?? 0;
       int quatriemeB = data['statistiques']['4emeB'] ?? 0;
 
-      // Calcul des scores totaux
       int scoreEquipeA = premierA + deuxiemeA + troisiemeA + quatriemeA;
       int scoreEquipeB = premierB + deuxiemeB + troisiemeB + quatriemeB;
 
-      // Met à jour les scores totaux des équipes
       await matchDoc.update({
         "scoreEquipeA": scoreEquipeA,
         "scoreEquipeB": scoreEquipeB,
       });
 
-      // Récupère à nouveau les données après la mise à jour
       querySnapshot = await matchDoc.get();
 
       return Basket.fromJson(querySnapshot.data() as Map<String, dynamic>);
@@ -422,13 +417,11 @@ class SportService {
     try {
       DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
 
-      // Met à jour les valeurs des sets
       await matchDoc.update({
         "statistiques.${libelle}A": value1,
         "statistiques.${libelle}B": value2,
       });
 
-      // Récupère les valeurs actuelles des sets
       DocumentSnapshot querySnapshot = await matchDoc.get();
       Map<String, dynamic> data = querySnapshot.data() as Map<String, dynamic>;
 
@@ -440,17 +433,24 @@ class SportService {
       int set2B = data['statistiques']['Set2B'] ?? 0;
       int set3B = data['statistiques']['Set3B'] ?? 0;
 
-      // Calcul des scores totaux
-      int scoreEquipeA = set1A + set2A + set3A;
-      int scoreEquipeB = set1B + set2B + set3B;
+      int setsWonA = 0;
+      int setsWonB = 0;
 
-      // Met à jour les scores totaux des équipes
+      if (set1A > set1B)
+        setsWonA++;
+      else if (set1B > set1A) setsWonB++;
+      if (set2A > set2B)
+        setsWonA++;
+      else if (set2B > set2A) setsWonB++;
+      if (set3A > set3B)
+        setsWonA++;
+      else if (set3B > set3A) setsWonB++;
+
       await matchDoc.update({
-        "scoreEquipeA": scoreEquipeA,
-        "scoreEquipeB": scoreEquipeB,
+        "scoreEquipeA": setsWonA,
+        "scoreEquipeB": setsWonB,
       });
 
-      // Récupère à nouveau les données après la mise à jour
       querySnapshot = await matchDoc.get();
 
       return Volleyball.fromJson(querySnapshot.data() as Map<String, dynamic>);
@@ -465,13 +465,11 @@ class SportService {
     try {
       DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
 
-      // Met à jour les valeurs des mi-temps
       await matchDoc.update({
         "statistiques.${libelle}A": value1,
         "statistiques.${libelle}B": value2,
       });
 
-      // Récupère les valeurs actuelles des mi-temps
       DocumentSnapshot querySnapshot = await matchDoc.get();
       Map<String, dynamic> data = querySnapshot.data() as Map<String, dynamic>;
 
@@ -481,17 +479,14 @@ class SportService {
       int miTemp1B = data['statistiques']['miTemp1B'] ?? 0;
       int miTemp2B = data['statistiques']['miTemp2B'] ?? 0;
 
-      // Calcul des scores totaux
       int scoreEquipeA = miTemp1A + miTemp2A;
       int scoreEquipeB = miTemp1B + miTemp2B;
 
-      // Met à jour les scores totaux des équipes
       await matchDoc.update({
         "scoreEquipeA": scoreEquipeA,
         "scoreEquipeB": scoreEquipeB,
       });
 
-      // Récupère à nouveau les données après la mise à jour
       querySnapshot = await matchDoc.get();
 
       return JeuxEsprit.fromJson(querySnapshot.data() as Map<String, dynamic>);
