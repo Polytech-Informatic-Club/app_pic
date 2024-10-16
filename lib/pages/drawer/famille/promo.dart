@@ -142,19 +142,16 @@ class _PromotionPageState extends State<PromotionPage> {
     if (_filteredUtilisateurs.isEmpty) {
       return Text("Aucun utilisateur trouvé");
     }
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: _filteredUtilisateurs.length,
-      itemBuilder: (context, index) {
-        final utilisateur = _filteredUtilisateurs[index];
+
+    return Column(
+      children: _filteredUtilisateurs.map((utilisateur) {
         return eleveWidget(
           utilisateur.photo,
           "${utilisateur.prenom} ${utilisateur.nom.toUpperCase()}",
           utilisateur.genie ?? 'Aucun génie spécifié',
           utilisateur.telephone ?? 'Numéro non disponible',
         );
-      },
+      }).toList(),
     );
   }
 }
@@ -172,9 +169,7 @@ Widget eleveWidget(String? photoUrl, String nom, String genie, String numero) {
         backgroundImage: photoUrl != null && photoUrl.isNotEmpty
             ? NetworkImage(photoUrl)
             : null,
-        child: photoUrl == null || photoUrl.isEmpty
-            ? Icon(Icons.person)
-            : null,
+        child: photoUrl == null || photoUrl.isEmpty ? Icon(Icons.person) : null,
         radius: 30,
       ),
       title: Text(
