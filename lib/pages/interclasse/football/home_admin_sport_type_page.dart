@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:new_app/pages/annonce/addCategorie.dart';
+import 'package:new_app/pages/interclasse/football/voir_match_admin.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/models/collection.dart';
 import 'package:new_app/models/match.dart';
@@ -72,6 +74,9 @@ class HomeAdminSportTypePage extends StatelessWidget {
               // SubmittedButton("Créer une commission", () {
               //   changerPage(context, CreateCommission(typeSport));
               // }),
+              SubmittedButton("Créer une catégorie", () {
+                changerPage(context, AddCategoriePage());
+              }),
               SizedBox(height: 10),
               SubmittedButton("Créer une collection", () {
                 _showCreateCollectionDialog(context);
@@ -87,11 +92,22 @@ class HomeAdminSportTypePage extends StatelessWidget {
               SizedBox(
                 height: 5,
               ),
-              Text('Listes des matchs à administrer'),
+              SizedBox(height: 10),
+              SubmittedButton("Administrer match", () {
+                changerPage(
+                    context,
+                    VoirMatchAdmin(
+                      typeSport: typeSport,
+                    ));
+              }),
               SizedBox(
                 height: 5,
               ),
-              _buildMatchList(typeSport),
+              // Text('Listes des matchs à administrer'),
+              // SizedBox(
+              //   height: 5,
+              // ),
+              // _buildMatchList(typeSport),
             ],
           ),
         ),

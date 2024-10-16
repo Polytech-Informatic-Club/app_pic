@@ -50,6 +50,39 @@ class AnnonceService {
     }
   }
 
+  Future<void> addCategorie(Categorie categorie) async {
+    try {
+      CollectionReference categories =
+          FirebaseFirestore.instance.collection('CATEGORIE');
+
+      await categories.doc(categorie.id).set(categorie.toJson());
+      print('Catégorie ajoutée avec succès.');
+    } catch (e) {
+      print('Erreur lors de l\'ajout de la catégorie: $e');
+    }
+  }
+
+  Future<void> updateCategorie(Categorie categorie) async {
+    try {
+      CollectionReference categories =
+          FirebaseFirestore.instance.collection('CATEGORIE');
+
+      await categories.doc(categorie.id).update(categorie.toJson());
+      print('Catégorie mise à jour avec succès.');
+    } catch (e) {
+      print('Erreur lors de la mise à jour de la catégorie: $e');
+    }
+  }
+
+  Future<void> deleteCategorie(String id) async {
+    try {
+      await FirebaseFirestore.instance.collection('CATEGORIE').doc(id).delete();
+      print('Catégorie supprimée avec succès.');
+    } catch (e) {
+      print('Erreur lors de la suppression de la catégorie: $e');
+    }
+  }
+
   Future<List<Categorie>> getAllCategories() async {
     try {
       List<Categorie> list = [];
