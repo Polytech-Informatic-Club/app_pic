@@ -30,8 +30,7 @@ class _GameScreenState extends State<GameScreen> {
     super.initState();
     _jeuService = JeuService();
     _fetchJeu();
-    _userId = FirebaseAuth
-        .instance.currentUser?.email; // Récupération de l'ID utilisateur
+    _userId = FirebaseAuth.instance.currentUser?.email;
   }
 
   Future<void> _fetchJeu() async {
@@ -54,7 +53,7 @@ class _GameScreenState extends State<GameScreen> {
           "Session créée avec succès.",
           AppColors.success,
         );
-        _fetchJeu(); // Recharger les sessions
+        _fetchJeu();
       }
     } catch (e) {
       alerteMessageWidget(
@@ -106,12 +105,10 @@ class _GameScreenState extends State<GameScreen> {
 
   Future<void> _toggleSession(SessionJeu session) async {
     if (_isUserInSession(session)) {
-      // Si l'utilisateur est déjà dans la session, quitter la session
-      JoueurJeu joueur = session.joueurs.firstWhere(
-          (joueur) => joueur.id == _userId!); // Récupérer le joueur par ID
+      JoueurJeu joueur =
+          session.joueurs.firstWhere((joueur) => joueur.id == _userId!);
       await _quitterSession(session, joueur);
     } else {
-      // Sinon, rejoindre la session
       await _rejoindreSession(session);
     }
   }
@@ -124,7 +121,7 @@ class _GameScreenState extends State<GameScreen> {
         "Vous avez quitté la session.",
         AppColors.success,
       );
-      _fetchJeu(); // Recharger les sessions
+      _fetchJeu();
     } catch (e) {
       alerteMessageWidget(
         context,
@@ -149,7 +146,7 @@ class _GameScreenState extends State<GameScreen> {
           "Bienvenue dans la session.",
           AppColors.success,
         );
-        _fetchJeu(); // Recharger les sessions
+        _fetchJeu();
       }
     } catch (e) {
       alerteMessageWidget(
@@ -222,7 +219,14 @@ class _GameScreenState extends State<GameScreen> {
                         Text("Sessions:",
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold)),
-                        ..._sortSessions(_jeu!.sessions).map((session) {
+                        ..._sortSessions(_jeu!.sessions).where((session) {
+                          DateTime now = DateTime.now();
+                          DateTime sessionDate = session.date;
+
+                          Duration difference = now.difference(sessionDate);
+
+                          return difference.inHours < 24;
+                        }).map((session) {
                           return ExpansionTile(
                             expandedCrossAxisAlignment:
                                 CrossAxisAlignment.start,
@@ -285,8 +289,7 @@ class _GameScreenState extends State<GameScreen> {
                                     ),
                                   ),
                                   Spacer(),
-                                  if (session.creatorId ==
-                                      _userId) // Vérifie si l'utilisateur est le créateur
+                                  if (session.creatorId == _userId)
                                     IconButton(
                                       onPressed: () {
                                         _deleteSession(session);
