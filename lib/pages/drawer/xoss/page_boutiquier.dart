@@ -25,6 +25,19 @@ class _XossListPageState extends State<XossListPage> {
     _loadXossList();
   }
 
+  Color _getStatutColor(String statut) {
+    switch (statut) {
+      case "ATTENTE":
+        return const Color.fromARGB(255, 157, 144, 24);
+      case "PAYEE":
+        return Colors.green;
+      case "IMPAYEE":
+        return Colors.red;
+      default:
+        return Colors.grey; // Couleur par défaut si le statut n'est pas reconnu
+    }
+  }
+
   void _sortXossList() {
     _xossList.sort((a, b) {
       const statusOrder = {"ATTENTE": 1, "IMPAYEE": 2, "PAYEE": 3};
@@ -130,11 +143,13 @@ class _XossListPageState extends State<XossListPage> {
   }
 
   Widget _buildXossItem(Xoss xoss) {
+    String statut = xoss.statut.toString().split('.').last; // Obtenir le statut
+
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: ListTile(
         leading: CircleAvatar(
-          child: Icon(Icons.person),
+          child: Icon(Icons.person), // Icône utilisateur
         ),
         title: Text(
           "${xoss.user?.prenom ?? 'Prénom inconnu'} ${xoss.user?.nom ?? 'Nom inconnu'}",
@@ -145,7 +160,13 @@ class _XossListPageState extends State<XossListPage> {
           children: [
             SizedBox(height: 4),
             Text("Montant: ${xoss.montant.toString()} FCFA"),
-            Text("Statut: ${xoss.statut.toString().split('.').last}"),
+            Text(
+              "Statut: $statut",
+              style: TextStyle(
+                color: _getStatutColor(statut), // Appliquer la couleur ici
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ],
         ),
       ),
