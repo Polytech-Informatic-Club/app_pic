@@ -15,14 +15,31 @@ class XossService {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await xossCollection.get();
 
-      List<Map<String, dynamic>> data =
-          querySnapshot.docs.map((doc) => doc.data()).toList();
+      if (querySnapshot.docs.isEmpty) {
+        print("Aucun document trouvé dans la collection XOSS.");
+      }
+
+      List<Map<String, dynamic>> data = querySnapshot.docs.map((doc) {
+        print(
+            "Document data: ${doc.data()}"); // Afficher chaque document récupéré
+        return doc.data();
+      }).toList();
+
       for (var d in data) {
-        list.add(Xoss.fromJson(d));
+        try {
+          Xoss xoss = Xoss.fromJson(d);
+          list.add(xoss);
+          print(
+              "Xoss ajouté : ${xoss.id}"); // Afficher chaque prêt ajouté à la liste
+        } catch (e) {
+          print(
+              "Erreur lors de la conversion de Xoss : $e"); // Afficher les erreurs de parsing
+        }
       }
 
       return list;
     } catch (e) {
+      print("Erreur lors de la récupération des données de Firestore : $e");
       return [];
     }
   }

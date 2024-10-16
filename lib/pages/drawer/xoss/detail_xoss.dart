@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/enums/statut_xoss.dart';
@@ -6,31 +7,63 @@ import 'package:new_app/services/user_service.dart';
 import 'package:new_app/services/xoss_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 
-class DetailXoss extends StatelessWidget {
+class DetailXoss extends StatefulWidget {
   String id;
   DetailXoss(this.id, {super.key});
 
+  @override
+  State<DetailXoss> createState() => _DetailXossState();
+}
+
+class _DetailXossState extends State<DetailXoss> {
   final XossService _xossService = XossService();
+
   ValueNotifier<Xoss?> _xossProvider = ValueNotifier(null);
+
   ValueNotifier<String?> _userRole = ValueNotifier(null);
 
   TextEditingController _versementController = TextEditingController();
 
   final UserService _userService = UserService();
 
-  Future<void> _getUserRole() async {
-    _userRole.value = await _userService.getRole();
+  String? userId;
+  bool isAdmin = false;
+
+  Future<void> _checkUserRole() async {
+    try {
+      // Récupérer l'utilisateur connecté via FirebaseAuth
+      var user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        userId = user.email;
+
+        String? role = await _userService.getUserRole(userId!);
+
+        if (role == 'ADMIN_PSHOP') {
+          setState(() {
+            isAdmin = true;
+          });
+        }
+      }
+    } catch (e) {
+      print("Erreur lors de la vérification du rôle : $e");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _checkUserRole();
   }
 
   @override
   Widget build(BuildContext context) {
-    _getUserRole();
     return Scaffold(
         appBar: AppBar(),
         body: Padding(
           padding: EdgeInsets.all(MediaQuery.sizeOf(context).height * 0.02),
           child: FutureBuilder<Xoss?>(
-              future: _xossService.getXossId(id),
+              future: _xossService.getXossId(widget.id),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
@@ -188,14 +221,18 @@ class DetailXoss extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               if (_xossProvider.value!.statut
-                                      .toString()
-                                      .split(".")
-                                      .last !=
-                                  StatutXoss.PAYEE.toString().split(".").last)
+                                          .toString()
+                                          .split(".")
+                                          .last !=
+                                      StatutXoss.PAYEE
+                                          .toString()
+                                          .split(".")
+                                          .last &&
+                                  !isAdmin)
                                 ElevatedButton(
                                     style: ButtonStyle(
                                       backgroundColor:
-                                          MaterialStateProperty.all<Color>(
+                                          WidgetStateProperty.all<Color>(
                                               AppColors.success),
                                     ),
                                     onPressed: () {
@@ -222,7 +259,7 @@ class DetailXoss extends StatelessWidget {
                                                 onPressed: () async {
                                                   _xossProvider.value =
                                                       await _xossService.updateXoss(
-                                                          id,
+                                                          widget.id,
                                                           "versement",
                                                           double.parse(
                                                               _versementController
@@ -230,7 +267,7 @@ class DetailXoss extends StatelessWidget {
                                                   _xossProvider.value =
                                                       await _xossService
                                                           .updateXoss(
-                                                              id,
+                                                              widget.id,
                                                               "statut",
                                                               StatutXoss.ATTENTE
                                                                   .toString()
@@ -254,12 +291,11 @@ class DetailXoss extends StatelessWidget {
                                           .toString()
                                           .split(".")
                                           .last &&
-                                  _userRole.value!.toUpperCase() ==
-                                      "ADMIN_PSHOP".toUpperCase())
+                                  isAdmin) ...[
                                 ElevatedButton(
                                     style: ButtonStyle(
                                       backgroundColor:
-                                          MaterialStateProperty.all<Color>(
+                                          WidgetStateProperty.all<Color>(
                                               Colors.yellow),
                                     ),
                                     onPressed: () {
@@ -282,7 +318,7 @@ class DetailXoss extends StatelessWidget {
                                                   _xossProvider.value =
                                                       await _xossService
                                                           .updateXoss(
-                                                              id,
+                                                              widget.id,
                                                               "statut",
                                                               StatutXoss.PAYEE
                                                                   .toString()
@@ -298,6 +334,7 @@ class DetailXoss extends StatelessWidget {
                                       );
                                     },
                                     child: Text("Valider")),
+                              ]
                             ],
                           )
                         ],

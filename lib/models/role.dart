@@ -8,7 +8,8 @@ enum RoleType {
   ADMIN_BASKET,
   ADMIN_VOLLEYBALL,
   ADMIN_JEUX_ESPRIT,
-  ADMIN_MB
+  ADMIN_MB,
+  ADMIN_PSHOP
 }
 
 class Role {
