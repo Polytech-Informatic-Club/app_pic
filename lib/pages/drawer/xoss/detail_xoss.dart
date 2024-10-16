@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/enums/statut_xoss.dart';
 import 'package:new_app/models/xoss.dart';
+import 'package:new_app/pages/drawer/xoss/page_boutiquier.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/services/xoss_service.dart';
 import 'package:new_app/utils/app_colors.dart';
@@ -325,6 +326,13 @@ class _DetailXossState extends State<DetailXoss> {
                                                                   .split(".")
                                                                   .last);
                                                   Navigator.pop(context);
+                                                  Navigator.pop(context);
+                                                  Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            XossListPage()),
+                                                  );
                                                 },
                                                 child: Text("Confirmer"),
                                               ),

@@ -34,7 +34,7 @@ class _XossListPageState extends State<XossListPage> {
       case "IMPAYEE":
         return Colors.red;
       default:
-        return Colors.grey; // Couleur par défaut si le statut n'est pas reconnu
+        return Colors.grey;
     }
   }
 
