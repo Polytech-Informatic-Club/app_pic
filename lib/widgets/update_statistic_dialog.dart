@@ -24,7 +24,7 @@ Widget updateGoldDialog(BuildContext context, List<Joueur> joueurs) {
               items: joueurs.map<DropdownMenuItem<Joueur>>((Joueur joueur) {
                 return DropdownMenuItem<Joueur>(
                   value: joueur,
-                  child: Text(joueur.nom),
+                  child: Text(joueur.prenom + " " + joueur.nom),
                 );
               }).toList(),
             );

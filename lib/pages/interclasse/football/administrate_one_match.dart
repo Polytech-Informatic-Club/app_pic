@@ -346,7 +346,7 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                                                 context,
                                                                 matchProvider
                                                                     .value!
-                                                                    .equipeA
+                                                                    .equipeB
                                                                     .joueurs,
                                                               );
                                                             },
