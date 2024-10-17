@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:new_app/pages/annonce/add_categorie.dart';
+import 'package:new_app/pages/interclasse/football/create_equipe.dart';
 import 'package:new_app/pages/interclasse/football/voir_match_admin.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/models/collection.dart';
@@ -89,9 +90,13 @@ class HomeAdminSportTypePage extends StatelessWidget {
               SubmittedButton("Créer un match", () {
                 changerPage(context, CreateMatch(typeSport));
               }),
+
               SizedBox(
-                height: 5,
+                height: 10,
               ),
+              SubmittedButton('Créer une équipe', () {
+                changerPage(context, CreateEquipePage());
+              }),
               SizedBox(height: 10),
               SubmittedButton("Administrer match", () {
                 changerPage(
@@ -100,14 +105,6 @@ class HomeAdminSportTypePage extends StatelessWidget {
                       typeSport: typeSport,
                     ));
               }),
-              SizedBox(
-                height: 5,
-              ),
-              // Text('Listes des matchs à administrer'),
-              // SizedBox(
-              //   height: 5,
-              // ),
-              // _buildMatchList(typeSport),
             ],
           ),
         ),

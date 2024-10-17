@@ -1,4 +1,3 @@
-import 'package:uuid/uuid.dart';
 import 'package:new_app/models/joueur.dart';
 
 class Equipe {
