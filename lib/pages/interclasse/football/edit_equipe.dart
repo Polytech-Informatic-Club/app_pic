@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:new_app/fonctions.dart';
+import 'package:new_app/pages/interclasse/football/edit_delete_joueur.dart';
 import 'dart:io';
 import '/models/equipe.dart';
 import '/models/joueur.dart';
@@ -87,11 +89,10 @@ class _EditEquipePageState extends State<EditEquipePage> {
     }
   }
 
-  // Boîte de dialogue de confirmation avant de supprimer l'équipe
   Future<void> _showDeleteConfirmationDialog() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // L'utilisateur doit confirmer ou annuler
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Confirmer la suppression'),
@@ -280,11 +281,21 @@ class _EditEquipePageState extends State<EditEquipePage> {
                     ? Text('Aucun joueur trouvé')
                     : Column(
                         children: joueurs
-                            .map((joueur) => ListTile(
-                                  leading: Icon(Icons.person),
-                                  title: Text('${joueur.prenom} ${joueur.nom}'),
-                                  subtitle: Text(
-                                      'Poste: ${joueur.position} | Buts: ${joueur.totalBut}'),
+                            .map((joueur) => GestureDetector(
+                                  onTap: () {
+                                    changerPage(
+                                        context,
+                                        EditJoueurPage(
+                                            joueur: joueur,
+                                            equipeId: widget.equipe.id));
+                                  },
+                                  child: ListTile(
+                                    leading: Icon(Icons.person),
+                                    title:
+                                        Text('${joueur.prenom} ${joueur.nom}'),
+                                    subtitle: Text(
+                                        'Poste: ${joueur.position} | Buts: ${joueur.totalBut}'),
+                                  ),
                                 ))
                             .toList(),
                       ),
