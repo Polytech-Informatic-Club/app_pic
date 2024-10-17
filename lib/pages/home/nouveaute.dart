@@ -89,7 +89,8 @@ class _NouveauteState extends State<Nouveaute> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
-                      return const Text('Erreur lors du chargement des annonces');
+                      return const Text(
+                          'Erreur lors du chargement des annonces');
                     } else {
                       List<Annonce> annonces = snapshot.data ?? [];
                       return SingleChildScrollView(
@@ -99,15 +100,19 @@ class _NouveauteState extends State<Nouveaute> {
                             for (var annonce in annonces)
                               annonce.image.isNotEmpty
                                   ? InfoCard(
-                                image: annonce.image, // Passer l'URL comme String
-                                width: 200,
-                                height: 300,
-                                titre: annonce.titre,
-                                lieu: annonce.lieu,
-                                date: annonce.date,
-                                description: annonce.description,
-                                idAnnonce: annonce.id,
-                              )
+                                      image: annonce
+                                          .image, // Passer l'URL comme String
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.4,
+                                      height:
+                                          MediaQuery.sizeOf(context).height *
+                                              0.25,
+                                      titre: annonce.titre,
+                                      lieu: annonce.lieu,
+                                      date: annonce.date,
+                                      description: annonce.description,
+                                      idAnnonce: annonce.id,
+                                    )
                                   : const SizedBox(height: 0),
                           ],
                         ),
@@ -122,7 +127,8 @@ class _NouveauteState extends State<Nouveaute> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
-                      return const Text('Erreur lors du chargement des annonces');
+                      return const Text(
+                          'Erreur lors du chargement des annonces');
                     } else {
                       List<Matches> matches = snapshot.data ?? [];
                       return SingleChildScrollView(
@@ -132,23 +138,28 @@ class _NouveauteState extends State<Nouveaute> {
                             for (var match in matches)
                               match.photo!.isNotEmpty
                                   ? Container(
-                                padding: const EdgeInsets.all(5),
-                                margin: const EdgeInsets.all(5),
-                                width: MediaQuery.sizeOf(context).width * 0.4,
-                                height: MediaQuery.sizeOf(context).height * 0.25,
-                                decoration: BoxDecoration(
-                                    color: AppColors.primary,
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15)),
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.network(
-                                    match.photo!,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              )
+                                      padding: const EdgeInsets.all(5),
+                                      margin: const EdgeInsets.all(5),
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.4,
+                                      height:
+                                          MediaQuery.sizeOf(context).height *
+                                              0.25,
+                                      decoration: BoxDecoration(
+                                          color: AppColors.primary,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        clipBehavior: Clip.hardEdge,
+                                        child: Image.network(
+                                          match.photo!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    )
                                   : const SizedBox(height: 0),
                           ],
                         ),
@@ -163,7 +174,8 @@ class _NouveauteState extends State<Nouveaute> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
-                      return const Text('Erreur lors du chargement des annonces');
+                      return const Text(
+                          'Erreur lors du chargement des annonces');
                     } else {
                       Collection? collection = snapshot.data ?? null;
                       return SingleChildScrollView(
@@ -174,23 +186,29 @@ class _NouveauteState extends State<Nouveaute> {
                               for (var articleShop in collection.articleShops)
                                 articleShop.image.isNotEmpty
                                     ? Container(
-                                  padding: const EdgeInsets.all(5),
-                                  margin: const EdgeInsets.all(5),
-                                  width: MediaQuery.sizeOf(context).width * 0.4,
-                                  height: MediaQuery.sizeOf(context).height * 0.25,
-                                  decoration: BoxDecoration(
-                                      color: AppColors.primary,
-                                      borderRadius: BorderRadius.circular(15)),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15)),
-                                    clipBehavior: Clip.hardEdge,
-                                    child: Image.network(
-                                      articleShop.image,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                )
+                                        padding: const EdgeInsets.all(5),
+                                        margin: const EdgeInsets.all(5),
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.4,
+                                        height:
+                                            MediaQuery.sizeOf(context).height *
+                                                0.25,
+                                        decoration: BoxDecoration(
+                                            color: AppColors.primary,
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          clipBehavior: Clip.hardEdge,
+                                          child: Image.network(
+                                            articleShop.image,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      )
                                     : const SizedBox(height: 0),
                           ],
                         ),
