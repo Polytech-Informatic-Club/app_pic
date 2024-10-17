@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:new_app/services/equipe_service.dart';
 import 'dart:io';
 import '/models/equipe.dart';
+import '/models/joueur.dart';
 
 class EditEquipePage extends StatefulWidget {
   final Equipe equipe;
@@ -19,7 +19,11 @@ class _EditEquipePageState extends State<EditEquipePage> {
   final TextEditingController _nomController = TextEditingController();
   File? _imageFile;
   bool _isLoading = false;
-  EquipeService _equipeService = EquipeService();
+
+  // Champs pour l'ajout des joueurs
+  final TextEditingController _prenomController = TextEditingController();
+  final TextEditingController _nomJoueurController = TextEditingController();
+  final TextEditingController _positionController = TextEditingController();
 
   @override
   void initState() {
@@ -27,54 +31,90 @@ class _EditEquipePageState extends State<EditEquipePage> {
     _nomController.text = widget.equipe.nom;
   }
 
-  Future<void> _supprimerEquipe() async {
-    setState(() {
-      _isLoading = true;
-    });
+  // Fonction pour récupérer la liste des joueurs à partir du champ 'joueurs'
+  List<Joueur> _getJoueursFromEquipe(DocumentSnapshot equipeSnapshot) {
+    List<dynamic> joueursData = equipeSnapshot['joueurs'];
+    return joueursData
+        .map(
+            (joueurData) => Joueur.fromJson(joueurData as Map<String, dynamic>))
+        .toList();
+  }
 
+  // Fonction pour ajouter un joueur dans Firestore
+  Future<void> _addJoueur(Joueur joueur) async {
     try {
+      // Récupérer la liste actuelle des joueurs dans Firestore
+      var snapshot = await FirebaseFirestore.instance
+          .collection('EQUIPE')
+          .doc(widget.equipe.id)
+          .get();
+      List<dynamic> joueursActuels = snapshot['joueurs'];
+
+      // Ajouter le nouveau joueur
+      joueursActuels.add(joueur.toJson());
+
+      // Mettre à jour la liste des joueurs
+      await FirebaseFirestore.instance
+          .collection('EQUIPE')
+          .doc(widget.equipe.id)
+          .update({
+        'joueurs': joueursActuels,
+      });
+
+      setState(() {
+        _prenomController.clear();
+        _nomJoueurController.clear();
+        _positionController.clear();
+      });
+
+      print('Joueur ajouté avec succès');
+    } catch (e) {
+      print('Erreur lors de l\'ajout du joueur: $e');
+    }
+  }
+
+  Future<void> _deleteEquipe() async {
+    try {
+      // Supprimer l'équipe de Firestore
       await FirebaseFirestore.instance
           .collection('EQUIPE')
           .doc(widget.equipe.id)
           .delete();
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Équipe supprimée avec succès !"),
-      ));
-
-      Navigator.pop(context); // Retour à la page précédente après suppression
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
     } catch (e) {
-      print('Erreur lors de la suppression de l\'équipe: $e');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Erreur lors de la suppression de l'équipe."),
-      ));
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      print('Erreur lors de la suppression de l\'équipe : $e');
     }
   }
 
-  // Fonction pour afficher une boîte de dialogue de confirmation
-  Future<void> _showDeleteConfirmation() async {
-    showDialog(
+  // Boîte de dialogue de confirmation avant de supprimer l'équipe
+  Future<void> _showDeleteConfirmationDialog() async {
+    return showDialog<void>(
       context: context,
+      barrierDismissible: false, // L'utilisateur doit confirmer ou annuler
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Confirmer la suppression'),
-          content: Text('Voulez-vous vraiment supprimer cette équipe ?'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Voulez-vous vraiment supprimer cette équipe ?'),
+                Text('Cette action est irréversible.'),
+              ],
+            ),
+          ),
           actions: <Widget>[
             TextButton(
               child: Text('Annuler'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(); // Fermer la boîte de dialogue
               },
             ),
-            TextButton(
-              child: Text('Confirmer'),
+            ElevatedButton(
+              child: Text('Supprimer'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               onPressed: () {
-                Navigator.of(context).pop();
-                _supprimerEquipe();
+                _deleteEquipe(); // Appel de la fonction de suppression
               },
             ),
           ],
@@ -83,9 +123,11 @@ class _EditEquipePageState extends State<EditEquipePage> {
     );
   }
 
+  // Sélectionner une image depuis la galerie
   Future<void> _pickImage() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
@@ -93,71 +135,62 @@ class _EditEquipePageState extends State<EditEquipePage> {
     }
   }
 
-  Future<String?> _uploadImageToStorage(File image) async {
+  // Fonction pour uploader l'image dans Firebase Storage et obtenir l'URL
+  Future<String?> _uploadImageToFirebase() async {
+    if (_imageFile == null) return null;
+
     try {
-      String fileName = '${_nomController.text}_logo';
-      Reference storageRef =
-          FirebaseStorage.instance.ref().child('equipes/$fileName');
-      UploadTask uploadTask = storageRef.putFile(image);
-      TaskSnapshot snapshot = await uploadTask;
+      setState(() {
+        _isLoading = true;
+      });
+
+      // Chemin de stockage dans Firebase Storage
+      String fileName =
+          'logos/${widget.equipe.id}_${DateTime.now().millisecondsSinceEpoch}.png';
+      Reference storageRef = FirebaseStorage.instance.ref().child(fileName);
+      UploadTask uploadTask = storageRef.putFile(_imageFile!);
+      TaskSnapshot snapshot = await uploadTask.whenComplete(() {});
+
+      // Obtenir l'URL de l'image uploadée
       String downloadUrl = await snapshot.ref.getDownloadURL();
+
+      setState(() {
+        _isLoading = false;
+      });
+
       return downloadUrl;
     } catch (e) {
-      print('Erreur lors du téléchargement de l\'image: $e');
+      setState(() {
+        _isLoading = false;
+      });
+      print('Erreur lors de l\'upload de l\'image: $e');
       return null;
     }
   }
 
-  Future<void> _modifierEquipe() async {
-    if (_nomController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Veuillez remplir tous les champs."),
-      ));
-      return;
-    }
+  // Fonction pour mettre à jour l'équipe dans Firestore
+  Future<void> _updateEquipe() async {
+    String? imageUrl = await _uploadImageToFirebase();
 
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      String? logoUrl;
-      if (_imageFile != null) {
-        logoUrl = await _uploadImageToStorage(_imageFile!);
-      } else {
-        logoUrl = widget.equipe.logo;
-      }
-
-      if (logoUrl != null) {
-        Equipe updatedEquipe = Equipe(
-          id: widget.equipe.id,
-          nom: _nomController.text,
-          logo: logoUrl,
-          joueurs: widget.equipe.joueurs,
-        );
-
-        _equipeService.updateEquipe(updatedEquipe);
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Équipe modifiée avec succès !"),
-        ));
-
-        Navigator.pop(context);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Erreur lors de la modification de l'image."),
-        ));
-      }
-    } catch (e) {
-      print('Erreur lors de la modification de l\'équipe: $e');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Erreur lors de la modification de l'équipe."),
-      ));
-    } finally {
-      setState(() {
-        _isLoading = false;
+    if (imageUrl != null) {
+      // Mettre à jour le logo si une nouvelle image a été uploadée
+      await FirebaseFirestore.instance
+          .collection('EQUIPE')
+          .doc(widget.equipe.id)
+          .update({
+        'nom': _nomController.text,
+        'logo': imageUrl,
+      });
+    } else {
+      await FirebaseFirestore.instance
+          .collection('EQUIPE')
+          .doc(widget.equipe.id)
+          .update({
+        'nom': _nomController.text,
       });
     }
+
+    Navigator.of(context).pop();
   }
 
   @override
@@ -168,40 +201,165 @@ class _EditEquipePageState extends State<EditEquipePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _showDeleteConfirmation();
+          _showDeleteConfirmationDialog();
         },
         child: Icon(Icons.delete),
         backgroundColor: Colors.red,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(
-              controller: _nomController,
-              decoration: InputDecoration(labelText: 'Nom de l\'équipe'),
+      body: StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('EQUIPE')
+            .doc(widget.equipe.id)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          if (!snapshot.hasData || !snapshot.data!.exists) {
+            return Center(child: Text('Aucune équipe trouvée.'));
+          }
+
+          var equipeData = snapshot.data!;
+          List<Joueur> joueurs = _getJoueursFromEquipe(equipeData);
+
+          return SingleChildScrollView(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _nomController,
+                  decoration: InputDecoration(labelText: 'Nom de l\'équipe'),
+                ),
+                SizedBox(height: 20),
+                _imageFile == null
+                    ? equipeData['logo'] != null
+                        ? Image.network(equipeData['logo'], height: 150)
+                        : Placeholder(fallbackHeight: 150)
+                    : Image.file(_imageFile!, height: 150),
+                ElevatedButton(
+                  onPressed: _pickImage,
+                  child: Text('Modifier le logo'),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _updateEquipe,
+                  child: _isLoading
+                      ? CircularProgressIndicator()
+                      : Text('Modifier l\'équipe'),
+                ),
+                SizedBox(height: 20),
+                Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Joueurs de l\'équipe',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AddJoueurDialog(
+                              onAddJoueur: (Joueur joueur) async {
+                                await _addJoueur(joueur);
+                                Navigator.of(context).pop();
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                joueurs.isEmpty
+                    ? Text('Aucun joueur trouvé')
+                    : Column(
+                        children: joueurs
+                            .map((joueur) => ListTile(
+                                  leading: Icon(Icons.person),
+                                  title: Text('${joueur.prenom} ${joueur.nom}'),
+                                  subtitle: Text(
+                                      'Poste: ${joueur.position} | Buts: ${joueur.totalBut}'),
+                                ))
+                            .toList(),
+                      ),
+              ],
             ),
-            SizedBox(height: 20),
-            _imageFile == null
-                ? widget.equipe.logo.isNotEmpty
-                    ? Image.network(widget.equipe.logo, height: 150)
-                    : Text('Aucune image sélectionnée.')
-                : Image.file(_imageFile!, height: 150),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: _pickImage,
-              child: Text('Choisir un nouveau logo'),
-            ),
-            SizedBox(height: 20),
-            _isLoading
-                ? CircularProgressIndicator()
-                : ElevatedButton(
-                    onPressed: _modifierEquipe,
-                    child: Text('Modifier l\'équipe'),
-                  ),
-          ],
-        ),
+          );
+        },
       ),
+    );
+  }
+}
+
+// Boîte de dialogue pour ajouter un joueur
+class AddJoueurDialog extends StatefulWidget {
+  final Function(Joueur) onAddJoueur;
+
+  AddJoueurDialog({required this.onAddJoueur});
+
+  @override
+  _AddJoueurDialogState createState() => _AddJoueurDialogState();
+}
+
+class _AddJoueurDialogState extends State<AddJoueurDialog> {
+  final TextEditingController _prenomController = TextEditingController();
+  final TextEditingController _nomJoueurController = TextEditingController();
+  final TextEditingController _positionController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Ajouter un joueur'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: _prenomController,
+            decoration: InputDecoration(labelText: 'Prénom'),
+          ),
+          TextField(
+            controller: _nomJoueurController,
+            decoration: InputDecoration(labelText: 'Nom'),
+          ),
+          TextField(
+            controller: _positionController,
+            decoration: InputDecoration(labelText: 'Position'),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text('Annuler'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            String prenom = _prenomController.text.trim();
+            String nom = _nomJoueurController.text.trim();
+            String position = _positionController.text.trim();
+
+            if (prenom.isNotEmpty && nom.isNotEmpty && position.isNotEmpty) {
+              Joueur joueur = Joueur(
+                id: DateTime.now().millisecondsSinceEpoch.toString(),
+                prenom: prenom,
+                nom: nom,
+                position: position,
+                totalBut: 0,
+              );
+              widget.onAddJoueur(joueur);
+            }
+          },
+          child: Text('Ajouter'),
+        ),
+      ],
     );
   }
 }
