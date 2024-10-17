@@ -75,7 +75,7 @@ class HomeAdminSportTypePage extends StatelessWidget {
               // SubmittedButton("Créer une commission", () {
               //   changerPage(context, CreateCommission(typeSport));
               // }),
-              SubmittedButton("Créer une catégorie", () {
+              SubmittedButton("Gestion catégories", () {
                 changerPage(context, AddCategoriePage());
               }),
               SizedBox(height: 10),
@@ -94,7 +94,7 @@ class HomeAdminSportTypePage extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              SubmittedButton('Créer une équipe', () {
+              SubmittedButton('Gestion équipes', () {
                 changerPage(context, CreateEquipePage());
               }),
               SizedBox(height: 10),

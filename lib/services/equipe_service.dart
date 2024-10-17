@@ -6,13 +6,12 @@ class EquipeService {
   LocalNotificationService _notificationService =
       new LocalNotificationService();
   final CollectionReference equipesCollection =
-      FirebaseFirestore.instance.collection('EQUIPES');
+      FirebaseFirestore.instance.collection('EQUIPE');
 
   Future<void> createEquipe(Equipe equipe) async {
     try {
       await equipesCollection.doc(equipe.id).set(equipe.toJson());
-      await _notificationService.sendAllNotification(
-        "Une nouvelle équipe",
+      await _notificationService.sendAllNotification("Une nouvelle équipe",
           "L'équipe du nom de ${equipe.nom} vient nous rejoindre dans la famille polytechnicienne. Nous leur souhaitons bonne chance.");
     } catch (e) {
       print('Erreur lors de la création de l\'équipe : $e');
