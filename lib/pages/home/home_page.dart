@@ -70,27 +70,38 @@ class _HomePageState extends State<HomePage> {
                     top: 120,
                     right: MediaQuery.of(context).size.width / 2 - 190,
                     child: Container(
-                        padding: const EdgeInsets.all(2),
-                        width: 88,
-                        height: 117,
+                      padding: const EdgeInsets.all(2),
+                      width: 88,
+                      height: 117,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      child: Container(
                         decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(40)),
-                        child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(40),
-                              border: Border.all(
-                                  width: 1,
-                                  color: jauneClair,
-                                  strokeAlign: BorderSide.strokeAlignOutside),
-                            ),
-                            clipBehavior: Clip.hardEdge,
-                            child: Image.network(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(40),
+                          border: Border.all(
+                            width: 1,
+                            color: jauneClair,
+                            strokeAlign: BorderSide.strokeAlignOutside,
+                          ),
+                        ),
+                        clipBehavior: Clip.hardEdge,
+                        child: Image(
+                          image: ResizeImage(
+                            NetworkImage(
                               'https://firebasestorage.googleapis.com/v0/b/ept-app-46930.appspot.com/o/assets%2Fpolytech-info%2Fbde_ept.jpg?alt=media&token=12c1e41f-0d06-4068-8ac6-50e35c146140',
-                              fit: BoxFit.contain,
-                            ))),
+                            ),
+                            width: 200,
+                            height: 200,
+                          ),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
                   ),
+
                 ],
               ),
             ),
@@ -114,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   _buildGameIcons(),
                   SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
                 ],
               ),
@@ -171,7 +182,12 @@ Widget _buildGameIcon(String imagePath, String gameName) {
             width: 3,
           ),
           image: DecorationImage(
-            image: NetworkImage(imagePath),
+            // Utilisation de ResizeImage pour redimensionner l'image à 80x80
+            image: ResizeImage(
+              NetworkImage(imagePath),
+              width: 80,
+              height: 80,
+            ),
             fit: BoxFit.cover,
           ),
         ),
@@ -181,3 +197,4 @@ Widget _buildGameIcon(String imagePath, String gameName) {
     ],
   );
 }
+

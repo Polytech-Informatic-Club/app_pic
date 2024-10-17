@@ -5,7 +5,6 @@ import 'package:new_app/models/article_shop.dart';
 import 'package:new_app/models/collection.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/pages/annonce/infocard.dart';
-import 'package:new_app/pages/annonce/p_info_nouveaute.dart';
 import 'package:new_app/pages/home/section_selector.dart';
 import 'package:new_app/services/annonce_service.dart';
 import 'package:new_app/services/shop_service.dart';
@@ -24,6 +23,7 @@ class _NouveauteState extends State<Nouveaute> {
   SportService _sportService = SportService();
   ShopService _shopService = ShopService();
   int _value = 1;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -31,11 +31,14 @@ class _NouveauteState extends State<Nouveaute> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text("Nouveautés",
-                style: TextStyle(
-                    fontFamily: "Inter",
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16)),
+            const Text(
+              "Nouveautés",
+              style: TextStyle(
+                fontFamily: "Inter",
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
           ],
         ),
         Padding(
@@ -54,9 +57,7 @@ class _NouveauteState extends State<Nouveaute> {
                     },
                     text: "Polytech-info",
                   ),
-                  const SizedBox(
-                    width: 30,
-                  ),
+                  const SizedBox(width: 30),
                   SectionSelector(
                     value: 2,
                     groupValue: _value,
@@ -67,9 +68,7 @@ class _NouveauteState extends State<Nouveaute> {
                     },
                     text: "Interclasses",
                   ),
-                  const SizedBox(
-                    width: 30,
-                  ),
+                  const SizedBox(width: 30),
                   SectionSelector(
                     value: 3,
                     groupValue: _value,
@@ -82,17 +81,15 @@ class _NouveauteState extends State<Nouveaute> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               if (_value == 1)
                 FutureBuilder<List<Annonce>>(
                   future: _annonceService.getAllAnnonces(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
-                      return Text('Erreur lors du chargement des annonces');
+                      return const Text('Erreur lors du chargement des annonces');
                     } else {
                       List<Annonce> annonces = snapshot.data ?? [];
                       return SingleChildScrollView(
@@ -102,21 +99,16 @@ class _NouveauteState extends State<Nouveaute> {
                             for (var annonce in annonces)
                               annonce.image.isNotEmpty
                                   ? InfoCard(
-                                      image: annonce.image,
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.4,
-                                      height:
-                                          MediaQuery.sizeOf(context).height *
-                                              0.25,
-                                      titre: annonce.titre,
-                                      lieu: annonce.lieu,
-                                      date: annonce.date,
-                                      description: annonce.description,
-                                      idAnnonce: annonce.id,
-                                    )
-                                  : Container(
-                                      height: 0,
-                                    )
+                                image: annonce.image, // Passer l'URL comme String
+                                width: 200,
+                                height: 300,
+                                titre: annonce.titre,
+                                lieu: annonce.lieu,
+                                date: annonce.date,
+                                description: annonce.description,
+                                idAnnonce: annonce.id,
+                              )
+                                  : const SizedBox(height: 0),
                           ],
                         ),
                       );
@@ -128,9 +120,9 @@ class _NouveauteState extends State<Nouveaute> {
                   future: _sportService.getNextMatch(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
-                      return Text('Erreur lors du chargement des annonces');
+                      return const Text('Erreur lors du chargement des annonces');
                     } else {
                       List<Matches> matches = snapshot.data ?? [];
                       return SingleChildScrollView(
@@ -140,32 +132,24 @@ class _NouveauteState extends State<Nouveaute> {
                             for (var match in matches)
                               match.photo!.isNotEmpty
                                   ? Container(
-                                      padding: const EdgeInsets.all(5),
-                                      margin: const EdgeInsets.all(5),
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.4,
-                                      height:
-                                          MediaQuery.sizeOf(context).height *
-                                              0.25,
-                                      decoration: BoxDecoration(
-                                          color: AppColors.primary,
-                                          // color: eptLightGrey,
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15)),
-                                        clipBehavior: Clip.hardEdge,
-                                        child: Image.network(
-                                          match.photo!,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    )
-                                  : Container(
-                                      height: 0,
-                                    )
+                                padding: const EdgeInsets.all(5),
+                                margin: const EdgeInsets.all(5),
+                                width: MediaQuery.sizeOf(context).width * 0.4,
+                                height: MediaQuery.sizeOf(context).height * 0.25,
+                                decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15)),
+                                  clipBehavior: Clip.hardEdge,
+                                  child: Image.network(
+                                    match.photo!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              )
+                                  : const SizedBox(height: 0),
                           ],
                         ),
                       );
@@ -177,9 +161,9 @@ class _NouveauteState extends State<Nouveaute> {
                   future: _shopService.getNewCollection(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
-                      return Text('Erreur lors du chargement des annonces');
+                      return const Text('Erreur lors du chargement des annonces');
                     } else {
                       Collection? collection = snapshot.data ?? null;
                       return SingleChildScrollView(
@@ -190,33 +174,24 @@ class _NouveauteState extends State<Nouveaute> {
                               for (var articleShop in collection.articleShops)
                                 articleShop.image.isNotEmpty
                                     ? Container(
-                                        padding: const EdgeInsets.all(5),
-                                        margin: const EdgeInsets.all(5),
-                                        width:
-                                            MediaQuery.sizeOf(context).width *
-                                                0.4,
-                                        height:
-                                            MediaQuery.sizeOf(context).height *
-                                                0.25,
-                                        decoration: BoxDecoration(
-                                            color: AppColors.primary,
-                                            // color: eptLightGrey,
-                                            borderRadius:
-                                                BorderRadius.circular(15)),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15)),
-                                          clipBehavior: Clip.hardEdge,
-                                          child: Image.network(
-                                            articleShop.image,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      )
-                                    : Container(
-                                        height: 0,
-                                      )
+                                  padding: const EdgeInsets.all(5),
+                                  margin: const EdgeInsets.all(5),
+                                  width: MediaQuery.sizeOf(context).width * 0.4,
+                                  height: MediaQuery.sizeOf(context).height * 0.25,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.primary,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15)),
+                                    clipBehavior: Clip.hardEdge,
+                                    child: Image.network(
+                                      articleShop.image,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                )
+                                    : const SizedBox(height: 0),
                           ],
                         ),
                       );

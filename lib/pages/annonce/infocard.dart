@@ -12,6 +12,7 @@ class InfoCard extends StatelessWidget {
   final DateTime date;
   final String description;
   final String idAnnonce;
+
   InfoCard({
     super.key,
     required this.image,
@@ -47,14 +48,18 @@ class InfoCard extends StatelessWidget {
           height: height,
           decoration: BoxDecoration(
               color: eptOrange, borderRadius: BorderRadius.circular(20)),
-          child: Container(
-            width: width,
-            height: height,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-            clipBehavior: Clip.hardEdge,
-            child: Image.network(
-              image,
-              fit: BoxFit.cover,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: FittedBox(
+              fit: BoxFit.fitHeight,
+              child: Image(
+                image: ResizeImage(
+                  NetworkImage(image),
+                  width: 900,  // Largeur de cache
+                  height: 900, // Hauteur de cache
+                ),
+                height: height,
+              ),
             ),
           ),
         ),
