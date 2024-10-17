@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers
 
 import 'dart:io';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,7 +12,8 @@ import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/alerte_message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:image/image.dart' as img;
+import 'package:path_provider/path_provider.dart';
 class UserService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
@@ -197,35 +199,62 @@ class UserService {
       return "Erreur lors de l'ajout de l'Utilisateur : $e";
     }
   }
-
   Future<String?> uploadImage(
       BuildContext context, ValueNotifier _loading, ValueNotifier _url) async {
     final XFile? pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedImage == null) {
       return "";
     }
-    String filename = pickedImage.name;
-    File imageFile = File(pickedImage.path);
 
-    Reference reference = firebaseStorage.ref(filename);
+    File imageFile = File(pickedImage.path);
 
     try {
       _loading.value = true;
-      await reference.putFile(imageFile);
 
-      _url.value = (await reference.getDownloadURL()).toString();
-      _loading.value = false;
+      // Lire l'image
+      final img.Image originalImage = img.decodeImage(await imageFile.readAsBytes())!;
+
+      // Compresser l'image
+      File compressedImageFile = await compressImage(originalImage);
+
+      // Uploader l'image compressée
+      String filename = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+      Reference reference = FirebaseStorage.instance.ref(filename);
+      await reference.putFile(compressedImageFile);
+
+      _url.value = await reference.getDownloadURL();
       return _url.value;
-      // ignore: unused_catch_clause
     } on FirebaseException catch (e) {
       alerteMessageWidget(context,
-          "Une erreur s'est produit lors du chargement !", AppColors.echec);
+          "Une erreur s'est produite lors du chargement : ${e.message}", AppColors.echec);
     } catch (error) {
       alerteMessageWidget(context,
-          "Une erreur s'est produit lors du chargement !", AppColors.echec);
+          "Une erreur s'est produite lors du chargement : $error", AppColors.echec);
+    } finally {
+      _loading.value = false;
     }
     return "";
+  }
+
+  Future<File> compressImage(img.Image image) async {
+    int quality = 85;
+    int minQuality = 20;
+    File? result;
+
+    do {
+      final tempDir = await getTemporaryDirectory();
+      final path = tempDir.path;
+      final compressedImage = img.encodeJpg(image, quality: quality);
+      result = await File('$path/compressed_image.jpg').writeAsBytes(compressedImage);
+
+      final fileSize = await result.length();
+      if (fileSize > 1000000) {  // 1 MB = 1,000,000 bytes
+        quality = max(quality - 10, minQuality);
+      }
+    } while (await result.length() > 1000000 && quality > minQuality);
+
+    return result;
   }
 
   Future<List<Promo>> getListPromo() async {
