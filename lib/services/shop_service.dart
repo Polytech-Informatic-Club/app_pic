@@ -43,7 +43,7 @@ class ShopService {
 
       Map<String, dynamic> data =
           querySnapshot.docs.map((doc) => doc.data()).first;
-      print(data);
+      // print(data);
       return Collection.fromJson(data);
     } catch (e) {
       return null;
@@ -145,9 +145,9 @@ class ShopService {
       Commande commande = Commande(
         date: DateTime.now(),
         id: DateTime.now().toIso8601String(),
-        user: Utilisateur.fromJson(userData),
+        userId: Utilisateur.fromJson(userData).id!,
         nombre: 1,
-        produit: produit.titre,
+        produitId: produit.id,
       );
 
       DocumentSnapshot doc =

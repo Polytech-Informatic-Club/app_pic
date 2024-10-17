@@ -5,7 +5,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:new_app/models/objet_perdu_model.dart';
 import 'dart:io';
 
+import 'package:new_app/services/notification_service.dart';
+
 class ObjetPerduService {
+  LocalNotificationService _notificationService = LocalNotificationService();
   final _firestore = FirebaseFirestore.instance;
 
   Future<String?> uploadImage(File imageFile) async {
@@ -39,6 +42,8 @@ class ObjetPerduService {
         'etat': objetPerdu.estTrouve,
         'idUser': objetPerdu.idUser
       });
+      await _notificationService.sendAllNotification("Nouveau objet perdu",
+          "Quelqu'un(e) vient de perdre un objet. Veuillez consulter l'annonce.");
     } catch (e) {
       print(e);
       return null;

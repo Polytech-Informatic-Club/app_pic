@@ -25,7 +25,7 @@ class Collection {
       id: json['id'] as String,
       nom: json['nom'] as String,
       date: (json['date'] as Timestamp).toDate(),
-      articleShops: articleShopsList,
+      articleShops:articleShopsList,
     );
   }
 

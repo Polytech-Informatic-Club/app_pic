@@ -2,8 +2,10 @@
 
 import 'package:app_version_update/app_version_update.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:new_app/login/inscription.dart';
 import 'package:new_app/login/login.dart';
 import 'package:new_app/models/football.dart';
@@ -31,6 +33,7 @@ import 'package:new_app/pages/shop/shop_screen.dart';
 
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:new_app/services/notification_service.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -39,7 +42,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await initializeDateFormatting(
-      'fr', null); // Initialisation de la locale française
+      'fr', null); // Initialisation de la locale français
+
   runApp(MyApp());
 }
 

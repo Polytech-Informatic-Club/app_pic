@@ -117,6 +117,7 @@ class _EptDrawerState extends State<EptDrawer> {
                   const SizedBox(height: 10),
                   Divider(thickness: 1, color: Colors.black),
                   const SizedBox(height: 20),
+                
                   drawerItem("assets/images/top-left-menu/compte.png", "Compte",
                       () {
                     changerPage(context, CompteScreen());

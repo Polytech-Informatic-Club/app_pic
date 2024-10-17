@@ -14,6 +14,7 @@ import 'package:new_app/widgets/alerte_message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
+
 class UserService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
@@ -193,16 +194,19 @@ class UserService {
 
   Future<String> postToken(String token, String role) async {
     try {
-      await tokenCollection.doc(token).set({"token": postToken, "role": role});
+      await tokenCollection
+          .doc(token)
+          .set({"token": postToken, "role": role, "active": true});
       return "OK";
     } catch (e) {
       return "Erreur lors de l'ajout de l'Utilisateur : $e";
     }
   }
+
   Future<String?> uploadImage(
       BuildContext context, ValueNotifier _loading, ValueNotifier _url) async {
     final XFile? pickedImage =
-    await ImagePicker().pickImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedImage == null) {
       return "";
     }
@@ -213,24 +217,30 @@ class UserService {
       _loading.value = true;
 
       // Lire l'image
-      final img.Image originalImage = img.decodeImage(await imageFile.readAsBytes())!;
+      final img.Image originalImage =
+          img.decodeImage(await imageFile.readAsBytes())!;
 
       // Compresser l'image
       File compressedImageFile = await compressImage(originalImage);
 
       // Uploader l'image compressée
-      String filename = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+      String filename =
+          DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
       Reference reference = FirebaseStorage.instance.ref(filename);
       await reference.putFile(compressedImageFile);
 
       _url.value = await reference.getDownloadURL();
       return _url.value;
     } on FirebaseException catch (e) {
-      alerteMessageWidget(context,
-          "Une erreur s'est produite lors du chargement : ${e.message}", AppColors.echec);
+      alerteMessageWidget(
+          context,
+          "Une erreur s'est produite lors du chargement : ${e.message}",
+          AppColors.echec);
     } catch (error) {
-      alerteMessageWidget(context,
-          "Une erreur s'est produite lors du chargement : $error", AppColors.echec);
+      alerteMessageWidget(
+          context,
+          "Une erreur s'est produite lors du chargement : $error",
+          AppColors.echec);
     } finally {
       _loading.value = false;
     }
@@ -246,10 +256,12 @@ class UserService {
       final tempDir = await getTemporaryDirectory();
       final path = tempDir.path;
       final compressedImage = img.encodeJpg(image, quality: quality);
-      result = await File('$path/compressed_image.jpg').writeAsBytes(compressedImage);
+      result = await File('$path/compressed_image.jpg')
+          .writeAsBytes(compressedImage);
 
       final fileSize = await result.length();
-      if (fileSize > 1000000) {  // 1 MB = 1,000,000 bytes
+      if (fileSize > 1000000) {
+        // 1 MB = 1,000,000 bytes
         quality = max(quality - 10, minQuality);
       }
     } while (await result.length() > 1000000 && quality > minQuality);

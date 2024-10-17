@@ -3,25 +3,26 @@ import 'package:new_app/models/utilisateur.dart';
 
 class Commande {
   String id;
-  String produit;
+  String produitId;
   DateTime date;
-  Utilisateur user;
+  String userId;
   int nombre;
 
   Commande({
     required this.id,
-    required this.produit,
+    required this.produitId,
     required this.date,
-    required this.user,
+    required this.userId,
     required this.nombre,
   });
 
   factory Commande.fromJson(Map<String, dynamic> json) {
+    print(json);
     return Commande(
       id: json['id'] as String,
-      produit: json['produit'] as String,
+      produitId: json['produitId'] as String,
       date: (json['date'] as Timestamp).toDate(),
-      user: Utilisateur.fromJson(json['user']),
+      userId: json['userId'] as String,
       nombre: json['nombre'] as int,
     );
   }
@@ -29,9 +30,9 @@ class Commande {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'produit': produit,
+      'produitId': produitId,
       'date': date,
-      'user': user.toJson(),
+      'userId': userId,
       'nombre': nombre,
     };
   }
