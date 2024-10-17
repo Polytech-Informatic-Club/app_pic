@@ -34,9 +34,20 @@ class _navbarState extends State<navbar> {
   NavigationDestination _destination(
       String imagePath, String finalPath, String label, double width) {
     return NavigationDestination(
-      icon: Image.asset(imagePath, width: width),
-      selectedIcon: Image.asset(
-        finalPath,
+      icon: Image(
+        image: ResizeImage(
+          AssetImage(imagePath),
+          width: 40,
+          height: 40,
+        ),
+        width: width,
+      ),
+      selectedIcon: Image(
+        image: ResizeImage(
+          AssetImage(finalPath),
+          width: 40,
+          height: 40,
+        ),
         width: width,
       ),
       label: label,

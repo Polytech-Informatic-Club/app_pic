@@ -182,11 +182,10 @@ Widget _buildGameIcon(String imagePath, String gameName) {
             width: 3,
           ),
           image: DecorationImage(
-            // Utilisation de ResizeImage pour redimensionner l'image à 80x80
             image: ResizeImage(
               NetworkImage(imagePath),
-              width: 80,
-              height: 80,
+              width: 120,
+              height: 120,
             ),
             fit: BoxFit.cover,
           ),
