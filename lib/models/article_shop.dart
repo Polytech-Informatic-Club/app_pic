@@ -47,7 +47,7 @@ class ArticleShop {
       // prix: 0,
       image: json['image'] as String,
       categorie: CategorieShop.fromJson(json['categorie']),
-      commandes: commandeList,
+      commandes: [],
       likes: json['likes'] as int,
       dislikes: json['dislikes'] as int,
       partageLien: json['partageLien'] as String,
