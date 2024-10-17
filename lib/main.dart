@@ -47,35 +47,6 @@ void main() async {
   runApp(MyApp());
 }
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-
-Future<void> showNotification(String title, String body) async {
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails(
-    'channel_id', // Utilise un ID de canal unique
-    'EPT_APP', // Nom du canal
-    channelDescription: 'your_channel_description', // Description
-    importance: Importance.max,
-    priority: Priority.high,
-    showWhen: false,
-    //  smallIcon: 'ic_launcher',
-    icon: 'launch_background',
-    //  largeIcon: 'ic_launcher'
-  );
-
-  const NotificationDetails platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
-
-  await flutterLocalNotificationsPlugin.show(
-    0, // ID de la notification
-    title,
-    body,
-    platformChannelSpecifics,
-    payload: 'item x', // Payload optionnel
-  );
-}
-
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
