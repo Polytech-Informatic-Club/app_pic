@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:new_app/models/annonce.dart';
 import 'package:new_app/models/categorie.dart';
+import 'package:new_app/services/notification_service.dart';
 
 class AnnonceService {
+  LocalNotificationService _notificationService = LocalNotificationService();
   CollectionReference<Map<String, dynamic>> annonceCollection =
       FirebaseFirestore.instance.collection("ANNONCE");
 
@@ -30,6 +32,10 @@ class AnnonceService {
   Future<String> postAnnonce(Annonce annonce) async {
     try {
       await annonceCollection.doc(annonce.id).set(annonce.toJson());
+      await _notificationService.sendAllNotification(
+          "${annonce.titre}",
+          "${annonce.description}");
+
       return "OK";
     } catch (e) {
       return "Erreur lors de la création de l'annnonce : $e";

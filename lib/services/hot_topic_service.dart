@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:new_app/pages/annonce/hot_topics.dart';
 import 'package:new_app/models/hot_topic.dart';
+import 'package:new_app/services/notification_service.dart';
 
 class HotTopicService {
+  LocalNotificationService _local_notification = LocalNotificationService();
   final CollectionReference hotTopicsCollection =
       FirebaseFirestore.instance.collection('HOTTOPICS');
 
@@ -20,6 +22,8 @@ class HotTopicService {
         'dateCreation': Timestamp.fromDate(hotTopic.dateCreation),
       });
 
+      await _local_notification.sendAllNotification(
+          "${hotTopic.title} (${hotTopic.category})", "${hotTopic.content}");
       print("Hot Topic créé avec succès !");
     } catch (e) {
       print("Erreur lors de la création du Hot Topic: $e");

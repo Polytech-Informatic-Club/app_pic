@@ -11,6 +11,7 @@ import 'package:new_app/pages/drawer/propos/a_propos.dart';
 import 'package:new_app/pages/interclasse/football/home_admin_sport_type_page.dart';
 import 'package:new_app/pages/drawer/xoss/xoss_screen.dart';
 import 'package:new_app/services/user_service.dart';
+import 'package:new_app/test.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart'; // Import du package url_launcher
 
@@ -117,6 +118,10 @@ class _EptDrawerState extends State<EptDrawer> {
                   const SizedBox(height: 10),
                   Divider(thickness: 1, color: Colors.black),
                   const SizedBox(height: 20),
+                    drawerItem("assets/images/top-left-menu/compte.png", "Tester",
+                      () {
+                    changerPage(context, TestPage());
+                  }),
                   drawerItem("assets/images/top-left-menu/compte.png", "Compte",
                       () {
                     changerPage(context, CompteScreen());

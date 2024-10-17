@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/basket.dart';
 import 'package:new_app/models/buteur.dart';
 import 'package:new_app/models/commentaires.dart';
@@ -18,6 +19,7 @@ import 'package:new_app/models/volleyball.dart';
 import 'package:new_app/services/notification_service.dart';
 
 class SportService {
+  LocalNotificationService _notificationService = LocalNotificationService();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   CollectionReference footballCollection =
       FirebaseFirestore.instance.collection("MATCH");
@@ -54,16 +56,11 @@ class SportService {
               football.date.toString())
           .set(football.toJson());
 
-      // var tokensSnapshot = await tokenCollection.get();
-      // List<String> tokens = tokensSnapshot.docs
-      //     .map((doc) => doc['token'])
-      //     .toList() as List<String>;
-
-      String token =
-          "cz3LdrHWTfi7kVAPdciW27:APA91bEVGqT7Ru6lsRKLLNrhZ82MWrgSaVKLNRBykhpIdZETs8UH13lEdUtvezqB27CteMn9qBqg3hQ6GZrVNeMCTzuXNmKHh2s9mI19-DiJ_L_CjMevR7tMqsnqY9tXigXqMbpJV6PP";
-      // for (var token in tokens) {
-      sendPushMessage(token, "Un nouveau match bla bla", "Un nouveau match");
-      // }
+      // Envoyer une notification à chaque token actif
+      await _notificationService.sendAllNotification(
+          "Un nouveau match",
+          "La ${football.equipeA.nom} jouera avec ${football.equipeB.nom} "
+              "le ${dateCustomformat(football.date)}. Rendez-vous à ne pas manquer!");
 
       return "OK";
     } catch (e) {
@@ -269,8 +266,14 @@ class SportService {
           'comments': FieldValue.arrayUnion([commentaire.toJson()])
         },
       );
-
+    
       DocumentSnapshot querySnapshot = await matchDoc.get();
+//  ${(querySnapshot.data()! as Map<String, dynamic>)["equipeA"].nom}
+         // Envoyer une notification à chaque token actif
+      await _notificationService.sendAllNotification(
+          "Nouveau commentaire match",
+          "${commentaire.user.prenom + commentaire.user.nom.toUpperCase()} a commenté sur le match.");
+
 
       return {
         "BASKETBALL":

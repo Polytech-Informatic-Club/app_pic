@@ -17,8 +17,10 @@ import 'package:new_app/models/match.dart';
 import 'package:new_app/models/session_jeu.dart';
 import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/models/volleyball.dart';
+import 'package:new_app/services/notification_service.dart';
 
 class JeuService {
+  LocalNotificationService _notificationService = LocalNotificationService();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   CollectionReference<Map<String, dynamic>> jeuxCollection =
       FirebaseFirestore.instance.collection("JEUX");
@@ -38,20 +40,6 @@ class JeuService {
       return list;
     } catch (e) {
       return [];
-    }
-  }
-
-  Future<String> postJeu(dynamic football) async {
-    try {
-      await jeuxCollection
-          .doc(football.equipeA.nom +
-              " VS " +
-              football.equipeB.nom +
-              football.date.toString())
-          .set(football.toJson());
-      return "OK";
-    } catch (e) {
-      return "Erreur lors de la création du match : $e";
     }
   }
 
@@ -137,7 +125,12 @@ class JeuService {
 
       // Récupérer les données mises à jour
       DocumentSnapshot querySnapshot = await matchDoc.get();
-      return Jeu.fromJson(querySnapshot.data() as Map<String, dynamic>);
+      Jeu jeu = Jeu.fromJson(querySnapshot.data() as Map<String, dynamic>);
+      await _notificationService.sendAllNotification(
+          "${jeu.nom}",
+          "Une nouvelle session vient d'etre créer par ${joueurCreant.prenom}"
+              " ${joueurCreant.nom.toUpperCase()}");
+      return jeu;
     } catch (e) {
       print(e);
       return null;
@@ -225,7 +218,11 @@ class JeuService {
 
       // Récupérer les données mises à jour
       DocumentSnapshot querySnapshot = await matchDoc.get();
-      return Jeu.fromJson(querySnapshot.data() as Map<String, dynamic>);
+        Jeu jeu = Jeu.fromJson(querySnapshot.data() as Map<String, dynamic>);
+      await _notificationService.sendAllNotification(
+          "${jeu.nom}",
+          "${nouveauJoueur.prenom} ${nouveauJoueur.nom.toUpperCase()} vient de rejoindre la  session ${idSession}.");
+      return jeu;
     } catch (e) {
       print(e);
       return null;
@@ -338,21 +335,4 @@ class JeuService {
     }
   }
 
-  Future<Football?> updateStatistique(
-      String matchId, String libelle, int value) async {
-    try {
-      DocumentReference matchDoc = _firestore.collection("MATCH").doc(matchId);
-      await matchDoc.update(
-        {"statistiques.$libelle": FieldValue.increment(value)},
-      );
-
-      DocumentSnapshot querySnapshot = await matchDoc.get();
-
-      return Football.fromJson(querySnapshot.data() as Map<String, dynamic>);
-    } catch (e) {
-      print(e);
-      return null;
-    }
-  }
-
-  }
+}
