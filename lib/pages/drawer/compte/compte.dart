@@ -59,10 +59,14 @@ class CompteScreen extends StatelessWidget {
                             child: CircleAvatar(
                               radius: 80,
                               backgroundImage: user!.photo! != ""
-                                  ? NetworkImage(user.photo!)
-                                  : AssetImage(''),
+                                  ? ResizeImage(
+                                NetworkImage(user.photo!),
+                                height: 480,  // Hauteur d'affichage souhaitée
+                              )
+                                  : AssetImage('') as ImageProvider,
                               backgroundColor: grisClair,
                             ),
+
                           ),
                           Text(user.role.toString().split(".").last),
                           SizedBox(

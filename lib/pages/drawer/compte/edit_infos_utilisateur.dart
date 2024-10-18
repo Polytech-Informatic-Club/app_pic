@@ -117,26 +117,22 @@ class _EditInfosUtilisateurState extends State<EditInfosUtilisateur> {
                                         ),
                                         child: CircleAvatar(
                                           radius: 80,
-                                          backgroundImage: NetworkImage(url),
+                                          backgroundImage: ResizeImage(
+                                            NetworkImage(url),
+                                            height: 480,  // Hauteur souhaitée
+                                          ),
                                           backgroundColor: grisClair,
                                           child: Align(
                                               alignment: Alignment.bottomRight,
                                               child: GestureDetector(
                                                 onTap: () async {
-                                                  String? url =
-                                                      await _userService
-                                                          .uploadImage(context,
-                                                              _loading, _url);
+                                                  String? url = await _userService.uploadImage(context, _loading, _url);
                                                   if (url != null) {
                                                     alerteMessageWidget(
-                                                        context,
-                                                        "Fichier enregistré avec succès !",
-                                                        AppColors.success);
+                                                        context, "Fichier enregistré avec succès !", AppColors.success);
                                                   } else {
                                                     alerteMessageWidget(
-                                                        context,
-                                                        "Une erreur s'est produit lors du chargement !",
-                                                        AppColors.echec);
+                                                        context, "Une erreur s'est produite lors du chargement !", AppColors.echec);
                                                   }
                                                 },
                                                 child: Icon(

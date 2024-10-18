@@ -80,11 +80,14 @@ class _EptDrawerState extends State<EptDrawer> {
                                       borderRadius: BorderRadius.circular(200),
                                     ),
                                     clipBehavior: Clip.hardEdge,
-                                    child: user?.photo != ""
-                                        ? Image.network(
-                                            "${user?.photo}",
-                                            fit: BoxFit.cover,
-                                          )
+                                    child:user?.photo != ""
+                                        ? Image(
+                                      image: ResizeImage(
+                                        NetworkImage("${user?.photo}"),
+                                        height: 270,  // Hauteur d'affichage souhaitée
+                                      ),
+                                      fit: BoxFit.cover,
+                                    )
                                         : Container(),
                                   ),
                                 ),

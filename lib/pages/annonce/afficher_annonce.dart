@@ -171,7 +171,6 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
                         child: Image(
                           image: ResizeImage(
                             NetworkImage(imagePath),
-                            width: 800,  // largeur souhaitée
                             height: 1110,  // hauteur souhaitée
                           ),
                           fit: BoxFit.cover,
