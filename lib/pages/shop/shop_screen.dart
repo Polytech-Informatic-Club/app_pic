@@ -23,7 +23,8 @@ class _ShopScreenState extends State<ShopScreen> {
   List<String> carouselImages = ['assets/market/photo_2024-05-24_12-27-53.jpg'];
   Collection? _collection;
   String searchQuery = '';
-  CategorieShop selectedCategory = CategorieShop(id: "", libelle: "Tous", logo: "");
+  CategorieShop selectedCategory =
+      CategorieShop(id: "", libelle: "Tous", logo: "");
   List<CategorieShop> categories = [
     CategorieShop(id: "", libelle: "Tous", logo: ""),
   ];
@@ -40,28 +41,25 @@ class _ShopScreenState extends State<ShopScreen> {
     if (collection != null) {
       setState(() {
         _collection = collection;
-        carouselImages = collection.articleShops.map((article) => article.image).toList();
+        carouselImages =
+            collection.articleShops.map((article) => article.image).toList();
       });
 
-      // Ajoutez un message de débogage pour afficher les images chargées
       print('Images chargées pour le carrousel :');
       for (String imageUrl in carouselImages) {
-        print(imageUrl); // Imprime chaque URL d'image
+        print(imageUrl);
       }
     } else {
       print('Aucune collection trouvée.');
     }
   }
 
-
-
   Future<void> _loadCategories() async {
-    List<CategorieShop>? loadedCategories = await _shopService.getAllCategorieShop();
-    if (loadedCategories != null) {
-      setState(() {
-        categories.addAll(loadedCategories);
-      });
-    }
+    List<CategorieShop>? loadedCategories =
+        await _shopService.getAllCategorieShop();
+    setState(() {
+      categories.addAll(loadedCategories);
+    });
   }
 
   Future<List<ArticleShop>> getFilteredProducts() async {
@@ -76,8 +74,10 @@ class _ShopScreenState extends State<ShopScreen> {
     });
 
     return filteredProducts.where((product) {
-      bool categoryMatch = selectedCategory.libelle == 'Tous' || product.categorie.id == selectedCategory.id;
-      bool searchMatch = product.titre.toLowerCase().contains(searchQuery.toLowerCase());
+      bool categoryMatch = selectedCategory.libelle == 'Tous' ||
+          product.categorie.id == selectedCategory.id;
+      bool searchMatch =
+          product.titre.toLowerCase().contains(searchQuery.toLowerCase());
       return categoryMatch && searchMatch;
     }).toList();
   }
@@ -92,7 +92,8 @@ class _ShopScreenState extends State<ShopScreen> {
             children: [
               Image.network(product.image, height: 200),
               SizedBox(height: 10),
-              Text(product.titre, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text(product.titre,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               Text('Catégorie: ${product.categorie.libelle}'),
               Text('Prix: ${product.prix} CFA'),
               SizedBox(height: 10),
@@ -101,7 +102,8 @@ class _ShopScreenState extends State<ShopScreen> {
               ElevatedButton(
                 child: Text('Commander'),
                 onPressed: () async {
-                  String code = await _shopService.postCommande(product, collection);
+                  String code =
+                      await _shopService.postCommande(product, collection);
                   if (code == "OK") {
                     Navigator.of(context).pop();
                     alerteMessageWidget(
@@ -154,18 +156,23 @@ class _ShopScreenState extends State<ShopScreen> {
                         child: Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 10, right: 5),
-                              child: Icon(Icons.search, color: Color(0xff777777), size: 20),
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 5),
+                              child: Icon(Icons.search,
+                                  color: Color(0xff777777), size: 20),
                             ),
                             Expanded(
                               child: TextField(
                                 decoration: InputDecoration(
                                   hintText: 'Chercher',
-                                  hintStyle: TextStyle(fontSize: 15, color: Color(0xff777777)),
+                                  hintStyle: TextStyle(
+                                      fontSize: 15, color: Color(0xff777777)),
                                   border: InputBorder.none,
-                                  contentPadding: EdgeInsets.symmetric(vertical: 10),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(vertical: 10),
                                 ),
-                                style: TextStyle(fontSize: 15, color: Colors.black),
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.black),
                                 onChanged: (value) {
                                   setState(() {
                                     searchQuery = value;
@@ -194,7 +201,10 @@ class _ShopScreenState extends State<ShopScreen> {
                           children: [
                             Text(
                               'Catégories',
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
                             ),
                             SizedBox(width: 10),
                             Container(
@@ -202,7 +212,8 @@ class _ShopScreenState extends State<ShopScreen> {
                               height: 35,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: AssetImage('assets/images/categorie.png'),
+                                  image:
+                                      AssetImage('assets/images/categorie.png'),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -215,7 +226,10 @@ class _ShopScreenState extends State<ShopScreen> {
                   SizedBox(height: 10),
                   Text(
                     selectedCategory.libelle,
-                    style: TextStyle(fontSize: 15, color: Colors.blue, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

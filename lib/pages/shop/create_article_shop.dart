@@ -32,7 +32,6 @@ class CreateArticleShop extends StatelessWidget {
     DateTime.now().hour,
     DateTime.now().minute,
   );
-  // ignore: non_constant_identifier_names
   final ShopService _shopService = ShopService();
   final UserService _userService = UserService();
 
@@ -96,230 +95,225 @@ class CreateArticleShop extends StatelessWidget {
         title: Text("Créer un article"),
       ),
       body: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          // height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
-              child: Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      20, MediaQuery.of(context).size.height * 0.02, 20, 0),
-                  child: Column(children: <Widget>[
-                    ValueListenableBuilder<String>(
-                        valueListenable: _url,
-                        builder: (context, url, child) {
-                          return url == ""
-                              ? Container(
-                                  height:
-                                      MediaQuery.sizeOf(context).width * 0.6,
-                                  width: MediaQuery.sizeOf(context).width * 0.5,
-                                  decoration: BoxDecoration(
-                                      color: AppColors.gray,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Center(
-                                    child: ValueListenableBuilder<bool>(
-                                        valueListenable: _loading,
-                                        builder: (context, loading, child) {
-                                          return loading
-                                              ? CircularProgressIndicator()
-                                              : Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Center(
-                                                        child:
-                                                            ElevatedButton.icon(
-                                                      style: ButtonStyle(
-                                                          iconColor:
-                                                              WidgetStateProperty
-                                                                  .all(AppColors
-                                                                      .black)),
-                                                      onPressed: () async {
-                                                        String? url =
-                                                            await _userService
-                                                                .uploadImage(
-                                                                    context,
-                                                                    _loading,
-                                                                    _url);
-                                                        if (url != null) {
-                                                          alerteMessageWidget(
-                                                              context,
-                                                              "Fichier enregistré avec succès !",
-                                                              AppColors
-                                                                  .success);
-                                                        } else {
-                                                          alerteMessageWidget(
-                                                              context,
-                                                              "Une erreur s'est produit lors du chargement !",
-                                                              AppColors.echec);
-                                                        }
-                                                      },
-                                                      icon: Icon(
-                                                        Icons.library_add,
-                                                        color: AppColors.black,
-                                                      ),
-                                                      label: Text(
-                                                        "Importer",
-                                                        style: TextStyle(
-                                                          color:
-                                                              AppColors.black,
-                                                        ),
-                                                      ),
-                                                    )),
-                                                  ],
-                                                );
-                                        }),
-                                  ),
-                                )
-                              : Image.network(url);
-                        }),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    ValueListenableBuilder<List<Collection>>(
-                      valueListenable: _collections,
-                      builder: (context, collections, child) {
-                        return ValueListenableBuilder<Collection?>(
-                          valueListenable: _selectedcollectionA,
-                          builder: (context, selectedcollectionA, child) {
-                            return DropdownButton<Collection>(
-                              hint: Text('collection'),
-                              value: collections.contains(selectedcollectionA)
-                                  ? selectedcollectionA
-                                  : null,
-                              onChanged: (Collection? newValue) {
-                                _selectedcollectionA.value = newValue;
-                              },
-                              items: collections
-                                  .map<DropdownMenuItem<Collection>>(
-                                      (Collection collection) {
-                                return DropdownMenuItem<Collection>(
-                                  value: collection,
-                                  child: Text(collection.nom),
-                                );
-                              }).toList(),
-                            );
+        width: MediaQuery.of(context).size.width,
+        // height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+                20, MediaQuery.of(context).size.height * 0.02, 20, 0),
+            child: Column(
+              children: <Widget>[
+                ValueListenableBuilder<String>(
+                    valueListenable: _url,
+                    builder: (context, url, child) {
+                      return url == ""
+                          ? Container(
+                              height: MediaQuery.sizeOf(context).width * 0.6,
+                              width: MediaQuery.sizeOf(context).width * 0.5,
+                              decoration: BoxDecoration(
+                                  color: AppColors.gray,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Center(
+                                child: ValueListenableBuilder<bool>(
+                                    valueListenable: _loading,
+                                    builder: (context, loading, child) {
+                                      return loading
+                                          ? CircularProgressIndicator()
+                                          : Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Center(
+                                                    child: ElevatedButton.icon(
+                                                  style: ButtonStyle(
+                                                      iconColor:
+                                                          WidgetStateProperty
+                                                              .all(AppColors
+                                                                  .black)),
+                                                  onPressed: () async {
+                                                    String? url =
+                                                        await _userService
+                                                            .uploadImage(
+                                                                context,
+                                                                _loading,
+                                                                _url);
+                                                    if (url != null) {
+                                                      alerteMessageWidget(
+                                                          context,
+                                                          "Fichier enregistré avec succès !",
+                                                          AppColors.success);
+                                                    } else {
+                                                      alerteMessageWidget(
+                                                          context,
+                                                          "Une erreur s'est produit lors du chargement !",
+                                                          AppColors.echec);
+                                                    }
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.library_add,
+                                                    color: AppColors.black,
+                                                  ),
+                                                  label: Text(
+                                                    "Importer",
+                                                    style: TextStyle(
+                                                      color: AppColors.black,
+                                                    ),
+                                                  ),
+                                                )),
+                                              ],
+                                            );
+                                    }),
+                              ),
+                            )
+                          : Image.network(url);
+                    }),
+                SizedBox(
+                  height: 20,
+                ),
+                ValueListenableBuilder<List<Collection>>(
+                  valueListenable: _collections,
+                  builder: (context, collections, child) {
+                    return ValueListenableBuilder<Collection?>(
+                      valueListenable: _selectedcollectionA,
+                      builder: (context, selectedcollectionA, child) {
+                        return DropdownButton<Collection>(
+                          hint: Text('collection'),
+                          value: collections.contains(selectedcollectionA)
+                              ? selectedcollectionA
+                              : null,
+                          onChanged: (Collection? newValue) {
+                            _selectedcollectionA.value = newValue;
                           },
+                          items: collections.map<DropdownMenuItem<Collection>>(
+                              (Collection collection) {
+                            return DropdownMenuItem<Collection>(
+                              value: collection,
+                              child: Text(collection.nom),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    );
+                  },
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                ValueListenableBuilder<List<CategorieShop>>(
+                  valueListenable: _categories,
+                  builder: (context, categories, child) {
+                    return ValueListenableBuilder<CategorieShop?>(
+                      valueListenable: _selectedCategorieShop,
+                      builder: (context, selectedCategorieShop, child) {
+                        return DropdownButton<CategorieShop>(
+                          hint: Text('catégorie'),
+                          value: categories.contains(selectedCategorieShop)
+                              ? selectedCategorieShop
+                              : null,
+                          onChanged: (CategorieShop? newValue) {
+                            _selectedCategorieShop.value = newValue;
+                          },
+                          items: categories
+                              .map<DropdownMenuItem<CategorieShop>>(
+                                  (CategorieShop collection) {
+                            return DropdownMenuItem<CategorieShop>(
+                              value: collection,
+                              child: Text(collection.libelle),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    );
+                  },
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  onTap: () => _selectDateTime(context),
+                  child: Row(children: [
+                    Icon(Icons.calendar_month),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    ValueListenableBuilder<DateTime?>(
+                      valueListenable: _selectedDate,
+                      builder: (context, selectedDate, child) {
+                        String formattedDate = selectedDate != null
+                            ? DateFormat('dd MMMM yyyy').format(selectedDate)
+                            : 'Pas de date sélectionnée';
+                        return Text(
+                          formattedDate,
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         );
                       },
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    ValueListenableBuilder<List<CategorieShop>>(
-                      valueListenable: _categories,
-                      builder: (context, categories, child) {
-                        return ValueListenableBuilder<CategorieShop?>(
-                          valueListenable: _selectedCategorieShop,
-                          builder: (context, selectedCategorieShop, child) {
-                            return DropdownButton<CategorieShop>(
-                              hint: Text('catégorie'),
-                              value: categories.contains(selectedCategorieShop)
-                                  ? selectedCategorieShop
-                                  : null,
-                              onChanged: (CategorieShop? newValue) {
-                                _selectedCategorieShop.value = newValue;
-                              },
-                              items: categories
-                                  .map<DropdownMenuItem<CategorieShop>>(
-                                      (CategorieShop collection) {
-                                return DropdownMenuItem<CategorieShop>(
-                                  value: collection,
-                                  child: Text(collection.libelle),
-                                );
-                              }).toList(),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    GestureDetector(
-                      onTap: () => _selectDateTime(context),
-                      child: Row(children: [
-                        Icon(Icons.calendar_month),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        ValueListenableBuilder<DateTime?>(
-                          valueListenable: _selectedDate,
-                          builder: (context, selectedDate, child) {
-                            String formattedDate = selectedDate != null
-                                ? DateFormat('dd MMMM yyyy').format(selectedDate)
-                                : 'Pas de date sélectionnée';
-                            return Text(
-                              formattedDate,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            );
-                          },
-                        ),
-
-                      ]),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    reusableTextFormField("Nom", _titreController, (value) {
-                      return null;
-                    }),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    reusableTextFormField("Prix", _prixController, (value) {
-                      return null;
-                    }),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    ReusableDescriptionInput(
-                        "Description", _descriptionTextController, (value) {
-                      return null;
-                    }),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    SubmittedButton("Poster", () async {
-                      if (_selectedcollectionA.value != null) {
-                        ArticleShop articleShop = ArticleShop(
-                          prix: double.parse(_prixController.value.text),
-                          id: DateTime.now().toString(),
-                          dateCreation: DateTime.now(),
-                          description: _descriptionTextController.value.text,
-                          titre: _titreController.value.text,
-                          image: _url.value,
-                          categorie: _selectedCategorieShop.value!,
-                          commandes: [],
-                          likes: 0,
-                          dislikes: 0,
-                          partageLien: "",
-                        );
-                        try {
-                          try {
-                            String code = await _shopService.postArticleShop(
-                                articleShop, _selectedcollectionA.value!);
-                            if (code == "OK") {
-                              alerteMessageWidget(
-                                  context,
-                                  "Article crée avec succès !",
-                                  AppColors.success);
-                            }
-                          } catch (e) {
-                            return null;
-                          }
-                        } catch (e) {
-                          alerteMessageWidget(
-                              context,
-                              "Une erreur est survie lors de la création.$e",
-                              AppColors.echec);
+                  ]),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                reusableTextFormField("Nom", _titreController, (value) {
+                  return null;
+                }),
+                SizedBox(
+                  height: 20,
+                ),
+                reusableTextFormField("Prix", _prixController, (value) {
+                  return null;
+                }),
+                SizedBox(
+                  height: 20,
+                ),
+                ReusableDescriptionInput(
+                    "Description", _descriptionTextController, (value) {
+                  return null;
+                }),
+                SizedBox(
+                  height: 20,
+                ),
+                SubmittedButton("Poster", () async {
+                  if (_selectedcollectionA.value != null) {
+                    ArticleShop articleShop = ArticleShop(
+                      prix: int.parse(_prixController.value.text),
+                      id: DateTime.now().toString(),
+                      dateCreation: DateTime.now(),
+                      description: _descriptionTextController.value.text,
+                      titre: _titreController.value.text,
+                      image: _url.value,
+                      categorie: _selectedCategorieShop.value!,
+                      commandes: [],
+                      partageLien: "",
+                    );
+                    try {
+                      try {
+                        String code = await _shopService.postArticleShop(
+                            articleShop, _selectedcollectionA.value!);
+                        if (code == "OK") {
+                          alerteMessageWidget(context,
+                              "Article crée avec succès !", AppColors.success);
                         }
-                      } else {
-                        alerteMessageWidget(
-                            context,
-                            "Vous n'avez pas sélectionné une collection.",
-                            AppColors.echec);
+                      } catch (e) {
+                        return null;
                       }
-                    })
-                  ])))),
+                    } catch (e) {
+                      alerteMessageWidget(
+                          context,
+                          "Une erreur est survie lors de la création.$e",
+                          AppColors.echec);
+                    }
+                  } else {
+                    alerteMessageWidget(
+                        context,
+                        "Vous n'avez pas sélectionné une collection.",
+                        AppColors.echec);
+                  }
+                })
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -10,13 +10,11 @@ class ArticleShop {
   final DateTime dateCreation;
   final String description;
   final String titre;
-  final double prix;
+  final int prix;
   final String image;
   final CategorieShop categorie;
   final List<Commande> commandes;
-  final int likes;
-  final int dislikes;
-  final String partageLien; // Link to share the announcement
+  final String partageLien;
 
   ArticleShop({
     required this.id,
@@ -27,12 +25,9 @@ class ArticleShop {
     required this.image,
     required this.categorie,
     required this.commandes,
-    required this.likes,
-    required this.dislikes,
     required this.partageLien,
   });
 
-  // Factory method to create an ArticleShop object from JSON
   factory ArticleShop.fromJson(Map<String, dynamic> json) {
     var commandesFromJson = json['commandes'] as List<dynamic>;
     List<Commande> commandeList =
@@ -43,18 +38,16 @@ class ArticleShop {
       dateCreation: (json['dateCreation'] as Timestamp).toDate(),
       description: json['description'] as String,
       titre: json['titre'] as String,
-      prix: (json['prix'] as num).toDouble(),
+      prix: (json['prix'] as num).toInt(),
       // prix: 0,
       image: json['image'] as String,
       categorie: CategorieShop.fromJson(json['categorie']),
-      commandes: [],
-      likes: json['likes'] as int,
-      dislikes: json['dislikes'] as int,
+      commandes: commandeList,
+
       partageLien: json['partageLien'] as String,
     );
   }
 
-  // Method to convert an ArticleShop object to JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -64,11 +57,7 @@ class ArticleShop {
       'prix': prix,
       'image': image,
       'categorie': categorie.toJson(),
-      'commandes': commandes
-          .map((user) => user.toJson())
-          .toList(), // Convert list of Commentaire objects to JSON
-      'likes': likes,
-      'dislikes': dislikes,
+      'commandes': commandes.map((user) => user.toJson()).toList(),
       'partageLien': partageLien,
     };
   }
