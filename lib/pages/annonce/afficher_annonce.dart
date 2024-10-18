@@ -15,7 +15,7 @@ import 'package:new_app/widgets/submited_button.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:url_launcher/url_launcher.dart';  // Nécessaire pour ouvrir les liens dans le navigateur
+import 'package:url_launcher/url_launcher.dart';
 
 // Fonction pour ouvrir les liens
 Future<void> _onOpenLink(LinkableElement link) async {
@@ -168,11 +168,16 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
                       },
                       child: SizedBox(
                         height: 370,
-                        child: Image.network(
-                          imagePath,
+                        child: Image(
+                          image: ResizeImage(
+                            NetworkImage(imagePath),
+                            width: 800,  // largeur souhaitée
+                            height: 1110,  // hauteur souhaitée
+                          ),
                           fit: BoxFit.cover,
                         ),
                       ),
+
                     ),
                   ),
                 ],
