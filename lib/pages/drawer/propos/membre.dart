@@ -49,7 +49,10 @@ class MembreEquipe extends StatelessWidget {
                   ),
                   child: CircleAvatar(
                     radius: 100,
-                    backgroundImage: AssetImage(image),
+                    backgroundImage: ResizeImage(
+                        AssetImage(image),
+                        height: 600,
+                    ) ,
                     backgroundColor: grisClair,
                   ),
                 ),

@@ -183,7 +183,10 @@ Widget equipeMembre(image, nom, String role, String description, String contact,
       child: Column(
         children: [
           CircleAvatar(
-            backgroundImage: AssetImage(image),
+            backgroundImage:ResizeImage(
+                AssetImage(image),
+                width: 210,
+            ) ,
             radius: 35,
             backgroundColor: Colors.grey[300], // Couleur de l'avatar
           ),
