@@ -131,10 +131,14 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                                     MediaQuery.sizeOf(context)
                                                             .width *
                                                         0.1,
-                                                backgroundImage: NetworkImage(
-                                                  matchProvider
-                                                      .value!.equipeA.logo,
-                                                )),
+                                                backgroundImage: ResizeImage(
+                                                    NetworkImage(
+                                                      matchProvider
+                                                          .value!.equipeA.logo,
+                                                    ),
+                                                        width:268,
+                                                )
+                                            ),
                                             SizedBox(height: 10),
                                             Text(
                                               matchProvider.value!.equipeA.nom,
@@ -157,10 +161,15 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                                     MediaQuery.sizeOf(context)
                                                             .width *
                                                         0.1,
-                                                backgroundImage: NetworkImage(
-                                                  matchProvider
-                                                      .value!.equipeB.logo,
-                                                )),
+                                                backgroundImage: ResizeImage(
+                                                    NetworkImage(
+                                                      matchProvider
+                                                          .value!.equipeB.logo,
+                                                    ),
+                                                    width: 268
+                                                )
+
+                                            ),
                                             SizedBox(height: 10),
                                             Text(
                                               matchProvider.value!.equipeB.nom,

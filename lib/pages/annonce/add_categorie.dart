@@ -171,12 +171,16 @@ class _AddCategoriePageState extends State<AddCategoriePage> {
                       },
                       leading: categorie.logo.isNotEmpty
                           ? SizedBox(
-                              width: 50,
-                              child: Image.network(
-                                categorie.logo,
-                                fit: BoxFit.cover,
-                              ),
-                            )
+                        width: 50,
+                        child: Image(
+                          image: ResizeImage(
+                            NetworkImage(categorie.logo),
+                            width: 150,
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      )
+
                           : Icon(Icons.image_not_supported),
                       title: Text(categorie.libelle),
                     );

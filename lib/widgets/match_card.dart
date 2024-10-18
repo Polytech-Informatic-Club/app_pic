@@ -35,9 +35,11 @@ Widget buildMatchCard(
                         children: [
                           CircleAvatar(
                               radius: MediaQuery.sizeOf(context).width * 0.08,
-                              backgroundImage: NetworkImage(
-                                photo1,
-                              )),
+                              backgroundImage:ResizeImage(
+                                  NetworkImage(photo1),
+                                width: 215
+                              ),
+                          ),
                           SizedBox(
                             width: 5,
                           ),
@@ -98,9 +100,11 @@ Widget buildMatchCard(
                           ),
                           CircleAvatar(
                               radius: MediaQuery.sizeOf(context).width * 0.08,
-                              backgroundImage: NetworkImage(
-                                photo2,
-                              )),
+                              backgroundImage: ResizeImage(
+                                  NetworkImage(photo2),
+                                  width: 215
+                              )
+                          ),
                         ],
                       ),
                     ],

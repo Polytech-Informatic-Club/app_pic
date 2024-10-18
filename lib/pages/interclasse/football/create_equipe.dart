@@ -175,12 +175,16 @@ class _CreateEquipePageState extends State<CreateEquipePage> {
                       child: ListTile(
                         leading: equipe.logo.isNotEmpty
                             ? SizedBox(
-                                width: 50,
-                                child: Image.network(
-                                  equipe.logo,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
+                          width: 50,
+                          height: 50,
+                          child: Image(
+                            image: ResizeImage(
+                              NetworkImage(equipe.logo),
+                              width: 150,
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        )
                             : Icon(Icons.image_not_supported),
                         title: Text(equipe.nom),
                       ),
