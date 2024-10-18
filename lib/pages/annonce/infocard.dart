@@ -55,8 +55,8 @@ class InfoCard extends StatelessWidget {
               child: Image(
                 image: ResizeImage(
                   NetworkImage(image),
-                  width: 900,  // Largeur de cache
-                  height: 900, // Hauteur de cache
+                  width: 730,  // Largeur de cache
+                  height: 730, // Hauteur de cache
                 ),
                 height: height,
               ),
