@@ -90,9 +90,13 @@ class _PromotionPageState extends State<PromotionPage> {
     return Center(
       child: Column(
         children: [
-          Image.network(
-            _promo!.logo,
-            height: 150,
+          Image(
+            image: ResizeImage(
+              NetworkImage(_promo!.logo),
+              width: 450,  // Largeur souhaitée
+              height: 450,  // Hauteur souhaitée
+            ),
+            height: 150,  // Taille d'affichage
           ),
           SizedBox(height: 10),
           Text(
@@ -167,11 +171,15 @@ Widget eleveWidget(String? photoUrl, String nom, String genie, String numero) {
     child: ListTile(
       leading: CircleAvatar(
         backgroundImage: photoUrl != null && photoUrl.isNotEmpty
-            ? NetworkImage(photoUrl)
+            ? ResizeImage(
+          NetworkImage(photoUrl),
+          width: 180,
+        )
             : null,
         child: photoUrl == null || photoUrl.isEmpty ? Icon(Icons.person) : null,
         radius: 30,
       ),
+
       title: Text(
         nom,
         style: TextStyle(

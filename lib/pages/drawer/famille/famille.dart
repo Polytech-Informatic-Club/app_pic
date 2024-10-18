@@ -64,7 +64,10 @@ class _FamillePolytechnicienneScreenState
               child: ListTile(
                 leading: CircleAvatar(
                   radius: 35,
-                  backgroundImage: NetworkImage(logo), // Chemin de l'image
+                  backgroundImage:ResizeImage(
+                      NetworkImage(logo),
+                      width: 210,
+                  ) , // Chemin de l'image
                 ),
                 title: Text(
                   nom,
