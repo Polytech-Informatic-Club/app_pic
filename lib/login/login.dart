@@ -160,6 +160,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   if (user != null && role != null) {
                                     _userService.setRole(role);
                                     changerPage(context, HomePage());
+                                  }else{
+                                    
+                                  alerteMessageWidget(
+                                      context,
+                                      "Compte non activé !",
+                                      AppColors.echec);
                                   }
                                 } catch (e) {
                                   alerteMessageWidget(

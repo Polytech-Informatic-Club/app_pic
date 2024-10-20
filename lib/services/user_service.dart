@@ -67,19 +67,65 @@ class UserService {
     await prefs.setString('role', role);
   }
 
-  Future<User?> signInWithEmailAndPassword(
-      String email, String password) async {
-    final UserCredential userCredential = await _auth
-        .signInWithEmailAndPassword(email: email, password: password);
-    return userCredential.user;
+  // Méthode pour créer un compte et envoyer l'email de validation
+  Future<User?> signUpWithEmailAndPassword(String email, String password) async {
+    try {
+      // Création du compte utilisateur
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      User? user = userCredential.user;
+
+      // Vérifier si l'utilisateur a été créé
+      if (user != null && !user.emailVerified) {
+        // Envoyer l'email de vérification
+        await user.sendEmailVerification();
+        print('Email de vérification envoyé à $email');
+
+        // Déconnecter l'utilisateur jusqu'à validation de l'email
+        await _auth.signOut();
+        print('Utilisateur déconnecté en attente de validation.');
+
+        // Retourner un message pour informer l'utilisateur de vérifier son email
+        return user;
+      }
+    } catch (e) {
+      print('Erreur lors de la création de compte : $e');
+    }
+    return null;
   }
 
-  Future<User?> signUpWithEmailAndPassword(
-      String email, String password) async {
-    final UserCredential userCredential = await _auth
-        .createUserWithEmailAndPassword(email: email, password: password);
-    return userCredential.user;
+  // Méthode de connexion avec email et mot de passe
+  Future<User?> signInWithEmailAndPassword(String email, String password) async {
+    try {
+      // Connexion de l'utilisateur
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      User? user = userCredential.user;
+
+      // Vérifier si l'utilisateur a validé son email
+      if (user != null && !user.emailVerified) {
+        // Déconnecter l'utilisateur si l'email n'est pas vérifié
+        await _auth.signOut();
+        print('Veuillez vérifier votre email avant de vous connecter.');
+
+        // Retourner null ou afficher un message d'erreur
+        return null;
+      }
+
+      // Si l'email est vérifié, autoriser la connexion
+      return user;
+    } catch (e) {
+      print('Erreur lors de la connexion : $e');
+    }
+    return null;
   }
+
 
   Future<void> signOut() async {
     await _auth.signOut();

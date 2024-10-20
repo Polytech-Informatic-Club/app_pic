@@ -524,7 +524,7 @@ class _InscriptionState extends State<Inscription> {
                                                               utilisateur);
                                                   if (code == "OK") {
                                                     changerPage(
-                                                        context, HomePage());
+                                                        context, LoginScreen());
                                                   }
                                                 } catch (e) {
                                                   _isSaving.value = false;
