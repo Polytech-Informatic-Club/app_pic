@@ -525,10 +525,14 @@ class _InscriptionState extends State<Inscription> {
                                                   if (code == "OK") {
                                                     changerPage(
                                                         context, LoginScreen());
+                                                  } else {
+                                                    _isSaving.value = false;
                                                   }
                                                 } catch (e) {
                                                   _isSaving.value = false;
                                                 }
+                                              } else {
+                                                _isSaving.value = false;
                                               }
                                             } catch (e) {
                                               _isSaving.value = false;
