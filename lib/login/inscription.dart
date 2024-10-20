@@ -527,12 +527,24 @@ class _InscriptionState extends State<Inscription> {
                                                         context, LoginScreen());
                                                   } else {
                                                     _isSaving.value = false;
+                                                    alerteMessageWidget(
+                                                        context,
+                                                        "Mot de passe ou email invalide.",
+                                                        AppColors.echec);
                                                   }
                                                 } catch (e) {
                                                   _isSaving.value = false;
+                                                  alerteMessageWidget(
+                                                      context,
+                                                      "Mot de passe ou email invalide.",
+                                                      AppColors.echec);
                                                 }
                                               } else {
                                                 _isSaving.value = false;
+                                                alerteMessageWidget(
+                                                    context,
+                                                    "Mot de passe ou email invalide.",
+                                                    AppColors.echec);
                                               }
                                             } catch (e) {
                                               _isSaving.value = false;
