@@ -96,7 +96,7 @@ class _NouveauteState extends State<Nouveaute> {
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           children: [
-                            for (var annonce in annonces)
+                            for (var annonce in annonces.reversed)
                               annonce.image.isNotEmpty
                                   ? InfoCard(
                                       image: annonce

@@ -375,14 +375,14 @@ class _InscriptionState extends State<Inscription> {
                               ),
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  _isPasswordVisible
+                                  _isConfirmPasswordVisible
                                       ? Icons.visibility
                                       : Icons.visibility_off,
                                 ),
                                 onPressed: () {
                                   setState(() {
-                                    _isPasswordVisible =
-                                        !_isPasswordVisible; // Basculer la visibilité du mot de passe
+                                    _isConfirmPasswordVisible =
+                                        !_isConfirmPasswordVisible; // Basculer la visibilité du mot de passe
                                   });
                                 },
                               ),

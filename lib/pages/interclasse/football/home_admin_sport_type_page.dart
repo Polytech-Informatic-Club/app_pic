@@ -67,45 +67,45 @@ class HomeAdminSportTypePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              // SubmittedButton("Créer une commission", () {
-              //   changerPage(context, CreateCommission(typeSport));
-              // }),
-              SubmittedButton("Gestion catégories", () {
-                changerPage(context, AddCategoriePage());
-              }),
-              SizedBox(height: 10),
-              SubmittedButton("Créer une collection", () {
-                _showCreateCollectionDialog(context);
-              }),
-              SizedBox(height: 10),
-              SubmittedButton("Créer un article", () {
-                changerPage(context, CreateArticleShop());
-              }),
-              SizedBox(height: 10),
-              SubmittedButton("Créer un match", () {
-                changerPage(context, CreateMatch(typeSport));
-              }),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                // SubmittedButton("Créer une commission", () {
+                //   changerPage(context, CreateCommission(typeSport));
+                // }),
+                SubmittedButton("Gestion catégories", () {
+                  changerPage(context, AddCategoriePage());
+                }),
+                SizedBox(height: 10),
+                SubmittedButton("Créer une collection", () {
+                  _showCreateCollectionDialog(context);
+                }),
+                SizedBox(height: 10),
+                SubmittedButton("Créer un article", () {
+                  changerPage(context, CreateArticleShop());
+                }),
+                SizedBox(height: 10),
+                SubmittedButton("Créer un match", () {
+                  changerPage(context, CreateMatch(typeSport));
+                }),
 
-              SizedBox(
-                height: 10,
-              ),
-              SubmittedButton('Gestion équipes', () {
-                changerPage(context, CreateEquipePage());
-              }),
-              SizedBox(height: 10),
-              SubmittedButton("Administrer match", () {
-                changerPage(
-                    context,
-                    VoirMatchAdmin(
-                      typeSport: typeSport,
-                    ));
-              }),
-            ],
+                SizedBox(
+                  height: 10,
+                ),
+                SubmittedButton('Gestion équipes', () {
+                  changerPage(context, CreateEquipePage());
+                }),
+                SizedBox(height: 10),
+                SubmittedButton("Administrer match", () {
+                  changerPage(
+                      context,
+                      VoirMatchAdmin(
+                        typeSport: typeSport,
+                      ));
+                }),
+              ],
+            ),
           ),
         ),
       ),

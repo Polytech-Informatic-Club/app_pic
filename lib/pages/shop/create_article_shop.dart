@@ -96,7 +96,6 @@ class CreateArticleShop extends StatelessWidget {
       ),
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
-        // height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.fromLTRB(
@@ -273,39 +272,32 @@ class CreateArticleShop extends StatelessWidget {
                   height: 20,
                 ),
                 SubmittedButton("Poster", () async {
-                  if (_selectedcollectionA.value != null) {
-                    ArticleShop articleShop = ArticleShop(
-                      prix: int.parse(_prixController.value.text),
-                      id: DateTime.now().toString(),
-                      dateCreation: DateTime.now(),
-                      description: _descriptionTextController.value.text,
-                      titre: _titreController.value.text,
-                      image: _url.value,
-                      categorie: _selectedCategorieShop.value!,
-                      commandes: [],
-                      partageLien: "",
-                    );
+                  ArticleShop articleShop = ArticleShop(
+                    prix: int.parse(_prixController.value.text),
+                    id: DateTime.now().toString(),
+                    dateCreation: DateTime.now(),
+                    description: _descriptionTextController.value.text,
+                    titre: _titreController.value.text,
+                    image: _url.value,
+                    categorie: _selectedCategorieShop.value!,
+                    commandes: [],
+                    partageLien: "",
+                  );
+                  try {
                     try {
-                      try {
-                        String code = await _shopService.postArticleShop(
-                            articleShop, _selectedcollectionA.value!);
-                        if (code == "OK") {
-                          alerteMessageWidget(context,
-                              "Article crée avec succès !", AppColors.success);
-                        }
-                      } catch (e) {
-                        return null;
+                      String code = await _shopService.postArticleShop(
+                          articleShop, _selectedcollectionA.value!);
+                      if (code == "OK") {
+                        alerteMessageWidget(context,
+                            "Article crée avec succès !", AppColors.success);
                       }
                     } catch (e) {
-                      alerteMessageWidget(
-                          context,
-                          "Une erreur est survie lors de la création.$e",
-                          AppColors.echec);
+                      return null;
                     }
-                  } else {
+                  } catch (e) {
                     alerteMessageWidget(
                         context,
-                        "Vous n'avez pas sélectionné une collection.",
+                        "Une erreur est survie lors de la création.$e",
                         AppColors.echec);
                   }
                 })
