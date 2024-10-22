@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:new_app/models/annonce.dart';
 import 'package:new_app/models/article_shop.dart';
 import 'package:new_app/models/collection.dart';
@@ -102,11 +101,8 @@ class _NouveauteState extends State<Nouveaute> {
                                   ? InfoCard(
                                       image: annonce
                                           .image, // Passer l'URL comme String
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.4,
-                                      height:
-                                          MediaQuery.sizeOf(context).height *
-                                              0.25,
+                                      width: 140,
+                                      height: 200,
                                       titre: annonce.titre,
                                       lieu: annonce.lieu,
                                       date: annonce.date,
@@ -140,11 +136,8 @@ class _NouveauteState extends State<Nouveaute> {
                                   ? Container(
                                       padding: const EdgeInsets.all(5),
                                       margin: const EdgeInsets.all(5),
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.4,
-                                      height:
-                                          MediaQuery.sizeOf(context).height *
-                                              0.25,
+                                      width: 140,
+                                      height: 200,
                                       decoration: BoxDecoration(
                                           color: AppColors.primary,
                                           borderRadius:

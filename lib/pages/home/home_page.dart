@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Positioned(
                     top: 120,
-                    right: MediaQuery.of(context).size.width / 2 - 190,
+                    right: 7,
                     child: Container(
                       padding: const EdgeInsets.all(2),
                       width: 88,
@@ -101,7 +101,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -196,4 +195,3 @@ Widget _buildGameIcon(String imagePath, String gameName) {
     ],
   );
 }
-
