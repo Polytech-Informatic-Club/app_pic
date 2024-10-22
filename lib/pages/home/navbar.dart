@@ -70,7 +70,7 @@ class _navbarState extends State<navbar> {
         indicatorShape: CircleBorder(),
         selectedIndex: widget.pageIndex,
         onDestinationSelected: _onSelected,
-        height: 70,
+        height: 60,
         destinations: [
           _destination('assets/images/Navbar-Icons/loupe.png',
               'assets/images/Navbar-Icons/loupe-selected.png', '', 30),
