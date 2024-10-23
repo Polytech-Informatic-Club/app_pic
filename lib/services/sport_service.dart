@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:new_app/fonctions.dart';
@@ -70,9 +71,26 @@ class SportService {
 
   Future<String> removeMatch(String id) async {
     try {
-      await _firestore.collection("MATCH").doc(id).delete();
+      DocumentSnapshot matchSnapshot =
+          await _firestore.collection("MATCH").doc(id).get();
 
-      return "ok";
+      if (matchSnapshot.exists) {
+        String imageUrl = matchSnapshot['photo'] ?? '';
+
+        if (imageUrl.isNotEmpty) {
+          try {
+            Reference imageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+            await imageRef.delete();
+          } catch (e) {
+            return "Erreur lors de la suppression de l'image : $e";
+          }
+        }
+
+        await _firestore.collection("MATCH").doc(id).delete();
+        return "ok";
+      } else {
+        return "Match non trouvé";
+      }
     } catch (e) {
       return "Erreur : $e";
     }
@@ -266,14 +284,13 @@ class SportService {
           'comments': FieldValue.arrayUnion([commentaire.toJson()])
         },
       );
-    
+
       DocumentSnapshot querySnapshot = await matchDoc.get();
 //  ${(querySnapshot.data()! as Map<String, dynamic>)["equipeA"].nom}
-         // Envoyer une notification à chaque token actif
+      // Envoyer une notification à chaque token actif
       await _notificationService.sendAllNotification(
           "Nouveau commentaire match",
           "${commentaire.user.prenom + commentaire.user.nom.toUpperCase()} a commenté sur le match.");
-
 
       return {
         "BASKETBALL":
@@ -621,34 +638,6 @@ class SportService {
     }
   }
 
-  // Future<Commission?> getMembresCommission(String libelle) async {
-  //   try {
-  //     QuerySnapshot<Map<String, dynamic>> filteredSnapshot = await _firestore
-  //         .collection("COMMISSION")
-  //         .where("nom", isEqualTo: libelle)
-  //         .limit(1)
-  //         .get();
-
-  //     if (filteredSnapshot.docs.isEmpty) {
-  //       return null;
-  //     }
-  //     var data = filteredSnapshot.docs.first.data();
-  //     return Commission.fromJson(data);
-  //   } catch (e) {
-  //     print("Erreur: $e");
-  //     return null;
-  //   }
-  // }
-
-  // Future<String> postCommission(Commission commission) async {
-  //   try {
-  //     await commissionCollection.doc(commission.nom).set(commission.toJson());
-  //     return "OK";
-  //   } catch (e) {
-  //     return "Erreur lors de la création du match : $e";
-  //   }
-  // }
-
   Future<List<Matches>> getAllMatch() async {
     List<Matches> list = [];
     try {
@@ -719,8 +708,28 @@ class SportService {
         FirebaseFirestore.instance.collection('MEMBRES');
 
     try {
-      await membres.doc(membreId).delete();
-      print("Membre supprimé avec succès");
+      // Récupérer le document du membre avant de le supprimer
+      DocumentSnapshot membreSnapshot = await membres.doc(membreId).get();
+
+      if (membreSnapshot.exists) {
+        String imageUrl = membreSnapshot['image'] ?? '';
+
+        if (imageUrl.isNotEmpty) {
+          try {
+            Reference imageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+
+            await imageRef.delete();
+            print("Image supprimée du Storage.");
+          } catch (e) {
+            print("Erreur lors de la suppression de l'image : $e");
+          }
+        }
+
+        await membres.doc(membreId).delete();
+        print("Membre et image supprimés avec succès");
+      } else {
+        print("Membre non trouvé");
+      }
     } catch (e) {
       print("Erreur lors de la suppression du membre : $e");
     }

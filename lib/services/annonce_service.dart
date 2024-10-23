@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:new_app/models/annonce.dart';
@@ -33,8 +34,7 @@ class AnnonceService {
     try {
       await annonceCollection.doc(annonce.id).set(annonce.toJson());
       await _notificationService.sendAllNotification(
-          "${annonce.titre}",
-          "${annonce.description}");
+          "${annonce.titre}", "${annonce.description}");
 
       return "OK";
     } catch (e) {
@@ -194,14 +194,27 @@ class AnnonceService {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // Suppression du document si trouvé
+        // Récupérer l'URL de l'image de l'annonce
+        String imageUrl = querySnapshot.docs.first['image'];
+
+        // Supprimer l'image dans Firebase Storage si l'URL existe
+        if (imageUrl.isNotEmpty) {
+          // Créer une référence à l'image dans Firebase Storage à partir de son URL
+          Reference imageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+
+          // Supprimer l'image dans Firebase Storage
+          await imageRef.delete();
+          print("Image supprimée du Storage.");
+        }
+
+        // Supprimer l'annonce dans Firestore
         await querySnapshot.docs.first.reference.delete();
-        return "Annonce supprimée avec succès";
+        return "Annonce et image supprimées avec succès";
       } else {
         return "Annonce non trouvée";
       }
     } catch (e) {
-      return "Erreur lors de la suppression de l'annonce : $e";
+      return "Erreur lors de la suppression de l'annonce ou de l'image : $e";
     }
   }
 

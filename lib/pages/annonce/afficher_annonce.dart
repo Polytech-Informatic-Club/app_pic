@@ -63,7 +63,6 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
   }
 
   Future<void> _loadAnnonce() async {
-    // Récupérer l'annonce
     Annonce? annonce = await _annonceService.getAnnonceId(widget.idAnnonce);
     if (annonce != null) {
       setState(() {
@@ -74,7 +73,6 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
 
   Future<void> _checkUserRole() async {
     try {
-      // Récupérer l'utilisateur connecté via FirebaseAuth
       var user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         userId = user.email;
@@ -101,27 +99,28 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
       extendBodyBehindAppBar: true,
       floatingActionButton: isAdmin
           ? Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            heroTag: "editButton",
-            onPressed: () {
-              changerPage(context, EditAnnonce(idAnnonce: widget.idAnnonce));
-            },
-            backgroundColor: AppColors.primary,
-            child: Icon(Icons.edit),
-          ),
-          SizedBox(width: 10),
-          FloatingActionButton(
-            heroTag: "deleteButton",
-            onPressed: () {
-              _showDeleteConfirmation(context, widget.idAnnonce);
-            },
-            backgroundColor: Colors.red,
-            child: Icon(Icons.delete),
-          ),
-        ],
-      )
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  heroTag: "editButton",
+                  onPressed: () {
+                    changerPage(
+                        context, EditAnnonce(idAnnonce: widget.idAnnonce));
+                  },
+                  backgroundColor: AppColors.primary,
+                  child: Icon(Icons.edit),
+                ),
+                SizedBox(width: 10),
+                FloatingActionButton(
+                  heroTag: "deleteButton",
+                  onPressed: () {
+                    _showDeleteConfirmation(context, widget.idAnnonce);
+                  },
+                  backgroundColor: Colors.red,
+                  child: Icon(Icons.delete),
+                ),
+              ],
+            )
           : null,
       body: SingleChildScrollView(
         child: afficherAnnonce(
@@ -145,7 +144,8 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
               height: 470,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/polytech-Info/white_bg_ept.png'),
+                  image: AssetImage(
+                      'assets/images/polytech-Info/white_bg_ept.png'),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -162,7 +162,8 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => FullScreenImage(imageUrl: imagePath),
+                            builder: (context) =>
+                                FullScreenImage(imageUrl: imagePath),
                           ),
                         );
                       },
@@ -171,12 +172,11 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
                         child: Image(
                           image: ResizeImage(
                             NetworkImage(imagePath),
-                            height: 1110,  // hauteur souhaitée
+                            height: 1110, // hauteur souhaitée
                           ),
                           fit: BoxFit.cover,
                         ),
                       ),
-
                     ),
                   ),
                 ],
@@ -285,12 +285,13 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Annonce supprimée avec succès')),
       );
-      Navigator.of(context).pop(); // Ferme le dialogue de confirmation
-      Navigator.of(context).pop(); // Ferme la page actuelle
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
       changerPage(context, AnnonceScreen());
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erreur lors de la suppression de l\'annonce : $e')),
+        SnackBar(
+            content: Text('Erreur lors de la suppression de l\'annonce : $e')),
       );
     }
   }
