@@ -82,41 +82,79 @@ class _ShopScreenState extends State<ShopScreen> {
   }
 
   void _showProductDetails(ArticleShop product, Collection collection) {
+    int quantity = 1;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.network(product.image, height: 200),
-              SizedBox(height: 10),
-              Text(product.titre,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              Text('Catégorie: ${product.categorie.libelle}'),
-              Text('Prix: ${product.prix} CFA'),
-              SizedBox(height: 10),
-              Text(product.description),
-              SizedBox(height: 20),
-              ElevatedButton(
-                child: Text('Commander'),
-                onPressed: () async {
-                  String code =
-                      await _shopService.postCommande(product, collection);
-                  if (code == "OK") {
-                    Navigator.of(context).pop();
-                    alerteMessageWidget(
-                        context,
-                        "Votre commande a été bien prise en compte.",
-                        AppColors.success);
-                  } else {
-                    alerteMessageWidget(
-                        context, "Echec lors de la commande.", AppColors.echec);
-                  }
-                },
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.network(product.image, height: 200),
+                  SizedBox(height: 10),
+                  Text(product.titre,
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text('Catégorie: ${product.categorie.libelle}'),
+                  Text('Prix: ${product.prix} CFA'),
+                  SizedBox(height: 10),
+                  Text(product.description),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Bouton "-"
+                      IconButton(
+                        onPressed: quantity > 1
+                            ? () {
+                                setState(() {
+                                  quantity--;
+                                });
+                              }
+                            : null, // Désactivé si quantité est 1
+                        icon: Icon(Icons.remove),
+                        color: quantity > 1 ? Colors.black : Colors.grey,
+                      ),
+                      Text(
+                        '$quantity', // Affiche la quantité actuelle
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            quantity++;
+                          });
+                        },
+                        icon: Icon(Icons.add),
+                        color: Colors.black,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    child: Text('Commander'),
+                    onPressed: () async {
+                      // Gestion de la commande avec la quantité
+                      String code = await _shopService.postCommande(product,
+                          collection, quantity); // Ajout de la quantité
+                      if (code == "OK") {
+                        Navigator.of(context).pop();
+                        alerteMessageWidget(
+                            context,
+                            "Votre commande a été bien prise en compte.",
+                            AppColors.success);
+                      } else {
+                        alerteMessageWidget(context,
+                            "Échec lors de la commande.", AppColors.echec);
+                      }
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );

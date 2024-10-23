@@ -100,9 +100,9 @@ class _Blouson_PageState extends State<blousonPage> {
               SizedBox(height: 20),
               ElevatedButton(
                 child: Text('Commander'),
-                    onPressed: () async {
-                  String code =
-                      await _shopService.postCommande(articleShop, collection);
+                onPressed: () async {
+                  String code = await _shopService.postCommande(
+                      articleShop, collection, 1);
                   if (code == "OK") {
                     Navigator.of(context).pop();
                     alerteMessageWidget(
@@ -232,12 +232,11 @@ class _Blouson_PageState extends State<blousonPage> {
                       onPressed: () {
                         // Récupérer l'article correspondant à l'image affichée
                         _showProductDetails(
-                          widget.collection.articleShops.firstWhere(
-                            (article) =>
-                                article.image == carouselImages[_currentPage],
-                          ),
-                          widget.collection
-                        );
+                            widget.collection.articleShops.firstWhere(
+                              (article) =>
+                                  article.image == carouselImages[_currentPage],
+                            ),
+                            widget.collection);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,

@@ -182,7 +182,7 @@ class ShopService {
   }
 
   Future<String> postCommande(
-      ArticleShop produit, Collection collection) async {
+      ArticleShop produit, Collection collection, int quantity) async {
     try {
       String email = FirebaseAuth.instance.currentUser!.email!;
       DocumentSnapshot userSnapshot =
@@ -195,7 +195,7 @@ class ShopService {
         date: DateTime.now(),
         id: DateTime.now().toIso8601String(),
         userId: Utilisateur.fromJson(userData).id!,
-        nombre: 1,
+        nombre: quantity,
         produitId: produit.id,
       );
 
