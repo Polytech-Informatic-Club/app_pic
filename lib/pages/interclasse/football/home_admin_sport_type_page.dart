@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:new_app/pages/annonce/add_categorie.dart';
 import 'package:new_app/pages/interclasse/football/create_equipe.dart';
 import 'package:new_app/pages/interclasse/football/voir_match_admin.dart';
+import 'package:new_app/pages/shop/afficher_commandes.dart';
 import 'package:new_app/pages/shop/create_collection.dart';
 import 'package:new_app/pages/shop/gestion_article.dart';
 import 'package:new_app/pages/shop/gestion_categorie_shop.dart';
@@ -93,6 +94,10 @@ class HomeAdminSportTypePage extends StatelessWidget {
                 SizedBox(height: 10),
                 SubmittedButton("Gérer les articles", () {
                   changerPage(context, ArticleListPage());
+                }),
+                SizedBox(height: 10),
+                SubmittedButton("Voir les commandes", () {
+                  changerPage(context, CommandeListPage());
                 }),
                 SizedBox(height: 10),
                 SubmittedButton("Gestion catégorie shop", () {
