@@ -101,8 +101,7 @@ class _Blouson_PageState extends State<blousonPage> {
               ElevatedButton(
                 child: Text('Commander'),
                 onPressed: () async {
-                  String code = await _shopService.postCommande(
-                      articleShop, collection, 1);
+                  String code = await _shopService.postCommande(articleShop, 1);
                   if (code == "OK") {
                     Navigator.of(context).pop();
                     alerteMessageWidget(

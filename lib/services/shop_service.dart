@@ -181,8 +181,7 @@ class ShopService {
     }
   }
 
-  Future<String> postCommande(
-      ArticleShop produit, Collection collection, int quantity) async {
+  Future<String> postCommande(ArticleShop produit, int quantity) async {
     try {
       String email = FirebaseAuth.instance.currentUser!.email!;
       DocumentSnapshot userSnapshot =
@@ -199,28 +198,33 @@ class ShopService {
         produitId: produit.id,
       );
 
-      DocumentSnapshot doc =
-          await collectionCollection.doc(collection.id).get();
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection("ARTICLE")
+          .doc(produit.id)
+          .get();
+
+      if (!doc.exists) {
+        return "L'article n'existe pas.";
+      }
+
+      // Convertir les données de l'article
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-      List<dynamic> articleShops = data['articleShops'];
+      // Récupérer la liste des commandes de l'article (ou une liste vide s'il n'y en a pas)
+      List<dynamic> commandes = data['commandes'] ?? [];
 
-      for (var article in articleShops) {
-        if (article['id'] == produit.id) {
-          // Ajouter la commande dans la liste des commandes
-          List<dynamic> commandes = article['commandes'] ?? [];
-          commandes.add(commande.toJson());
-          article['commandes'] = commandes;
-          break;
-        }
-      }
-      await collectionCollection.doc(collection.id).update({
-        'articleShops': articleShops,
+      // Ajouter la nouvelle commande
+      commandes.add(commande.toJson());
+
+      // Mettre à jour l'article avec la nouvelle liste des commandes
+      await FirebaseFirestore.instance
+          .collection("ARTICLE")
+          .doc(produit.id)
+          .update({
+        'commandes': commandes,
       });
 
-      print("Mise à jour réussie !");
-
-      print("OK");
+      print("Commande ajoutée avec succès !");
       return "OK";
     } catch (e) {
       return "Erreur lors de la création de la commande : $e";

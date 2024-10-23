@@ -81,7 +81,7 @@ class _ShopScreenState extends State<ShopScreen> {
     }).toList();
   }
 
-  void _showProductDetails(ArticleShop product, Collection collection) {
+  void _showProductDetails(ArticleShop product) {
     int quantity = 1;
 
     showDialog(
@@ -137,8 +137,8 @@ class _ShopScreenState extends State<ShopScreen> {
                     child: Text('Commander'),
                     onPressed: () async {
                       // Gestion de la commande avec la quantité
-                      String code = await _shopService.postCommande(product,
-                          collection, quantity); // Ajout de la quantité
+                      String code = await _shopService.postCommande(
+                          product, quantity); // Ajout de la quantité
                       if (code == "OK") {
                         Navigator.of(context).pop();
                         alerteMessageWidget(
@@ -316,7 +316,7 @@ class _ShopScreenState extends State<ShopScreen> {
 
   Widget _buildProductItem(ArticleShop produit) {
     return GestureDetector(
-      onTap: () => _showProductDetails(produit, _collection!),
+      onTap: () => _showProductDetails(produit),
       child: Column(
         children: [
           Container(
