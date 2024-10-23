@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:new_app/models/article_shop.dart';
 import 'package:new_app/models/categorie_shop.dart';
@@ -24,11 +25,15 @@ class _EditArticleShopState extends State<EditArticleShop> {
   final TextEditingController _prixController = TextEditingController();
 
   final ShopService _shopService = ShopService();
+  final ImagePicker _imagePicker =
+      ImagePicker(); // Ajoutez l'instance d'ImagePicker
 
   final ValueNotifier<CategorieShop?> _selectedCategorieShop =
       ValueNotifier(null);
   final ValueNotifier<DateTime?> _selectedDate = ValueNotifier(DateTime.now());
   final ValueNotifier<String> _url = ValueNotifier("");
+
+  List<CategorieShop> _categories = []; // Liste des catégories disponibles
 
   @override
   void initState() {
@@ -39,32 +44,27 @@ class _EditArticleShopState extends State<EditArticleShop> {
     _selectedCategorieShop.value = widget.article.categorie;
     _selectedDate.value = widget.article.dateCreation;
     _url.value = widget.article.image;
+
+    _loadCategories(); // Charger les catégories au démarrage
   }
 
-  Future<void> _selectDateTime(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate.value!,
-      firstDate: DateTime(2015, 8),
-      lastDate: DateTime(2101),
-    );
+  // Charger les catégories disponibles (par exemple, à partir d'une API ou d'une base de données)
+  Future<void> _loadCategories() async {
+    _categories =
+        await _shopService.getAllCategorieShop(); // Exécuter la récupération
+    setState(
+        () {}); // Mettre à jour l'interface après le chargement des catégories
+  }
 
-    if (pickedDate != null) {
-      final TimeOfDay? pickedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(_selectedDate.value!),
-      );
-
-      if (pickedTime != null) {
-        final DateTime pickedDateTime = DateTime(
-          pickedDate.year,
-          pickedDate.month,
-          pickedDate.day,
-          pickedTime.hour,
-          pickedTime.minute,
-        );
-        _selectedDate.value = pickedDateTime;
-      }
+  // Fonction pour sélectionner une nouvelle image à partir de la galerie
+  Future<void> _pickImage() async {
+    final XFile? image =
+        await _imagePicker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _url.value =
+            image.path; // Mettre à jour l'URL avec le chemin de l'image
+      });
     }
   }
 
@@ -79,37 +79,46 @@ class _EditArticleShopState extends State<EditArticleShop> {
         padding: EdgeInsets.all(20),
         child: Column(
           children: <Widget>[
+            // Affichage de l'image
             ValueListenableBuilder<String>(
               valueListenable: _url,
               builder: (context, url, child) {
                 return url.isNotEmpty
-                    ? Image.network(url)
-                    : Container(
-                        height: 200,
-                        width: double.infinity,
-                        color: AppColors.gray,
-                        child: Center(child: Text("Pas d'image")),
+                    ? Column(
+                        children: [
+                          Image.network(url),
+                          SizedBox(height: 10),
+                          // Bouton pour changer l'image
+                          ElevatedButton.icon(
+                            onPressed:
+                                _pickImage, // Ouvre la galerie pour sélectionner une nouvelle image
+                            icon: Icon(Icons.photo),
+                            label: Text("Changer l'image"),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          Container(
+                            height: 200,
+                            width: double.infinity,
+                            color: AppColors.gray,
+                            child: Center(child: Text("Pas d'image")),
+                          ),
+                          SizedBox(height: 10),
+                          // Bouton pour ajouter une image
+                          ElevatedButton.icon(
+                            onPressed:
+                                _pickImage, // Ouvre la galerie pour sélectionner une nouvelle image
+                            icon: Icon(Icons.photo),
+                            label: Text("Ajouter une image"),
+                          ),
+                        ],
                       );
               },
             ),
             SizedBox(height: 20),
-            GestureDetector(
-              onTap: () => _selectDateTime(context),
-              child: Row(children: [
-                Icon(Icons.calendar_today),
-                SizedBox(width: 10),
-                ValueListenableBuilder<DateTime?>(
-                  valueListenable: _selectedDate,
-                  builder: (context, selectedDate, child) {
-                    return Text(
-                      DateFormat('dd MMMM yyyy').format(selectedDate!),
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    );
-                  },
-                ),
-              ]),
-            ),
-            SizedBox(height: 20),
+
             reusableTextFormField("Titre", _titreController, (value) {
               return null;
             }),
@@ -123,6 +132,36 @@ class _EditArticleShopState extends State<EditArticleShop> {
               return null;
             }),
             SizedBox(height: 20),
+
+            // DropdownButton pour sélectionner une catégorie
+            ValueListenableBuilder<CategorieShop?>(
+              valueListenable: _selectedCategorieShop,
+              builder: (context, selectedCategorie, child) {
+                return DropdownButtonFormField<CategorieShop>(
+                  value: _categories.firstWhere(
+                    (categorie) => categorie.id == selectedCategorie?.id,
+                    orElse: () => CategorieShop(id: '', libelle: '', logo: ''),
+                  ), // Recherche basée sur l'id
+                  hint: Text("Sélectionnez une catégorie"),
+                  items: _categories.map((CategorieShop categorie) {
+                    return DropdownMenuItem<CategorieShop>(
+                      value: categorie,
+                      child: Text(categorie.libelle),
+                    );
+                  }).toList(),
+                  onChanged: (CategorieShop? newCategorie) {
+                    _selectedCategorieShop.value = newCategorie;
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Catégorie',
+                  ),
+                );
+              },
+            ),
+
+            SizedBox(height: 20),
+
             SubmittedButton("Modifier l'article", () async {
               ArticleShop updatedArticle = ArticleShop(
                 id: widget.article.id,
@@ -137,10 +176,12 @@ class _EditArticleShopState extends State<EditArticleShop> {
               );
 
               try {
-                // String result = await _shopService.updateArticleShop(updatedArticle);
-                // if (result == "OK") {
-                //   alerteMessageWidget(context, "Article modifié avec succès !", AppColors.success);
-                // }
+                String result =
+                    await _shopService.updateArticleShop(updatedArticle);
+                if (result == "OK") {
+                  alerteMessageWidget(context, "Article modifié avec succès !",
+                      AppColors.success);
+                }
               } catch (e) {
                 alerteMessageWidget(context,
                     "Erreur lors de la modification : $e", AppColors.echec);

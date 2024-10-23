@@ -228,30 +228,6 @@ class CreateArticleShop extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
-                GestureDetector(
-                  onTap: () => _selectDateTime(context),
-                  child: Row(children: [
-                    Icon(Icons.calendar_month),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    ValueListenableBuilder<DateTime?>(
-                      valueListenable: _selectedDate,
-                      builder: (context, selectedDate, child) {
-                        String formattedDate = selectedDate != null
-                            ? DateFormat('dd MMMM yyyy').format(selectedDate)
-                            : 'Pas de date sélectionnée';
-                        return Text(
-                          formattedDate,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        );
-                      },
-                    ),
-                  ]),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
                 reusableTextFormField("Nom", _titreController, (value) {
                   return null;
                 }),

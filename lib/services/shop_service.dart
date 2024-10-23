@@ -132,6 +132,27 @@ class ShopService {
     }
   }
 
+  Future<String> updateArticleShop(ArticleShop articleShop) async {
+    try {
+      DocumentReference articleRef =
+          _firestore.collection('ARTICLE').doc(articleShop.id);
+
+      await articleRef.update({
+        'titre': articleShop.titre,
+        'description': articleShop.description,
+        'prix': articleShop.prix,
+        'image': articleShop.image,
+        'categorie': articleShop.categorie.toJson(),
+        'dateCreation': articleShop.dateCreation.toIso8601String(),
+      });
+
+      return "OK";
+    } catch (e) {
+      print("Erreur lors de la mise à jour de l'article : $e");
+      return "Erreur lors de la mise à jour de l'article.";
+    }
+  }
+
   Future<String> postCommande(
       ArticleShop produit, Collection collection) async {
     try {

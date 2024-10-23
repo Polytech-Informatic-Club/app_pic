@@ -5,6 +5,17 @@ class CategorieShop {
   final String libelle;
   final String logo;
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CategorieShop &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
+
+  // Implémentation de hashCode
+  @override
+  int get hashCode => id.hashCode;
+
   CategorieShop({
     required this.id,
     required this.libelle,
