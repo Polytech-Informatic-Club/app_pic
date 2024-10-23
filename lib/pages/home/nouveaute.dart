@@ -161,8 +161,8 @@ class _NouveauteState extends State<Nouveaute> {
                   },
                 ),
               if (_value == 3)
-                FutureBuilder<Collection?>(
-                  future: _shopService.getNewCollection(),
+                FutureBuilder<List<ArticleShop>?>(
+                  future: _shopService.getAllArticle(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();
@@ -170,13 +170,13 @@ class _NouveauteState extends State<Nouveaute> {
                       return const Text(
                           'Erreur lors du chargement des annonces');
                     } else {
-                      Collection? collection = snapshot.data ?? null;
+                      List<ArticleShop> articles = snapshot.data ?? [];
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           children: [
-                            if (collection != null)
-                              for (var articleShop in collection.articleShops)
+                            if (articles != [])
+                              for (var articleShop in articles)
                                 articleShop.image.isNotEmpty
                                     ? Container(
                                         padding: const EdgeInsets.all(5),
