@@ -190,6 +190,8 @@ class ShopService {
 
       Map<String, dynamic> userData =
           userSnapshot.data() as Map<String, dynamic>;
+
+      // Créer une nouvelle commande
       Commande commande = Commande(
         date: DateTime.now(),
         id: DateTime.now().toIso8601String(),
@@ -198,33 +200,13 @@ class ShopService {
         produitId: produit.id,
       );
 
-      DocumentSnapshot doc = await FirebaseFirestore.instance
-          .collection("ARTICLE")
-          .doc(produit.id)
-          .get();
-
-      if (!doc.exists) {
-        return "L'article n'existe pas.";
-      }
-
-      // Convertir les données de l'article
-      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-
-      // Récupérer la liste des commandes de l'article (ou une liste vide s'il n'y en a pas)
-      List<dynamic> commandes = data['commandes'] ?? [];
-
-      // Ajouter la nouvelle commande
-      commandes.add(commande.toJson());
-
-      // Mettre à jour l'article avec la nouvelle liste des commandes
+      // Ajouter la commande directement dans la collection "COMMANDE"
       await FirebaseFirestore.instance
-          .collection("ARTICLE")
-          .doc(produit.id)
-          .update({
-        'commandes': commandes,
-      });
+          .collection("COMMANDE")
+          .doc(commande.id)
+          .set(commande.toJson());
 
-      print("Commande ajoutée avec succès !");
+      print("Commande ajoutée avec succès dans la collection COMMANDE !");
       return "OK";
     } catch (e) {
       return "Erreur lors de la création de la commande : $e";
