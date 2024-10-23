@@ -82,8 +82,28 @@ class AnnonceService {
 
   Future<void> deleteCategorie(String id) async {
     try {
-      await FirebaseFirestore.instance.collection('CATEGORIE').doc(id).delete();
-      print('Catégorie supprimée avec succès.');
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('CATEGORIE')
+          .doc(id)
+          .get();
+
+      if (doc.exists) {
+        String logoUrl = doc.get('logo');
+
+        if (logoUrl.isNotEmpty) {
+          Reference imageRef = FirebaseStorage.instance.refFromURL(logoUrl);
+          await imageRef.delete();
+          print('Image du logo supprimée avec succès.');
+        }
+
+        await FirebaseFirestore.instance
+            .collection('CATEGORIE')
+            .doc(id)
+            .delete();
+        print('Catégorie supprimée avec succès.');
+      } else {
+        print("La catégorie n'existe pas.");
+      }
     } catch (e) {
       print('Erreur lors de la suppression de la catégorie: $e');
     }

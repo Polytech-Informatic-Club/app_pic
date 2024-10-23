@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:new_app/models/equipe.dart';
 import 'package:new_app/services/notification_service.dart';
 
@@ -52,7 +53,19 @@ class EquipeService {
 
   Future<void> deleteEquipe(String id) async {
     try {
-      await equipesCollection.doc(id).delete();
+      DocumentSnapshot equipeDoc = await equipesCollection.doc(id).get();
+
+      if (equipeDoc.exists) {
+        String logoUrl = equipeDoc['logo'];
+
+        await equipesCollection.doc(id).delete();
+
+        if (logoUrl.isNotEmpty) {
+          final Reference storageRef =
+              FirebaseStorage.instance.refFromURL(logoUrl);
+          await storageRef.delete();
+        }
+      }
     } catch (e) {
       print('Erreur lors de la suppression de l\'équipe : $e');
     }
