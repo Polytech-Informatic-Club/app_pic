@@ -264,6 +264,7 @@ class CreateArticleShop extends StatelessWidget {
                       String code = await _shopService.postArticleShop(
                           articleShop, _selectedcollectionA.value!);
                       if (code == "OK") {
+                        Navigator.of(context).pop();
                         alerteMessageWidget(context,
                             "Article crée avec succès !", AppColors.success);
                       }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/models/article_shop.dart';
 import 'package:new_app/models/categorie_shop.dart';
@@ -132,6 +133,18 @@ class ShopService {
     }
   }
 
+  Future<void> updateArticleImage(String articleId, String newImageUrl) async {
+    try {
+      // Mise à jour du document Firestore correspondant à l'article
+      await _firestore.collection('ARTICLE').doc(articleId).update({
+        'image': newImageUrl, // Mise à jour du champ 'image' avec le nouvel URL
+      });
+      print("Image de l'article mise à jour avec succès !");
+    } catch (e) {
+      throw Exception("Erreur lors de la mise à jour de l'image : $e");
+    }
+  }
+
   Future<String> updateArticleShop(ArticleShop articleShop) async {
     try {
       DocumentReference articleRef =
@@ -143,13 +156,28 @@ class ShopService {
         'prix': articleShop.prix,
         'image': articleShop.image,
         'categorie': articleShop.categorie.toJson(),
-        'dateCreation': articleShop.dateCreation.toIso8601String(),
       });
 
       return "OK";
     } catch (e) {
       print("Erreur lors de la mise à jour de l'article : $e");
       return "Erreur lors de la mise à jour de l'article.";
+    }
+  }
+
+  Future<void> deleteArticle(String articleId, String imageUrl) async {
+    try {
+      // Supprimer l'image du stockage Firebase
+      if (imageUrl.isNotEmpty) {
+        await FirebaseStorage.instance.refFromURL(imageUrl).delete();
+        print("Image supprimée avec succès !");
+      }
+
+      // Supprimer l'article de Firestore
+      await _firestore.collection('ARTICLE').doc(articleId).delete();
+      print("Article supprimé avec succès !");
+    } catch (e) {
+      throw Exception("Erreur lors de la suppression de l'article : $e");
     }
   }
 

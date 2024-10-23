@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:new_app/models/article_shop.dart';
 import 'package:new_app/models/categorie_shop.dart';
+import 'package:new_app/pages/shop/gestion_article.dart';
 import 'package:new_app/services/shop_service.dart';
 import 'package:new_app/utils/app_colors.dart';
 import 'package:new_app/widgets/alerte_message.dart';
@@ -23,17 +26,16 @@ class _EditArticleShopState extends State<EditArticleShop> {
       TextEditingController();
   final TextEditingController _titreController = TextEditingController();
   final TextEditingController _prixController = TextEditingController();
-
   final ShopService _shopService = ShopService();
-  final ImagePicker _imagePicker =
-      ImagePicker(); // Ajoutez l'instance d'ImagePicker
 
   final ValueNotifier<CategorieShop?> _selectedCategorieShop =
       ValueNotifier(null);
   final ValueNotifier<DateTime?> _selectedDate = ValueNotifier(DateTime.now());
   final ValueNotifier<String> _url = ValueNotifier("");
 
-  List<CategorieShop> _categories = []; // Liste des catégories disponibles
+  List<CategorieShop> _categories = [];
+  final ImagePicker _picker = ImagePicker();
+  File? _newImage;
 
   @override
   void initState() {
@@ -45,26 +47,100 @@ class _EditArticleShopState extends State<EditArticleShop> {
     _selectedDate.value = widget.article.dateCreation;
     _url.value = widget.article.image;
 
-    _loadCategories(); // Charger les catégories au démarrage
+    _loadCategories();
   }
 
-  // Charger les catégories disponibles (par exemple, à partir d'une API ou d'une base de données)
   Future<void> _loadCategories() async {
-    _categories =
-        await _shopService.getAllCategorieShop(); // Exécuter la récupération
-    setState(
-        () {}); // Mettre à jour l'interface après le chargement des catégories
+    _categories = await _shopService.getAllCategorieShop();
+    setState(() {});
   }
 
-  // Fonction pour sélectionner une nouvelle image à partir de la galerie
-  Future<void> _pickImage() async {
-    final XFile? image =
-        await _imagePicker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
+  // Affichage de la boîte de dialogue de confirmation de suppression
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Confirmer la suppression"),
+          content: Text("Êtes-vous sûr de vouloir supprimer cet article ?"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Annuler"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Supprimer"),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _deleteArticle();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteArticle() async {
+    try {
+      await _shopService.deleteArticle(widget.article.id, _url.value);
+
+      Navigator.of(context).pop();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => ArticleListPage()),
+      );
+      alerteMessageWidget(
+        context,
+        "Article supprimé avec succès !",
+        AppColors.success,
+      );
+    } catch (e) {
+      Navigator.of(context).pop();
+
+      alerteMessageWidget(
+        context,
+        "Erreur lors de la suppression : $e",
+        AppColors.echec,
+      );
+    }
+  }
+
+  Future<void> _selectAndUploadImage() async {
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
       setState(() {
-        _url.value =
-            image.path; // Mettre à jour l'URL avec le chemin de l'image
+        _newImage = File(pickedFile.path);
       });
+
+      try {
+        if (_url.value.isNotEmpty) {
+          await FirebaseStorage.instance.refFromURL(_url.value).delete();
+        }
+
+        String newFileName = DateTime.now().millisecondsSinceEpoch.toString();
+        Reference storageRef =
+            FirebaseStorage.instance.ref().child('articles/$newFileName.jpg');
+        await storageRef.putFile(_newImage!);
+
+        String newImageUrl = await storageRef.getDownloadURL();
+
+        setState(() {
+          _url.value = newImageUrl;
+        });
+
+        await _shopService.updateArticleImage(widget.article.id, newImageUrl);
+
+        alerteMessageWidget(
+            context, "Image modifiée avec succès !", AppColors.success);
+      } catch (e) {
+        alerteMessageWidget(
+            context, "Erreur lors de la modification : $e", AppColors.echec);
+      }
     }
   }
 
@@ -75,50 +151,43 @@ class _EditArticleShopState extends State<EditArticleShop> {
         backgroundColor: AppColors.primary,
         title: Text("Modifier l'article"),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showDeleteConfirmationDialog(context);
+        },
+        backgroundColor: AppColors.echec,
+        child: Icon(Icons.delete),
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20),
         child: Column(
           children: <Widget>[
-            // Affichage de l'image
             ValueListenableBuilder<String>(
               valueListenable: _url,
               builder: (context, url, child) {
-                return url.isNotEmpty
-                    ? Column(
-                        children: [
-                          Image.network(url),
-                          SizedBox(height: 10),
-                          // Bouton pour changer l'image
-                          ElevatedButton.icon(
-                            onPressed:
-                                _pickImage, // Ouvre la galerie pour sélectionner une nouvelle image
-                            icon: Icon(Icons.photo),
-                            label: Text("Changer l'image"),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          Container(
-                            height: 200,
-                            width: double.infinity,
-                            color: AppColors.gray,
-                            child: Center(child: Text("Pas d'image")),
-                          ),
-                          SizedBox(height: 10),
-                          // Bouton pour ajouter une image
-                          ElevatedButton.icon(
-                            onPressed:
-                                _pickImage, // Ouvre la galerie pour sélectionner une nouvelle image
-                            icon: Icon(Icons.photo),
-                            label: Text("Ajouter une image"),
-                          ),
-                        ],
-                      );
+                return Column(
+                  children: [
+                    _newImage != null
+                        ? Image.file(_newImage!)
+                        : (url.isNotEmpty
+                            ? Image.network(url)
+                            : Container(
+                                height: 200,
+                                width: double.infinity,
+                                color: AppColors.gray,
+                                child: Center(child: Text("Pas d'image")),
+                              )),
+                    SizedBox(height: 10),
+                    ElevatedButton.icon(
+                      onPressed: _selectAndUploadImage,
+                      icon: Icon(Icons.image),
+                      label: Text("Modifier l'image"),
+                    ),
+                  ],
+                );
               },
             ),
             SizedBox(height: 20),
-
             reusableTextFormField("Titre", _titreController, (value) {
               return null;
             }),
@@ -132,8 +201,6 @@ class _EditArticleShopState extends State<EditArticleShop> {
               return null;
             }),
             SizedBox(height: 20),
-
-            // DropdownButton pour sélectionner une catégorie
             ValueListenableBuilder<CategorieShop?>(
               valueListenable: _selectedCategorieShop,
               builder: (context, selectedCategorie, child) {
@@ -141,7 +208,7 @@ class _EditArticleShopState extends State<EditArticleShop> {
                   value: _categories.firstWhere(
                     (categorie) => categorie.id == selectedCategorie?.id,
                     orElse: () => CategorieShop(id: '', libelle: '', logo: ''),
-                  ), // Recherche basée sur l'id
+                  ),
                   hint: Text("Sélectionnez une catégorie"),
                   items: _categories.map((CategorieShop categorie) {
                     return DropdownMenuItem<CategorieShop>(
@@ -159,9 +226,7 @@ class _EditArticleShopState extends State<EditArticleShop> {
                 );
               },
             ),
-
             SizedBox(height: 20),
-
             SubmittedButton("Modifier l'article", () async {
               ArticleShop updatedArticle = ArticleShop(
                 id: widget.article.id,
@@ -179,6 +244,11 @@ class _EditArticleShopState extends State<EditArticleShop> {
                 String result =
                     await _shopService.updateArticleShop(updatedArticle);
                 if (result == "OK") {
+                  Navigator.of(context).pop();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => ArticleListPage()),
+                  );
                   alerteMessageWidget(context, "Article modifié avec succès !",
                       AppColors.success);
                 }
