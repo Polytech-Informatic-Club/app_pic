@@ -169,35 +169,6 @@ class CreateArticleShop extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
-                ValueListenableBuilder<List<Collection>>(
-                  valueListenable: _collections,
-                  builder: (context, collections, child) {
-                    return ValueListenableBuilder<Collection?>(
-                      valueListenable: _selectedcollectionA,
-                      builder: (context, selectedcollectionA, child) {
-                        return DropdownButton<Collection>(
-                          hint: Text('collection'),
-                          value: collections.contains(selectedcollectionA)
-                              ? selectedcollectionA
-                              : null,
-                          onChanged: (Collection? newValue) {
-                            _selectedcollectionA.value = newValue;
-                          },
-                          items: collections.map<DropdownMenuItem<Collection>>(
-                              (Collection collection) {
-                            return DropdownMenuItem<Collection>(
-                              value: collection,
-                              child: Text(collection.nom),
-                            );
-                          }).toList(),
-                        );
-                      },
-                    );
-                  },
-                ),
-                SizedBox(
-                  height: 20,
-                ),
                 ValueListenableBuilder<List<CategorieShop>>(
                   valueListenable: _categories,
                   builder: (context, categories, child) {
@@ -261,8 +232,8 @@ class CreateArticleShop extends StatelessWidget {
                   );
                   try {
                     try {
-                      String code = await _shopService.postArticleShop(
-                          articleShop, _selectedcollectionA.value!);
+                      String code =
+                          await _shopService.postArticleShop(articleShop);
                       if (code == "OK") {
                         Navigator.of(context).pop();
                         alerteMessageWidget(context,

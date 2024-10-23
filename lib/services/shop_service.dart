@@ -120,13 +120,9 @@ class ShopService {
     }
   }
 
-  Future<String> postArticleShop(
-      ArticleShop article, Collection collection) async {
+  Future<String> postArticleShop(ArticleShop article) async {
     try {
       await articleCollection.doc(article.id).set(article.toJson());
-      await collectionCollection.doc(collection.id).update({
-        "articleShops": FieldValue.arrayUnion([article.toJson()])
-      });
       return "OK";
     } catch (e) {
       return "Erreur lors de la création de l'article : $e";
