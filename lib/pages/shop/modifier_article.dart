@@ -196,18 +196,13 @@ class _EditArticleShopState extends State<EditArticleShop> {
               return null;
             }),
             SizedBox(height: 20),
-            ReusableDescriptionInput("Description", _descriptionTextController,
-                (value) {
-              return null;
-            }),
-            SizedBox(height: 20),
             ValueListenableBuilder<CategorieShop?>(
               valueListenable: _selectedCategorieShop,
               builder: (context, selectedCategorie, child) {
                 return DropdownButtonFormField<CategorieShop>(
                   value: _categories.firstWhere(
                     (categorie) => categorie.id == selectedCategorie?.id,
-                    orElse: () => CategorieShop(id: '', libelle: '', logo: ''),
+                    orElse: () => CategorieShop(id: '', libelle: ''),
                   ),
                   hint: Text("Sélectionnez une catégorie"),
                   items: _categories.map((CategorieShop categorie) {
@@ -226,6 +221,11 @@ class _EditArticleShopState extends State<EditArticleShop> {
                 );
               },
             ),
+            SizedBox(height: 20),
+            ReusableDescriptionInput("Description", _descriptionTextController,
+                (value) {
+              return null;
+            }),
             SizedBox(height: 20),
             SubmittedButton("Modifier l'article", () async {
               ArticleShop updatedArticle = ArticleShop(

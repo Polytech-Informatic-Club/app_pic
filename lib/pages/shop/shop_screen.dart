@@ -23,10 +23,9 @@ class _ShopScreenState extends State<ShopScreen> {
   List<String> carouselImages = ['assets/market/photo_2024-05-24_12-27-53.jpg'];
   Collection? _collection;
   String searchQuery = '';
-  CategorieShop selectedCategory =
-      CategorieShop(id: "", libelle: "Tous", logo: "");
+  CategorieShop selectedCategory = CategorieShop(id: "", libelle: "Tous");
   List<CategorieShop> categories = [
-    CategorieShop(id: "", libelle: "Tous", logo: ""),
+    CategorieShop(id: "", libelle: "Tous"),
   ];
 
   @override

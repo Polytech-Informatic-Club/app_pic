@@ -3,7 +3,6 @@ import 'package:uuid/uuid.dart';
 class CategorieShop {
   final String id;
   final String libelle;
-  final String logo;
 
   @override
   bool operator ==(Object other) =>
@@ -19,7 +18,6 @@ class CategorieShop {
   CategorieShop({
     required this.id,
     required this.libelle,
-    required this.logo,
   });
 
   // Factory method to create a CategorieShop object from JSON
@@ -27,7 +25,6 @@ class CategorieShop {
     return CategorieShop(
       id: json['id'] as String,
       libelle: json['libelle'] as String,
-      logo: json['logo'] as String,
     );
   }
 
@@ -36,7 +33,6 @@ class CategorieShop {
     return {
       'id': id,
       'libelle': libelle,
-      'logo': logo,
     };
   }
 }
