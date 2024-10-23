@@ -251,7 +251,18 @@ class CreateAnnonce extends StatelessWidget {
                 SubmittedButton(
                   "Poster",
                   () async {
-                    if (_url != ValueNotifier("")) {
+                    if (_titreTextController.text.isEmpty) {
+                      alerteMessageWidget(context, "Le titre est obligatoire.",
+                          AppColors.echec);
+                    } else if (_lieuTextController.text.isEmpty) {
+                      alerteMessageWidget(
+                          context, "Le lieu est obligatoire.", AppColors.echec);
+                    } else if (_url.value.isEmpty) {
+                      alerteMessageWidget(
+                          context,
+                          "Vous devez sélectionner une image.",
+                          AppColors.echec);
+                    } else {
                       Annonce annonce = Annonce(
                           categorie: _selectedCategory.value == null
                               ? Categorie(id: '', libelle: '', logo: '')
@@ -266,6 +277,7 @@ class CreateAnnonce extends StatelessWidget {
                           comments: [],
                           image: _url.value,
                           partageLien: "");
+
                       try {
                         String code =
                             await _annonceService.postAnnonce(annonce);
@@ -277,17 +289,15 @@ class CreateAnnonce extends StatelessWidget {
                       } catch (e) {
                         alerteMessageWidget(
                             context,
-                            "Une erreur est survie lors de la création.$e",
+                            "Une erreur est survenue lors de la création. $e",
                             AppColors.echec);
                       }
-                    } else {
-                      alerteMessageWidget(
-                          context,
-                          "Vous devez selectionner une image.",
-                          AppColors.echec);
                     }
                   },
-                )
+                ),
+                SizedBox(
+                  height: 10,
+                ),
               ],
             ),
           ),
