@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:new_app/pages/annonce/add_categorie.dart';
 import 'package:new_app/pages/interclasse/football/create_equipe.dart';
 import 'package:new_app/pages/interclasse/football/voir_match_admin.dart';
+import 'package:new_app/pages/shop/create_collection.dart';
 import 'package:new_app/pages/shop/gestion_article.dart';
 import 'package:new_app/pages/shop/gestion_categorie_shop.dart';
+import 'package:new_app/pages/shop/gestion_collection.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/models/collection.dart';
 import 'package:new_app/models/match.dart';
@@ -73,12 +75,16 @@ class HomeAdminSportTypePage extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                SubmittedButton("Gestion catégories", () {
+                SubmittedButton("Gestion catégories info", () {
                   changerPage(context, AddCategoriePage());
                 }),
                 SizedBox(height: 10),
-                SubmittedButton("Créer une collection", () {
-                  _showCreateCollectionDialog(context);
+                SubmittedButton("Créer collection", () {
+                  changerPage(context, CreateCollectionPage());
+                }),
+                SizedBox(height: 10),
+                SubmittedButton("Gestion collection", () {
+                  changerPage(context, CollectionListPage());
                 }),
                 SizedBox(height: 10),
                 SubmittedButton("Créer un article", () {

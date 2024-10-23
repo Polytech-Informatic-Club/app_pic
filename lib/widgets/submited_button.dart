@@ -7,9 +7,9 @@ Widget SubmittedButton(String label, Function() _onSubmited) {
     onPressed: _onSubmited,
     style: ElevatedButton.styleFrom(
       backgroundColor: AppColors.primary,
-      padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(20),
       ),
     ),
     child: Text(
