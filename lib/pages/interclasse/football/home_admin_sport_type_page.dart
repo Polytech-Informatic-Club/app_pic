@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:new_app/pages/annonce/add_categorie.dart';
 import 'package:new_app/pages/interclasse/football/create_equipe.dart';
 import 'package:new_app/pages/interclasse/football/voir_match_admin.dart';
+import 'package:new_app/pages/shop/gestion_article.dart';
 import 'package:new_app/services/user_service.dart';
 import 'package:new_app/models/collection.dart';
 import 'package:new_app/models/match.dart';
@@ -71,9 +72,6 @@ class HomeAdminSportTypePage extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                // SubmittedButton("Créer une commission", () {
-                //   changerPage(context, CreateCommission(typeSport));
-                // }),
                 SubmittedButton("Gestion catégories", () {
                   changerPage(context, AddCategoriePage());
                 }),
@@ -86,10 +84,13 @@ class HomeAdminSportTypePage extends StatelessWidget {
                   changerPage(context, CreateArticleShop());
                 }),
                 SizedBox(height: 10),
+                SubmittedButton("Gérer les articles", () {
+                  changerPage(context, ArticleListPage());
+                }),
+                SizedBox(height: 10),
                 SubmittedButton("Créer un match", () {
                   changerPage(context, CreateMatch(typeSport));
                 }),
-
                 SizedBox(
                   height: 10,
                 ),
@@ -99,10 +100,11 @@ class HomeAdminSportTypePage extends StatelessWidget {
                 SizedBox(height: 10),
                 SubmittedButton("Administrer match", () {
                   changerPage(
-                      context,
-                      VoirMatchAdmin(
-                        typeSport: typeSport,
-                      ));
+                    context,
+                    VoirMatchAdmin(
+                      typeSport: typeSport,
+                    ),
+                  );
                 }),
               ],
             ),

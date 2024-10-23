@@ -260,7 +260,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
+                    mainAxisSpacing: 5,
                     childAspectRatio: 0.7,
                   ),
                   itemCount: products.length,
@@ -297,11 +297,11 @@ class _ShopScreenState extends State<ShopScreen> {
           Text(
             produit.titre,
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            overflow: TextOverflow.ellipsis, // Pas de débordement
+            overflow: TextOverflow.ellipsis,
           ),
           SizedBox(height: 4),
           Text(
-            '${produit.prix} CFA',
+            '${produit.prix} FCFA',
             style: TextStyle(fontSize: 12, color: Colors.grey),
           ),
         ],
