@@ -43,7 +43,7 @@ class ShopService {
           await collectionCollection.get();
 
       Map<String, dynamic> data =
-          querySnapshot.docs.map((doc) => doc.data()).first;
+          querySnapshot.docs.map((doc) => doc.data()).last;
       // print(data);
       return Collection.fromJson(data);
     } catch (e) {
