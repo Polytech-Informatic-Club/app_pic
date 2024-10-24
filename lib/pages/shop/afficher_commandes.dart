@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/commande.dart';
 import 'package:new_app/models/article_shop.dart';
 import 'package:new_app/models/utilisateur.dart';
@@ -39,6 +40,7 @@ class _CommandeListPageState extends State<CommandeListPage> {
       'prenom': utilisateur.prenom,
       'nom': utilisateur.nom,
       'libelle': article.titre,
+      'prix': article.prix,
     };
   }
 
@@ -92,11 +94,12 @@ class _CommandeListPageState extends State<CommandeListPage> {
                   String prenom = commandeData['prenom'];
                   String nom = commandeData['nom'];
                   String libelle = commandeData['libelle'];
+                  int prixTotal = commandeData['prix'] * commande.nombre;
 
                   return ListTile(
                     title: Text("Commande de $prenom $nom"),
                     subtitle: Text(
-                        "Article: $libelle\nQuantité: ${commande.nombre}\nDate: ${commande.date.toString()}"),
+                        "Article: $libelle\nQuantité: ${commande.nombre}\n Prix: $prixTotal FCFA\nDate: ${simpleDateformat(commande.date)}"),
                   );
                 },
               );
