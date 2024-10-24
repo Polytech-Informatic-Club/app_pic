@@ -50,9 +50,9 @@ class MembreEquipe extends StatelessWidget {
                   child: CircleAvatar(
                     radius: 100,
                     backgroundImage: ResizeImage(
-                        AssetImage(image),
-                        height: 600,
-                    ) ,
+                      AssetImage(image),
+                      height: 600,
+                    ),
                     backgroundColor: grisClair,
                   ),
                 ),
@@ -124,7 +124,7 @@ class MembreEquipe extends StatelessWidget {
                     ouvrirLien(context, linkedin);
                   },
                   child: SizedBox(
-                    width: 300,
+                    width: MediaQuery.sizeOf(context).width - 100,
                     child: Text(
                       linkedin,
                       style: TextStyle(fontFamily: 'InterMedium'),
