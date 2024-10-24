@@ -90,9 +90,7 @@ class _HomePageState extends State<HomePage> {
                         clipBehavior: Clip.hardEdge,
                         child: Image(
                           image: ResizeImage(
-                            NetworkImage(
-                              'https://firebasestorage.googleapis.com/v0/b/ept-app-46930.appspot.com/o/assets%2Fpolytech-info%2Fbde_ept.jpg?alt=media&token=12c1e41f-0d06-4068-8ac6-50e35c146140',
-                            ),
+                            AssetImage("assets/images/homepage/bde_ept.jpg"),
                             width: 200,
                             height: 200,
                           ),
