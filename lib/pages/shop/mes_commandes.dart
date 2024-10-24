@@ -1,34 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/commande.dart';
 import 'package:new_app/models/article_shop.dart';
 import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/utils/app_colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class CommandeListPage extends StatefulWidget {
-  @override
-  State<CommandeListPage> createState() => _CommandeListPageState();
-}
-
-class _CommandeListPageState extends State<CommandeListPage> {
+class UserCommandeListPage extends StatelessWidget {
   final CollectionReference _commandeCollection =
       FirebaseFirestore.instance.collection('COMMANDE');
-
   final CollectionReference _userCollection =
       FirebaseFirestore.instance.collection('USER');
-
   final CollectionReference _articleCollection =
       FirebaseFirestore.instance.collection('ARTICLE');
+  final User? _currentUser = FirebaseAuth.instance.currentUser;
 
-  // Récupère l'utilisateur et l'article associés à chaque commande
   Future<Map<String, dynamic>> _getCommandeDetails(Commande commande) async {
-    // Récupérer l'utilisateur (nom et prénom)
-    DocumentSnapshot userSnapshot =
-        await _userCollection.doc(commande.userId).get();
-    Utilisateur utilisateur =
-        Utilisateur.fromJson(userSnapshot.data() as Map<String, dynamic>);
-
-    // Récupérer l'article (libelle)
     DocumentSnapshot articleSnapshot =
         await _articleCollection.doc(commande.produitId).get();
     ArticleShop article =
@@ -36,24 +24,66 @@ class _CommandeListPageState extends State<CommandeListPage> {
 
     return {
       'commande': commande,
-      'prenom': utilisateur.prenom,
-      'nom': utilisateur.nom,
+      'prix': article.prix,
       'libelle': article.titre,
     };
   }
 
+  Future<void> _deleteCommande(String commandeId) async {
+    await _commandeCollection.doc(commandeId).delete();
+  }
+
+  Future<void> _showDeleteConfirmationDialog(
+      BuildContext context, String commandeId) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmation de suppression'),
+          content: Text('Voulez-vous vraiment supprimer cette commande ?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Annuler'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Supprimer', style: TextStyle(color: Colors.red)),
+              onPressed: () async {
+                await _deleteCommande(commandeId);
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Commande supprimée.')),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_currentUser == null) {
+      return Center(
+        child: Text("Aucun utilisateur connecté."),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Liste des Commandes"),
+        title: Text("Mes Commandes"),
         backgroundColor: AppColors.primary,
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: _commandeCollection.snapshots(),
+        stream: _commandeCollection
+            .where('userId', isEqualTo: _currentUser.email)
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: LinearProgressIndicator());
           }
 
           if (snapshot.hasError) {
@@ -89,14 +119,20 @@ class _CommandeListPageState extends State<CommandeListPage> {
                   }
 
                   var commandeData = snapshot.data!;
-                  String prenom = commandeData['prenom'];
-                  String nom = commandeData['nom'];
+                  int prix = commandeData['prix'];
+                  int prixTotal = prix * commande.nombre;
                   String libelle = commandeData['libelle'];
 
                   return ListTile(
-                    title: Text("Commande de $prenom $nom"),
+                    title: Text("Commande de $libelle"),
                     subtitle: Text(
-                        "Article: $libelle\nQuantité: ${commande.nombre}\nDate: ${commande.date.toString()}"),
+                        "Quantité: ${commande.nombre}\nPrix: $prixTotal FCFA\nDate: ${simpleDateformat(commande.date)}"),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red),
+                      onPressed: () {
+                        _showDeleteConfirmationDialog(context, commande.id);
+                      },
+                    ),
                   );
                 },
               );

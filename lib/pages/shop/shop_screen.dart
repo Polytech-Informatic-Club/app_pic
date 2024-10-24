@@ -3,7 +3,9 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/article_shop.dart';
 import 'package:new_app/models/categorie_shop.dart';
 import 'package:new_app/models/collection.dart';
+import 'package:new_app/pages/drawer/drawer.dart';
 import 'package:new_app/pages/home/navbar.dart';
+import 'package:new_app/pages/shop/mes_commandes.dart';
 import 'package:new_app/pages/shop/shopCaroussel.dart';
 import 'package:new_app/services/shop_service.dart';
 import 'package:new_app/utils/app_colors.dart';
@@ -165,8 +167,38 @@ class _ShopScreenState extends State<ShopScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      appBar: AppBar(
+        forceMaterialTransparency: true,
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: Icon(
+                Icons.menu,
+                color: Colors.black,
+                size: 35,
+              ),
+            );
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.shopping_cart,
+              size: 30,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              changerPage(context, UserCommandeListPage());
+            },
+          )
+        ],
+      ),
       backgroundColor: Colors.white,
       bottomNavigationBar: navbar(pageIndex: 4),
+      drawer: EptDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
