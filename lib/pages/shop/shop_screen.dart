@@ -22,7 +22,7 @@ class ShopScreen extends StatefulWidget {
 class _ShopScreenState extends State<ShopScreen> {
   final ShopService _shopService = ShopService();
 
-  List<String> carouselImages = ['assets/market/photo_2024-05-24_12-27-53.jpg'];
+  List<String> carouselImages = [];
   Collection? _collection;
   String searchQuery = '';
   CategorieShop selectedCategory = CategorieShop(id: "", libelle: "Tous");
@@ -168,6 +168,8 @@ class _ShopScreenState extends State<ShopScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        title : Text('Shop'),
+        centerTitle : true,
         forceMaterialTransparency: true,
         leading: Builder(
           builder: (context) {

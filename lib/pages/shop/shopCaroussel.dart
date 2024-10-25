@@ -110,13 +110,11 @@ class _ShopCarouselState extends State<ShopCarousel> {
                         fontFamily: 'LeagueGothicRegular-Regular',
                       ),
                     ),
-
                     Row(
                       children: [
-                        Icon(Icons.account_tree, color: Colors.black, size: 30.0),
-                        Text(
-                          '4 pieces'
-                        ),
+                        Icon(Icons.account_tree,
+                            color: Colors.black, size: 30.0),
+                        Text('  ${widget.imagePaths.length} pieces'),
                       ],
                     ),
                     SizedBox(height: 10),
@@ -132,7 +130,7 @@ class _ShopCarouselState extends State<ShopCarousel> {
                       },
                       child: Container(
                         padding:
-                        EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(.8),
                           borderRadius: BorderRadius.circular(8),
