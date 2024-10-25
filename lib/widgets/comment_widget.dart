@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 
@@ -24,7 +25,11 @@ class CommentWidget extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 20,
-              backgroundImage: NetworkImage(photo),
+              backgroundImage: ResizeImage(
+                CachedNetworkImageProvider(photo),
+                width: 65,
+              )
+
             ),
             SizedBox(width: 10),
             Expanded(

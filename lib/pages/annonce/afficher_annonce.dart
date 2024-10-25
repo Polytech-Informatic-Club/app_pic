@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
@@ -170,7 +171,7 @@ class _AfficherAnononceScreenState extends State<AfficherAnononceScreen> {
                         height: 370,
                         child: Image(
                           image: ResizeImage(
-                            NetworkImage(imagePath),
+                            CachedNetworkImageProvider(imagePath),
                             height: 1110, // hauteur souhaitée
                           ),
                           fit: BoxFit.cover,
@@ -307,7 +308,7 @@ class FullScreenImage extends StatelessWidget {
       body: Stack(
         children: [
           PhotoView(
-            imageProvider: NetworkImage(imageUrl),
+            imageProvider: CachedNetworkImageProvider(imageUrl),
             minScale: PhotoViewComputedScale.contained * 1,
             maxScale: PhotoViewComputedScale.covered * 5,
           ),

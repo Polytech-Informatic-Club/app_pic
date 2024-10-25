@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/jeu.dart';
@@ -180,7 +181,7 @@ Widget _buildGameIcon(String imagePath, String gameName) {
           ),
           image: DecorationImage(
             image: ResizeImage(
-              NetworkImage(imagePath),
+              CachedNetworkImageProvider(imagePath),
               width: 120,
               height: 120,
             ),

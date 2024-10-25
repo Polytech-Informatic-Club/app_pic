@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/promo.dart';
@@ -65,7 +66,7 @@ class _FamillePolytechnicienneScreenState
                 leading: CircleAvatar(
                   radius: 35,
                   backgroundImage:ResizeImage(
-                      NetworkImage(logo),
+                      CachedNetworkImageProvider(logo),
                       width: 210,
                   ) , // Chemin de l'image
                 ),

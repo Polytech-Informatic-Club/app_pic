@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -117,8 +118,8 @@ class _EditInfosUtilisateurState extends State<EditInfosUtilisateur> {
                                         child: CircleAvatar(
                                           radius: 80,
                                           backgroundImage: ResizeImage(
-                                            NetworkImage(url),
-                                            height: 480, // Hauteur souhaitée
+                                            CachedNetworkImageProvider(url),
+                                            height: 360,
                                           ),
                                           backgroundColor: grisClair,
                                           child: Align(

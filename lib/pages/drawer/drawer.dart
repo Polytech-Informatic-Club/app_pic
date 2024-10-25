@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
@@ -83,8 +84,8 @@ class _EptDrawerState extends State<EptDrawer> {
                                     child:user?.photo != ""
                                         ? Image(
                                       image: ResizeImage(
-                                        NetworkImage("${user?.photo}"),
-                                        height: 270,  // Hauteur d'affichage souhaitée
+                                        CachedNetworkImageProvider("${user?.photo}"),
+                                        height: 250,
                                       ),
                                       fit: BoxFit.cover,
                                     )
