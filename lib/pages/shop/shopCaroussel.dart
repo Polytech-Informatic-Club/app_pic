@@ -36,7 +36,12 @@ class _ShopCarouselState extends State<ShopCarousel> {
       );
     });
   }
-
+  Future<ImageProvider> _getCachedResizedImage(String imageUrl, int height) async {
+    return ResizeImage(
+      CachedNetworkImageProvider(imageUrl),
+      height: height,
+    );
+  }
   @override
   void dispose() {
     super.dispose();
@@ -58,16 +63,23 @@ class _ShopCarouselState extends State<ShopCarousel> {
               });
             },
             itemBuilder: (context, index) {
-              return CachedNetworkImage(
-                imageUrl: widget.imagePaths[index],
-                fit: BoxFit.cover,
-                height: 650,
-                width: double.infinity,
-                placeholder: (context, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) => Icon(Icons.error),
+              return FutureBuilder<ImageProvider>(
+                future: _getCachedResizedImage(widget.imagePaths[index], 650),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Icon(Icons.error));
+                  } else {
+                    return Image(
+                      image: snapshot.data!,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    );
+                  }
+                },
               );
             },
-
           ),
           Positioned(
             bottom: 20,

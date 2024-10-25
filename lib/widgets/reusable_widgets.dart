@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/utils/app_colors.dart';
 
@@ -36,7 +37,7 @@ Widget buildMatchCard(String title, String logoteam1, String score1,
                       CircleAvatar(
                         radius: 30,
                         backgroundColor: grisClair,
-                        backgroundImage: NetworkImage(logoteam1),
+                        backgroundImage: CachedNetworkImageProvider(logoteam1),
                       ),
                       Text(
                         score1,
@@ -49,7 +50,7 @@ Widget buildMatchCard(String title, String logoteam1, String score1,
                       CircleAvatar(
                         radius: 30,
                         backgroundColor: grisClair,
-                        backgroundImage: NetworkImage(logoteam2),
+                        backgroundImage: CachedNetworkImageProvider(logoteam2),
                       ),
                     ],
                   ),

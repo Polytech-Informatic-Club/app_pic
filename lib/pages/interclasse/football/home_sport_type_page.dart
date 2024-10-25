@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable, no_logic_in_create_state
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
@@ -308,36 +309,41 @@ class _HomeSportTypePageState extends State<HomeSportTypePage> {
 Widget _afficheFollowingMatch(String id, String affiche, String description,
     String typeSport, BuildContext context) {
   return GestureDetector(
-      onTap: () => changerPage(context, DetailMatchScreen(id, typeSport)),
-      child: Column(
-        children: [
-          affiche != ""
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    affiche,
-                    height: description != ""
-                        ? MediaQuery.sizeOf(context).height * 0.2
-                        : MediaQuery.sizeOf(context).height * 0.3,
-                    width: double.infinity,
-                  ))
-              : Container(
-                  height: MediaQuery.sizeOf(context).height * 0.15,
-                  decoration: BoxDecoration(
-                      color: AppColors.gray,
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-          SizedBox(
-            height: 5,
+    onTap: () => changerPage(context, DetailMatchScreen(id, typeSport)),
+    child: Column(
+      children: [
+        affiche.isNotEmpty
+            ? ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image(
+            image: ResizeImage(
+              CachedNetworkImageProvider(affiche),
+              width:200,
+              height: 250,
+            ),
+            height: 250,
+            width: 200,
           ),
-          Text(
-            description,
-            // simpleDateformat(date),
-            style: TextStyle(fontSize: 12),
-          )
-        ],
-      ));
+        )
+            : Container(
+          height: 100,
+          decoration: BoxDecoration(
+            color: AppColors.gray,
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Text(
+          description,
+          style: TextStyle(fontSize: 12),
+        ),
+      ],
+    ),
+  );
 }
+
 
 class MemberCard extends StatelessWidget {
   final String role;
@@ -364,7 +370,10 @@ class MemberCard extends StatelessWidget {
           CircleAvatar(
             radius: 30,
             backgroundColor: AppColors.primary,
-            backgroundImage: NetworkImage(image),
+            backgroundImage: ResizeImage(
+              CachedNetworkImageProvider(image),
+              height: 190
+            ),
           ),
           Text(
             nom,
