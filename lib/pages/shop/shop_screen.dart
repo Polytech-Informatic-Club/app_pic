@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/article_shop.dart';
@@ -359,7 +360,10 @@ class _ShopScreenState extends State<ShopScreen> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
-                image: NetworkImage(produit.image),
+                image: ResizeImage(
+                  CachedNetworkImageProvider(produit.image),
+                  width: 250
+                ),
                 fit: BoxFit.cover,
               ),
             ),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
@@ -86,11 +87,15 @@ class _DetailMatchScreenState extends State<DetailMatchScreen> {
                                       children: [
                                         CircleAvatar(
                                             radius: MediaQuery.sizeOf(context)
-                                                    .width *
+                                                .width *
                                                 0.1,
-                                            backgroundImage: NetworkImage(
-                                              match.equipeA.logo,
-                                            )),
+                                            backgroundImage: ResizeImage(
+                                              CachedNetworkImageProvider(
+                                                match.equipeA.logo,
+                                              ),
+                                              width: 210,
+                                            )
+                                        ),
                                         SizedBox(height: 10),
                                         Text(
                                           match.equipeA.nom,
@@ -113,9 +118,13 @@ class _DetailMatchScreenState extends State<DetailMatchScreen> {
                                               radius: MediaQuery.sizeOf(context)
                                                       .width *
                                                   0.1,
-                                              backgroundImage: NetworkImage(
-                                                match.equipeB.logo,
-                                              )),
+                                              backgroundImage: ResizeImage(
+                                                  CachedNetworkImageProvider(
+                                                    match.equipeB.logo,
+                                                  ),
+                                                width: 210,
+                                                )
+                                            ),
                                           SizedBox(height: 10),
                                           Text(
                                             match.equipeB.nom,

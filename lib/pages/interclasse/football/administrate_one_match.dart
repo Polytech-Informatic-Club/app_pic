@@ -1,5 +1,6 @@
 // ignore_for_file: no_logic_in_create_state
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
@@ -132,7 +133,7 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                                             .width *
                                                         0.1,
                                                 backgroundImage: ResizeImage(
-                                                    NetworkImage(
+                                                    CachedNetworkImageProvider(
                                                       matchProvider
                                                           .value!.equipeA.logo,
                                                     ),
@@ -162,7 +163,7 @@ class _AdministrateOneFootballState extends State<AdministrateOneFootball> {
                                                             .width *
                                                         0.1,
                                                 backgroundImage: ResizeImage(
-                                                    NetworkImage(
+                                                    CachedNetworkImageProvider(
                                                       matchProvider
                                                           .value!.equipeB.logo,
                                                     ),
