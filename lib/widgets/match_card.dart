@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/utils/app_colors.dart';
@@ -36,8 +37,8 @@ Widget buildMatchCard(
                           CircleAvatar(
                               radius: MediaQuery.sizeOf(context).width * 0.08,
                               backgroundImage:ResizeImage(
-                                  NetworkImage(photo1),
-                                width: 215
+                                  CachedNetworkImageProvider(photo1),
+                                width: 110
                               ),
                           ),
                           SizedBox(
@@ -101,8 +102,8 @@ Widget buildMatchCard(
                           CircleAvatar(
                               radius: MediaQuery.sizeOf(context).width * 0.08,
                               backgroundImage: ResizeImage(
-                                  NetworkImage(photo2),
-                                  width: 215
+                                  CachedNetworkImageProvider(photo2),
+                                  width: 110
                               )
                           ),
                         ],

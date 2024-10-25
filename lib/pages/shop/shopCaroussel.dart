@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/models/collection.dart';
 import 'package:new_app/pages/shop/shop_blouson.dart';
@@ -57,13 +58,16 @@ class _ShopCarouselState extends State<ShopCarousel> {
               });
             },
             itemBuilder: (context, index) {
-              return Image.network(
-                widget.imagePaths[index],
+              return CachedNetworkImage(
+                imageUrl: widget.imagePaths[index],
                 fit: BoxFit.cover,
                 height: 650,
                 width: double.infinity,
+                placeholder: (context, url) => CircularProgressIndicator(),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               );
             },
+
           ),
           Positioned(
             bottom: 20,

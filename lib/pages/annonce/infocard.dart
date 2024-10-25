@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
 import 'package:new_app/pages/annonce/afficher_annonce.dart';
@@ -54,9 +55,8 @@ class InfoCard extends StatelessWidget {
               fit: BoxFit.fitHeight,
               child: Image(
                 image: ResizeImage(
-                  NetworkImage(image),
-                  width: 730,  // Largeur de cache
-                  height: 730, // Hauteur de cache
+                  CachedNetworkImageProvider(image),
+                  height: 340,
                 ),
                 height: height,
               ),

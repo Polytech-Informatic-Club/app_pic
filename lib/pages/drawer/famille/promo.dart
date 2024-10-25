@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/models/promo.dart';
 import 'package:new_app/models/utilisateur.dart';
@@ -92,7 +93,7 @@ class _PromotionPageState extends State<PromotionPage> {
         children: [
           Image(
             image: ResizeImage(
-              NetworkImage(_promo!.logo),
+              CachedNetworkImageProvider(_promo!.logo),
               width: 450,  // Largeur souhaitée
               height: 450,  // Hauteur souhaitée
             ),
@@ -172,7 +173,7 @@ Widget eleveWidget(String? photoUrl, String nom, String genie, String numero) {
       leading: CircleAvatar(
         backgroundImage: photoUrl != null && photoUrl.isNotEmpty
             ? ResizeImage(
-          NetworkImage(photoUrl),
+          CachedNetworkImageProvider(photoUrl),
           width: 180,
         )
             : null,

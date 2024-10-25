@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/fonctions.dart';
@@ -60,7 +61,7 @@ class CompteScreen extends StatelessWidget {
                               radius: 80,
                               backgroundImage: user!.photo! != ""
                                   ? ResizeImage(
-                                NetworkImage(user.photo!),
+                                CachedNetworkImageProvider(user.photo!),
                                 height: 480,  // Hauteur d'affichage souhaitée
                               )
                                   : AssetImage('') as ImageProvider,
