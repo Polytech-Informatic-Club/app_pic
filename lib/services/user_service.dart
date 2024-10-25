@@ -68,10 +68,12 @@ class UserService {
   }
 
   // Méthode pour créer un compte et envoyer l'email de validation
-  Future<User?> signUpWithEmailAndPassword(String email, String password) async {
+  Future<User?> signUpWithEmailAndPassword(
+      String email, String password) async {
     try {
       // Création du compte utilisateur
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -98,7 +100,8 @@ class UserService {
   }
 
   // Méthode de connexion avec email et mot de passe
-  Future<User?> signInWithEmailAndPassword(String email, String password) async {
+  Future<User?> signInWithEmailAndPassword(
+      String email, String password) async {
     try {
       // Connexion de l'utilisateur
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -125,7 +128,6 @@ class UserService {
     }
     return null;
   }
-
 
   Future<void> signOut() async {
     await _auth.signOut();
@@ -291,6 +293,15 @@ class UserService {
       _loading.value = false;
     }
     return "";
+  }
+
+  Future<void> deleteProfilePicture(String imageUrl) async {
+    try {
+      Reference storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+      await storageRef.delete();
+    } catch (e) {
+      print("Erreur lors de la suppression de l'image : $e");
+    }
   }
 
   Future<File> compressImage(img.Image image) async {

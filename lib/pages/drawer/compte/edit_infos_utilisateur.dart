@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/pages/drawer/compte/compte.dart';
 import 'package:new_app/services/user_service.dart';
@@ -119,20 +118,100 @@ class _EditInfosUtilisateurState extends State<EditInfosUtilisateur> {
                                           radius: 80,
                                           backgroundImage: ResizeImage(
                                             NetworkImage(url),
-                                            height: 480,  // Hauteur souhaitée
+                                            height: 480, // Hauteur souhaitée
                                           ),
                                           backgroundColor: grisClair,
                                           child: Align(
                                               alignment: Alignment.bottomRight,
                                               child: GestureDetector(
                                                 onTap: () async {
-                                                  String? url = await _userService.uploadImage(context, _loading, _url);
-                                                  if (url != null) {
-                                                    alerteMessageWidget(
-                                                        context, "Fichier enregistré avec succès !", AppColors.success);
+                                                  if (url != '') {
+                                                    // Affiche un dialogue si l'utilisateur a déjà une photo
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          AlertDialog(
+                                                        title: Text(
+                                                            "Modifier la photo de profil"),
+                                                        content: Text(
+                                                            "Que souhaitez-vous faire ?"),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed:
+                                                                () async {
+                                                              // Supprime la photo de profil
+                                                              await _userService
+                                                                  .deleteProfilePicture(
+                                                                      _user!
+                                                                          .photo!);
+                                                              _url.value =
+                                                                  ""; // Supprime le lien localement
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              alerteMessageWidget(
+                                                                  context,
+                                                                  "Photo supprimée avec succès.",
+                                                                  AppColors
+                                                                      .success);
+                                                            },
+                                                            child: Text(
+                                                                "Supprimer"),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed:
+                                                                () async {
+                                                              // Modifie la photo de profil
+                                                              String? newUrl =
+                                                                  await _userService
+                                                                      .uploadImage(
+                                                                          context,
+                                                                          _loading,
+                                                                          _url);
+                                                              if (newUrl !=
+                                                                  null) {
+                                                                await _userService
+                                                                    .deleteProfilePicture(
+                                                                        _user!
+                                                                            .photo!);
+                                                                _url.value =
+                                                                    newUrl; // Met à jour le lien localement
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                alerteMessageWidget(
+                                                                    context,
+                                                                    "Photo modifiée avec succès.",
+                                                                    AppColors
+                                                                        .success);
+                                                              }
+                                                            },
+                                                            child: Text(
+                                                                "Modifier"),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
                                                   } else {
-                                                    alerteMessageWidget(
-                                                        context, "Une erreur s'est produite lors du chargement !", AppColors.echec);
+                                                    // Charge une nouvelle photo si aucune n'existe
+                                                    String? url =
+                                                        await _userService
+                                                            .uploadImage(
+                                                                context,
+                                                                _loading,
+                                                                _url);
+                                                    if (url != null) {
+                                                      _url.value = url;
+                                                      alerteMessageWidget(
+                                                          context,
+                                                          "Photo enregistrée avec succès.",
+                                                          AppColors.success);
+                                                    } else {
+                                                      alerteMessageWidget(
+                                                          context,
+                                                          "Une erreur est survenue lors du chargement.",
+                                                          AppColors.echec);
+                                                    }
                                                   }
                                                 },
                                                 child: Icon(
@@ -226,7 +305,12 @@ class _EditInfosUtilisateurState extends State<EditInfosUtilisateur> {
                               context,
                               "Informations modifiée avec succès !",
                               AppColors.success);
-                          changerPage(context, CompteScreen());
+                          Navigator.of(context).pop();
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CompteScreen()),
+                          );
                         }
                       } catch (e) {
                         alerteMessageWidget(

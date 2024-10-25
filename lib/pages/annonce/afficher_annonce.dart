@@ -4,7 +4,6 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/annonce.dart';
 import 'package:new_app/models/categorie.dart';
 import 'package:new_app/models/commentaires.dart';
-import 'package:new_app/models/user.dart';
 import 'package:new_app/models/utilisateur.dart';
 import 'package:new_app/pages/annonce/annonce_screen.dart';
 import 'package:new_app/pages/annonce/edit_annonce.dart';

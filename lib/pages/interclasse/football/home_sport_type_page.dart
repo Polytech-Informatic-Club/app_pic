@@ -6,7 +6,6 @@ import 'package:new_app/fonctions.dart';
 import 'package:new_app/models/commission.dart';
 import 'package:new_app/models/match.dart';
 import 'package:new_app/models/membre.dart';
-import 'package:new_app/models/user.dart';
 import 'package:new_app/pages/interclasse/football/create_membre.dart';
 import 'package:new_app/pages/interclasse/football/detail_match.dart';
 import 'package:new_app/pages/interclasse/football/edit_delete_membre.dart';
