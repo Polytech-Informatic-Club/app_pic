@@ -149,10 +149,13 @@ class AuthHandler extends StatelessWidget {
           // Si l'utilisateur est connecté, afficher la page d'accueil
           if (snapshot.connectionState == ConnectionState.active) {
             User? user = snapshot.data;
-
             if (user == null) {
+              print('codiallo');
+
               return LoginScreen(); // Utilisateur non connecté -> Page de connexion
             } else {
+              print('codiallo 2');
+
               return HomePage(); // Utilisateur connecté -> Page d'accueil
             }
           }
